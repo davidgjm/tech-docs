@@ -1,0 +1,59 @@
+==== References:
+
+* https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-introduction/4-operational-excellence
+
+=== Questions
+
+* What's analytics?
+* What's monitoring?
+* instrumentation system
+
+'''
+
+== DevOps
+
+Essential DevOps practices include agile planning, continuous integration, continuous delivery, and monitoring of applications.
+
+The DevOps culture stresses small, multidisciplinary teams that work autonomously and take collective accountability for how end users will experience their software. DevOps teams apply agile practices and include operations in each team's responsibilities. Teams work in small batches that focus on improving the end-to-end delivery of customer value, and they strive to eliminate waste and impediments along the way. There are no silos and no blame games, because each team is mutually accountable.
+
+== Continuous Integration and Continuous Delivery (CI/CD)
+
+Continuous Integration (CI) is the practice of building and testing code every time a team member commits changes to version control. CI encourages developers to share their code and unit tests by merging their changes into a shared version control repository after every small task completion. Committing code triggers an automated build system to grab the latest code from the shared repository, and then build, test, and validate the full master branch.
+
+CI helps developers to identify bugs earlier, and it improves software quality since code is checked in, built, and verified more frequently. Instead of working on code for a month and discovering numerous issues when changes are eventually checked in, developers can check in smaller sets of changes and be confident that their code doesn't introduce large volumes of issues into the master branch.
+
+Continuous Delivery (CD) is the process to build, test, configure and deploy from a build environment to a production environment. Multiple testing or staging environments create a release pipeline to automate the creation of infrastructure and deployment of a new build. Successive environments support progressively longer-running activities of integration, load, and user acceptance testing.
+
+Continuous integration and continuous delivery are often combined into a single pipeline known as CI/CD. Continuous integration starts the continuous delivery process, and the CI/CD pipeline stages changes from each successive environment to the next upon successful completion of the tests that are defined at each stage. As a developer, you can check in code, validate that it passes all tests and introduces no new issues into the master branch, and then roll it out to production with the confidence that it will not impact the operation of your production environment.
+
+== Use monitoring and analytics to gain operational insights
+
+https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-operational-excellence/3-use-monitoring-and-analytics-to-gain-operational-insights
+
+When it comes to monitoring and analytics on Azure, we can bundle services into three specific areas of focus:
+
+* Core monitoring
+* Deep infrastructure monitoring
+* Deep application monitoring
+
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-operational-excellence/media/3-monitoring-products-overview.png[image]
+
+=== Core monitoring
+
+Azure provides services to give you visibility into four key core monitoring areas: a**ctivity logging, the health of services, metrics and diagnostics, and recommendations on best practices**.
+
+==== Metrics and diagnostics
+
+Azure Monitor enables core monitoring for Azure services by allowing the collection, aggregation, and visualization of metrics, activity logs, and diagnostic logs.
+
+=== Deep infrastructure monitoring
+
+When you're designing a monitoring strategy, it's important to include every component in the application chain, so you can correlate events across services and resources. Services that support Azure Monitor can be easily configured to send their data to a Log Analytics workspace. Virtual machines (both in the cloud and on-premises) can have an agent installed to send data to Log Analytics. You can submit custom data to Log Analytics through the Log Analytics API. The following illustration shows how Log Analytics acts as a central hub for monitoring data; Log Analytics receives monitoring data from your Azure resources, and makes that data available to consumers for analysis or visualization.
+
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-operational-excellence/media/3-collecting-data.png[image]
+
+Log Analytics allows you to create queries and interact with other systems based on those queries. The most common example is an alert. Maybe you want to receive an email when a system runs out of disk space, or a best practice on your SQL Servers is no longer being followed. Log Analytics can send alerts, kick off automation, and even hook into custom APIs for things like integration with _IT service management (ITSM)_.
+
+=== Deep application monitoring
+
+Azure Application Insights allows you to do exactly that. Application Insights provides telemetry collection, query, and visualization capabilities. Instrumenting this level of monitoring requires little to no code changes; you only have to install a small instrumentation package into your application. Application Insights is cross platform, supporting .NET, Node.js, or Java.

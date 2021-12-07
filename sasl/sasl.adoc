@@ -1,0 +1,67 @@
+= SASL
+
+== Overview
+
+=== References
+
+* https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer
+* https://datatracker.ietf.org/doc/html/rfc4422
+* https://www.gnu.org/software/gsasl/manual/html_node/index.html
+* https://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml
+* https://docs.oracle.com/cd/E23824_01/html/819-2145/sasl.intro.20.html
+* https://www.rfc-editor.org/rfc/rfc4752.html
+
+== SASL Specification
+
+John Gardiner Myers wrote the original SASL specification (RFC 2222) in 1997 while at https://en.wikipedia.org/wiki/Carnegie_Mellon_University[Carnegie Mellon University].
+In 2006, that document was replaced by RFC 4422 authored by Alexey Melnikov and Kurt D.
+Zeilenga.
+SASL, as defined by RFC 4422 is an https://en.wikipedia.org/wiki/IETF[IETF] _Standard Track_ protocol and is, as of 2006, a _https://en.wikipedia.org/wiki/Internet_Standard[Proposed Standard]_.
+
+== SASL mechanisms
+
+A SASL mechanism implements a series of challenges and responses.
+Defined SASL mechanisms[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-1[1\]] include:
+
+* EXTERNAL, where authentication is implicit in the context (e.g., for protocols already using https://en.wikipedia.org/wiki/IPsec[IPsec] or https://en.wikipedia.org/wiki/Transport_Layer_Security[TLS])
+* ANONYMOUS, for unauthenticated guest access
+* PLAIN, a simple https://en.wikipedia.org/wiki/Cleartext[cleartext] https://en.wikipedia.org/wiki/Password[password] mechanism, defined in RFC 4616
+* OTP, a https://en.wikipedia.org/wiki/One-time_password[one-time password] mechanism.
+Obsoletes the SKEY mechanism.
+* SKEY, an https://en.wikipedia.org/wiki/S/KEY[S/KEY] mechanism.
+* https://en.wikipedia.org/wiki/CRAM-MD5[CRAM-MD5], a simple challenge-response scheme based on https://en.wikipedia.org/wiki/HMAC[HMAC-MD5].
+* https://en.wikipedia.org/wiki/Digest_access_authentication[DIGEST-MD5] _(historic[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-2[2\]])_, partially https://en.wikipedia.org/wiki/HTTP[HTTP] Digest compatible challenge-response scheme based upon MD5.
+DIGEST-MD5 offered a data security layer.
+* https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism[SCRAM] (RFC 5802), modern challenge-response scheme based mechanism with channel binding support
+* https://en.wikipedia.org/wiki/NTLM[NTLM], an NT LAN Manager authentication mechanism
+* GS2- family of mechanisms supports arbitrary https://en.wikipedia.org/wiki/GSS-API[GSS-API] mechanisms in SASL.[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-3[3\]] It is now standardized as RFC 5801.
+* https://en.wikipedia.org/wiki/GSSAPI[GSSAPI], for https://en.wikipedia.org/wiki/Kerberos_protocol[Kerberos] V5 authentication via the https://en.wikipedia.org/wiki/Generic_Security_Services_Application_Program_Interface[GSSAPI].
+GSSAPI offers a data-security layer.
+* BROWSERID-AES128, for https://en.wikipedia.org/wiki/Mozilla_Persona[Mozilla Persona] authentication[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-4[4\]]
+* EAP-AES128, for GSS EAP authentication[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-5[5\]]
+* https://en.wikipedia.org/wiki/MSN_Chat#GateKeeper_and_GateKeeperPassport[GateKeeper] (& https://en.wikipedia.org/wiki/MSN_Chat#GateKeeper_and_GateKeeperPassport[GateKeeperPassport]), a challenge-response mechanism developed by https://en.wikipedia.org/wiki/Microsoft[Microsoft] for https://en.wikipedia.org/wiki/MSN_Chat[MSN Chat]
+* https://en.wikipedia.org/wiki/OAuth#OAuth_2.0[OAUTHBEARER], https://en.wikipedia.org/wiki/OAuth#OAuth_2.0[OAuth 2.0] bearer tokens (RFC 6750), communicated through TLS[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-rfc7628-6[6\]]
+* https://en.wikipedia.org/wiki/OAuth[OAUTH10A], https://en.wikipedia.org/wiki/OAuth[OAuth] 1.0a message-authentication-code tokens (RFC 5849, Section 3.4.2)[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-rfc7628-6[6\]]
+
+== SASL-aware application protocols
+
+Application protocols define their representation of SASL exchanges with a _profile_.
+A protocol has a _service name_ such as "ldap" in a registry shared with https://en.wikipedia.org/wiki/Generic_Security_Services_Application_Program_Interface[GSSAPI] and https://en.wikipedia.org/wiki/Kerberos_protocol[Kerberos].[https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-7[7\]]
+
+As of 2012 protocols currently supporting SASL include:
+
+* https://en.wikipedia.org/wiki/Application_Configuration_Access_Protocol[Application Configuration Access Protocol]
+* https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol[Advanced Message Queuing Protocol] (AMQP)
+* https://en.wikipedia.org/wiki/Blocks_Extensible_Exchange_Protocol[Blocks Extensible Exchange Protocol]
+* https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol[Internet Message Access Protocol] (IMAP)
+* https://en.wikipedia.org/wiki/IMSP[Internet Message Support Protocol]
+* https://en.wikipedia.org/wiki/Internet_Relay_Chat[Internet Relay Chat] (IRC) (with https://en.wikipedia.org/wiki/IRCX[IRCX] or the http://ircv3.net/specs/extensions/sasl-3.1.html[IRCv3 SASL extension])
+* https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol[Lightweight Directory Access Protocol] (LDAP)
+* https://en.wikipedia.org/wiki/Libvirt[libvirt]
+* ManageSieve (RFC 5804)
+* https://en.wikipedia.org/wiki/Memcached[memcached]
+* https://en.wikipedia.org/wiki/Post_Office_Protocol[Post Office Protocol] (POP)
+* https://en.wikipedia.org/wiki/RFB_protocol[Remote framebuffer protocol][https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-8[8\]] used by https://en.wikipedia.org/wiki/VNC[VNC]
+* https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol[Simple Mail Transfer Protocol] (SMTP)
+* https://en.wikipedia.org/wiki/Apache_Subversion[Subversion] svn protocol
+* https://en.wikipedia.org/wiki/Extensible_Messaging_and_Presence_Protocol[Extensible Messaging and Presence Protocol] (XMPP)
