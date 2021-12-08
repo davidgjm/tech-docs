@@ -1,0 +1,53 @@
+= Performance Efficiency in Azure
+:toc: auto
+
+== Optimize network performance
+
+https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-performance-efficiency/3-optimize-network-performance
+
+In comparison, a cloud environment is built for scale. Cloud-hosted resources might not be in the same rack, datacenter, or region. This distributed approach can have an impact on the round-trip time of your network communications. While all Azure regions are interconnected by a high-speed fiber backbone, the speed of light is still a physical limitation. Calls between services in different physical locations will still have network latency directly correlated to the distance between them.
+
+In addition, depending on the communication needs of an application, more round trips might be required. Each round trip comes with a latency tax, and each round trip adds to the overall latency. The following illustration shows how the latency perceived by the user is the combination of the round trips required to service the request.
+
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-performance-efficiency/media/3-network-latency.png[Round-trip delay in cloud]
+
+=== Latency between Azure resources
+Suppose that your pilot testing of the booking system was successful. As a result, the scope of your pilot test has expanded to include users in Australia. When the users in Australia view your website, they'll incur the additional round-trip time that's necessary to access all of the resources that are located in West Europe. Their experience will be diminished because of the additional network latency.
+
+To address your network latency issues, your IT team decides to host another front-end instance in the Australia East region. This design helps reduce the time for your web servers to return content to users in Australia. But their experience is still diminished because there's significant latency for data that's being transferred between the front-end web servers in Australia East and the database in West Europe.
+
+There are a few ways you could reduce the remaining latency:
+
+* Create a read-replica of the database in Australia East. A read replica allows reads to perform well, but writes still incur latency. Azure SQL Database geo-replication allows for read-replicas.
+* Sync your data between regions with Azure SQL Data Sync.
+* Use a globally distributed database such as Azure Cosmos DB. This database allows both reads and writes to occur regardless of location. But it might require changes to the way your application stores and references data.
+* Use caching technology, such as Azure Cache for Redis, to minimize high-latency calls to remote databases for frequently accessed data.
+
+=== Latency between users and Azure resources
+
+Traffic Manager is a DNS-based load balancer that you can use to distribute traffic within and across Azure regions. Rather than having the user browse to a specific instance of your web front end, Traffic Manager can route users based on a set of characteristics:
+
+* **Priority**: You specify an ordered list of front-end instances. If the one with the highest priority is unavailable, Traffic Manager routes the user to the next available instance.
+* **Weighted**: You set a weight against each front-end instance. Traffic Manager then distributes traffic according to those defined ratios.
+* **Performance**: Traffic Manager routes users to the closest front-end instance based on network latency.
+* **Geographic**: You set up geographical regions for front-end deployments and route your users based on data sovereignty mandates or localization of content.
+
+.Note
+[IMPORTANT]
+====
+It's important to note that this load balancing (Traffic Manager) is only handled via DNS. No inline load balancing or caching is happening here. Traffic Manager simply returns the DNS name of the closest front end to the user.
+====
+
+=== Use a CDN to cache content close to users
+
+Web static content (__web pages, images, videos, etc.__) can be delivered to users faster by using a content delivery network (**CDN**), such as Azure Content Delivery Network.
+
+This approach puts content closer to the destination, which reduces latency and improves the user experience. The following illustration shows how using Azure Content Delivery Network puts content closer to the destination, which reduces latency and improves the user experience.
+
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-performance-efficiency/media/3-cdn.png[]
+
+Content delivery networks can also be used to host cached dynamic content. Extra consideration is required though, because cached content might be out of date compared with the source. Context expiration can be controlled by setting a time to live (TTL). If the TTL is too high, out-of-date content might be displayed and the cache would need to be purged.
+
+One way to handle cached content is with a feature called dynamic site acceleration, which can increase performance of webpages with dynamic content. Dynamic site acceleration can also provide a low-latency path to additional services in your solution. An example is an API endpoint.
+
+== Optimize storage performance
