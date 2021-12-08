@@ -1,0 +1,8 @@
+= Azure Well Architected Framework
+
+== Content
+
+=== link:Operational-Execllence.adoc[Operational Excellence]
+=== link:Performance-efficiency.adoc[Performance Efficiency]
+
+== References
