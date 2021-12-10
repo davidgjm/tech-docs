@@ -1,0 +1,3 @@
+===== References
+
+* https://medium.com/@TimvanBaarsen/build-your-spring-boot-project-using-azure-pipelines-in-azure-devops-3305977991d[Build your Spring Boot project using Azure Pipelines in Azure DevOps]
