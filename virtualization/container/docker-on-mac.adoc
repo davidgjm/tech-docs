@@ -1,0 +1,125 @@
+= docker replacement & minikube
+
+== hyberkit virtualization solution for MacOS
+
+== Installing multipass
+[source,bash]
+----
+brew install multipass
+----
+
+=== Find available images
+
+[source,bash]
+----
+s0001321@mC02FG16BML85 ~ % multipass find       
+Image                       Aliases           Version          Description
+18.04                       bionic            20211129         Ubuntu 18.04 LTS
+20.04                       focal,lts         20211129         Ubuntu 20.04 LTS
+21.04                       hirsute           20211130         Ubuntu 21.04
+21.10                       impish            20211209         Ubuntu 21.10
+anbox-cloud-appliance                         latest           Anbox Cloud Appliance
+minikube                                      latest           minikube is local Kubernetes
+----
+
+=== Lauch an Ubuntu image
+
+==== Launch an Ubuntu 20.04 instance
+[source,bash]
+----
+multipass launch --name ubuntu 20.04
+----
+
+==== List created instances
+[source,bash]
+----
+s0001321@mC02FG16BML85 ~ % multipass list
+Name                    State             IPv4             Image
+minikube                Running           192.168.64.8     Ubuntu 20.04 LTS
+sandbox                 Stopped           --               Ubuntu 20.04 LTS
+----
+
+== Install and setup podman
+
+
+[sidebar]
+.References
+--
+* https://www.atlantic.net/dedicated-server-hosting/how-to-install-and-use-podman-on-ubuntu-20-04/
+* https://podman.io/getting-started/installation
+
+It is used to present information related to the main content.
+
+--
+
+=== Installing on MacOS
+Podman is a tool for running Linux containers. You can do this from a MacOS desktop as long as you have access to a linux box either running inside of a VM on the host, or available via the network. Podman includes a command, podman machine that automatically manages VM’s.
+
+The Mac client is available through Homebrew:
+[source, bash]
+----
+brew install podman
+----
+
+You can then verify the installation information using:
+[source, bash]
+--
+podman info
+--
+
+=== Installing on Ubuntu
+
+
+[NOTE]
+The podman package is available in the official repositories for Ubuntu 20.10 and newer.
+
+==== Ubuntu 20.10 and newer
+[source, bash]
+----
+sudo apt-get -y update
+sudo apt-get -y install podman
+----
+
+
+==== Ubuntu earlier versions
+[source, bash]
+----
+. /etc/os-release
+echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | sudo apt-key add -
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get -y install podman
+----
+
+
+You can then verify the installation information using:
+[source, bash]
+--
+podman info
+--
+
+=== Configuring podman to use vm from multipass
+
+==== Setup podman in multipass vm (ubuntu)
+See previous section.
+
+==== Setup podman remote connection
+
+[source, bash]
+----
+
+----
+
+<<<
+
+== Configuring environment for minikube
+* https://minikube.sigs.k8s.io/docs/drivers/ssh/
+* https://computingforgeeks.com/install-cri-o-container-runtime-on-ubuntu-linux/
+
+=== Starting minikube
+
+[source, bash]
+----
+minikube start --driver=ssh --ssh-ip-address=192.168.64.9 --ssh-key=~/.ssh/id_rsa --ssh-user=root
+----

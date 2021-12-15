@@ -71,3 +71,140 @@ IMPORTANT: When architecting for high availability, you'll want to understand th
 <<<
 
 
+=== Develop a disaster recovery strategy
+Designing for high availability helps keep an application or process running despite unfavorable events and adverse conditions. But what do you do when something so significant happens that you've lost data and it's impossible to keep your apps and processes from going down? When disaster strikes, you need to have a plan to get your services running again. You should know what your goals and expectations are for recovering, what are the costs and limitations of your plan, and how to execute on it.
+
+==== What is disaster recovery?
+Regardless of its cause, the best remedy for a disaster once it has occurred is a well-defined, tested disaster recovery plan and an application that actively supports disaster recovery efforts through its design.
+
+==== How to create a disaster recovery plan
+
+A disaster recovery plan is a single document that details the procedures that are required to recover from data loss and downtime caused by a disaster, and identifies who's in charge of directing those procedures. Operators should be able to use the plan as a manual to restore application connectivity and recover data after a disaster occurs. A detailed, written plan that's dedicated to disaster recovery is critical to ensuring a favorable outcome. The process of creating the plan will help to assemble a complete picture of the application. The resulting written steps will promote good decision-making and follow-through in the panicked, chaotic aftermath of a disaster event.
+
+Creating a disaster recovery plan requires expert knowledge of the application's workflows, data, infrastructure, and dependencies.
+
+===== Risk assessment and process inventory
+The first step in creating a disaster recovery plan is performing a risk analysis that examines the impact of different kinds of disasters on the application. The exact nature of a disaster isn't as important to the risk analysis as its potential impact through data loss and application downtime. Explore various kinds of hypothetical disasters and try to be specific when thinking about their effects. For example, a targeted malicious attack may modify code or data that results in a different kind of impact than an earthquake that disrupts network connectivity and datacenter availability.
+
+The risk assessment needs to consider every process that can't afford unlimited downtime, and every category of data that can't afford unlimited loss. When a disaster that affects multiple application components occurs, it's critical that the plan owners can use the plan to take a complete inventory of what needs attention and how to prioritize each item.
+
+Some apps may only constitute a single process or classification of data. This is still important to note, as the application will likely be one component of a larger disaster recovery plan that includes multiple applications with the organization.
+
+===== Recovery objectives
+
+* *Recovery Point Objective (RPO)*: The maximum duration of acceptable data loss. RPO is measured in units of time, not volume: "30 minutes of data", "four hours of data", and so on. RPO is about limiting and recovering from data loss, not data theft.
+* *Recovery Time Objective (RTO)*: The maximum duration of acceptable downtime, where "downtime" needs to be defined by your specification. For example, if the acceptable downtime duration is eight hours in the event of a disaster, then your RTO is eight hours.
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/3-rto-rpo.png[]
+
+Each major process or workload that's implemented by an app should have separate RPO and RTO values. Even if you arrive at the same values for different processes, each one should be generated through a separate analysis that examines disaster scenario risks and potential recovery strategies for each respective process.
+
+The process of specifying an RPO and RTO is effectively the creation of disaster recovery requirements for your application. It requires establishing the priority of each workload and category of data and performing a cost-benefit analysis. The analysis includes concerns, such as implementation and maintenance cost, operational expense, process overhead, performance impact, and the impact of downtime and lost data. You'll need to define exactly what "downtime" means for your application, and in some cases, you may establish separate RPO and RTO values for different levels of functionality. Specifying RPO and RTO should be more than simply choosing arbitrary values. Much of the value of a disaster recovery plan comes from the research and analysis that goes into discovering the potential impact of a disaster and the cost of mitigating the risks.
+
+===== Detailing recovery steps
+
+* *Backups*: How often they're created, where they're located, and how to restore data from them.
+* *Data replicas*: The number and locations of replicas, the nature and consistency characteristics of the replicated data, and how to switch over to a different replica.
+* *Deployments*: How deployments are executed, how rollbacks occur, and failure scenarios for deployments.
+* *Infrastructure*: On-premises and cloud resources, network infrastructure, and hardware inventory.
+* *Dependencies*: External services that are used by the application, including SLAs and contact information.
+* *Configuration and notification*: _Flags or options that can be set to gracefully degrade the application, and services that are used to notify users of application impact_.
+
+==== Designing for disaster recovery
+Designing for disaster recovery has two main concerns:
+
+. *Data recovery*: Using backups and replication to restore lost data.
+. *Process recovery*: Recovering services and deploying code to recover from outages.
+
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/3-region-pairs.png[]
+
+===== Data recovery and replication
+.Replication & Backup
+[NOTE]
+====
+_Replication duplicates stored data between multiple data store replicas. Unlike backup, which creates long-lived, read-only snapshots of data for use in recovery, replication creates real-time or near-real-time copies of live data._ The goal of replication is to keep replicas synchronized with as little latency as possible while maintaining application responsiveness. Replication is a key component of designing for high availability and disaster recovery, and is a common feature of production-grade applications.
+====
+
+[IMPORTANT]
+Replication is used to mitigate a failed or unreachable data store by executing a *failover*: changing application configuration to route data requests to a working replica. Failover is often automated, triggered by error detection built into a data storage product, or detection that you implement through your monitoring solution. Depending on the implementation and the scenario, failover may need to be manually executed by system operators.
+
+Replication is not something you implement from scratch. Most fully featured database systems and other data storage products and services include some kind of replication as a tightly integrated feature due to its functional and performance requirements. However, it's up to you to include these features in your application design and make appropriate use of them.
+
+Many different replication designs exist that place different priorities on data consistency, performance, and cost. Active replication requires updates to take place on multiple replicas simultaneously, guaranteeing consistency at the cost of throughput. In contrast, passive replication performs synchronization in the background, removing replication as a constraint on application performance, but increasing RPO. Active-active or multi-master replication enables multiple replicas to be used simultaneously, enabling load balancing at the cost of complicating data consistency, while active-passive replication reserves replicas for live use only during failover.
+
+===== Process recovery
+After a disaster, business data isn't the only asset that needs recovering. Disaster scenarios will also commonly result in downtime, whether it's due to network connectivity problems, datacenter outages, or damaged VM instances or software deployments. *The design of your application needs to enable you to restore it to a working state.*
+
+In most cases, process restoration involves failover to a separate, working deployment. Depending on the scenario, geographic location may be a critical aspect. For example, a large-scale natural disaster that brings an entire Azure region offline will necessitate restoring service in another region. Your application's disaster recovery requirements, especially RTO, should drive your design and help you decide how many replicated environments you should have, where they should be located, and whether they should be maintained in a ready-to-run state or should be ready to accept a deployment in the event of disaster.
+
+====== Azure Site Recovery
+
+Azure Site Recovery is a service that's dedicated to managing process recovery for workloads running on VMs deployed to Azure, VMs running on physical servers, and workloads running directly on physical servers.
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/3-azure-site-recovery.png[]
+
+Site Recovery supports replicating whole VMs and physical server images as well as individual workloads, where a workload may be an individual application or an entire VM or operating system with its applications. Any application workload can be replicated, but Site Recovery has first-class integrated support for many Microsoft server applications, such as SQL Server and SharePoint, as well as a handful of third-party applications like SAP.
+
+==== Testing a disaster recovery plan
+Disaster recovery planning doesn't end once you have a completed plan in hand. Testing the plan is a crucial aspect of disaster recovery, to ensure that the directions and explanations are clear and up-to-date.
+
+Choose intervals to perform different types and scopes of tests, such as testing backups and failover mechanisms every month, and performing a full-scale disaster recovery simulation every six months. Always follow the steps and details exactly as they're documented in the plan, and consider having someone unfamiliar with the plan give perspective on anything that could be made clearer. As you execute the test, identify gaps, areas of improvement, and places to automate and add these enhancements to your plan.
+
+Make sure to include your monitoring system in your testing as well. For example, if your application supports automated failover, introduce failures in a dependency or other critical component to ensure that the application behaves correctly end-to-end, including detection of the failure and triggering of the automated failover.
+
+By carefully identifying your requirements and laying out a plan, you'll be able to determine what types of services you'll need to use to meet your recovery objectives. Azure provides several services and features to help you meet these objectives.
+
+
+<<<
+
+=== Protect your data with backup and restore
+
+==== Establish backup and restoration requirements
+As with a disaster recovery strategy, backup requirements are based on a cost-benefit analysis. Analysis of your app's data should be guided by the relative importance of the different categories of data the app manages, as well as external requirements, such as data retention laws.
+
+To establish backup requirements for your app, group your application's data based on the following requirements:
+
+* How much of this type of data can afford to be lost, measured in duration
+* The maximum amount of time a restore of this type of data should require
+* Backup retention requirements: how long and at what frequency do backups need to remain available
+
+These concepts map neatly to the concepts of Recovery Point Objective and Recovery Time Objective (RPO and RTO). The duration of acceptable loss will generally translate directly to required backup intervals and RPO. The maximum amount of time a restore takes corresponds to the RTO for the data component of your application. Both requirements should be developed relative to the cost of achieving them. Every organization would like to say that they truly can't afford to lose _any_ data, but often that's not the case when the cost of achieving that requirement is considered.
+
+Backup absolutely plays a role in disaster recovery (DR), but backups, restores and their associated scenarios extend beyond the scope of DR. Backups may need to be restored in non-disaster situations, including those where RTO and RPO aren't of great concern. For example, if a small amount of data older than your backup interval is corrupted or deleted, but the application doesn't experience downtime, your application may never be in danger of missing its SLA and a successful restore will result in no data lost. Your disaster recovery plan may or may not include guidance on performing restores in non-disaster situations.
+
+.Tip
+[INFO]
+====
+Don't confuse _archival, replication, and backup_. Archival is the storage of data for long-term preservation and read access. Replication is the near-real-time copying of data between replicas to support high availability and certain disaster recovery scenarios. Some requirements, such as data retention laws, may influence your strategies for all three of these concerns. Archival, replication, and backup all require separate analysis and implementation.
+====
+
+==== Azure backup and restore capabilities
+
+===== Azure Backup
+Azure Backup is a family of backup products that back up data to Azure Recovery Services vaults for storage and recovery. Recovery Service vaults are storage resources in Azure that are dedicated to holding data and configuration backups for virtual machines, servers, and individual workstations and workloads.
+
+Azure Backup serves as a general-purpose backup solution for cloud and on-premises workflows that run on VMs or physical servers. It's designed to be a drop-in replacement for traditional backup solutions that stores data in Azure instead of archive tapes or other local physical media.
+
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/4-azure-backup.png []
+
+===== Azure Blob storage
+Azure Storage doesn't include an automated backup feature, but blobs are commonly used to back up all kinds of data from various sources. Many services that provide backup capabilities use blobs to store their data, and blobs are a common target for scripts and tools in every kind of backup scenario.
+
+Immutable blob storage is configurable to be non-erasable and non-modifiable for a user-specified interval. Immutable blob storage was designed primarily to fulfill strict requirements for certain kinds of data, such as financial data. It's a great option for ensuring that backups are protected against accidental deletion or modification.
+
+===== Azure SQL Database
+
+Comprehensive, automatic backup functionality is included with Azure SQL Database at no extra charge. Full backups are created weekly, with differential backups performed every 12 hours, and log backups created every five minutes. Backups created by the service can be used to restore a database to a specific point in time, even if it's been deleted. Restores can be performed using the Azure portal, PowerShell, or the REST API. Backups for databases encrypted with Transparent Data Encryption, enabled by default, are also encrypted.
+
+===== Azure App Service
+
+Web applications hosted in the Azure App Service Standard and Premium tiers support turnkey scheduled and manual backups. Backups include configuration and file contents as well as contents of databases used by the app. They also support simple filters for excluding files. Restore operations can target different App Service instances, making App Service backup a simple way to move one app's contents to another.
+
+App Service backups are limited to 10 GB total, including app and database content. They're a good solution for new apps under development and small-scale apps. More mature applications won't generally use App Service backup. They will instead rely on robust deployment and rollback procedures, storage strategies that don't use application disk storage, and dedicated backup strategies for databases and persistent storage.
+
+==== Verify backups and test restore procedures
+No backup system is complete without a strategy for verifying backups and testing restore procedures. Even if you use a dedicated backup service or product, you should still document and practice recovery procedures to ensure that they're well-understood and return the system to the expected state.
+
+Strategies for verifying backups vary and will depend on the nature of your infrastructure. You may want to consider techniques, such as creating a new deployment of the application, restoring the backup to it, and comparing the state of the two instances. In many cases, this technique closely mimics actual disaster recovery procedures. Simply performing a comparison of a subset of the backup data with the live data immediately after creating a backup is enough. A common component of backup verification is attempting to restore old backups to ensure that they're still available and operational, and that the backup system hasn't changed in a way that renders them incompatible.
+
+Any strategy is better than finding out that your backups are corrupted or incomplete while attempting to recover from a disaster.
+
+A backup and restore strategy is an important part of ensuring your architecture can recover from the loss or corruption of data. Review your architecture to define your backup and restore requirements. Azure provides several services and features to provide backup and restore capabilities to any architecture.
