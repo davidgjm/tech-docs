@@ -4,5 +4,20 @@
 
 === link:Operational-Execllence.adoc[Operational Excellence]
 === link:Performance-efficiency.adoc[Performance Efficiency]
+=== link:Reliability.adoc[Reliability]
+=== link:Security.adoc[Security]
 
-== References
+
+[sidebar]
+.References
+--
+
+Learning Paths
+
+* https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-introduction/
+* https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-cost-optimization/
+* https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-operational-excellence/
+* https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-performance-efficiency/
+* https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/
+
+--
