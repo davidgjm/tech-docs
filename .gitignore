@@ -16,3 +16,5 @@ gradle-app.setting
 cheatsheet*/
 
 .DS_Store
+
+.idea/
