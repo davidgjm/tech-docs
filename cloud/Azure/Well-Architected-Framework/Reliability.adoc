@@ -94,6 +94,7 @@ Some apps may only constitute a single process or classification of data. This i
 
 * *Recovery Point Objective (RPO)*: The maximum duration of acceptable data loss. RPO is measured in units of time, not volume: "30 minutes of data", "four hours of data", and so on. RPO is about limiting and recovering from data loss, not data theft.
 * *Recovery Time Objective (RTO)*: The maximum duration of acceptable downtime, where "downtime" needs to be defined by your specification. For example, if the acceptable downtime duration is eight hours in the event of a disaster, then your RTO is eight hours.
+
 image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/3-rto-rpo.png[]
 
 Each major process or workload that's implemented by an app should have separate RPO and RTO values. Even if you arrive at the same values for different processes, each one should be generated through a separate analysis that examines disaster scenario risks and potential recovery strategies for each respective process.

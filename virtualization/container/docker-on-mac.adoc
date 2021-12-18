@@ -1,125 +1,102 @@
-= docker replacement & minikube
+= _Docker Desktop_ replacement on MacOS
 
-== hyberkit virtualization solution for MacOS
+== setup minikube
 
-== Installing multipass
+=== Setup prerequisite tools
+[source, bash]
+----
+brew install hyperkit                   <1>
+brew install minikube                   <2>
+minikube config set driver hyperkit     <3>
+----
+<1> Installs hyperkit
+<2> Installs minikube
+<3> Sets `hyperkit` as the default driver
+
+
+
+
+
+== Setup docker client
+
+=== Install docker client binaries
+Follow the instructions in https://docs.docker.com/engine/install/binaries/#install-client-binaries-on-macos[Install client binaries on macOS🔗]
+
+[source, bash]
+----
+$ tar xzvf /path/to/<FILE>.tar.gz
+$ sudo xattr -rc docker
+$ docker/docker
+$ sudo cp docker/docker /usr/local/bin/
+$ docker version
+----
+
+=== Setup docker host environment
+https://docs.docker.com/engine/reference/commandline/cli/#environment-variables
+
+==== Get minikube docker engine information
+
+===== Check if minikube is running
+Make sure minikube is up and running by running the command below:
+
+    minikube status
+
+===== Get docker engine info
+
+View the docker engine host information by running command below:
+[source, bash]
+----
+s0001321@mC02FG16BML85 ~ % minikube docker-env
+----
+
+.Output
+[source, bash]
+----
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.64.12:2376"
+export DOCKER_CERT_PATH="/Users/s0001321/.minikube/certs"
+export MINIKUBE_ACTIVE_DOCKERD="minikube"
+
+# To point your shell to minikube's docker-daemon, run:
+# eval $(minikube -p minikube docker-env)
+----
+
+==== Setup docker host information
+You can either simply use the environment variables exposed by command `minikube docker-env` or configure the docker context.
+
+===== Use docker context to configure docker host
+
+.Setup context
+[source, bash]
+----
+docker context create minikube --description "using minikube's docker engine" --docker "host=tcp://192.168.64.12:2376,ca=$HOME/.minikube/certs/ca.pem,cert=$HOME/.minikube/certs/cert.pem,key=$HOME/.minikube/certs/key.pem"
+docker context use minikube
+----
+
+==== Use `minikube docker-env`
+
 [source,bash]
 ----
-brew install multipass
+eval $(minikube docker-env)
 ----
 
-=== Find available images
+==== Test docker command
+    docker ps
 
+.example output
 [source,bash]
 ----
-s0001321@mC02FG16BML85 ~ % multipass find       
-Image                       Aliases           Version          Description
-18.04                       bionic            20211129         Ubuntu 18.04 LTS
-20.04                       focal,lts         20211129         Ubuntu 20.04 LTS
-21.04                       hirsute           20211130         Ubuntu 21.04
-21.10                       impish            20211209         Ubuntu 21.10
-anbox-cloud-appliance                         latest           Anbox Cloud Appliance
-minikube                                      latest           minikube is local Kubernetes
-----
+s0001321@mC02FG16BML85 .docker % docker images
+REPOSITORY                                TAG       IMAGE ID       CREATED        SIZE
+k8s.gcr.io/kube-apiserver                 v1.22.3   53224b502ea4   7 weeks ago    128MB
+k8s.gcr.io/kube-scheduler                 v1.22.3   0aa9c7e31d30   7 weeks ago    52.7MB
+k8s.gcr.io/kube-controller-manager        v1.22.3   05c905cef780   7 weeks ago    122MB
+k8s.gcr.io/kube-proxy                     v1.22.3   6120bd723dce   7 weeks ago    104MB
+kubernetesui/dashboard                    v2.3.1    e1482a24335a   6 months ago   220MB
+k8s.gcr.io/etcd                           3.5.0-0   004811815584   6 months ago   295MB
+kubernetesui/metrics-scraper              v1.0.7    7801cfc6d5c0   6 months ago   34.4MB
+k8s.gcr.io/coredns/coredns                v1.8.4    8d147537fb7d   6 months ago   47.6MB
+gcr.io/k8s-minikube/storage-provisioner   v5        6e38f40d628d   8 months ago   31.5MB
+k8s.gcr.io/pause                          3.5       ed210e3e4a5b   9 months ago   683kB
 
-=== Lauch an Ubuntu image
-
-==== Launch an Ubuntu 20.04 instance
-[source,bash]
-----
-multipass launch --name ubuntu 20.04
-----
-
-==== List created instances
-[source,bash]
-----
-s0001321@mC02FG16BML85 ~ % multipass list
-Name                    State             IPv4             Image
-minikube                Running           192.168.64.8     Ubuntu 20.04 LTS
-sandbox                 Stopped           --               Ubuntu 20.04 LTS
-----
-
-== Install and setup podman
-
-
-[sidebar]
-.References
---
-* https://www.atlantic.net/dedicated-server-hosting/how-to-install-and-use-podman-on-ubuntu-20-04/
-* https://podman.io/getting-started/installation
-
-It is used to present information related to the main content.
-
---
-
-=== Installing on MacOS
-Podman is a tool for running Linux containers. You can do this from a MacOS desktop as long as you have access to a linux box either running inside of a VM on the host, or available via the network. Podman includes a command, podman machine that automatically manages VM’s.
-
-The Mac client is available through Homebrew:
-[source, bash]
-----
-brew install podman
-----
-
-You can then verify the installation information using:
-[source, bash]
---
-podman info
---
-
-=== Installing on Ubuntu
-
-
-[NOTE]
-The podman package is available in the official repositories for Ubuntu 20.10 and newer.
-
-==== Ubuntu 20.10 and newer
-[source, bash]
-----
-sudo apt-get -y update
-sudo apt-get -y install podman
-----
-
-
-==== Ubuntu earlier versions
-[source, bash]
-----
-. /etc/os-release
-echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
-curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | sudo apt-key add -
-sudo apt-get update
-sudo apt-get -y upgrade
-sudo apt-get -y install podman
-----
-
-
-You can then verify the installation information using:
-[source, bash]
---
-podman info
---
-
-=== Configuring podman to use vm from multipass
-
-==== Setup podman in multipass vm (ubuntu)
-See previous section.
-
-==== Setup podman remote connection
-
-[source, bash]
-----
-
-----
-
-<<<
-
-== Configuring environment for minikube
-* https://minikube.sigs.k8s.io/docs/drivers/ssh/
-* https://computingforgeeks.com/install-cri-o-container-runtime-on-ubuntu-linux/
-
-=== Starting minikube
-
-[source, bash]
-----
-minikube start --driver=ssh --ssh-ip-address=192.168.64.9 --ssh-key=~/.ssh/id_rsa --ssh-user=root
 ----
