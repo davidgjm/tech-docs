@@ -1,4 +1,5 @@
 = _Docker Desktop_ replacement on MacOS
+:toc:
 
 == setup minikube
 
@@ -13,9 +14,74 @@ minikube config set driver hyperkit     <3>
 <2> Installs minikube
 <3> Sets `hyperkit` as the default driver
 
+=== Bootstrap a single node Kubernetes cluster in Minikube
+
+==== Start a new cluster
+[source,bash]
+----
+minikube start
+----
+
+.Command output
+[source]
+----
+😄  minikube v1.24.0 on Darwin 11.6.1
+✨  Using the hyperkit driver based on user configuration
+💾  Downloading driver docker-machine-driver-hyperkit:
+    > docker-machine-driver-hyper...: 65 B / 65 B [----------] 100.00% ? p/s 0s
+    > docker-machine-driver-hyper...: 8.35 MiB / 8.35 MiB  100.00% 4.65 MiB p/s
+🔑  The 'hyperkit' driver requires elevated permissions. The following commands will be executed:
+
+    $ sudo chown root:wheel /Users/user/.minikube/bin/docker-machine-driver-hyperkit
+    $ sudo chmod u+s /Users/user/.minikube/bin/docker-machine-driver-hyperkit
 
 
+Password:
+💿  Downloading VM boot image ...
+    > minikube-v1.24.0.iso.sha256: 65 B / 65 B [-------------] 100.00% ? p/s 0s
+    > minikube-v1.24.0.iso: 225.58 MiB / 225.58 MiB  100.00% 1.47 MiB p/s 2m33s
+👍  Starting control plane node minikube in cluster minikube
+💾  Downloading Kubernetes v1.22.3 preload ...
+    > preloaded-images-k8s-v13-v1...: 501.73 MiB / 501.73 MiB  100.00% 1.40 MiB
+🔥  Creating hyperkit VM (CPUs=2, Memory=4000MB, Disk=20000MB) ...
+🐳  Preparing Kubernetes v1.22.3 on Docker 20.10.8 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+💡  kubectl not found. If you need it, try: 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+----
 
+==== Check cluster status
+
+    minikube status
+
+.Command Output
+[source]
+----
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+----
+
+==== Shutdown your cluster
+
+    minikube stop
+
+.Command Output
+[source]
+----
+✋  Stopping node "minikube"  ...
+🛑  1 node stopped.
+----
+
+<<<
 
 == Setup docker client
 
