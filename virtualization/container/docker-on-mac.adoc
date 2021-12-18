@@ -86,15 +86,11 @@ kubeconfig: Configured
 == Setup docker client
 
 === Install docker client binaries
-Follow the instructions in https://docs.docker.com/engine/install/binaries/#install-client-binaries-on-macos[Install client binaries on macOS🔗]
+//Follow the instructions in https://docs.docker.com/engine/install/binaries/#install-client-binaries-on-macos[Install client binaries on macOS🔗]
 
 [source, bash]
 ----
-$ tar xzvf /path/to/<FILE>.tar.gz
-$ sudo xattr -rc docker
-$ docker/docker
-$ sudo cp docker/docker /usr/local/bin/
-$ docker version
+brew install docker
 ----
 
 === Setup docker host environment
