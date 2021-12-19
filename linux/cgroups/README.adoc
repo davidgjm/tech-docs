@@ -1,0 +1,44 @@
+= Control Groups (`cgroups`)
+:toc:
+
+.References
+[sidebar]
+****
+* https://medium.com/@kasunmaduraeng/docker-namespace-and-cgroups-dece27c209c7[Docker Namespace and Cgroups]
+
+****
+
+== Introduction
+_Cgroups_ provide resource limitation and reporting capability within the container space. They allow granular control over what host resources are allocated to the containers and when they are allocated.
+
+=== Common control groups
+
+. CPU
+. Memory
+. Network Bandwidth
+. Disk
+. Priority
+
+== Using cgroups
+
+=== Find cgroups info
+[source, bash]
+----
+sudo systemd-cgls
+sudo systemd-ctop
+----
+
+=== Use cgroups with docker
+Using these cgroup policies is very simple. If you for instance want to lock down a Docker container to the first CPU core, you’d append --cpuset-cpus=0 to your docker run command.And also you could setup the cpu shares which you required.
+
+[source, bash]
+====
+$ docker run -d --name='kasun_priority_1' --cpuset-cpus=0 --cpu-shares=20 kasuntest1
+
+$ docker run -d --name='kasun_priority_2' --cpuset-cpus=2 --cpu-shares=30 kasuntest2
+====
+
+And we could use the below command to change running container CPU shards.
+
+    sudo systemctl set-property docker-7d7ds9s7dhdsda044b29cb873cac460b429cfcbdd0e877c0868eb2a901dbf80.scope CPUShares=512
+

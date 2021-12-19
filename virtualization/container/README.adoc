@@ -1,0 +1,34 @@
+= Generic
+
+== References
+
+.Readings
+[sidebar]
+****
+* https://www.tutorialworks.com/difference-docker-containerd-runc-crio-oci[The differences between Docker, containerd, CRI-O and runc]
+****
+
+== Different terms (OCI,CRI,etc)
+
+image::container-ecosystem.drawio.png[]
+
+== Docker
+We have to start with Docker because it’s the most popular developer tool for working with containers. And for a lot of people, the name “Docker” itself is synonymous with the word “container”.
+
+Docker kick-started this whole revolution. Docker created a very ergonomic (nice-to-use) tool for working with containers – also called #docker#.
+
+image::container-ecosystem-docker.drawio.png[]
+
+docker is designed to be installed on a workstation or server and comes with a bunch of tools to make it easy to build and run containers as a developer, or DevOps person.
+
+The docker command line tool can build container images, pull them from registries, create, start and manage containers.
+
+To make all of this happen, the experience you know as docker is now comprised of these projects (there are others, but these are the main ones):
+
+* https://github.com/docker/cli[*docker-cli*]: This is the command-line utility that you interact with using docker ... commands.
+
+* https://containerd.io/[*containerd*]: This is a daemon process that manages and runs containers. It pushes and pulls images, manages storage and networking, and supervises the running of containers.
+
+* https://github.com/opencontainers/runc[*runc*]: This is the low-level container runtime (the thing that actually creates and runs containers). It includes libcontainer, a native Go-based implementation for creating containers.
+
+In reality, when you run a container with docker, you’re actually running it through the Docker daemon, containerd, and then runc.
