@@ -1,0 +1,4 @@
+= Best Practices for cloud applications
+
+https://docs.microsoft.com/en-us/azure/architecture/best-practices/index-best-practices
+
