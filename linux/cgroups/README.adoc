@@ -5,6 +5,7 @@
 [sidebar]
 ****
 * https://medium.com/@kasunmaduraeng/docker-namespace-and-cgroups-dece27c209c7[Docker Namespace and Cgroups]
+* * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/resource_management_guide/sec-default_cgroup_hierarchies
 
 ****
 

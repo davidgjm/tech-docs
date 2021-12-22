@@ -6,7 +6,11 @@
 * https://opensource.com/article/18/8/sysadmins-guide-containers[
 A sysadmin's guide to containers]
 * https://github.com/opencontainers/runtime-spec
-* https://tldp.org/LDP/sag/html/root-fs.html[The root filesyste]
+* https://tldp.org/LDP/sag/html/root-fs.html[The root filesystem]
+* https://wiki.debian.org/ramfs
+* https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch03.html
+* https://unix.stackexchange.com/questions/479415/how-does-linux-know-where-the-rootfs-is
+
 ****
 
 == Introduction

@@ -1,0 +1,237 @@
+= cgroups with docker
+
+
+== Limiting cpu (cgroups v2)
+
+=== Run a docker container
+    ubuntu@linuxbox:~$ docker run -it --cpu-period=100000 --cpu-quota=20000 nginx /bin/bash
+    root@28b59d5db245:/#
+
+
+    ubuntu@linuxbox:~$ docker ps
+    CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS     NAMES
+    28b59d5db245   nginx     "/docker-entrypoint.…"   10 minutes ago   Up 10 minutes   80/tcp    interesting_mccarthy
+
+Note the container id _28b59d5db245_ above.
+
+=== Check `pstree`
+
+The PID _7192_ is the process id for the docker container created above
+
+    ubuntu@linuxbox:~$ pstree -p
+    systemd(1)─┬─agetty(655)
+    ├─agetty(661)
+    ├─containerd(649)─┬─{containerd}(702)
+    │                 ├─{containerd}(703)
+    │                 ├─{containerd}(704)
+    │                 ├─{containerd}(705)
+    │                 ├─{containerd}(706)
+    │                 ├─{containerd}(720)
+    │                 ├─{containerd}(722)
+    │                 ├─{containerd}(1501)
+    │                 └─{containerd}(2440)
+    ├─containerd-shim(7169)─┬─bash(7192)
+    │                       ├─{containerd-shim}(7170)
+    │                       ├─{containerd-shim}(7171)
+    │                       ├─{containerd-shim}(7172)
+    │                       ├─{containerd-shim}(7173)
+    │                       ├─{containerd-shim}(7174)
+    │                       ├─{containerd-shim}(7175)
+    │                       ├─{containerd-shim}(7176)
+    │                       ├─{containerd-shim}(7177)
+    │                       └─{containerd-shim}(7218)
+    ├─cron(623)
+    ├─dbus-daemon(624)
+    ├─dockerd(3583)─┬─{dockerd}(3585)
+    │               ├─{dockerd}(3586)
+    │               ├─{dockerd}(3587)
+    │               ├─{dockerd}(3588)
+    │               ├─{dockerd}(3589)
+    │               ├─{dockerd}(3590)
+    │               ├─{dockerd}(3591)
+    │               ├─{dockerd}(3592)
+    │               ├─{dockerd}(3593)
+    │               ├─{dockerd}(3594)
+    │               └─{dockerd}(3595)
+    ├─fwupd(6034)─┬─{fwupd}(6055)
+    │             ├─{fwupd}(6061)
+    │             ├─{fwupd}(6062)
+    │             └─{fwupd}(6064)
+    ├─irqbalance(630)───{irqbalance}(656)
+    ├─multipathd(494)─┬─{multipathd}(495)
+    │                 ├─{multipathd}(496)
+    │                 ├─{multipathd}(497)
+    │                 ├─{multipathd}(498)
+    │                 ├─{multipathd}(499)
+    │                 └─{multipathd}(500)
+    ├─networkd-dispat(632)
+    ├─packagekitd(1434)─┬─{packagekitd}(1435)
+    │                   └─{packagekitd}(1436)
+    ├─polkitd(693)─┬─{polkitd}(694)
+    │              └─{polkitd}(696)
+    ├─rsyslogd(633)─┬─{rsyslogd}(663)
+    │               ├─{rsyslogd}(664)
+    │               └─{rsyslogd}(665)
+    ├─snapd(5183)─┬─{snapd}(5194)
+    │             ├─{snapd}(5195)
+    │             ├─{snapd}(5196)
+    │             ├─{snapd}(5197)
+    │             ├─{snapd}(5198)
+    │             ├─{snapd}(5204)
+    │             ├─{snapd}(5206)
+    │             ├─{snapd}(5209)
+    │             ├─{snapd}(5210)
+    │             ├─{snapd}(5258)
+    │             └─{snapd}(5270)
+    ├─sshd(689)─┬─sshd(6102)───sshd(6210)───bash(6211)───docker(7137)─┬─{docker}(7138)
+    │           │                                                     ├─{docker}(7139)
+    │           │                                                     ├─{docker}(7140)
+    │           │                                                     ├─{docker}(7141)
+    │           │                                                     ├─{docker}(7142)
+    │           │                                                     ├─{docker}(7143)
+    │           │                                                     ├─{docker}(7145)
+    │           │                                                     ├─{docker}(7146)
+    │           │                                                     └─{docker}(7147)
+    │           ├─sshd(6398)───sshd(6469)───bash(6470)───pstree(7227)
+    │           └─sshd(6615)───sshd(6686)───bash(6687)───sudo(6696)───su(6697)───bash(6698)───bash(7019)
+    ├─systemd(6105)───(sd-pam)(6106)
+    ├─systemd-journal(368)
+    ├─systemd-logind(641)
+    ├─systemd-network(584)
+    ├─systemd-resolve(586)
+    ├─systemd-timesyn(536)───{systemd-timesyn}(541)
+    ├─systemd-udevd(400)
+    ├─udisksd(644)─┬─{udisksd}(678)
+    │              ├─{udisksd}(687)
+    │              ├─{udisksd}(698)
+    │              └─{udisksd}(715)
+    └─unattended-upgr(688)───{unattended-upgr}(718)
+
+
+=== Check the PID in `cgroup.procs`
+
+The directory *_docker-28b59d5db245184419afeb09d9756c666979a46f6a7d5cc0e87f2502c92714ec.scope_* is the cgroupfs directory for the subject container.
+
+    root@linuxbox:~# cd /sys/fs/cgroup/system.slice
+
+[source, bash]
+----
+root@linuxbox:/sys/fs/cgroup/system.slice# ll
+total 0
+drwxr-xr-x 88 root root 0 Dec 21 23:24  .
+dr-xr-xr-x 14 root root 0 Dec 21 22:22  ..
+drwxr-xr-x  2 root root 0 Dec 19 18:05  apparmor.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  apport.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  blk-availability.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  boot-efi.mount
+-r--r--r--  1 root root 0 Dec 19 17:32  cgroup.controllers
+-r--r--r--  1 root root 0 Dec 19 17:32  cgroup.events
+-rw-r--r--  1 root root 0 Dec 19 17:32  cgroup.freeze
+-rw-r--r--  1 root root 0 Dec 19 17:32  cgroup.max.depth
+-rw-r--r--  1 root root 0 Dec 19 17:32  cgroup.max.descendants
+-rw-r--r--  1 root root 0 Dec 19 17:32  cgroup.procs
+-r--r--r--  1 root root 0 Dec 19 17:32  cgroup.stat
+-rw-r--r--  1 root root 0 Dec 21 10:13  cgroup.subtree_control
+-rw-r--r--  1 root root 0 Dec 19 17:32  cgroup.threads
+-rw-r--r--  1 root root 0 Dec 19 17:32  cgroup.type
+drwxr-xr-x  2 root root 0 Dec 19 18:05  cloud-config.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  cloud-final.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  cloud-init-hotplugd.socket
+drwxr-xr-x  2 root root 0 Dec 19 18:05  cloud-init-local.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  cloud-init.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  console-setup.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  containerd.service
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpu.max
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpu.pressure
+-r--r--r--  1 root root 0 Dec 19 17:32  cpu.stat
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpu.uclamp.max
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpu.uclamp.min
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpu.weight
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpu.weight.nice
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpuset.cpus
+-r--r--r--  1 root root 0 Dec 19 17:32  cpuset.cpus.effective
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpuset.cpus.partition
+-rw-r--r--  1 root root 0 Dec 19 17:32  cpuset.mems
+-r--r--r--  1 root root 0 Dec 19 17:32  cpuset.mems.effective
+drwxr-xr-x  2 root root 0 Dec 19 18:05  cron.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  dbus.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  dbus.socket
+drwxr-xr-x  2 root root 0 Dec 19 18:05  dm-event.socket
+drwxr-xr-x  2 root root 0 Dec 21 23:14  docker-28b59d5db245184419afeb09d9756c666979a46f6a7d5cc0e87f2502c92714ec.scope
+drwxr-xr-x  2 root root 0 Dec 19 22:35  docker.service
+drwxr-xr-x  2 root root 0 Dec 19 18:05  docker.socket
+----
+
+==== Find what's included under the container scope
+
+    root@linuxbox:/sys/fs/cgroup/system.slice# cd docker-28b59d5db245184419afeb09d9756c666979a46f6a7d5cc0e87f2502c92714ec.scope
+    root@linuxbox:/sys/fs/cgroup/system.slice/docker-28b59d5db245184419afeb09d9756c666979a46f6a7d5cc0e87f2502c92714ec.scope# ll
+    total 0
+    drwxr-xr-x  2 root root 0 Dec 21 23:14 .
+    drwxr-xr-x 88 root root 0 Dec 21 23:24 ..
+    -r--r--r--  1 root root 0 Dec 21 23:14 cgroup.controllers
+    -r--r--r--  1 root root 0 Dec 21 23:14 cgroup.events
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cgroup.freeze
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cgroup.max.depth
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cgroup.max.descendants
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cgroup.procs
+    -r--r--r--  1 root root 0 Dec 21 23:17 cgroup.stat
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cgroup.subtree_control
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cgroup.threads
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cgroup.type
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cpu.max
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cpu.pressure
+    -r--r--r--  1 root root 0 Dec 21 23:14 cpu.stat
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cpu.uclamp.max
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cpu.uclamp.min
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cpu.weight
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cpu.weight.nice
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cpuset.cpus
+    -r--r--r--  1 root root 0 Dec 21 23:17 cpuset.cpus.effective
+    -rw-r--r--  1 root root 0 Dec 21 23:17 cpuset.cpus.partition
+    -rw-r--r--  1 root root 0 Dec 21 23:14 cpuset.mems
+    -r--r--r--  1 root root 0 Dec 21 23:17 cpuset.mems.effective
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.1GB.current
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.1GB.events
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.1GB.events.local
+    -rw-r--r--  1 root root 0 Dec 21 23:17 hugetlb.1GB.max
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.1GB.rsvd.current
+    -rw-r--r--  1 root root 0 Dec 21 23:17 hugetlb.1GB.rsvd.max
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.2MB.current
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.2MB.events
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.2MB.events.local
+    -rw-r--r--  1 root root 0 Dec 21 23:17 hugetlb.2MB.max
+    -r--r--r--  1 root root 0 Dec 21 23:17 hugetlb.2MB.rsvd.current
+    -rw-r--r--  1 root root 0 Dec 21 23:17 hugetlb.2MB.rsvd.max
+    -rw-r--r--  1 root root 0 Dec 21 23:17 io.max
+    -rw-r--r--  1 root root 0 Dec 21 23:17 io.pressure
+    -r--r--r--  1 root root 0 Dec 21 23:14 io.stat
+    -rw-r--r--  1 root root 0 Dec 21 23:14 io.weight
+    -r--r--r--  1 root root 0 Dec 21 23:17 memory.current
+    -r--r--r--  1 root root 0 Dec 21 23:14 memory.events
+    -r--r--r--  1 root root 0 Dec 21 23:17 memory.events.local
+    -rw-r--r--  1 root root 0 Dec 21 23:14 memory.high
+    -rw-r--r--  1 root root 0 Dec 21 23:14 memory.low
+    -rw-r--r--  1 root root 0 Dec 21 23:14 memory.max
+    -rw-r--r--  1 root root 0 Dec 21 23:14 memory.min
+    -r--r--r--  1 root root 0 Dec 21 23:17 memory.numa_stat
+    -rw-r--r--  1 root root 0 Dec 21 23:14 memory.oom.group
+    -rw-r--r--  1 root root 0 Dec 21 23:17 memory.pressure
+    -r--r--r--  1 root root 0 Dec 21 23:17 memory.stat
+    -r--r--r--  1 root root 0 Dec 21 23:17 memory.swap.current
+    -r--r--r--  1 root root 0 Dec 21 23:17 memory.swap.events
+    -rw-r--r--  1 root root 0 Dec 21 23:17 memory.swap.high
+    -rw-r--r--  1 root root 0 Dec 21 23:14 memory.swap.max
+    -r--r--r--  1 root root 0 Dec 21 23:17 misc.current
+    -rw-r--r--  1 root root 0 Dec 21 23:17 misc.max
+    -r--r--r--  1 root root 0 Dec 21 23:17 pids.current
+    -r--r--r--  1 root root 0 Dec 21 23:17 pids.events
+    -rw-r--r--  1 root root 0 Dec 21 23:14 pids.max
+    -r--r--r--  1 root root 0 Dec 21 23:17 rdma.current
+    -rw-r--r--  1 root root 0 Dec 21 23:17 rdma.max
+
+
+==== Check the PID 7192
+
+    root@linuxbox:/sys/fs/cgroup/system.slice/docker-28b59d5db245184419afeb09d9756c666979a46f6a7d5cc0e87f2502c92714ec.scope# cat cgroup.procs
+    7192
