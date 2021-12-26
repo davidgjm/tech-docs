@@ -1,0 +1,25 @@
+= Linux Tools
+:toc:
+:source-highlighter: rouge
+
+
+== vim
+
+=== Sample `.vimrc` config
+
+[source,shell script]
+----
+s0001321@mC02FG16BML85 statefulset % cat ~/.vimrc
+syntax on
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+----
+
+=== Setup syntax highlighting
+
+._.vimrc_ file
+[source,bash]
+----
+echo "syntax on" >> ~/.vimrc
+echo "autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab" >> ~/.vimrc
+----
+
