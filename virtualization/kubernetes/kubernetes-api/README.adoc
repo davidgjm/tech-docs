@@ -1,0 +1,117 @@
+= Kubernetes API information
+
+This page contains information and/or links to commonly used or important API information about `Kubernetes API`
+
+== List API resources
+
+=== List All API resources for current context
+[source,bash]
+----
+kubectl api-resources --namespaced=true -o wide --sort-by=name
+----
+
+=== List api resources in `core` API group
+
+[source,bash]
+----
+kubectl api-resources --namespaced=true -o wide --sort-by=name --api-group=''
+NAME                     SHORTNAMES   APIVERSION   NAMESPACED   KIND                    VERBS
+bindings                              v1           true         Binding                 [create]
+configmaps               cm           v1           true         ConfigMap               [create delete deletecollection get list patch update watch]
+endpoints                ep           v1           true         Endpoints               [create delete deletecollection get list patch update watch]
+events                   ev           v1           true         Event                   [create delete deletecollection get list patch update watch]
+limitranges              limits       v1           true         LimitRange              [create delete deletecollection get list patch update watch]
+persistentvolumeclaims   pvc          v1           true         PersistentVolumeClaim   [create delete deletecollection get list patch update watch]
+pods                     po           v1           true         Pod                     [create delete deletecollection get list patch update watch]
+podtemplates                          v1           true         PodTemplate             [create delete deletecollection get list patch update watch]
+replicationcontrollers   rc           v1           true         ReplicationController   [create delete deletecollection get list patch update watch]
+resourcequotas           quota        v1           true         ResourceQuota           [create delete deletecollection get list patch update watch]
+secrets                               v1           true         Secret                  [create delete deletecollection get list patch update watch]
+serviceaccounts          sa           v1           true         ServiceAccount          [create delete deletecollection get list patch update watch]
+services                 svc          v1           true         Service                 [create delete get list patch update watch]
+----
+
+
+
+== API Groups
+
+.Links
+* https://kubernetes.io/docs/reference/using-api/#api-groups
+* https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#-strong-api-groups-strong-
+
+The API Groups and their versions are summarized in the following tables.
+
+=== v1.21
+
+.`v1.21` API Groups
+[cols="60,40"]
+|===
+|Group|Version
+
+|admissionregistration.k8s.io
+|v1, v1beta1
+
+|apiextensions.k8s.io
+|v1, v1beta1
+
+|apiregistration.k8s.io
+|v1, v1beta1
+
+|apps
+|v1
+
+|authentication.k8s.io
+|v1, v1beta1
+
+|authorization.k8s.io
+|v1, v1beta1
+
+|autoscaling
+|v1, v2beta2, v2beta1
+
+|batch
+|v1, v1beta1
+
+|certificates.k8s.io
+|v1, v1beta1
+
+|coordination.k8s.io
+|v1, v1beta1
+
+|core
+|v1
+
+|discovery.k8s.io
+|v1, v1beta1
+
+|events.k8s.io
+|v1, v1beta1
+
+|policy
+|v1, v1beta1
+
+|extensions
+|v1beta1
+
+|flowcontrol.apiserver.k8s.io
+|v1beta1
+
+|internal.apiserver.k8s.io
+|v1alpha1
+
+|networking.k8s.io
+|v1, v1beta1
+
+|node.k8s.io
+|v1, v1beta1, v1alpha1
+
+|rbac.authorization.k8s.io
+|v1, v1beta1, v1alpha1
+
+|scheduling.k8s.io
+|v1, v1beta1, v1alpha1
+
+|storage.k8s.io
+|v1, v1beta1, v1alpha1
+
+|===

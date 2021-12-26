@@ -1,1 +1,60 @@
 = Kubernetes Readings
+
+== Cheatsheet
+
+=== Check role binding info for current kubectl config
+
+==== View subject info in `kubectl client cert`
+
+[source,bash]
+----
+s0001321@mC02FG16BML85 ~ % cluster_user=$(kubectl config view --raw -o json | jq -r ".contexts[]|select(.name==\"$(kubectl config current-context)\")|.context.user")
+
+s0001321@mC02FG16BML85 ~ % kubectl config view --raw -o json | jq ".users[]|select(.name==\"$cluster_user\")" | jq -r '.user["client-certificate-data"]'|base64 -d|openssl x509 -noout -subject
+subject= /O=system:masters/CN=masterclient
+
+----
+
+==== Check `clusterrolebindings`
+
+[source,bash]
+----
+s0001321@mC02FG16BML85 ~ % group="system:masters"
+s0001321@mC02FG16BML85 ~ % kubectl get clusterrolebindings -o json \
+    | jq ".items[] | select(.subjects[].name==\"$group\")"
+----
+
+.Example output
+[source,json]
+----
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "ClusterRoleBinding",
+  "metadata": {
+    "annotations": {
+      "rbac.authorization.kubernetes.io/autoupdate": "true"
+    },
+    "creationTimestamp": "2021-11-19T10:09:19Z",
+    "labels": {
+      "kubernetes.io/bootstrapping": "rbac-defaults"
+    },
+    "name": "cluster-admin",
+    "resourceVersion": "148",
+    "uid": "2010da38-f24e-47da-9e23-39cc506d81f8"
+  },
+  "roleRef": {
+    "apiGroup": "rbac.authorization.k8s.io",
+    "kind": "ClusterRole",
+    "name": "cluster-admin"
+  },
+  "subjects": [
+    {
+      "apiGroup": "rbac.authorization.k8s.io",
+      "kind": "Group",
+      "name": "system:masters"
+    }
+  ]
+}
+
+----
+

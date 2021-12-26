@@ -1,0 +1,16 @@
+= Configuration Management
+
+.Readings
+[sidebar]
+****
+* https://utkuozdemir.org/blog/why-k8s-as-backend-dev/[Why you should care about Kubernetes as a backend developer?]
+* https://dev.to/devfanooos/managing-configurations-in-microservices-1l1o[Managing configurations in microservices]
+* https://www.briansdevblog.com/2021/04/spring-cloud-config-server-on-kubernetes-part-1/[]
+****
+
+== Configuration Management Concerns
+* Externalized configuration for applications
+* Versioned
+* Automated Reloading
+* tech stack support (Java, go, python)
+* Runtime platform (_Kubernetes_)

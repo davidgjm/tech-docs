@@ -1,4 +1,68 @@
 = Best Practices for cloud applications
 
-https://docs.microsoft.com/en-us/azure/architecture/best-practices/index-best-practices
+.References
+[sidebar]
+****
+* https://docs.microsoft.com/en-us/azure/architecture/best-practices/index-best-practices
+****
 
+== Catalog of practices
+
+This table lists various best practices. The Related pillars or patterns column contains the following links:
+
+* Cloud development challenges that the practice and related design patterns address.
+* Pillars of the Microsoft Azure Well-Architected Framework that the practice focuses on.
+
+[cols="20,60,20"]
+|===
+|Practice 	|Summary 	|Related pillars or patterns
+
+
+|API design
+|Design web APIs to support platform independence by using standard protocols and agreed-upon data formats. Promote service evolution so that clients can discover functionality without requiring modification. Improve response times and prevent transient faults by supporting partial responses and providing ways to filter and paginate data.
+|Design and implementation, Performance efficiency, Operational excellence
+
+|API implementation
+|Implement web APIs to be efficient, responsive, scalable, and available. Make actions idempotent, support content negotiation, and follow the HTTP specification. Handle exceptions, and support the discovery of resources. Provide ways to handle large requests and minimize network traffic.
+|Design and implementation, Operational excellence
+
+|Autoscaling
+|Design apps to dynamically allocate and de-allocate resources to satisfy performance requirements and minimize costs. Take advantage of Azure Monitor autoscale and the built-in autoscaling that many Azure components offer.
+|Performance efficiency, Cost optimization
+
+|Background jobs
+|Implement batch jobs, processing tasks, and workflows as background jobs. Use Azure platform services to host these tasks. Trigger tasks with events or schedules, and return results to calling tasks.
+|Design and implementation, Operational excellence
+
+|Caching
+|Improve performance by copying data to fast storage that's close to apps. Cache data that you read often but rarely modify. Manage data expiration and concurrency. See how to populate caches and use the Azure Cache for Redis service.
+|Data management, Performance efficiency
+
+|Content delivery network
+|Use content delivery networks (CDNs) to efficiently deliver web content to users and reduce load on web apps. Overcome deployment, versioning, security, and resilience challenges.
+|Data management, Performance efficiency
+
+|Data partitioning
+|Partition data to improve scalability, availability, and performance, and to reduce contention and data storage costs. Use horizontal, vertical, and functional partitioning in efficient ways.
+|Data management, Performance efficiency, Cost optimization
+
+|Data partitioning strategies (by service)
+|Partition data in Azure SQL Database and Azure Storage services like Azure Table Storage and Azure Blob Storage. Shard your data to distribute loads, reduce latency, and support horizontal scaling.
+|Data management, Performance efficiency, Cost optimization
+
+|Message encoding considerations
+|Use asynchronous messages to exchange information between system components. Choose the payload structure, encoding format, and serialization library that work best with your data.
+|Messaging, Security
+
+|Monitoring and diagnostics
+|Track system health, usage, and performance with a monitoring and diagnostics pipeline. Turn monitoring data into alerts, reports, and triggers that help in various situations. Examples include detecting and correcting issues, spotting potential problems, meeting performance guarantees, and fulfilling auditing requirements.
+|Operational excellence
+
+|Retry guidance for specific services
+|Use, adapt, and extend the retry mechanisms that Azure services and client SDKs offer. Develop a systematic and robust approach for managing temporary issues with connections, operations, and resources.
+|Design and implementation, Reliability
+
+|Transient fault handling
+|Handle transient faults caused by unavailable networks or resources. Overcome challenges when developing appropriate retry strategies. Avoid duplicating layers of retry code and other anti-patterns.
+|Design and implementation, Reliability
+|===
