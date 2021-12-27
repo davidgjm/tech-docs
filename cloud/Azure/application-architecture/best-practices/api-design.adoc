@@ -1,5 +1,6 @@
 = RESTful web API design
 :source-highlighter: rouge
+:icons: font
 :toc:
 
 A well-designed web API should aim to support:
@@ -265,5 +266,235 @@ Location: /api/orders/12345
 
 For more information, see https://docs.microsoft.com/en-us/azure/architecture/patterns/async-request-reply[Asynchronous Request-Reply pattern].
 
+== Filter and paginate data
+GET requests over collection resources can potentially return a large number of items. You should design a web API to limit the amount of data returned by any single request. Consider supporting query strings that specify the maximum number of items to retrieve and a starting offset into the collection. For example:
+
+[source,HTTP]
+----
+/orders?limit=25&offset=50
+----
+
+Also consider imposing an _upper limit on the number of items returned_, to help prevent Denial of Service attacks. To assist client applications, GET requests that return paginated data should also include some form of metadata that indicate the total number of resources available in the collection.
+
+You can use a similar strategy to sort data as it is fetched, by providing a sort parameter that takes a field name as the value, such as _/orders?sort=ProductID_. However, this approach can have a negative effect on caching, because query string parameters form part of the resource identifier used by many cache implementations as the key to cached data.
+
+You can extend this approach to _limit the fields returned_ for each item, if each item contains a large amount of data. For example, you could use a query string parameter that accepts a comma-delimited list of fields, such as /orders?fields=ProductID,Quantity.
+
+[IMPORTANT]
+.Use meaningful defaults
+====
+Give all optional parameters in query strings meaningful defaults. For example, set the `limit` parameter to 10 and the `offset` parameter to 0 if you implement pagination, set the sort parameter to the key of the resource if you implement ordering, and set the `fields` parameter to all fields in the resource if you support projections.
+====
+
+== Support partial responses for large binary resources
+
+A resource may contain large binary fields, such as files or images. To overcome problems caused by unreliable and intermittent connections and to improve response times, consider enabling such resources to be retrieved in chunks. To do this, the web API should support the `Accept-Ranges` header for GET requests for large resources. This header indicates that the GET operation supports partial requests. The client application can submit GET requests that return a subset of a resource, specified as a range of bytes.
+
+Also, consider implementing HTTP HEAD requests for these resources. A HEAD request is similar to a GET request, except that it only returns the HTTP headers that describe the resource, with an empty message body. A client application can issue a HEAD request to determine whether to fetch a resource by using partial GET requests. For example:
+[source,HTTP]
+----
+HEAD https://adventure-works.com/products/10?fields=productImage HTTP/1.1
+----
+Here is an example response message:
+[source,HTTP]
+----
+HTTP/1.1 200 OK
+
+Accept-Ranges: bytes
+Content-Type: image/jpeg
+Content-Length: 4580
+----
+The `Content-Length` header gives the total size of the resource, and the ``Accept-Range``s header indicates that the corresponding GET operation supports partial results. The client application can use this information to retrieve the image in smaller chunks. The first request fetches the first 2500 bytes by using the Range header:
+[source,HTTP]
+----
+GET https://adventure-works.com/products/10?fields=productImage HTTP/1.1
+Range: bytes=0-2499
+----
+
+The response message indicates that this is a partial response by returning HTTP status code _206_. The Content-Length header specifies the actual number of bytes returned in the message body (not the size of the resource), and the Content-Range header indicates which part of the resource this is (bytes 0-2499 out of 4580):
+[source,HTTP]
+----
+HTTP/1.1 206 Partial Content
+
+Accept-Ranges: bytes
+Content-Type: image/jpeg
+Content-Length: 2500
+Content-Range: bytes 0-2499/4580
+
+[...]
+----
+A subsequent request from the client application can retrieve the remainder of the resource.
 
 == Use HATEOAS to enable navigation to related resources
+One of the primary motivations behind REST is that it should be possible to navigate the entire set of resources without requiring prior knowledge of the URI scheme. Each HTTP GET request should return the information necessary to find the resources related directly to the requested object through hyperlinks included in the response, and it should also be provided with information that describes the operations available on each of these resources. This principle is known as HATEOAS, or Hypertext as the Engine of Application State. The system is effectively a finite state machine, and the response to each request contains the information necessary to move from one state to another; no other information should be necessary.
+
+NOTE: Currently there are no general-purpose standards that define how to model the HATEOAS principle. The examples shown in this section illustrate one possible, proprietary solution.
+
+For example, to handle the relationship between an order and a customer, the representation of an order could include links that identify the available operations for the customer of the order. Here is a possible representation:
+
+[source, json]
+----
+{
+  "orderID":3,
+  "productID":2,
+  "quantity":4,
+  "orderValue":16.60,
+  "links":[
+    {
+      "rel":"customer",
+      "href":"https://adventure-works.com/customers/3",
+      "action":"GET",
+      "types":["text/xml","application/json"]
+    },
+    {
+      "rel":"customer",
+      "href":"https://adventure-works.com/customers/3",
+      "action":"PUT",
+      "types":["application/x-www-form-urlencoded"]
+    },
+    {
+      "rel":"customer",
+      "href":"https://adventure-works.com/customers/3",
+      "action":"DELETE",
+      "types":[]
+    },
+    {
+      "rel":"self",
+      "href":"https://adventure-works.com/orders/3",
+      "action":"GET",
+      "types":["text/xml","application/json"]
+    },
+    {
+      "rel":"self",
+      "href":"https://adventure-works.com/orders/3",
+      "action":"PUT",
+      "types":["application/x-www-form-urlencoded"]
+    },
+    {
+      "rel":"self",
+      "href":"https://adventure-works.com/orders/3",
+      "action":"DELETE",
+      "types":[]
+    }]
+}
+----
+In this example, the `links` array has a set of links. Each link represents an operation on a related entity. The data for each link includes the relationship ("customer"), the URI (`https://adventure-works.com/customers/3`), the HTTP method, and the supported MIME types. This is all the information that a client application needs to be able to invoke the operation.
+
+The `links` array also includes self-referencing information about the resource itself that has been retrieved. These have the relationship self.
+
+The set of links that are returned may change, depending on the state of the resource. This is what is meant by hypertext being the "engine of application state."
+
+
+== Versioning a RESTful web API
+
+The primary imperative is to enable existing client applications to continue functioning unchanged while allowing new client applications to take advantage of new features and resources.
+
+Versioning enables a web API to indicate the features and resources that it exposes, and a client application can submit requests that are directed to a specific version of a feature or resource. The following sections describe several different approaches, each of which has its own benefits and trade-offs.
+
+=== No versioning
+This is the simplest approach, and may be acceptable for some internal APIs. Significant changes could be represented as new resources or new links. Adding content to existing resources might not present a breaking change as client applications that are not expecting to see this content will ignore it.
+
+For example, a request to the URI `https://adventure-works.com/customers/3` should return the details of a single customer containing `id`, `name`, and `address` fields expected by the client application:
+[source,HTTP]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"id":3,"name":"Contoso LLC","address":"1 Microsoft Way Redmond WA 98053"}
+----
+
+NOTE: For simplicity, the example responses shown in this section do not include HATEOAS links.
+
+If the `DateCreated` field is added to the schema of the customer resource, then the response would look like this:
+
+[source,HTTP]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"id":3,"name":"Contoso LLC","dateCreated":"2014-09-04T12:11:38.0376089Z","address":"1 Microsoft Way Redmond WA 98053"}
+----
+Existing client applications might continue functioning correctly if they are capable of ignoring unrecognized fields, while new client applications can be designed to handle this new field. However, if more radical changes to the schema of resources occur (such as removing or renaming fields) or the relationships between resources change then these may constitute breaking changes that prevent existing client applications from functioning correctly. In these situations, you should consider one of the following approaches.
+
+=== URI versioning
+Each time you modify the web API or change the schema of resources, you add a version number to the URI for each resource. The previously existing URIs should continue to operate as before, returning resources that conform to their original schema.
+
+Extending the previous example, if the `address` field is restructured into subfields containing each constituent part of the address (such as `streetAddress`, `city`, `state`, and `zipCode`), this version of the resource could be exposed through a URI containing a version number, such as `https://adventure-works.com/v2/customers/3`:
+
+[source,HTTP]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"id":3,"name":"Contoso LLC","dateCreated":"2014-09-04T12:11:38.0376089Z","address":{"streetAddress":"1 Microsoft Way","city":"Redmond","state":"WA","zipCode":98053}}
+----
+This versioning mechanism is very simple but depends on the server routing the request to the appropriate endpoint. However, it can become unwieldy as the web API matures through several iterations and the server has to support a number of different versions. Also, from a purist's point of view, in all cases the client applications are fetching the same data (customer 3), so the URI should not really be different depending on the version. This scheme also complicates implementation of HATEOAS as all links will need to include the version number in their URIs.
+
+=== Query string versioning
+Rather than providing multiple URIs, you can specify the version of the resource by using a parameter within the query string appended to the HTTP request, such as `https://adventure-works.com/customers/3?version=2`. The version parameter should default to a meaningful value such as 1 if it is omitted by older client applications.
+
+This approach has the semantic advantage that the same resource is always retrieved from the same URI, but it depends on the code that handles the request to parse the query string and send back the appropriate HTTP response. This approach also suffers from the same complications for implementing HATEOAS as the URI versioning mechanism.
+
+NOTE: Some older web browsers and web proxies will not cache responses for requests that include a query string in the URI. This can degrade performance for web applications that use a web API and that run from within such a web browser.
+
+=== Header versioning
+
+Rather than appending the version number as a query string parameter, you could implement a custom header that indicates the version of the resource. This approach requires that the client application adds the appropriate header to any requests, although the code handling the client request could use a default value (version 1) if the version header is omitted. The following examples use a custom header named Custom-Header. The value of this header indicates the version of web API.
+
+Version 1:
+[source,HTTP]
+----
+GET https://adventure-works.com/customers/3 HTTP/1.1
+Custom-Header: api-version=1
+----
+
+[source,HTTP]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"id":3,"name":"Contoso LLC","address":"1 Microsoft Way Redmond WA 98053"}
+----
+
+Version 2:
+[source,HTTP]
+----
+GET https://adventure-works.com/customers/3 HTTP/1.1
+Custom-Header: api-version=2
+----
+[source,HTTP]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"id":3,"name":"Contoso LLC","dateCreated":"2014-09-04T12:11:38.0376089Z","address":{"streetAddress":"1 Microsoft Way","city":"Redmond","state":"WA","zipCode":98053}}
+----
+As with the previous two approaches, implementing HATEOAS requires including the appropriate custom header in any links.
+
+=== Media type versioning
+When a client application sends an HTTP GET request to a web server it should stipulate the format of the content that it can handle by using an Accept header, as described earlier in this guidance. Frequently the purpose of the Accept header is to allow the client application to specify whether the body of the response should be XML, JSON, or some other common format that the client can parse. However, it is possible to define custom media types that include information enabling the client application to indicate which version of a resource it is expecting.
+
+The following example shows a request that specifies an _Accept_ header with the value `application/vnd.adventure-works.v1+json`. The `vnd.adventure-works.v1` element indicates to the web server that it should return version 1 of the resource, while the json element specifies that the format of the response body should be JSON:
+[source,HTTP]
+----
+GET https://adventure-works.com/customers/3 HTTP/1.1
+Accept: application/vnd.adventure-works.v1+json
+----
+The code handling the request is responsible for processing the Accept header and honoring it as far as possible (the client application may specify multiple formats in the Accept header, in which case the web server can choose the most appropriate format for the response body). The web server confirms the format of the data in the response body by using the Content-Type header:
+[source,HTTP]
+----
+HTTP/1.1 200 OK
+Content-Type: application/vnd.adventure-works.v1+json; charset=utf-8
+
+{"id":3,"name":"Contoso LLC","address":"1 Microsoft Way Redmond WA 98053"}
+----
+If the Accept header does not specify any known media types, the web server could generate an HTTP 406 (Not Acceptable) response message or return a message with a default media type.
+
+This approach is arguably the purest of the versioning mechanisms and lends itself naturally to HATEOAS, which can include the MIME type of related data in resource links.
+
+[NOTE]
+====
+When you select a versioning strategy, you should also consider the implications on performance, especially *caching* on the web server. The URI versioning and Query String versioning schemes are cache-friendly inasmuch as the same URI/query string combination refers to the same data each time.
+
+The Header versioning and Media Type versioning mechanisms typically require additional logic to examine the values in the custom header or the Accept header. In a large-scale environment, many clients using different versions of a web API can result in a significant amount of duplicated data in a server-side cache. This issue can become acute if a client application communicates with a web server through a proxy that implements caching, and that only forwards a request to the web server if it does not currently hold a copy of the requested data in its cache.
+====
