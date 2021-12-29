@@ -59,11 +59,10 @@ endif::safe-mode-unsafe[]
 // Github uses secure mode by default
 ifdef::safe-mode-secure[]
 
-xref:health-monitoring.adoc[]
+xref:health-monitoring.adoc[Health Monitoring]
 
+xref:availability-monitoring.adoc[Availability Monitoring]
 
-xref:availability-monitoring.adoc[]
-
-xref:sla-monitoring.adoc[]
+xref:sla-monitoring.adoc[SLA Monitoring]
 
 endif::safe-mode-secure[]
