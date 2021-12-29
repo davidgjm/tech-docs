@@ -1,0 +1,51 @@
+= Monitoring and diagnostics
+:toc:
+:source-highlighter: rouge
+:icons: font
+:tip-caption: 💡
+ifdef::env-github[]
+:tip-caption: :bulb:
+endif::[]
+
+.References
+[sidebar]
+****
+* https://docs.microsoft.com/en-us/azure/architecture/best-practices/monitoring[Best practices for monitoring cloud applications]
+****
+
+
+
+.Reflections
+[TIP]
+=====
+* How can this be implemented with Spring Boot Actuator endpoints?
+* Which Actuator endpoints correspond to:
+- health monitoring
+- availability monitoring
+=====
+
+
+== Monitoring and diagnostics scenarios
+
+icon:android[]
+
+You can use monitoring to gain an insight into how well a system is functioning. Monitoring is a crucial part of maintaining quality-of-service targets. Common scenarios for collecting monitoring data include:
+
+* Ensuring that the system remains healthy.
+* Tracking the availability of the system and its component elements.
+* Maintaining performance to ensure that the throughput of the system does not degrade unexpectedly as the volume of work increases.
+* Guaranteeing that the system meets any service-level agreements (SLAs) established with customers.
+* Protecting the privacy and security of the system, users, and their data.
+* Tracking the operations that are performed for auditing or regulatory purposes.
+* Monitoring the day-to-day usage of the system and spotting trends that might lead to problems if they're not addressed.
+* Tracking issues that occur, from initial report through to analysis of possible causes, rectification, consequent software updates, and deployment.
+* Tracing operations and debugging software releases.
+
+NOTE: This list is not intended to be comprehensive. This document focuses on these scenarios as the most common situations for performing monitoring. There might be others that are less common or are specific to your environment.
+
+include::health-monitoring.adoc[leveloffset=+1]
+
+include::availability-monitoring.adoc[leveloffset=+1]
+
+include::sla-monitoring.adoc[leveloffset=+1]
+

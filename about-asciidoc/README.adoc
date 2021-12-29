@@ -1,0 +1,17 @@
+= asciidoc tips
+:toc:
+:icons: font
+
+.Useful links
+[sidebar]
+****
+* https://www.vogella.com/tutorials/AsciiDoc/article.html[Using AsciiDoc and Asciidoctor to write documentation - Tutorial]
+* https://blog.mrhaki.com/2014/06/awesome-asciidoc-use-inline-icons.html[Awesome Asciidoctor: Use Inline Icons]
+****
+
+== Using icon fonts
+
+https://docs.asciidoctor.org/asciidoc/latest/macros/icon-macro/[Icon Macro]
+
+
+* `+icon:android[2x, role=green]+` produces icon:android[2x, role=green]

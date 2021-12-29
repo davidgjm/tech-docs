@@ -1,0 +1,7 @@
+[#_sla-monitoring]
+= SLA monitoring
+:icons: font
+
+Many commercial systems that support paying customers make guarantees about the performance of the system in the form of SLAs. Essentially, SLAs state that the system can handle a defined volume of work within an agreed time frame and without losing critical information. SLA monitoring is concerned with ensuring that the system can meet measurable SLAs.
+
+NOTE: SLA monitoring is closely related to performance monitoring. But whereas performance monitoring is concerned with ensuring that the system functions _optimally_, SLA monitoring is governed by a contractual obligation that defines what _optimally_ actually means.
