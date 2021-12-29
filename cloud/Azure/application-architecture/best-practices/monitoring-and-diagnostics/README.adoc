@@ -43,9 +43,27 @@ You can use monitoring to gain an insight into how well a system is functioning.
 
 NOTE: This list is not intended to be comprehensive. This document focuses on these scenarios as the most common situations for performing monitoring. There might be others that are less common or are specific to your environment.
 
+
+
+
+ifdef::safe-mode-unsafe[]
 include::health-monitoring.adoc[leveloffset=+1]
 
 include::availability-monitoring.adoc[leveloffset=+1]
 
 include::sla-monitoring.adoc[leveloffset=+1]
 
+endif::safe-mode-unsafe[]
+
+
+// Github uses secure mode by default
+ifdef::safe-mode-secure[]
+
+xref:health-monitoring.adoc[]
+
+
+xref:availability-monitoring.adoc[]
+
+xref:sla-monitoring.adoc[]
+
+endif::safe-mode-secure[]
