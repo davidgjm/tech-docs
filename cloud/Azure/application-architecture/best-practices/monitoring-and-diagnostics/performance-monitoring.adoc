@@ -3,9 +3,8 @@
 :source-highlighter: rouge
 :icons: font
 
+.icon:sticky-note[2x, role=lime] Open Questions
 ====
-icon:sticky-note[2x, role=yellow] *Open Questions*
-
 * How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?
 ====
 
