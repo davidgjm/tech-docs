@@ -4,9 +4,10 @@
 :icons: font
 
 .icon:sticky-note[2x, role=lime] Open Questions
-====
+[sidebar]
+****
 * How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?
-====
+****
 
 System performance depends on a number of factors. Each factor is typically measured through key performance indicators (KPIs), such as the number of database transactions per second or the volume of network requests that are successfully serviced in a specified time frame. Some of these KPIs might be available as specific performance measures, whereas others might be derived from a combination of metrics.
 
