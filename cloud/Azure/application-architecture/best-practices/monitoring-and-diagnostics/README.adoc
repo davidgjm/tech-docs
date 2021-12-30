@@ -51,6 +51,10 @@ include::health-monitoring.adoc[leveloffset=+1]
 
 include::availability-monitoring.adoc[leveloffset=+1]
 
+include::performance-monitoring.adoc[leveloffset=+1]
+
+include::security-monitoring.adoc[leveloffset=+1]
+
 include::sla-monitoring.adoc[leveloffset=+1]
 
 endif::safe-mode-unsafe[]
@@ -62,6 +66,10 @@ ifdef::safe-mode-secure[]
 xref:health-monitoring.adoc[Health Monitoring]
 
 xref:availability-monitoring.adoc[Availability Monitoring]
+
+xref:performance-monitoring.adoc[Performance Monitoring]
+
+xref:security-monitoring.adoc[Security Monitoring]
 
 xref:sla-monitoring.adoc[SLA Monitoring]
 

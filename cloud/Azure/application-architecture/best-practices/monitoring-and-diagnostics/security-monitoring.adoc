@@ -1,0 +1,44 @@
+= Security Monitoring
+:toc:
+:icons: font
+
+
+All commercial systems that include sensitive data must implement a security structure. The complexity of the security mechanism is usually a function of the sensitivity of the data. In a system that requires users to be authenticated, you should record:
+
+* All sign-in attempts, whether they fail or succeed.
+* All operations performed by—and the details of all resources accessed by—an authenticated user.
+* When a user ends a session and signs out.
+
+Monitoring might be able to help detect attacks on the system. For example, a large number of failed sign-in attempts might indicate a brute-force attack. An unexpected surge in requests might be the result of a distributed denial-of-service (DDoS) attack. *You must be prepared to monitor all requests to all resources #regardless of the source of these requests#.* A system that has a sign-in vulnerability might accidentally expose resources to the outside world without requiring a user to actually sign in.
+
+== Requirements for security monitoring
+The most critical aspects of security monitoring should enable an operator to quickly:
+
+* Detect attempted intrusions by an unauthenticated entity.
+* Identify attempts by entities to perform operations on data for which they have not been granted access.
+* Determine whether the system, or some part of the system, is under attack from outside or inside. (For example, a malicious authenticated user might be attempting to bring the system down.)
+
+[IMPORTANT]
+====
+To support these requirements, an operator should be notified if:
+
+* One account makes repeated failed sign-in attempts within a specified period.
+* One authenticated account repeatedly tries to access a prohibited resource during a specified period.
+* A large number of unauthenticated or unauthorized requests occur during a specified period.
+====
+
+The information that's provided to an operator should include the host address of the source for each request. If security violations regularly arise from a particular range of addresses, these hosts might be blocked.
+
+A key part in maintaining the security of a system is being able to quickly detect actions that deviate from the usual pattern. Information such as the number of failed and/or successful sign-in requests can be displayed visually to help detect whether there is a spike in activity at an unusual time. (An example of this activity is users signing in at 3:00 AM and performing a large number of operations when their working day starts at 9:00 AM). This information can also be used to help configure time-based autoscaling. For example, if an operator observes that a large number of users regularly sign in at a particular time of day, the operator can arrange to start additional authentication services to handle the volume of work, and then shut down these additional services when the peak has passed.
+
+== Data sources, instrumentation, and data-collection requirements
+
+Security is an all-encompassing aspect of most distributed systems. The pertinent data is likely to be generated at multiple points throughout a system. You should consider adopting a _Security Information and Event Management (SIEM)_ approach to gather the security-related information that results from events raised by the application, network equipment, servers, firewalls, antivirus software, and other intrusion-prevention elements.
+
+Security monitoring can incorporate data from tools that are not part of your application. These tools can include utilities that identify port-scanning activities by external agencies, or network filters that detect attempts to gain unauthenticated access to your application and data.
+
+In all cases, the gathered data must enable an administrator to determine the nature of any attack and take the appropriate countermeasures.
+
+== Analyzing security data
+
+A feature of security monitoring is the variety of sources from which the data arises. The different formats and level of detail often require complex analysis of the captured data to tie it together into a coherent thread of information. Apart from the simplest of cases (such as detecting a large number of failed sign-ins, or repeated attempts to gain unauthorized access to critical resources), it might not be possible to perform any complex automated processing of security data. Instead, it might be preferable to write this data, timestamped but otherwise in its original form, to a secure repository to allow for expert manual analysis.

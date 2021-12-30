@@ -5,3 +5,56 @@
 Many commercial systems that support paying customers make guarantees about the performance of the system in the form of SLAs. Essentially, SLAs state that the system can handle a defined volume of work within an agreed time frame and without losing critical information. SLA monitoring is concerned with ensuring that the system can meet measurable SLAs.
 
 NOTE: SLA monitoring is closely related to performance monitoring. But whereas performance monitoring is concerned with ensuring that the system functions _optimally_, SLA monitoring is governed by a contractual obligation that defines what _optimally_ actually means.
+
+SLAs are often defined in terms of:
+
+* Overall system availability. For example, an organization might guarantee that the system will be available for 99.9 percent of the time. This equates to no more than 9 hours of downtime per year, or approximately 10 minutes a week.
+* Operational throughput. This aspect is often expressed as one or more high-water marks, such as guaranteeing that the system can support up to 100,000 concurrent user requests or handle 10,000 concurrent business transactions.
+* Operational response time. The system might also make guarantees for the rate at which requests are processed. An example is that 99 percent of all business transactions will finish within 2 seconds, and no single transaction will take longer than 10 seconds.
+
+NOTE: Some contracts for commercial systems might also include SLAs for customer support. An example is that all help-desk requests will elicit a response within five minutes, and that 99 percent of all problems will be fully addressed within 1 working day. Effective issue tracking (described later in this section) is key to meeting SLAs such as these.
+
+== Requirements for SLA monitoring
+At the highest level, an operator should be able to determine at a glance whether the system is meeting the agreed SLAs or not. And if not, the operator should be able to drill down and examine the underlying factors to determine the reasons for substandard performance.
+
+Typical high-level indicators that can be depicted visually include:
+
+* The percentage of service uptime.
+* The application throughput (measured in terms of successful transactions and/or operations per second).
+* The number of successful/failing application requests.
+* The number of application and system faults, exceptions, and warnings.
+
+All of these indicators should be capable of being filtered by a specified period of time.
+
+A cloud application will likely comprise a number of subsystems and components. An operator should be able to select a high-level indicator and see how it's composed from the health of the underlying elements. For example, if the uptime of the overall system falls below an acceptable value, an operator should be able to zoom in and determine which elements are contributing to this failure.
+
+[NOTE]
+====
+System uptime needs to be defined carefully. In a system that uses redundancy to ensure maximum availability, individual instances of elements might fail, but the system can remain functional. System uptime as presented by health monitoring should indicate the aggregate uptime of each element and not necessarily whether the system has actually halted. Additionally, failures might be isolated. So even if a specific system is unavailable, the remainder of the system might remain available, although with decreased functionality. (In an e-commerce system, a failure in the system might prevent a customer from placing orders, but the customer might still be able to browse the product catalog.)
+====
+For alerting purposes, the system should be able to raise an event if any of the high-level indicators exceed a specified threshold. The lower-level details of the various factors that compose the high-level indicator should be available as contextual data to the alerting system.
+
+== Data sources, instrumentation, and data-collection requirements
+
+The raw data that's required to support SLA monitoring is similar to the raw data that's required for performance monitoring, together with some aspects of health and availability monitoring. (See those sections for more details.) You can capture this data by:
+
+* Performing endpoint monitoring.
+* Logging exceptions, faults, and warnings.
+* Tracing the execution of user requests.
+* Monitoring the availability of any third-party services that the system uses.
+* Using performance metrics and counters.
+
+All data must be timed and timestamped.
+
+== Analyzing SLA data
+The instrumentation data must be aggregated to generate a picture of the overall performance of the system. Aggregated data must also support drill-down to enable examination of the performance of the underlying subsystems. For example, you should be able to:
+
+* Calculate the total number of user requests during a specified period and determine the success and failure rate of these requests.
+* Combine the response times of user requests to generate an overall view of system response times.
+* Analyze the progress of user requests to break down the overall response time of a request into the response times of the individual work items in that request.
+* Determine the overall availability of the system as a percentage of uptime for any specific period.
+* Analyze the percentage time availability of the individual components and services in the system. This might involve parsing logs that third-party services have generated.
+
+Many commercial systems are required to report real performance figures against agreed SLAs for a specified period, typically a month. This information can be used to calculate credits or other forms of repayments for customers if the SLAs are not met during that period. You can calculate availability for a service by using the technique described in the section Analyzing availability data.
+
+For internal purposes, an organization might also track the number and nature of incidents that caused services to fail. Learning how to resolve these issues quickly, or eliminate them completely, will help to reduce downtime and meet SLAs.
