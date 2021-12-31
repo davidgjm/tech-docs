@@ -3,6 +3,8 @@
 :source-highlighter: rouge
 :icons: font
 :tip-caption: 💡
+:imagesdir: ./images
+
 ifdef::env-github[]
 :tip-caption: :bulb:
 endif::[]
@@ -87,7 +89,7 @@ You can envisage the entire monitoring and diagnostics process as a pipeline tha
 
 [#img-pipeline]
 .The stages in the monitoring and diagnostics pipeline
-image::images/pipeline.png[The stages in the monitoring and diagnostics pipeline.]
+image::pipeline.png[The stages in the monitoring and diagnostics pipeline.]
 
 
 Figure 1 highlights how the data for monitoring and diagnostics can come from a variety of data sources. The instrumentation and collection stages are concerned with identifying the sources from where the data needs to be captured, determining which data to capture, how to capture it, and how to format this data so that it can be easily examined. The analysis/diagnosis stage takes the raw data and uses it to generate meaningful information that an operator can use to determine the state of the system. The operator can use this information to make decisions about possible actions to take, and then feed the results back into the instrumentation and collection stages. The visualization/alerting stage phase presents a consumable view of the system state. It can display information in near real time by using a series of dashboards. And it can generate reports, graphs, and charts to provide a historical view of the data that can help identify long-term trends. If information indicates that a KPI is likely to exceed acceptable bounds, this stage can also trigger an alert to an operator. In some cases, an alert can also be used to trigger an automated process that attempts to take corrective actions, such as autoscaling.
