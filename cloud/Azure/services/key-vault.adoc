@@ -1,0 +1,15 @@
+= Azure Key Vault
+
+== Cheat sheet
+
+=== Access Policy management
+
+[cols="30,70m"]
+|===
+|Description|Command
+
+|Get policy details
+|az keyvault show -n _key-vault-name_ \| jq  '.properties.accessPolicies[]\|select(.objectId=="_aad- object-id_")'
+
+|===
+

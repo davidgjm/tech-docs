@@ -57,6 +57,8 @@ include::security-monitoring.adoc[leveloffset=+1]
 
 include::sla-monitoring.adoc[leveloffset=+1]
 
+include::auditing.adoc[leveloffset=+1]
+
 endif::safe-mode-unsafe[]
 
 
@@ -73,4 +75,24 @@ xref:security-monitoring.adoc[Security Monitoring]
 
 xref:sla-monitoring.adoc[SLA Monitoring]
 
+xref:auditing.adoc[Auditing]
+
 endif::safe-mode-secure[]
+
+== The monitoring and diagnostics pipeline
+
+Monitoring a large-scale distributed system poses a significant challenge. Each of the scenarios described in the previous section should not necessarily be considered in isolation. There is likely to be a significant overlap in the monitoring and diagnostic data that's required for each situation, although this data might need to be processed and presented in different ways. For these reasons, you should take a holistic view of monitoring and diagnostics.
+
+You can envisage the entire monitoring and diagnostics process as a pipeline that comprises the stages shown in Figure 1.
+
+[#img-pipeline]
+.The stages in the monitoring and diagnostics pipeline
+image::images/pipeline.png[The stages in the monitoring and diagnostics pipeline.]
+
+
+Figure 1 highlights how the data for monitoring and diagnostics can come from a variety of data sources. The instrumentation and collection stages are concerned with identifying the sources from where the data needs to be captured, determining which data to capture, how to capture it, and how to format this data so that it can be easily examined. The analysis/diagnosis stage takes the raw data and uses it to generate meaningful information that an operator can use to determine the state of the system. The operator can use this information to make decisions about possible actions to take, and then feed the results back into the instrumentation and collection stages. The visualization/alerting stage phase presents a consumable view of the system state. It can display information in near real time by using a series of dashboards. And it can generate reports, graphs, and charts to provide a historical view of the data that can help identify long-term trends. If information indicates that a KPI is likely to exceed acceptable bounds, this stage can also trigger an alert to an operator. In some cases, an alert can also be used to trigger an automated process that attempts to take corrective actions, such as autoscaling.
+
+Note that these steps constitute a continuous-flow process where the stages are happening in parallel. Ideally, all the phases should be dynamically configurable. At some points, especially when a system has been newly deployed or is experiencing problems, it might be necessary to gather extended data on a more frequent basis. At other times, it should be possible to revert to capturing a base level of essential information to verify that the system is functioning properly.
+
+Additionally, the entire monitoring process should be considered a live, ongoing solution that's subject to fine-tuning and improvements as a result of feedback. For example, you might start with measuring many factors to determine system health. Analysis over time might lead to a refinement as you discard measures that aren't relevant, enabling you to more precisely focus on the data that you need while minimizing background noise.
+

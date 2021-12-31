@@ -1,0 +1,52 @@
+= jq
+:toc:
+:icons: font
+:source-highlighter: rouge
+
+== Cheatsheet
+
+.External sources
+[sidebar]
+****
+* https://gist.github.com/olih/f7437fb6962fb3ee9fe95bda8d2c8fa4[Processing JSON using jq]
+****
+
+=== Dealing with json arrays
+
+==== Slicing and Filtering
+
+[cols="30,70m"]
+|===
+|Description|Command
+| All
+| `jq .[]`
+
+| First
+|	`jq '.[0]'`
+
+| Range
+| `jq '.[2:4]'`
+
+| First 3
+| `jq '.[:3]'`
+
+| Last 2
+| `jq '.[-2:]'`
+
+| Before Last
+| `jq '.[-2]'`
+
+| Select array of int by value
+| `jq 'map(select(. >= 2))'`
+
+| Select array of objects by value
+m| `jq '.[] &#124; select(.id == "second")'`
+
+| Select by type
+| `jq '.[] &#124; numbers'` ^*^
+
+|===
+
+===== data types
+
+with type been arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars

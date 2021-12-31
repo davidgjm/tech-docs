@@ -1,0 +1,41 @@
+= helm
+
+== helm best practices
+
+* https://codersociety.com/blog/articles/helm-best-practices[13 Best Practices for using Helm]
+
+=== Ensure Secrets Are Secure
+
+Sensitive data, such as keys or passwords, are stored as secrets in Kubernetes. Although it is possible to secure secrets on the Kubernetes side, they are mostly stored as text files as part of Helm templates and values.
+
+The helm-secrets plugin offers secret management and protection for your critical information. It delegates the secret encryption to Mozilla SOPS, which supports AWS KMS, Cloud KMS on GCP, Azure Key Vault, and PGP.
+
+Let's assume you’ve collected your sensitive data in a file named secrets.yaml as follows:
+
+[source, yaml]
+----
+postgresql:
+  postgresqlUsername: postgres
+  postgresqlPassword: WoZpCAlBsg
+  postgresqlDatabase: wp
+----
+You can encrypt the file with the plugin:
+[source, bash]
+----
+$ helm secrets enc secrets.yaml
+Encrypting secrets.yaml
+Encrypted secrets.yaml
+----
+Now, the file will be updated and all values will be encrypted:
+
+[source, yaml]
+----
+postgresql:
+    postgresqlUsername: ENC\[AES256\_GCM,data:D14/CcA3WjY=,iv...==,type:str\]
+    postgresqlPassword: ENC\[AES256\_GCM,data:Wd7VEKSoqV...,type:str\]
+    postgresqlDatabase: ENC\[AES256\_GCM,data:8ur9pqDxUA==,iv:R...,type:str\]
+sops:
+  ...
+----
+The data in secrets.yaml above was not secure and helm-secrets solves the problem of storing sensitive data as part of Helm charts.
+
