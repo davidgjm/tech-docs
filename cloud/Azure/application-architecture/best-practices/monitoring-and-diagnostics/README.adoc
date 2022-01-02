@@ -141,3 +141,5 @@ Profiling.:: This approach is primarily targeted at monitoring and improving app
 Endpoint monitoring.:: This technique uses one or more diagnostic endpoints that the application exposes specifically to enable monitoring. An endpoint provides a pathway into the application code and can return information about the health of the system. Different endpoints can focus on various aspects of the functionality. You can write your own diagnostics client that sends periodic requests to these endpoints and assimilate the responses. For more information, see the https://docs.microsoft.com/en-us/azure/architecture/patterns/health-endpoint-monitoring[Health Endpoint Monitoring pattern].
 
 For maximum coverage, you should use a combination of these techniques.
+
+include::instrumenting-application.adoc[leveloffset=+1]
