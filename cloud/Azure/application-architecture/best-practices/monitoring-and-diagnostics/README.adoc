@@ -143,3 +143,9 @@ Endpoint monitoring.:: This technique uses one or more diagnostic endpoints that
 For maximum coverage, you should use a combination of these techniques.
 
 include::instrumenting-application.adoc[leveloffset=+1]
+
+include::collecting-and-storing.adoc[leveloffset=+1]
+
+include::analyzing-data-and-diagnosing-issues.adoc[leveloffset=+1]
+
+include::visualizing.adoc[leveloffset=+1]
