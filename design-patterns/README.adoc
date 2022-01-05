@@ -1,1 +1,21 @@
 = Design Patterns
+
+.Readings/Papers
+[sidebar]
+****
+* https://docs.microsoft.com/en-us/azure/architecture/patterns/[Azure Cloud Design Patterns]
+* https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns]
+****
+
+
+== Catalog of patterns
+
+[cols="20,60,20"]
+|===
+|Pattern|Summary|Category
+
+|xref:retry.adoc[Retry]
+|Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that's previously failed.
+|https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability]
+
+|===

@@ -1,5 +1,5 @@
 FROM alpine:latest
 
-RUN apk --no-cache add curl
+RUN apk --no-cache add curl vim
 
-CMD [ "sleep 2h" ]
+CMD [ "/bin/sleep", "2h" ]

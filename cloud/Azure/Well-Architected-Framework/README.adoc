@@ -2,9 +2,9 @@
 
 == Content
 
-=== link:Operational-Execllence.adoc[Operational Excellence]
+=== link:Operational-Excellence.adoc[Operational Excellence]
 === link:Performance-efficiency.adoc[Performance Efficiency]
-=== link:Reliability.adoc[Reliability]
+=== xref:reliability/README.adoc[Reliability]
 === link:Security.adoc[Security]
 
 
