@@ -1,0 +1,6 @@
+= Competing Consumers pattern
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+

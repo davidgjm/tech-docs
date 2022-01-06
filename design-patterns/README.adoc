@@ -3,6 +3,7 @@
 .Readings/Papers
 [sidebar]
 ****
+- https://www.enterpriseintegrationpatterns.com/index.html[Enterprise Integration Patterns]
 * https://docs.microsoft.com/en-us/azure/architecture/patterns/[Azure Cloud Design Patterns]
 * https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns]
 ****
@@ -14,8 +15,18 @@
 |===
 |Pattern|Summary|Category
 
+|xref:async-request-reply.adoc[Asynchronous Request-Reply]
+|Decouple backend processing from a frontend host, where backend processing needs to be asynchronous, but the frontend still needs a clear response.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
+
+|xref:claim-check.adoc[Claim Check]
+|Split a large message into a claim check and a payload to avoid overwhelming a message bus.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
+
 |xref:retry.adoc[Retry]
 |Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that's previously failed.
 |https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability]
+
+
 
 |===
