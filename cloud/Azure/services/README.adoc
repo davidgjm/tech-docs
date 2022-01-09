@@ -1,1 +1,6 @@
 = Azure Services Quick References
+
+== Cheat sheets
+
+- xref:azure-devops.adoc[Azure DevOps]
+- xref:key-vault.adoc[Key Vault]
