@@ -3,5 +3,8 @@
 == Getting Started materials
 
 * xref:geektime.adoc[程序员练级攻略：分布式架构入门]
+* https://www.youtube.com/playlist?list=PLawkBQ15NDEkDJ5IyLIJUTZ1rRM9YQq6N[CS 436 Distributed Computer Systems]
+
 
 == Knowledge graph
+

@@ -1,0 +1,61 @@
+= Spring Kafka
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+== Spring Kafka usage notes
+
+=== Consumer AutoCommit setting
+
+[source,java]
+.org.springframework.boot.autoconfigure.kafka.KafkaProperties
+----
+spring.kafka.consumer.enableAutoCommit
+----
+
+=== KafkaListner annotation setting
+
+`org.springframework.boot.autoconfigure.kafka.KafkaAnnotationDrivenConfiguration`
+
+
+https://docs.spring.io/spring-kafka/docs/current/reference/html/#kafka-listener-annotation
+
+=== Record Listeners
+
+The `@KafkaListener` annotation provides a mechanism for simple POJO listeners.
+The following example shows how to use it:
+[source,java]
+----
+public class Listener {
+
+    @KafkaListener(id = "foo", topics = "myTopic", clientIdPrefix = "myClientId")
+    public void listen(String data) {
+        ...
+    }
+}
+----
+
+=== Spring Boot auto configuration
+
+.org.springframework.boot.autoconfigure.kafka.KafkaAnnotationDrivenConfiguration
+[source,java]
+----
+@Bean
+@ConditionalOnMissingBean(name = "kafkaListenerContainerFactory")
+ConcurrentKafkaListenerContainerFactory<?, ?> kafkaListenerContainerFactory(
+      ConcurrentKafkaListenerContainerFactoryConfigurer configurer,
+      ObjectProvider<ConsumerFactory<Object, Object>> kafkaConsumerFactory) {
+   ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+   configurer.configure(factory, kafkaConsumerFactory
+         .getIfAvailable(() -> new DefaultKafkaConsumerFactory<>(this.properties.buildConsumerProperties())));
+   return factory;
+}
+
+@Configuration(proxyBeanMethods = false)
+@EnableKafka
+@ConditionalOnMissingBean(name = KafkaListenerConfigUtils.KAFKA_LISTENER_ANNOTATION_PROCESSOR_BEAN_NAME)
+static class EnableKafkaConfiguration {
+
+}
+----
