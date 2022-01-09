@@ -1,0 +1,7 @@
+= Idempotency Processing
+
+.Readings
+[sidebar]
+****
+- https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns]
+****

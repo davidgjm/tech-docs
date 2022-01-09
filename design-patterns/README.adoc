@@ -4,8 +4,8 @@
 [sidebar]
 ****
 - https://www.enterpriseintegrationpatterns.com/index.html[Enterprise Integration Patterns]
-* https://docs.microsoft.com/en-us/azure/architecture/patterns/[Azure Cloud Design Patterns]
-* https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns]
+- https://docs.microsoft.com/en-us/azure/architecture/patterns/[Azure Cloud Design Patterns]
+- https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns, Jonathan Oliver's blog]
 ****
 
 
@@ -14,18 +14,42 @@
 [cols="20,60,20"]
 |===
 |Pattern|Summary|Category
+|xref:ambassador.adoc[Ambassador]
+|Create helper services that send network requests on behalf of a consumer service or application.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
 |xref:async-request-reply.adoc[Asynchronous Request-Reply]
 |Decouple backend processing from a frontend host, where backend processing needs to be asynchronous, but the frontend still needs a clear response.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
+|xref:choreography.adoc[Choreography pattern]
+|Let each service decide when and how a business operation is processed, instead of depending on a central orchestrator.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging], https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
 |xref:claim-check.adoc[Claim Check]
 |Split a large message into a claim check and a payload to avoid overwhelming a message bus.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
+|xref:competing-consumers.adoc[Competing Consumers]
+|Enable multiple concurrent consumers to process messages received on the same messaging channel.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
+
+|xref:pipes-and-filters.adoc[Pipes and Filters]
+|Break down a task that performs complex processing into a series of separate elements that can be reused.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
+
+|xref:priority-queue.adoc[Priority Queue]
+|Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging], https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
+
 |xref:retry.adoc[Retry]
 |Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that's previously failed.
 |https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability]
+
+|xref:sidecar.adoc[Sidecar]
+|Deploy components of an application into a separate process or container to provide isolation and encapsulation.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
 
 
