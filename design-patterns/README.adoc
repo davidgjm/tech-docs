@@ -18,9 +18,17 @@
 |Create helper services that send network requests on behalf of a consumer service or application.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
+|xref:anti-corruption-layer.adoc[Anti-Corruption Layer]
+|Implement a façade or adapter layer between a modern application and a legacy system.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
+
 |xref:async-request-reply.adoc[Asynchronous Request-Reply]
 |Decouple backend processing from a frontend host, where backend processing needs to be asynchronous, but the frontend still needs a clear response.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
+
+|xref:backends-for-frontends.adoc[Backends for Frontends]
+|Create separate backend services to be consumed by specific frontend applications or interfaces.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation]
 
 |xref:choreography.adoc[Choreography pattern]
 |Let each service decide when and how a business operation is processed, instead of depending on a central orchestrator.
@@ -46,6 +54,10 @@
 |xref:retry.adoc[Retry]
 |Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that's previously failed.
 |https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability]
+
+|xref:sequential-convoy.adoc[Sequential Convoy]
+|Process a set of related messages in a defined order, without blocking processing of other groups of messages.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
 |xref:sidecar.adoc[Sidecar]
 |Deploy components of an application into a separate process or container to provide isolation and encapsulation.

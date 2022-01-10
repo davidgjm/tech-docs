@@ -1,0 +1,5 @@
+= Gateway Offloading pattern
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images

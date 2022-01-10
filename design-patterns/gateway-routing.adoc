@@ -1,0 +1,6 @@
+= Gateway Routing pattern
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
