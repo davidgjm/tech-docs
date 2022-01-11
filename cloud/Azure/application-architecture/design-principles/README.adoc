@@ -3,7 +3,7 @@
 :source-highlighter: rouge
 
 Follow these design principles to make your application more scalable, resilient, and manageable.
-
+[horizontal]
 xref:self-healing.adoc[Design for self healing.]:: In a distributed system, failures happen. Design your application to be self healing when failures occur.
 
 Make all things redundant.:: Build redundancy into your application, to avoid having single points of failure.

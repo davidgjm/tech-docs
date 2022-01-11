@@ -15,3 +15,17 @@ https://docs.asciidoctor.org/asciidoc/latest/macros/icon-macro/[Icon Macro]
 
 
 * `+icon:android[2x, role=green]+` produces icon:android[2x, role=green]
+
+== Custom styles
+
+=== Open Questions
+
+[source]
+----
+.icon:sticky-note[2x, role=lime] Open Questions
+[sidebar]
+****
+* How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?
+****
+
+----

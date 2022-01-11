@@ -50,6 +50,12 @@
 |Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging], https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
 
+|xref:queue-based-load-leveling.adoc[Queue-Based Load Leveling]
+|Use a queue that acts as a buffer between a task and a service that it invokes in order to smooth intermittent heavy loads.
+|https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability],
+https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging],
+https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Resiliency],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
 
 |xref:retry.adoc[Retry]
 |Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that's previously failed.
