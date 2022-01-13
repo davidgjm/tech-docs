@@ -1,6 +1,22 @@
 = Azure Key Vault
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
 
 == Cheat sheet
+
+=== Common Operations
+
+[cols="30,70m"]
+|===
+|Description|Command
+
+|Secret - set
+|az keyvault secret set --name 'secret-name' --vault-name {key-vault-instance-name} --expires 2022-5-29T00:00:00Z --value {your-value} 
+
+|===
 
 === Access Policy management
 
