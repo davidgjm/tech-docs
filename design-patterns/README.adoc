@@ -42,6 +42,10 @@
 |Enable multiple concurrent consumers to process messages received on the same messaging channel.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
+|xref:gateway-aggregation.adoc[Gateway Aggregation]
+|Use a gateway to aggregate multiple individual requests into a single request.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
+
 |xref:gateway-offloading.adoc[Gateway Offloading]
 |Offload shared or specialized service functionality to a gateway proxy.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
