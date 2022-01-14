@@ -1,37 +1,53 @@
 = docker command cheatsheet
+:toc:
+:icons: font
+:source-highlighter: rouge
+
+
+== build image with build arguments
+
+[source, bash]
+----
+docker build -t lzmapdev.azurecr.io/madmaps/transport-agent:2022.1.0-SNAPSHOT \
+  -f etc/Dockerfile \
+  --build-arg JAR_FILE=transport-agent-application/build/libs/transport-agent-application-2022.1.0-SNAPSHOT.jar \
+  .
+
+----
 
 == image commands
 
 === Check image storage (graph driver)
-
-    docker image inspect --format "{{json .GraphDriver}}" nginx | jq .
-    {
-      "Data": {
-        "LowerDir": "/var/lib/docker/overlay2/da4ce607f5fac70523405e31d478677a7202fc326b793ee2f0a897500e297a76/diff:/var/lib/docker/overlay2/225f322a087349fe2ca9724715f0619cc507b87f410a7eaf9eae34d35f946c88/diff:/var/lib/docker/overlay2/b76fd2bb2eced35112955689f0ca0a4b1a9f6a0725b7a6b9f386b9dcfe0e8307/diff:/var/lib/docker/overlay2/022fc0d3a107d2754a1e673221eb7b0bb5ee6f45b66ff33accfcf18c2a7848d4/diff:/var/lib/docker/overlay2/18cb8586fac982cc17d23da44b3a7e5a7c12b7eb13117a84b0a4eb8a63974987/diff",
-        "MergedDir": "/var/lib/docker/overlay2/8fc8e89f9b806b74e955498ff5ec4d127ef77a76edf937f6769da14b40a932e0/merged",
-        "UpperDir": "/var/lib/docker/overlay2/8fc8e89f9b806b74e955498ff5ec4d127ef77a76edf937f6769da14b40a932e0/diff",
-        "WorkDir": "/var/lib/docker/overlay2/8fc8e89f9b806b74e955498ff5ec4d127ef77a76edf937f6769da14b40a932e0/work"
-      },
-      "Name": "overlay2"
-    }
-
+[source, bash]
+----
+docker image inspect --format "{{json .GraphDriver}}" nginx | jq .
+{
+  "Data": {
+    "LowerDir": "/var/lib/docker/overlay2/da4ce607f5fac70523405e31d478677a7202fc326b793ee2f0a897500e297a76/diff:/var/lib/docker/overlay2/225f322a087349fe2ca9724715f0619cc507b87f410a7eaf9eae34d35f946c88/diff:/var/lib/docker/overlay2/b76fd2bb2eced35112955689f0ca0a4b1a9f6a0725b7a6b9f386b9dcfe0e8307/diff:/var/lib/docker/overlay2/022fc0d3a107d2754a1e673221eb7b0bb5ee6f45b66ff33accfcf18c2a7848d4/diff:/var/lib/docker/overlay2/18cb8586fac982cc17d23da44b3a7e5a7c12b7eb13117a84b0a4eb8a63974987/diff",
+    "MergedDir": "/var/lib/docker/overlay2/8fc8e89f9b806b74e955498ff5ec4d127ef77a76edf937f6769da14b40a932e0/merged",
+    "UpperDir": "/var/lib/docker/overlay2/8fc8e89f9b806b74e955498ff5ec4d127ef77a76edf937f6769da14b40a932e0/diff",
+    "WorkDir": "/var/lib/docker/overlay2/8fc8e89f9b806b74e955498ff5ec4d127ef77a76edf937f6769da14b40a932e0/work"
+  },
+  "Name": "overlay2"
+}
+----
 
 
 === Check image layers
 
 [source, bash]
-====
-    docker image inspect --format "{{json .RootFS.Layers}}" nginx | jq .
-    {
-      "Type": "layers",
-      "Layers": [
-        "sha256:9321ff862abbe8e1532076e5fdc932371eff562334ac86984a836d77dfb717f5",
-        "sha256:0664b7821b6050b321b14cdede97c2079ae45aff22beb4a42f7595294f5be62d",
-        "sha256:c9fcd9c6ced8b793a0ad4f93820c1d51d94c3b1fca93000d93e9e8eefa6fdb38",
-        "sha256:d3e1dca44e8225cdd06b6bf7cdfc847e3ab9f09ab6aeefb006e2e8f02f0dd26c",
-        "sha256:82caad489ad7bc7e1ae6f17bb1e9ade2bca44a41a07cc8c5587af8a2de2f536a",
-        "sha256:2bed47a66c07ecddfea2bc9c128d81b31272d99b69aff1fb4edc079c4dbf56e7"
-      ]
-    }
+----
+docker image inspect --format "{{json .RootFS.Layers}}" nginx | jq .
+{
+  "Type": "layers",
+  "Layers": [
+    "sha256:9321ff862abbe8e1532076e5fdc932371eff562334ac86984a836d77dfb717f5",
+    "sha256:0664b7821b6050b321b14cdede97c2079ae45aff22beb4a42f7595294f5be62d",
+    "sha256:c9fcd9c6ced8b793a0ad4f93820c1d51d94c3b1fca93000d93e9e8eefa6fdb38",
+    "sha256:d3e1dca44e8225cdd06b6bf7cdfc847e3ab9f09ab6aeefb006e2e8f02f0dd26c",
+    "sha256:82caad489ad7bc7e1ae6f17bb1e9ade2bca44a41a07cc8c5587af8a2de2f536a",
+    "sha256:2bed47a66c07ecddfea2bc9c128d81b31272d99b69aff1fb4edc079c4dbf56e7"
+  ]
+}
 
-====
+----
