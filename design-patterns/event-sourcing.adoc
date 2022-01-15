@@ -1,0 +1,21 @@
+= Event Sourcing pattern
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+.References
+[sidbar]
+****
+- DDD
+- xref:../cloud/Azure/application-architecture/architecture-styles/event-driven.adoc[Event-driven architecture]
+- Event sourcing
+****
+
+
+.icon:sticky-note[2x, role=lime] Open Questions
+[sidebar]
+****
+* How to generate a snapshot?
+* How a snapshot can be used when replaying all events?
+****

@@ -1,3 +1,13 @@
 = Compute Resource Consolidation pattern
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+.References
+[sidbar]
+****
+
+****
 
 Consolidate multiple tasks or operations into a single computational unit. This can increase compute resource utilization, and reduce the costs and management overhead associated with performing compute processing in cloud-hosted applications.

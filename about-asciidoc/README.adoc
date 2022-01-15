@@ -29,3 +29,10 @@ https://docs.asciidoctor.org/asciidoc/latest/macros/icon-macro/[Icon Macro]
 ****
 
 ----
+The above directives will create the following:
+
+.icon:sticky-note[2x, role=lime] Open Questions
+[sidebar]
+****
+* How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?
+****

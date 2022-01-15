@@ -42,6 +42,12 @@
 |Enable multiple concurrent consumers to process messages received on the same messaging channel.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
+|xref:cqrs.adoc[CQRS]
+|Segregate operations that read data from operations that update data by using separate interfaces.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
 |xref:external-configuration-store.adoc[External Configuration Store]
 |Move configuration information out of the application deployment package to a centralized location.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
@@ -57,6 +63,11 @@
 |xref:gateway-routing.adoc[Gateway Routing]
 |Route requests to multiple services using a single endpoint.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
+
+|xref:materialized-view.adoc[Materialized View]
+|Generate prepopulated views over the data in one or more data stores when the data isn't ideally formatted for required query operations.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
 |xref:pipes-and-filters.adoc[Pipes and Filters]
 |Break down a task that performs complex processing into a series of separate elements that can be reused.

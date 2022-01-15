@@ -1,0 +1,11 @@
+= Index Table pattern
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+.References
+[sidbar]
+****
+
+****
