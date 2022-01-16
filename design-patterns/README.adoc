@@ -64,6 +64,11 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/perfor
 |Route requests to multiple services using a single endpoint.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
+|xref:leader-election.adoc[Leader Election]
+|Coordinate the actions performed by a collection of collaborating task instances in a distributed application by electing one instance as the leader that assumes responsibility for managing the other instances.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation],
+https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability]
+
 |xref:materialized-view.adoc[Materialized View]
 |Generate prepopulated views over the data in one or more data stores when the data isn't ideally formatted for required query operations.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
@@ -76,6 +81,10 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patt
 |xref:priority-queue.adoc[Priority Queue]
 |Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging], https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
+|xref:publisher-subscriber.adoc[Publisher/Subscriber]
+|Enable an application to announce events to multiple interested consumers asynchronously, without coupling the senders to the receivers.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
 |xref:queue-based-load-leveling.adoc[Queue-Based Load Leveling]
 |Use a queue that acts as a buffer between a task and a service that it invokes in order to smooth intermittent heavy loads.

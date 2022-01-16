@@ -1,0 +1,17 @@
+= Observability vs. Monitoring
+
+.References
+****
+- https://www.baeldung.com/distributed-systems-observability#observability_vs_monitoring[Observability vs. Monitoring]
+****
+
+== Monitoring
+We often hear about monitoring in relation to observability in the practice of DevOps. So, what is the difference between these terms? Well, they both have similar functions and enable us to maintain the system's reliability. But they have a subtle difference and, in fact, a relationship between them. We can only effectively monitor a system if it's observable!
+
+Monitoring basically refers to *the practice of watching a system's state through a predefined set of metrics and logs*. This inherently means that we are watching for a known set of failures. However, in a distributed system, there are a lot of dynamic changes that keep happening. This results in problems that we were never looking for. Hence, our monitoring system can just miss them.
+
+== Observability
+Observability, on the other hand, helps us understand the internal state of a system. This can enable us to ask arbitrary questions about the system's behavior. For instance, we can ask complex questions like how did each service handle the request in case of problems. Over time, it can aid in building knowledge about the dynamic behavior of the system.
+
+To understand why this is so, we need to understand the concept of cardinality. *Cardinality refers to the number of unique items in a set*. For instance, the set of users' social security numbers will have a higher cardinality than gender. To answer arbitrary questions about a system's behavior, we need high cardinality data. However, monitoring typically only deals with low cardinality data.
+
