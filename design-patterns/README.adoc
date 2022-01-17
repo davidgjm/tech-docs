@@ -110,6 +110,12 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliabi
 |Deploy components of an application into a separate process or container to provide isolation and encapsulation.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
+|xref:static-content-hosting.adoc[Static Content Hosting]
+|Deploy static content to a cloud-based storage service that can deliver them directly to the client.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation],
+https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
 |xref:strangler-fig.adoc[Strangler Fig]
 |Incrementally migrate a legacy system by gradually replacing specific pieces of functionality with new applications and services.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]

@@ -37,6 +37,8 @@ Telemetry, the data collected to observe your application, can be broken into th
 . Metrics
 . Logs
 
+xref:open-telemetry.adoc[OpenTelemetry] is a specification for this area.
+
 *Logs are lines of text that an application generates at discrete points* during the execution of the code. Normally these are structured and often generated at different levels of severity. These are quite easy to generate but often carry performance costs. Moreover, we may require additional tools like Logstash to collect, store, and analyze logs efficiently.
 
 Simply put, *metrics are values represented as counts or measures that we calculate or aggregate* over a time period. These values express some data about a system like a virtual machine — for instance, the memory consumption of a virtual machine every second. These can come from various sources like the host, application, and cloud platform.
@@ -113,18 +115,9 @@ The cost of tracing isn’t quite as catastrophic as that of logging, mainly bec
 - Midway through the request flow, when only downstream services would then report the trace
 
 All approaches have their own pros and cons, and one might even want to use them all.
-<<<
 
 == Further readings
 
 === Conferences/Videos
 
 - https://www.infoq.com/presentations/cncf-open-telemetry-fluentbit/?itm_campaign=rightbar_v2&itm_source=infoq&itm_medium=presentations_link&itm_content=link_text[InfoQ - Embracing Observability in Distributed Systems]
-
-== About OpenTelemetry
-
-Initially the OpenTelemetry community took on Distributed Tracing. Metrics and Logs are still in progress. A complete observability story includes all three pillars, but currently our Azure Monitor OpenTelemetry-based exporter preview offerings for .NET, Python, and JavaScript only include Distributed Tracing.
-
-
-
-

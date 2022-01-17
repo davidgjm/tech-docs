@@ -1,0 +1,112 @@
+= OpenTelemetry
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+
+.References
+[sidebar]
+****
+- https://opentelemetry.io/vendors[OpenTelemetry vendors]
+****
+
+== What is OpenTelemetry?
+OpenTelemetry is a set of APIs, SDKs, tooling and integrations that are designed for the creation and management of telemetry data such as traces, metrics, and logs. The project provides a vendor-agnostic implementation that can be configured to send telemetry data to the backend(s) of your choice. It supports a variety of popular open-source projects including Jaeger and Prometheus.
+
+=== Why you need OpenTelemetry and what it can do
+
+In cloud-native technology stacks, distributed and polyglot architectures are the norm. Distributed architectures introduce a variety of operational challenges including how to solve availability and performance issues quickly. These challenges have led to the rise of observability.
+
+Telemetry data is needed to power observability products. Traditionally, telemetry data has been provided by either open-source projects or commercial vendors. With a lack of standardization, the net result is the lack of data portability and the burden on the user to maintain the instrumentation.
+
+The OpenTelemetry project solves these problems by providing a single, vendor-agnostic solution. The project has broad industry support and adoption from cloud providers, vendors and end users.
+
+OpenTelemetry provides you with:
+
+- A single, vendor-agnostic instrumentation library per language with support for both automatic and manual instrumentation.
+- A single collector binary that can be deployed in a variety of ways including as an agent or gateway.
+- An end-to-end implementation to generate, emit, collect, process and export telemetry data.
+- Full control of your data with the ability to send data to multiple destinations in parallel through configuration.
+- Open-standard semantic conventions to ensure vendor-agnostic data collection
+- The ability to support multiple context propagation formats in parallel to assist with migrating as standards evolve.
+- A path forward no matter where you are on your observability journey. With support for a variety of open-source and commercial protocols, format and context propagation mechanisms as well as providing shims to the OpenTracing and OpenCensus projects, it is easy to adopt OpenTelemetry.
+
+=== What OpenTelemetry is not
+
+OpenTelemetry is not an observability back-end like Jaeger or Prometheus. Instead, it supports exporting data to a variety of open-source and commercial back-ends. It provides a pluggable architecture so additional technology protocols and formats can be easily added.
+
+
+== Instrumenting
+At a basic level, "instrumenting” is simply enabling an application to capture telemetry.
+
+There are two methods to instrument your application:
+
+. Manual Instrumentation
+. Automatic Instrumentation (Auto-Instrumentation)
+
+Manual instrumentation is coding against the OpenTelemetry API. In the context of an end user, it typically refers to installing a language-specific SDK in an application.
+
+IMPORTANT: “Manual” does NOT mean you’ll be required to write complex code to define spans for distributed traces (though it remains an option). A rich and growing set of instrumentation libraries maintained by OpenTelemetry contributors will enable you to effortlessly capture telemetry signals across common frameworks and libraries. A subset of OpenTelemetry Instrumentation Libraries will be supported by Azure Monitor, informed by customer feedback. Additionally, we are working to instrument the most popular Azure Service SDKs using OpenTelemetry.
+
+On the other hand, auto-instrumentation is enabling telemetry collection through configuration without touching the application's code. While more convenient, it tends to be less configurable and it’s not available in all languages.
+
+=== Automatic Instrumentation
+==== Add dependencies
+In order to enable automatic instrumentation, one or more dependencies need to be added. How dependencies are added are language specific. #At a minimum, these dependencies will add OpenTelemetry API and SDK capabilities#. Some languages also require per instrumentation dependencies. Exporter dependencies may also be required. For more information about the OpenTelemetry API and SDK, see the https://opentelemetry.io/docs/reference/specification/[specification].
+
+==== Configure OpenTelemetry Instrumentation
+
+Configuration is available via environment variables and possibly language specific means such as system properties in Java. At a minimum, a service name must be configured to identify the service being instrumented. A variety of other configuration options are available and may include:
+
+- Data source specific configuration
+- Exporter configuration
+- Propagator configuration
+- Resource configuration
+
+=== Manual Instrumentation
+==== Import the OpenTelemetry API and SDK
+You’ll first need to import OpenTelemetry to your service code. If you’re developing a library or some other component that is intended to be consumed by a runnable binary, then you would only take a dependency on the API. If your artifact is a standalone process or service, then you would take a dependency on the API and the SDK. For more information about the OpenTelemetry API and SDK, see the https://opentelemetry.io/docs/reference/specification/[specification].
+
+==== Configure the OpenTelemetry API
+In order to create traces or metrics, you’ll need to first create a tracer and/or meter provider. In general, we recommend that the SDK should provide a single default provider for these objects. You’ll then get a tracer or meter instance from that provider, and give it a name and version. The name you choose here should identify what exactly is being instrumented – if you’re writing a library, for example, then you should name it after your library (i.e., `com.legitimatebusiness.myLibrary` or some other unique identifier) as this name will namespace all spans or metric events produced. It is also recommended that you supply a version string (i.e., `semver:1.0.0`) that corresponds to the current version of your library or service.
+
+==== Configure the OpenTelemetry SDK
+If you’re building a service process, you’ll also need to configure the SDK with appropriate options for exporting your telemetry data to some analysis backend. We recommend that this configuration be handled programmatically through a configuration file or some other mechanism. There are also per-language tuning options you may wish to take advantage of.
+
+==== Create Telemetry Data
+
+Once you’ve configured the API and SDK, you’ll then be free to create traces and metric events through the tracer and meter objects you obtained from the provider. You can also utilize a plugin or integration to create traces and metric events for you – check out the https://opentelemetry.io/registry[registry] or your language’s repository for more information on these.
+
+==== Export Data
+
+Once you’ve created telemetry data, you’ll want to send it somewhere. OpenTelemetry supports two primary methods of exporting data from your process to an analysis backend, either directly from a process or by proxying it through the https://opentelemetry.io/docs/collector[OpenTelemetry Collector].
+
+In-process export requires you to import and take a dependency on one or more exporters, libraries that translate OpenTelemetry’s in-memory span and metric objects into the appropriate format for telemetry analysis tools like Jaeger or Prometheus. In addition, OpenTelemetry supports a wire protocol known as OTLP, which is supported by all OpenTelemetry SDKs. This protocol can be used to send data to the OpenTelemetry Collector, a standalone binary process that can be run as a proxy or sidecar to your service instances or run on a separate host. The Collector can then be configured to forward and export this data to your choice of analysis tools.
+
+In addition to open source tools such as Jaeger or Prometheus, a growing list of companies support ingesting telemetry data from OpenTelemetry. Please see this page for more details.
+
+== Data Collection
+
+=== Deployment
+
+The OpenTelemetry Collector provides a single binary and two deployment methods:
+
+- *Agent*: A Collector instance running with the application or on the same host as the application (e.g. binary, sidecar, or daemonset).
+- *Gateway*: One or more Collector instances running as a standalone service (e.g. container or deployment) typically per cluster, datacenter or region.
+
+For information on how to use the Collector see the https://opentelemetry.io/docs/collector/getting-started[getting started] documentation.
+
+=== Components
+
+The Collector is made up of the following components:
+
+- `receivers`: How to get data into the Collector; these can be push or pull based
+- `processors`: What to do with received data
+- `exporters`: Where to send received data; these can be push or pull based
+
+These components are enabled through `pipelines`. Multiple instances of components as well as pipelines can be defined via YAML configuration.
+
+For more information about these components see the https://opentelemetry.io/docs/collector/configuration[configuration documentation].
+
+
