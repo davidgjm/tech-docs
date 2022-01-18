@@ -9,6 +9,7 @@
 [sidebar]
 ****
 - https://opentelemetry.io/vendors[OpenTelemetry vendors]
+- https://www.youtube.com/watch?v=2nTJSsBngao
 ****
 
 == What is OpenTelemetry?
@@ -110,3 +111,12 @@ These components are enabled through `pipelines`. Multiple instances of componen
 For more information about these components see the https://opentelemetry.io/docs/collector/configuration[configuration documentation].
 
 
+== OpenTelemetry with Java
+
+=== References
+- https://reflectoring.io/spring-boot-tracing/[Tracing with Spring Boot, OpenTelemetry, and Jaeger]
+- https://help.sumologic.com/Traces/01Getting_Started_with_Transaction_Tracing/Instrument_your_application_with_OpenTelemetry/Java_OpenTelemetry_auto-instrumentation/TraceId_and_SpanId_injection_into_logs_configuration[ TraceId and SpanId injection into logs configuration ]
+
+=== Integrate traces with logs
+
+- https://docs.datadoghq.com/tracing/connect_logs_and_traces/opentelemetry/[Connect OpenTelemetry Traces and Logs]

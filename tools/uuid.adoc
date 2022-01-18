@@ -1,0 +1,13 @@
+= UUID
+
+== Readings
+-
+
+== UUID Generators
+
+=== MacOS
+uuidgen
+
+=== version 5 generator
+https://www.uuidtools.com/generate/v5
+

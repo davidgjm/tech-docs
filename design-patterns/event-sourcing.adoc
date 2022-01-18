@@ -19,3 +19,4 @@
 * How to generate a snapshot?
 * How a snapshot can be used when replaying all events?
 ****
+

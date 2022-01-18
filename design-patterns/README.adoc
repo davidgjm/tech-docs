@@ -34,6 +34,11 @@
 |Let each service decide when and how a business operation is processed, instead of depending on a central orchestrator.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging], https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
 
+|xref:cache-aside.adoc[Cache-Aside]
+|Load data on demand into a cache from a data store
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
 |xref:claim-check.adoc[Claim Check]
 |Split a large message into a claim check and a payload to avoid overwhelming a message bus.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
@@ -120,5 +125,9 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/perfor
 |Incrementally migrate a legacy system by gradually replacing specific pieces of functionality with new applications and services.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
+|xref:valet-key.adoc[Valet Key]
+|Use a token or key that provides clients with restricted direct access to a specific resource or service.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/framework/security/security-patterns[Security]
 
-|===Teaz
+|===
