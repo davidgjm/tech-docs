@@ -1,0 +1,14 @@
+= Sharding pattern
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+.References
+[sidbar]
+****
+
+****
+
+Divide a data store into a set of horizontal partitions or shards. This can improve scalability when storing and accessing large volumes of data.
+

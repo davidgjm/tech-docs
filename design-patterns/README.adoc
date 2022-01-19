@@ -69,6 +69,12 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/perfor
 |Route requests to multiple services using a single endpoint.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
+|xref:index-table.adoc[Index Table]
+|Create indexes over the fields in data stores that are frequently referenced by queries.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
+
 |xref:leader-election.adoc[Leader Election]
 |Coordinate the actions performed by a collection of collaborating task instances in a distributed application by electing one instance as the leader that assumes responsibility for managing the other instances.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation],
