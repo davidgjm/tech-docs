@@ -1,0 +1,10 @@
+= Azure Overview
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+== Azure Global Infrastructure
+
+=== Network latency between Azure regions via Microsoft backbone
+image::azure-backbone-latency.png[]

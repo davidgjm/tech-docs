@@ -2,6 +2,13 @@
 :toc:
 :source-highlighter: rouge
 
+== Find files
+
+=== Find files by extension
+[source, bash]
+----
+find / -name "*.jar" -print
+----
 
 == vim
 
