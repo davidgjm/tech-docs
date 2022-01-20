@@ -117,6 +117,11 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliabi
 |Process a set of related messages in a defined order, without blocking processing of other groups of messages.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
+|xref:sharding.adoc[Sharding]
+|Divide a data store into a set of horizontal partitions or shards.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
 |xref:sidecar.adoc[Sidecar]
 |Deploy components of an application into a separate process or container to provide isolation and encapsulation.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
