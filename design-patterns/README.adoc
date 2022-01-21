@@ -53,6 +53,11 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/perfor
 https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation],
 https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
 
+|xref:event-sourcing.adoc[Event Sourcing]
+|Use an append-only store to record the full series of events that describe actions taken on data in a domain.
+|https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
 |xref:external-configuration-store.adoc[External Configuration Store]
 |Move configuration information out of the application deployment package to a centralized location.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]

@@ -9,6 +9,50 @@
 * https://blog.mrhaki.com/2014/06/awesome-asciidoc-use-inline-icons.html[Awesome Asciidoctor: Use Inline Icons]
 ****
 
+== Styling tips & tricks
+
+=== Numbered list continuation
+
+When we write a list in Asciidoctor we can simply create a list item by starting the line with a dot (.). To create a another list item we simply start a new line with a dot (.). But what if we want to add a list item with multiple paragraphs, or text and a source code block element. We can use the list item continuation (+) to indicate to Asciidoctor we want to keep these together for a single list item.
+
+In the following example we have a list in Asciidoctor markup. The second list item has multiple paragraphs , the third item has an extra admonition block and the fourth item contains a source code block:
+
+[source, asciidoc]
+----
+Sample list::
+
+. A very simple first item
+. This item consists of two paragraphs.
++
+By adding the `+` symbol we indicate this
+paragraph also belongs to the second list item.
+. We can even add for example an admonition.
++
+TIP: Did you know Asciidoctor is awesome?
+. A small code example:
++
+----
+Will produce
+
+.Sample output
+====
+
+Sample list::
+
+. A very simple first item
+. This item consists of two paragraphs.
++
+By adding the `+` symbol we indicate this
+paragraph also belongs to the second list item.
+. We can even add for example an admonition.
++
+TIP: Did you know Asciidoctor is awesome?
+. A small code example:
++
+
+====
+
+
 == Using icon fonts
 
 https://docs.asciidoctor.org/asciidoc/latest/macros/icon-macro/[Icon Macro]
