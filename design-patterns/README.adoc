@@ -91,6 +91,11 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/perfor
 |Route requests to multiple services using a single endpoint.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation], https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
 
+|xref:geodes.adoc[Geodes]
+|Deploy backend services into a set of geographical nodes, each of which can service any client request in any region.
+|https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability],
+https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns[Operational Excellence]
+
 |xref:health-endpoint-monitoring.adoc[Health Endpoint Monitoring]
 |Implement functional checks in an application that external tools can access through exposed endpoints at regular intervals.
 |https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability],
