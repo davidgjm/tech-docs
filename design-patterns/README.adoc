@@ -62,6 +62,11 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/perfor
 https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation[Design and Implementation],
 https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
 
+|xref:deployment-stamp.adoc[Deployment Stamps]
+|Deploy multiple independent copies of application components, including data stores.
+|https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability],
+https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns[Performance Efficiency]
+
 |xref:event-sourcing.adoc[Event Sourcing]
 |Use an append-only store to record the full series of events that describe actions taken on data in a domain.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management[Data Management],
