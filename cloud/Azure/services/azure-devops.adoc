@@ -1,3 +1,22 @@
-===== References
+= Azure DevOps
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ../images
 
+
+.References
+[sidebar]
+****
 * https://medium.com/@TimvanBaarsen/build-your-spring-boot-project-using-azure-pipelines-in-azure-devops-3305977991d[Build your Spring Boot project using Azure Pipelines in Azure DevOps]
+****
+
+== Case studies & examples
+
+=== Use deployment rings with extension releases
+
+Check details at https://docs.microsoft.com/en-us/azure/devops/migrate/phase-rollout-with-rings?view=azure-devops
+
+image::phase-rollout-with-rings-rings.png[]
+
+image::phase-rollout-with-rings-pipeline.png[]

@@ -8,3 +8,8 @@
 
 === Network latency between Azure regions via Microsoft backbone
 image::azure-backbone-latency.png[]
+
+== Azure learning action items
+
+
+* [ ] xref:services/resource-groups.adoc[Resource group best practices]
