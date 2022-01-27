@@ -1,0 +1,19 @@
+= GitOps Best Practices
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+.References
+[sidebar]
+****
+- https://www.weave.works/blog/gitops-compliance-and-secure-cicd[GitOps Part 4 - Application Delivery Compliance and Secure CICD]
+- https://www.weave.works/blog/kubernetes-anti-patterns-let-s-do-gitops-not-ciops[Kubernetes anti-patterns: Let's do GitOps, not CIOps!]
+****
+
+
+This is what we think you need to do:
+
+. Keep a record in Git of important interactions with the system: who made changes, when and why
+. Don’t rebuild images from scratch unnecessarily, if you can update config instead. Build each container image just once and 'promote' it through each test sequence / environment, do not rebuild each time. But you must still update your declarative config changes in Git.
+. Use pull based deployment - do not let CI push updates into the Kubernetes cluster or use kubectl by hand
