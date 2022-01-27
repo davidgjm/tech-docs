@@ -3,5 +3,6 @@
 .Readings
 [sidebar]
 ****
-- https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns]
+- xref:../../design-patterns/idempotency-patterns.adoc[Idempotency Patterns]
+- https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns from Jonathan Oliver's blog]
 ****

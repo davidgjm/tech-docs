@@ -1,4 +1,4 @@
-= External Configuration Store Pattern
+= https://docs.microsoft.com/en-us/azure/architecture/patterns/external-configuration-store[External Configuration Store Pattern]
 :toc:
 :icons: font
 :source-highlighter: rouge

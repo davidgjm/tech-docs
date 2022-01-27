@@ -52,6 +52,10 @@ https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/perfor
 |Split a large message into a claim check and a payload to avoid overwhelming a message bus.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]
 
+|xref:compensating-transaction.adoc[Compensating Transaction]
+|Undo the work performed by a series of steps, which together define an eventually consistent operation.
+|https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns[Reliability]
+
 |xref:competing-consumers.adoc[Competing Consumers]
 |Enable multiple concurrent consumers to process messages received on the same messaging channel.
 |https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging[Messaging]

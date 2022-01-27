@@ -2,6 +2,11 @@
 :toc:
 :source-highlighter: rouge
 
+== Linux shell scripts
+
+=== bash tips & tricks
+See xref:shellscriipts.adoc[tips and tricks].
+
 == Find files
 
 === Find files by extension

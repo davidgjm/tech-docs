@@ -1,0 +1,17 @@
+= Shell script tips & tricks
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+== Cheatsheet
+
+[cols="30,40m,30"]
+|===
+|Use case|Command|Description
+
+|Get the return code of last command
+|echo $?
+|
+
+|===
