@@ -9,6 +9,7 @@
 ****
 - https://www.weave.works/blog/gitops-compliance-and-secure-cicd[GitOps Part 4 - Application Delivery Compliance and Secure CICD]
 - https://www.weave.works/blog/kubernetes-anti-patterns-let-s-do-gitops-not-ciops[Kubernetes anti-patterns: Let's do GitOps, not CIOps!]
+- https://boxboat.com/2018/07/05/gitops-kubernetes-rolling-update-configmap-secret-change/[GitOps Kubernetes Rolling Update when ConfigMaps and Secrets Change]
 ****
 
 

@@ -13,6 +13,9 @@ Basics::
 - https://www.weave.works/blog/gitops-compliance-and-secure-cicd[GitOps Part 4 - Application Delivery Compliance and Secure CICD]
 - https://cloud.google.com/kubernetes-engine/docs/tutorials/gitops-cloud-build[GKE, GitOps-style continuous delivery with Cloud Build]
 - https://ashishtechmill.com/what-is-gitops-and-what-are-its-benefits[What is GitOps, and what are its benefits?]
+
+Books::
+- link:eBook_ThePracticalGuideToGitOps.pdf[The Practical Guide to GitOps]
 ****
 
 == What is GitOps

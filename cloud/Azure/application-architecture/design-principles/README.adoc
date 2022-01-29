@@ -14,7 +14,7 @@ Design to scale out.:: Design your application so that it can scale horizontally
 
 Partition around limits.:: Use partitioning to work around database, network, and compute limits.
 
-Design for operations.:: Design your application so that the operations team has the tools they need.
+xref:design-for-operations.adoc[Design for operations].:: Design your application so that the operations team has the tools they need.
 
 Use managed services.:: When possible, use platform as a service (PaaS) rather than infrastructure as a service (IaaS).
 

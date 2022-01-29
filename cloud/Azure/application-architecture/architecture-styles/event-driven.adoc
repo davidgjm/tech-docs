@@ -3,8 +3,10 @@
 .References
 [sidebar]
 ****
+* https://martinfowler.com/articles/201701-event-driven.html[What do you mean by “Event-Driven”?]
 * https://particular.net/blog/putting-your-events-on-a-diet[Putting your events on a diet]
 * https://docs.particular.net/tutorials/nservicebus-step-by-step/
+* https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/serverless/cloud-automation[Azure - Event-based cloud automation]
 ****
 
 

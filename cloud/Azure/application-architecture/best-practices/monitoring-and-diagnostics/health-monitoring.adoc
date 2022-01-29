@@ -25,7 +25,7 @@ The raw data that's required to support health monitoring can be generated as a 
 * Collecting ambient performance information, such as background CPU utilization or I/O (including network) activity.
 
 == Analyzing health data
-The primary focus of health monitoring is to quickly indicate whether the system is running. Hot analysis of the immediate data can trigger an alert if a critical component is detected as unhealthy. (It fails to respond to a consecutive series of pings, for example.) The operator can then take the appropriate corrective action.
+#The primary focus of health monitoring is to quickly indicate whether the system is running.# Hot analysis of the immediate data can trigger an alert if a critical component is detected as unhealthy. (It fails to respond to a consecutive series of pings, for example.) The operator can then take the appropriate corrective action.
 
 A more advanced system might include a predictive element that performs a cold analysis over recent and current workloads. A cold analysis can spot trends and determine whether the system is likely to remain healthy or whether the system will need additional resources. This predictive element should be based on critical performance metrics, such as:
 
