@@ -1,0 +1,14 @@
+= Architecture (Applications/Systems) Subjects
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+[cols="20,50,30"]
+|===
+|Application Usecase|Description|Document
+|Multitenancy
+| A system used by multiple customers (_tenants_)
+|xref:multi-tenancy/README.adoc[Architecting multitenant solutions]
+
+|===

@@ -18,3 +18,73 @@ This is what we think you need to do:
 . Keep a record in Git of important interactions with the system: who made changes, when and why
 . Don’t rebuild images from scratch unnecessarily, if you can update config instead. Build each container image just once and 'promote' it through each test sequence / environment, do not rebuild each time. But you must still update your declarative config changes in Git.
 . Use pull based deployment - do not let CI push updates into the Kubernetes cluster or use kubectl by hand
+
+== Config Repo structure
+
+.References
+- https://github.com/redhat-developer/gitops-repo-example[Sample GitOps Repo]
+- https://github.com/redhat-developer/kam[GitOps Application Manager]
+- https://github.com/redhat-developer/kam/blob/master/docs/README.md[GitOps for Application Delivery]
+- https://github.com/fluxcd/flux2-kustomize-helm-example[flux2-kustomize-helm-example]
+
+=== Opinionated GitOps Repository model by https://github.com/redhat-developer/kam/tree/master/docs/model[Redhat developer]
+
+A GitOps repository is just a Git repository organized to be used with GitOps tools. It organizes the Environments, Applications, and Services with any customization necessary for deployment.
+
+Different Environments are stored in different directories under the `environments/` directory in the GitOps repository. Configuration in is then separated into layers reflected by these sub-directories:
+
+- `env/` - Configuration specific to the namespace / Environment.
+- `apps/*` - Configuration folders specific to each Application.
+- `services/*` - Configuration folders specific to each Service.
+
+Each configuration directory will contain Kustomization files structured like this:
+
+```
+.
+├── base
+│   ├── *.yaml
+│   └── kustomization.yaml
+└── overlays
+    ├── *.yaml
+    └── kustomization.yaml
+```
+
+Each Service is defined in its `.../services/<service-name>/base/` directory in various YAML files, and its `overlays/` directory includes more specific details such as pod scaling and environment variables. The configuration of each service can be maintained by just a development team, and should be individually deployable with a `kubectl apply -k ` command, which allows for quick testing.
+
+Each Application’s `.../apps/<app-name>/base/kustomization.yaml` will refer to each Service which it uses. Again, the `overlays/` directory will include new specific configuration files required for the application, for example new labels or other details to connect the services.
+
+Finally, the `.../env/base/kustomization.yaml` will refer to each application which is to be deployed in the environment, and the `env/overlays/` directory will contain any specifics required for the environment. For example, details about service accounts and specific Ingress URLs could be specified here. It will also have a `.../env/kustomization.yaml` file so that the fully-configured applications can be deployed into the environment with this command:
+
+```shell
+$ oc apply -k environments/<env-name>/env/
+```
+
+=== Repository structure from FluxCD v2 w/ Kustomize
+
+NOTE: See detailed explanation at https://github.com/fluxcd/flux2-kustomize-helm-example/blob/main/README.md#repository-structure[Repository structure]
+
+The Git repository contains the following top directories:
+
+- **apps** dir contains Helm releases with a custom configuration per cluster
+- **infrastructure** dir contains common infra tools such as NGINX ingress controller and Helm repository definitions
+- **clusters** dir contains the Flux configuration per cluster
+
+```
+├── apps
+│   ├── base
+│   ├── production
+│   └── staging
+├── infrastructure
+│   ├── nginx
+│   ├── redis
+│   └── sources
+└── clusters
+    ├── production
+    └── staging
+```
+
+The apps configuration is structured into:
+
+- **apps/base/** dir contains namespaces and Helm release definitions
+- **apps/production/** dir contains the production Helm release values
+- **apps/staging/** dir contains the staging values

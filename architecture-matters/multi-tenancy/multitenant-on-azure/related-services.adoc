@@ -1,0 +1,5 @@
+= Resources for architects and developers of multitenant solutions
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images

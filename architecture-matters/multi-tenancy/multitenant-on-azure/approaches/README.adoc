@@ -1,0 +1,5 @@
+= Architectural approaches for multitenancy
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images

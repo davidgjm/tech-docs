@@ -1,0 +1,5 @@
+= Tenant lifecycle considerations in a multitenant solution
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ../images

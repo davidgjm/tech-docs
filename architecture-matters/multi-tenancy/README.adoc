@@ -1,0 +1,44 @@
+= Designing multi-tenant solutions
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+.References
+[sidebar]
+****
+- https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/overview[Architecting multitenant solutions on Azure]
+- https://www.enterpriseintegrationpatterns.com/patterns/messaging/StoreInLibrary.html[Claim Check]
+- https://docs.microsoft.com/en-us/azure/architecture/patterns/claim-check[Claim-Check pattern]
+- https://www.serverless360.com/blog/deal-with-large-service-bus-messages-using-claim-check-pattern[Dealing with large Service Bus messages using claim check pattern]
+- _Enterprise Integration Patterns_, by Gregor Hohpe and Bobby Woolf
+****
+
+A multitenant solution is one used by multiple customers, or tenants. Tenants are distinct from users. Multiple users from a single organization, company, or group form a single tenant. Examples of multitenant applications include:
+
+- Business-to-business (B2B) solutions, such as accounting software, work tracking, and other software as a service (SaaS) products.
+- Business-to-consumer (B2C) solutions, such as music streaming, photo sharing, and social network services.
+- Enterprise-wide platform solutions, such as a shared Kubernetes cluster that's used by multiple business units within an organization.
+
+== Architecting multi-tenant applications on cloud platforms
+
+=== AWS
+
+==== Readings
+- https://aws.amazon.com/partners/programs/saas-factory/tenant-isolation/[Tenant Isolation]
+- https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/saas-lens.html[SaaS Lens]
+- https://aws.amazon.com/blogs/apn/in-depth-strategies-for-building-a-scalable-multi-tenant-saas-solution-with-amazon-redshift/[In-Depth Strategies for Building a Scalable, Multi-Tenant SaaS Solution with Amazon Redshift]
+
+=== Azure
+- https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/considerations/tenant-lifecycle[Tenant lifecycle considerations in a multitenant solution]
+- xref:multitenant-on-azure/README.adoc[Architecting multitenant solutions on Azure]
+
+=== Google
+- https://cloud.google.com/architecture/designing-multi-tenant-architectures[Designing multi-tenant architectures]
+- https://cloud.google.com/kubernetes-engine/docs/best-practices/enterprise-multitenancy[Best practices for enterprise multi-tenancy]
+
+=== Alibaba Cloud (Aliyun)
+- https://www.alibabacloud.com/blog/from-single-tenant-iaas-to-multi-tenant-paas---multi-tenant-isolation-with-maxcompute_593817[From Single-tenant IaaS to Multi-tenant PaaS - Multi-tenant Isolation with MaxCompute]
+- https://www.alibabacloud.com/blog/boost-the-tenant-experience-with-maxcompute_595151[Boost the Tenant Experience with MaxCompute]
+- https://topic.alibabacloud.com/a/analysis-on-the-implementation-of-multi-tenant-in-java-platform-and-some-paas_3_81_10070177.html[Analysis on the implementation of multi-tenant in Java platform and some PAAs]
+- https://topic.alibabacloud.com/a/transform-your-web-application-into-a-font-classtopic-s-color00c1demultifont-font-classtopic-s-color00c1detenantfont-saas-solution_1_11_30516656.html?spm=a2c61.600666.200003.6.51bb2e96sl5Dso[Transform your Web application into a multi-tenant SaaS Solution]

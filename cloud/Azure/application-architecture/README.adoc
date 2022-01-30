@@ -1,4 +1,19 @@
 = Azure application architecture fundamentals
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ./images
+
+
+.Readings
+****
+* https://docs.microsoft.com/en-us/azure/architecture/architectures/?filter=reference-architecture[Azure Reference architectures]
+* https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/[Design principles]
+* https://docs.microsoft.com/en-us/azure/architecture/patterns/[Design patterns]
+* https://docs.microsoft.com/en-us/azure/architecture/best-practices[Best practices]
+* https://docs.microsoft.com/en-us/security/compass/applications-services[Security best practices]
+****
+
 
 == Introduction
 
@@ -22,16 +37,3 @@ You will probably have to make additional technology choices along the way, but 
 === Design the architecture
 
 Once you have chosen the architecture style and the major technology components, you are ready to tackle the specific design of your application.
-
-== References
-
-.Readings
-[sidebar]
-====
-* https://docs.microsoft.com/en-us/azure/architecture/architectures/?filter=reference-architecture[Azure Reference architectures]
-* https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/[Design principles]
-* https://docs.microsoft.com/en-us/azure/architecture/patterns/[Design patterns]
-* https://docs.microsoft.com/en-us/azure/architecture/best-practices[Best practices]
-* https://docs.microsoft.com/en-us/security/compass/applications-services[Security best practices]
-
-====

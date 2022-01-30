@@ -12,10 +12,11 @@
 - Event sourcing
 - https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff650012(v=pandp.10)[Primary-Subordinate Snapshot Replication]
 
-Next steps
+*Next steps*
 
 * https://en.wikipedia.org/wiki/Object-relational_impedance_mismatch[Object-relational impedance mismatch]
 * Martin Fowler's blog:
+** https://martinfowler.com/articles/201701-event-driven.html[What do you mean by “Event-Driven”?]
 ** https://martinfowler.com/eaaDev/EventSourcing.html[Event Sourcing]
 ** https://martinfowler.com/eaaDev/Snapshot.html[Snapshot on Martin Fowler's Enterprise Application Architecture website]
 
