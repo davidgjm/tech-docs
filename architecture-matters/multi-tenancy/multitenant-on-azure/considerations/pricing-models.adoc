@@ -1,0 +1,5 @@
+= Pricing models for a multitenant solution
+:toc:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: ../images
