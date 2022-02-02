@@ -378,21 +378,22 @@ For example, to handle the relationship between an order and a customer, the rep
     }]
 }
 ----
-In this example, the `links` array has a set of links. Each link represents an operation on a related entity. The data for each link includes the relationship ("customer"), the URI (`https://adventure-works.com/customers/3`), the HTTP method, and the supported MIME types. This is all the information that a client application needs to be able to invoke the operation.
+In this example, the `links` array has a set of links.Each link represents an operation on a related entity.The data for each link includes the relationship ("customer"), the URI (`https://adventure-works.com/customers/3`), the HTTP method, and the supported MIME types.This is all the information that a client application needs to be able to invoke the operation.
 
-The `links` array also includes self-referencing information about the resource itself that has been retrieved. These have the relationship self.
+The `links` array also includes self-referencing information about the resource itself that has been retrieved.These have the relationship self.
 
-The set of links that are returned may change, depending on the state of the resource. This is what is meant by hypertext being the "engine of application state."
+The set of links that are returned may change, depending on the state of the resource.This is what is meant by hypertext being the "engine of application state."
 
 
+[#_versioning_a_restful_web_api]
 == Versioning a RESTful web API
 
 The primary imperative is to enable existing client applications to continue functioning unchanged while allowing new client applications to take advantage of new features and resources.
 
-Versioning enables a web API to indicate the features and resources that it exposes, and a client application can submit requests that are directed to a specific version of a feature or resource. The following sections describe several different approaches, each of which has its own benefits and trade-offs.
+Versioning enables a web API to indicate the features and resources that it exposes, and a client application can submit requests that are directed to a specific version of a feature or resource.The following sections describe several different approaches, each of which has its own benefits and trade-offs.
 
 === No versioning
-This is the simplest approach, and may be acceptable for some internal APIs. Significant changes could be represented as new resources or new links. Adding content to existing resources might not present a breaking change as client applications that are not expecting to see this content will ignore it.
+This is the simplest approach, and may be acceptable for some internal APIs.Significant changes could be represented as new resources or new links.Adding content to existing resources might not present a breaking change as client applications that are not expecting to see this content will ignore it.
 
 For example, a request to the URI `https://adventure-works.com/customers/3` should return the details of a single customer containing `id`, `name`, and `address` fields expected by the client application:
 [source,HTTP]
