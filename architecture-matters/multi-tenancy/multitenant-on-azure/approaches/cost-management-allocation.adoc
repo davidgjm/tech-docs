@@ -1,0 +1,6 @@
+= Cost Management Allocation
+
+== Approaches and patterns to consider
+
+[#_allocate_costs_by_using_resource_tags]
+=== Allocate costs by using resource tags

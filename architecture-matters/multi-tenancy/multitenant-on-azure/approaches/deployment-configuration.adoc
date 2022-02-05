@@ -1,0 +1,6 @@
+= Deployment Configuration
+
+== Key considerations and requirements
+
+[#_resource_management_responsibility]
+=== Resource management responsibility
