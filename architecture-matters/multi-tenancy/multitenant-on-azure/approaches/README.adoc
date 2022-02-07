@@ -30,4 +30,4 @@ To implement the Deployment Stamps pattern, it's important to use automated depl
 The pages in this section are intended to be useful for solution architects and lead developers of multitenant applications, including independent software vendors (ISVs) and startups who develop SaaS solutions. Much of the guidance in this section is generic and applies to multiple Azure services within a category.
 
 == Next Steps
-We recommend you review the approaches for resource organization in a multitenant solution before reviewing the guidance about specific categories of Azure services.
+We recommend you review the xref:resource-organization.adoc[approaches for resource organization in a multitenant solution] before reviewing the guidance about specific categories of Azure services.
