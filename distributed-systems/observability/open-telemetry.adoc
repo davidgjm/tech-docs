@@ -8,6 +8,7 @@
 .References
 [sidebar]
 ****
+- https://medium.com/opentelemetry/opentelemetry-beyond-getting-started-5ac43cd0fe26[OpenTelemetry: beyond getting started]
 - https://opentelemetry.io/vendors[OpenTelemetry vendors]
 - https://www.youtube.com/watch?v=2nTJSsBngao
 ****

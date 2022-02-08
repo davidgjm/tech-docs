@@ -117,6 +117,11 @@ The cost of tracing isn’t quite as catastrophic as that of logging, mainly bec
 All approaches have their own pros and cons, and one might even want to use them all.
 
 == Further readings
+- https://www.humio.com/whats-new/blog/observability-redefined/[Observability (re)defined]
+- https://www.splunk.com/en_us/data-insider/what-is-observability.html[What Is Observability?]
+- https://www.dynatrace.com/news/blog/what-is-observability-2/[What is observability? Not just logs, metrics and traces]
+- https://newrelic.com/topics/what-is-observability[What is observability?]
+- https://peter.bourgon.org/blog/2017/02/21/metrics-tracing-and-logging.html[Metrics, tracing, and logging]
 
 === Conferences/Videos
 

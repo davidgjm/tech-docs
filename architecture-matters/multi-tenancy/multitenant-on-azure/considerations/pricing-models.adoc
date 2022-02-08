@@ -113,25 +113,26 @@ You might choose to offer a free tier of your service, with basic functionality 
 
 image::freemium.png[]
 
-The free tier may also be offered as a time-limited trial, and during the trial your customers might have full or limited functionality available. This is referred to as a freemium model, which is effectively an extension of the <<_feature_and_service_level_based_pricing>>.
+The free tier may also be offered as a time-limited trial, and during the trial your customers might have full or limited functionality available.This is referred to as a freemium model, which is effectively an extension of the <<_feature_and_service_level_based_pricing>>.
 
 Benefits:: It's very easy to market a solution when it's free.
 
-Complexity and operational cost:: All of the complexity and operational cost concerns apply from the feature-based pricing model. However, you also have to consider the operational cost involved in managing free tenants. You might need to ensure that stale tenants are offboarded or removed, and you must have a clear retention policy, especially for free tenants. When promoting a tenant to a paid tier, you might need to move the tenant between Azure services, to obtain higher SLAs.
+Complexity and operational cost:: All of the complexity and operational cost concerns apply from the feature-based pricing model.However, you also have to consider the operational cost involved in managing free tenants.You might need to ensure that stale tenants are offboarded or removed, and you must have a clear retention policy, especially for free tenants.When promoting a tenant to a paid tier, you might need to move the tenant between Azure services, to obtain higher SLAs.
 
-Risks:: You need to ensure that you provide a high enough ROV for tenants to consider switching to a paid tier. Additionally, the cost of providing your solution to customers on the free tier needs to be covered by the profit margin from those who are on paid tiers.
+Risks:: You need to ensure that you provide a high enough ROV for tenants to consider switching to a paid tier.Additionally, the cost of providing your solution to customers on the free tier needs to be covered by the profit margin from those who are on paid tiers.
 
+[#_flat_rate_pricing]
 === Flat-rate pricing
 
-In this model, you charge a flat rate to a tenant for access to your solution, for a given period of time. The same pricing applies regardless of how much they use the service, the number of users, the number of devices they connect, or any other metric. See the following diagram.
+In this model, you charge a flat rate to a tenant for access to your solution, for a given period of time.The same pricing applies regardless of how much they use the service, the number of users, the number of devices they connect, or any other metric.See the following diagram.
 
-image::flat-rate.png[Diagram showing revenue that remains consistent, regardless of the amount of use.]
+image::flat-rate.png[Diagram showing revenue that remains consistent,regardless of the amount of use.]
 
-This is the simplest model to implement and for customers to understand, and it's often requested by enterprise customers. However, it can easily become unprofitable if you need to continue to add new features or if tenant consumption increases without any additional revenue.
+This is the simplest model to implement and for customers to understand, and it's often requested by enterprise customers.However, it can easily become unprofitable if you need to continue to add new features or if tenant consumption increases without any additional revenue.
 
 Benefits:: Flat-rate pricing is easy to sell, and it's easy for your customers to understand and budget for.
 
-Complexity and operational cost:: Flat-rate pricing models can be easy to implement because billing customers doesn't require any metering or tracking consumption. However, while not essential, it's advisable to measure per-tenant consumption to ensure that you're measuring COGS accurately and to ensure that your profitability is maintained.
+Complexity and operational cost:: Flat-rate pricing models can be easy to implement because billing customers doesn't require any metering or tracking consumption.However, while not essential, it's advisable to measure per-tenant consumption to ensure that you're measuring COGS accurately and to ensure that your profitability is maintained.
 
 Risks:: If you have tenants who make heavy use of your solution, then it's easy for this pricing model to become unprofitable.
 

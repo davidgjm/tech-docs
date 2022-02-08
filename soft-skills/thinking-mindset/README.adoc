@@ -1,0 +1,21 @@
+= Mindsets and ways of thinking
+
+== Known ways of thinking and mindsets
+
+. Growth mindset
+. Critical thinking
+. Structural thinking
+. Conceptual thinking
+. System thinking
+. Design thinking
+
+=== Relationship and learning sequence of the above theories
+
+[source,text]
+----
+Growth mindset > Critical thinking > Structural thinking
+----
+
+== Learning materials
+- https://www.musingsofahistorygal.com/2015/12/the-importance-of-critical-thinking-in.html[THE IMPORTANCE OF CRITICAL THINKING IN A GROWTH MINDSET CLASS CULTURE]
+- https://www.fldoe.org/core/fileparse.php/7718/urlt/April2915JFT.pdf[Critical Thinking and growth mindset]

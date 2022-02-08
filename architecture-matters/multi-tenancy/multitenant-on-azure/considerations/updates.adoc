@@ -74,23 +74,25 @@ In all cases, ensure that you have sufficient reporting/visibility, so that you 
 
 === Deployment Stamps pattern
 
-Some multitenant applications are a good fit for the xref:../../../../design-patterns/deployment-stamp.adoc[Deployment Stamps pattern], in which you deploy multiple copies of your application and other components. Depending on your isolation requirements, you might deploy a stamp for each tenant, or shared stamps that run multiple tenants' workloads.
+Some multitenant applications are a good fit for the xref:../../../../design-patterns/deployment-stamp.adoc[Deployment Stamps pattern], in which you deploy multiple copies of your application and other components.Depending on your isolation requirements, you might deploy a stamp for each tenant, or shared stamps that run multiple tenants' workloads.
 
-Stamps are a great way to provide isolation between tenants. They also provide you with flexibility for your update process, since you can roll out updates progressively across stamps, without affecting others.
+Stamps are a great way to provide isolation between tenants.They also provide you with flexibility for your update process, since you can roll out updates progressively across stamps, without affecting others.
 
+[#_feature_flags]
 === Feature flags
 
-https://docs.microsoft.com/en-us/azure/devops/migrate/phase-features-with-feature-flags[Feature flags] enable you to add functionality to your solution, while only exposing to a subset of your customers or tenants. You might use feature flags, if you deploy updates regularly but want to avoid showing new functionality, or if you want to avoid applying changes in behavior until a customer opts in.
+https://docs.microsoft.com/en-us/azure/devops/migrate/phase-features-with-feature-flags[Feature flags] enable you to add functionality to your solution, while only exposing to a subset of your customers or tenants.You might use feature flags, if you deploy updates regularly but want to avoid showing new functionality, or if you want to avoid applying changes in behavior until a customer opts in.
 
 You can embed feature flag support into your application by writing code yourself, or by using a service like https://docs.microsoft.com/en-us/azure/azure-app-configuration/overview[Azure App Configuration].
 
+[#_deployment_rings]
 === Deployment rings
 
-https://docs.microsoft.com/en-us/azure/devops/migrate/phase-rollout-with-rings[Deployment rings] enable you to progressively roll out updates across a set of tenants or deployment stamps. You can assign a subset of tenants to each ring. A canary ring includes your own test tenants and customers who want to have updates as soon as they are available, with the understanding that they may receive more frequent updates, and that updates might not have been through as comprehensive a validation process as in the other things. An early adopter ring contains tenants who are slightly more risk-averse, but who are still prepared to receive regular updates. Most of your tenants will belong to the users ring, which receives less frequent and more highly tested updates.
+https://docs.microsoft.com/en-us/azure/devops/migrate/phase-rollout-with-rings[Deployment rings] enable you to progressively roll out updates across a set of tenants or deployment stamps.You can assign a subset of tenants to each ring.A canary ring includes your own test tenants and customers who want to have updates as soon as they are available, with the understanding that they may receive more frequent updates, and that updates might not have been through as comprehensive a validation process as in the other things.An early adopter ring contains tenants who are slightly more risk-averse, but who are still prepared to receive regular updates.Most of your tenants will belong to the users ring, which receives less frequent and more highly tested updates.
 
 === API versions
 
-If your service exposes an external API, consider that any updates you apply might affect the way that customers or partners integrate with your platform. In particular, you need to be conscious of breaking changes to your APIs. Consider using an xref:../../../../cloud/Azure/application-architecture/best-practices/api-design.adoc#_versioning_a_restful_web_api[API versioning strategy] to mitigate the risk of updates to your API.
+If your service exposes an external API, consider that any updates you apply might affect the way that customers or partners integrate with your platform.In particular, you need to be conscious of breaking changes to your APIs.Consider using an xref:../../../../cloud/Azure/application-architecture/best-practices/api-design.adoc#_versioning_a_restful_web_api[API versioning strategy] to mitigate the risk of updates to your API.
 
 == Next steps
 
