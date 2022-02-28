@@ -14,4 +14,37 @@
 |echo $?
 |
 
+|Check number of cli arguments
+a|
+[source,bash]
+----
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+fi
+----
+|The result will be *0* if no arguments are provided
+
+|Check if cli argument exists
+a|
+[source,bash]
+----
+if [ -z "$1" ]
+  then
+    echo "No argument supplied"
+fi
+----
+|
+
+|Check if environment variable exists
+a|
+[source,bash]
+----
+if [[  -z "${AZURE_CLIENT_SECRET}" ]]; then
+    echo "Azure AD client secret not set in environment variable AZURE_CLIENT_SECRET "
+    exit 1
+fi
+----
+|`AZURE_CLIENT_SECRET` is the name of the target environment variable
+
 |===
