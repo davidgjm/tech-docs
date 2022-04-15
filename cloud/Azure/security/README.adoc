@@ -1,0 +1,6 @@
+= Security
+
+== Network Security
+
+- https://docs.microsoft.com/en-us/azure/security/fundamentals/network-best-practices#logically-segment-subnets
+- https://docs.microsoft.com/en-us/azure/security/fundamentals/isolation-choices#networking-isolation[Networking Isolation]

@@ -1,4 +1,10 @@
 = helm
+:toc:
+
+== template development
+
+=== Template development notes
+link:template-dev.adoc[Helm template development notes]
 
 == helm best practices
 
