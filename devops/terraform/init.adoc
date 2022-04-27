@@ -1,0 +1,39 @@
+= Terraform `init`
+:toc:
+:icons: font
+:source-highlighter: rouge
+
+== Remote state - Azure
+=== References
+[example]
+====
+- https://www.terraform.io/language/settings/backends/azurerm
+- https://docs.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash
+- https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli
+- https://www.terraform.io/language/state/backends
+====
+
+=== Environment setup
+[source,bash]
+----
+
+RESOURCE_GROUP_NAME=rg-backend-mapdev-westeurope
+STORAGE_ACCOUNT_NAME=satfstatemapdev
+CONTAINER_NAME=state
+
+ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query '[0].value' -o tsv)
+export ARM_ACCESS_KEY=$ACCOUNT_KEY
+----
+
+=== Execution
+[source,bash]
+----
+terraform init \
+-backend=true \
+-backend-config=storage_account_name=tfstate \
+-backend-config=container_name=state \
+-backend-config=key=terraform.tfstate \
+-backend-config=resource_group_name=your_resource_group \
+-backend-config=subscription_id=your-subscription_id \
+-backend-config=tenant_id=your-tenant_id
+----

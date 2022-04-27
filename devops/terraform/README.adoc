@@ -30,42 +30,6 @@ resource_type.resource_name[instance index]
 - `resource_name` - User-defined name of the resource.
 - `[instance index]` - (Optional) Index to select an instance from a resource that has multiple instances, surrounded by square bracket characters (`[` and `]`).
 
-== State backend using Azure Blobs
-=== References
-[example]
-====
-- https://www.terraform.io/language/settings/backends/azurerm
-- https://docs.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash
-- https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli
-- https://www.terraform.io/language/state/backends
-====
-
-== Terraform Init
-
-=== Environment setup
-[source,bash]
-----
-
-RESOURCE_GROUP_NAME=rg-backend-mapdev-westeurope
-STORAGE_ACCOUNT_NAME=satfstatemapdev
-CONTAINER_NAME=state
-
-ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query '[0].value' -o tsv)
-export ARM_ACCESS_KEY=$ACCOUNT_KEY
-----
-
-
-=== Init
-[source,bash]
-----
-terraform init \
--backend=true \
--backend-config=storage_account_name=satfstatemapdev \
--backend-config=container_name=state \
--backend-config=key=map-delivery-k8s.tfstate \
--backend-config=resource_group_name=rg-backend-mapdev-westeurope \
--backend-config=subscription_id=98ce2f4e-c279-42ee-bc8d-cf65b81d8fc4 \
--backend-config=tenant_id=2add9d3d-b354-49e2-a68d-ee84001ffd34
-----
+include::init.adoc[leveloffset=+1]
 
 include::import.adoc[leveloffset=+1]
