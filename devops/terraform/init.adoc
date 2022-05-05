@@ -16,24 +16,26 @@
 === Environment setup
 [source,bash]
 ----
+#!/usr/bin/env bash
 
-RESOURCE_GROUP_NAME=rg-backend-mapdev-westeurope
-STORAGE_ACCOUNT_NAME=satfstatemapdev
+RESOURCE_GROUP_NAME=your_resource_group
+STORAGE_ACCOUNT_NAME=tfstate
 CONTAINER_NAME=state
+STATE_FILE_NAME=terraform.tfstate
 
+export ARM_TENANT_ID=your-tenant_id
+export ARM_SUBSCRIPTION_ID=36d606bb-5ac2-55bb-9ad2-caa7ecb881e8
+
+echo "Getting access key for storage account ${STORAGE_ACCOUNT_NAME}"
 ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query '[0].value' -o tsv)
 export ARM_ACCESS_KEY=$ACCOUNT_KEY
-----
 
-=== Execution
-[source,bash]
-----
+echo "Initializing terraform backend"
 terraform init \
 -backend=true \
--backend-config=storage_account_name=tfstate \
--backend-config=container_name=state \
--backend-config=key=terraform.tfstate \
--backend-config=resource_group_name=your_resource_group \
--backend-config=subscription_id=your-subscription_id \
--backend-config=tenant_id=your-tenant_id
+-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+-backend-config=container_name=${CONTAINER_NAME} \
+-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+-backend-config=key=${STATE_FILE_NAME}
+
 ----
