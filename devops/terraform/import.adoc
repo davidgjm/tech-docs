@@ -54,6 +54,23 @@ resource "aws_instance" "example" {
 |https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace#import[namespace]
 |$ terraform import kubernetes_namespace.n terraform-example-namespace
 
+|kubernetes
+|kubernetes_config_map
+|https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/config_map#import[configmap]
+|$ terraform import kubernetes_config_map.example default/my-config
+
+|kubernetes
+|kubernetes_storage_class
+|https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/storage_class#import[storageClass]
+|$ terraform import kubernetes_storage_class.example terraform-example
+
+
+|kubernetes
+|kubernetes_persistent_volume_claim
+|https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume_claim#import[import note]
+|$ terraform import kubernetes_persistent_volume_claim.example default/example-name
+
+
 |helm
 |helm_release
 |https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release#import[`namespace/name`]

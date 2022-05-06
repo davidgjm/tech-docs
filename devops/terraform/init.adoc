@@ -23,8 +23,8 @@ STORAGE_ACCOUNT_NAME=tfstate
 CONTAINER_NAME=state
 STATE_FILE_NAME=terraform.tfstate
 
-export ARM_TENANT_ID=your-tenant_id
-export ARM_SUBSCRIPTION_ID=36d606bb-5ac2-55bb-9ad2-caa7ecb881e8
+export ARM_TENANT_ID=${AZURE_TENANT_ID}
+export ARM_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}
 
 echo "Getting access key for storage account ${STORAGE_ACCOUNT_NAME}"
 ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query '[0].value' -o tsv)
