@@ -1,0 +1,90 @@
+= Setup multi-module gradle projects
+:toc:
+
+== Common Settings
+=== `/gradle.properties`
+Define all library versions in `gradle.properties` at the root of the project.
+[source,properties]
+----
+applicationName=my-app
+baseVersion=2022.1.0
+version=2022.1.0-SNAPSHOT
+
+springCloudVersion=2021.0.1
+
+springBootGradlePluginVersion=1.0.11.RELEASE
+springBootVersion=2.6.3
+
+## Observability artifacts
+otelVersion=1.9.1
+otelVersionAlpha=1.9.1-alpha
+grpcVersion=1.34.1
+
+cloudEventsSdkVersion=2.3.0
+
+## Apache Commons
+commonsCodecVersion=1.15
+commonsIoVersion=2.11.0
+
+gitCommitIdVersion=2.3.1
+----
+
+=== `settings.gradle`
+==== Define shared plugins for all modules
+[source,groovy]
+----
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+}
+----
+
+====  Use application name as project name
+Define the application name inside `gradle.properties` and reference to it in `/settings.gradle`
+
+[source, properties]
+----
+rootProject.name = applicationName
+----
+
+
+=== `/build.gradle`
+
+==== Manage dependencies
+
+[source,groovy]
+----
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+
+            //CloudEvents
+            mavenBom "io.cloudevents:cloudevents-bom:${cloudEventsSdkVersion}"
+
+            //OpenTelemetry
+            mavenBom "io.opentelemetry:opentelemetry-bom:${otelVersion}"
+            mavenBom "io.opentelemetry:opentelemetry-bom-alpha:${otelVersionAlpha}"
+            mavenBom "io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom-alpha:${otelVersionAlpha}"
+        }
+        dependencies {
+            dependency ("commons-io:commons-io:${commonsIoVersion}")
+        }
+    }
+----
+
+== Define shared dependencies with precompiled scripts in `buildSrc`
+
+=== `buildSrc` layout
+[source]
+----
+buildSrc
+├── build.gradle
+├── gradle.properties
+├── settings.gradle
+└── src
+    └── main
+        └── groovy
+            ├── cloud.java-application.gradle
+            ├── cloud.java-conventions.gradle
+            └── cloud.library-conventions.gradle
+----

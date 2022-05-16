@@ -1,0 +1,11 @@
+spring:
+  application.name: my-application
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: REACTIVE
+  cloud:
+    kubernetes:
+      enabled: true
+      config:
+        enabled: true
+        fail-fast: true
