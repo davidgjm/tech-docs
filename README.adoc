@@ -1,3 +1,5 @@
 = tech-docs
 
+include::_attributes.adoc[]
+
 Repository for technology knowledge sharing

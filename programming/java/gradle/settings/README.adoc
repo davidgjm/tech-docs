@@ -1,0 +1,69 @@
+= Gradle user and project settings
+:toc: auto
+:source-highlighter: rouge
+
+== Project Settings
+
+=== Using multi-level (hierachical) projects (modules)
+
+TIP: Use `:` as separator for directories.
+
+[source,groovy]
+----
+include 'project1', 'project2:child', 'project3:child1'
+----
+
+In the settings file you can use the `include` method to build the project tree.
+The `include` method takes project paths as arguments. The project path is assumed to be equal to the relative physical file system path. For example, a path 'services:api' is mapped by default to a folder 'services/api' (relative from the project root). You only need to specify the leaves of the tree. This means that the inclusion of the path 'services:hotels:api' will result in creating 3 projects: 'services', 'services:hotels' and 'services:hotels:api'. More examples of how to work with the project path can be found in the DSL documentation of https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html#org.gradle.api.initialization.Settings:include(java.lang.String%5B%5D)[Settings.include(java.lang.String[]]).
+
+
+
+== Initialization Scripts (init scripts)
+=== References
+[example]
+====
+- https://docs.gradle.org/current/userguide/init_scripts.html[Initialization Scripts]
+- https://rahulsom.github.io/blog/2016/gradle-equivalent-of-maven-mirror.html[Gradle Equivalent of Maven Mirror]
+- https://docs.gradle.org/current/userguide/declaring_repositories.html#sec:declaring_multiple_repositories[Declaring multiple repositories]
+====
+
+=== Basics
+==== Using an init script
+- Put a file called `init.gradle` (or `init.gradle.kts` for Kotlin) in the `USER_HOME/.gradle/` directory.
+- Put a file that ends with `.gradle` (or `.init.gradle.kts` for Kotlin) in the `USER_HOME/.gradle/init.d/` directory.
+
+If more than one init script is found they will all be executed, in the order specified above. Scripts in a given directory are executed in alphabetical order. This allows, for example, a tool to specify an init script on the command line and the user to put one in their home directory for defining the environment and both scripts will run when Gradle is executed.
+
+=== Using Maven Mirrors
+[quote, Gradle: Declaring multiple repositories]
+____
+The order of declaration determines how Gradle will check for dependencies at runtime. If Gradle finds a module descriptor in a particular repository, it will attempt to download all of the artifacts for that module from the same repository. You can learn more about the inner workings of https://docs.gradle.org/current/userguide/dependency_resolution.html#sec:how-gradle-downloads-deps[dependency downloads].
+____
+
+[source,groovy]
+----
+allprojects {         <1>
+  buildscript {       <2>
+    repositories {    <3>
+      mavenLocal() 
+      maven { url "http://repo.internal.example.com/releases" } <4>
+    }
+  }
+  repositories {      <5>
+    mavenLocal()
+    maven { url "http://repo.internal.example.com/releases" }
+  }
+}
+----
+<1> This says we want to apply to all projects on this machine.
+<2> This says you want to modify the build script dependencies too. This will make gradle plugins and build dependencies also use your mirror.
+<3> This says to look in maven local first. That's typically your `$USER_HOME/.m2/repository` directory.
+<4> This says to look at your maven mirror next if the artifact could not be found.
+<5> This says to do the same set of changes for non-build dependencies of your gradle projects.
+
+==== Concret example
+
+[source, groovy]
+----
+include::init.gradle[]
+----

@@ -1,0 +1,100 @@
+= Setting observability Java agent via init container
+:toc: auto
+
+
+== Setup `emptyDir` volume
+
+[source, yaml]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: online-shopping
+  labels:
+    app.kubernetes.io/name: online-shopping
+  annotations:
+    rollme: "fB47B"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: online-shopping
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: online-shopping
+    spec:
+      serviceAccountName: online-shopping
+      initContainers:
+        - name: otel
+          image: busybox:1.35
+          env:
+            - name: OTEL_AGENT_VERSION
+              value: 1.14.0
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - >-
+              DEST_DIR=/data/observability/agent; 
+              AGENT_VER=v$(OTEL_AGENT_VERSION); 
+              AGENT_FILE=opentelemetry-javaagent.jar;
+              mkdir -p ${DEST_DIR};
+              if [ ! -f ${DEST_DIR}/${AGENT_FILE} ]; 
+              then wget --no-check-certificate -P ${DEST_DIR} https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/${AGENT_VER}/${AGENT_FILE}; 
+              fi
+          volumeMounts:
+            - name: observability-agent
+              mountPath: /data/observability/agent
+      containers:
+        - name: app
+          image: online-shopping:latest
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+            - name: SPRING_CLOUD_BOOTSTRAP_LOCATION
+              value: /etc/config/bootstrap/
+            - name: JAVA_TOOL_OPTIONS
+              value: -javaagent:/data/observability/agent/opentelemetry-javaagent.jar
+          volumeMounts:
+            - name: config-bootstrap
+              mountPath: /etc/config/bootstrap
+              readOnly: true
+            - name: observability-agent
+              mountPath: /data/observability/agent
+            - name: observability-config
+              mountPath: /data/observability/config
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            failureThreshold: 10
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 300m
+              memory: 1Gi
+      volumes:
+        - name: config-bootstrap
+          configMap:
+            name: online-shopping-bootstrap
+            optional: false
+        - name: observability-agent
+          emptyDir: { }
+        - name: observability-config
+          configMap:
+            name: observability
+            items:
+              - key: otel.json
+                path: otel.json
+----

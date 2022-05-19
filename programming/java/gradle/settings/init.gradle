@@ -1,0 +1,45 @@
+allprojects {
+    buildscript {
+        repositories {
+            mavenLocal()
+            maven { 
+                name 'aliyun-public'
+                url 'https://maven.aliyun.com/repository/public/'
+            }
+            maven { 
+                name 'aliyun-spring'
+                url 'https://maven.aliyun.com/repository/spring/'
+            }
+            mavenCentral()
+            maven { 
+                name "spring-snapshot"
+                url "https://repo.spring.io/snapshot"
+            }
+            maven {
+                name "spring-milestone"
+                url "https://repo.spring.io/milestone" 
+            }
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven { 
+            name 'aliyun-public'
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        maven { 
+            name 'aliyun-spring'
+            url 'https://maven.aliyun.com/repository/spring/'
+        }
+        mavenCentral()
+        maven { 
+            name "spring-snapshot"
+            url "https://repo.spring.io/snapshot"
+        }
+        maven {
+            name "spring-milestone"
+            url "https://repo.spring.io/milestone" 
+        }
+    }
+}
+
