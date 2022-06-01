@@ -1,0 +1,67 @@
+= Change Management
+:toc:
+:imagesdir: ./images
+
+== https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/implement-change.html[Implement Change]
+Controlled changes are necessary to deploy new functionality and to ensure that the workloads and the operating environment are running known, properly patched software. If these changes are uncontrolled, then it makes it difficult to predict the effect of these changes, or to address issues that arise because of them.
+
+=== Use runbooks for standard activities such as deployment
+Runbooks are the predefined steps to achieve specific outcomes. Use runbooks to perform standard activities, whether done manually or automatically. Examples include deploying a workload, patching it, or making DNS modifications.
+
+For example, put processes in place to ensure rollback safety during deployments
+
+. Ensuring that you can roll back a deployment without any disruption for your customers is critical in making a service reliable.
+
+For runbook procedures, start with a valid effective manual process, implement it in code, and trigger automated execution where appropriate.
+
+Even for sophisticated workloads that are highly automated, runbooks are still useful for running game days or meeting rigorous reporting and auditing requirements.
+
+NOTE: playbooks are used in response to specific incidents, and runbooks are used to achieve specific outcomes. Often, runbooks are for routine activities, while playbooks are used for responding to non-routine events.
+
+=== Integrate functional testing as part of your deployment
+Functional tests are run as part of automated deployment. If success criteria are not met, the pipeline is halted or rolled back.
+
+These tests are run in a pre-production environment, which is staged prior to production in the pipeline. Ideally, this is done as part of a deployment pipeline.
+
+=== Integrate resiliency testing as part of your deployment
+*Resiliency tests (as part of chaos engineering)* are run as part of the automated deployment pipeline in a pre-production environment.
+
+These tests are staged and run in the pipeline prior to production. They should also be run in production, but as part of https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/test-reliability.html#GameDays[Game Days].
+
+=== Deploy using immutable infrastructure
+This is a model that mandates that no updates, security patches, or configuration changes happen in-place on production systems. When a change is needed, the architecture is built onto new infrastructure and deployed into production.
+
+The most common implementation of the immutable infrastructure paradigm is the *_immutable server_*. This means that if a server needs an update or a fix, new servers are deployed instead of updating the ones already in use. So, instead of logging into the server via SSH and updating the software version, every change in the application starts with a software push to the code repository, for example, git push. Since changes are not allowed in immutable infrastructure, you can be sure about the state of the deployed system. Immutable infrastructures are inherently more consistent, reliable, and predictable, and they simplify many aspects of software development and operations.
+
+Use a canary or blue/green deployment when deploying applications in immutable infrastructures.
+
+https://martinfowler.com/bliki/CanaryRelease.html[Canary deployment]:: is the practice of directing a small number of your customers to the new version, usually running on a single service instance (the canary). You then deeply scrutinize any behavior changes or errors that are generated. You can remove traffic from the canary if you encounter critical problems and send the users back to the previous version. If the deployment is successful, you can continue to deploy at your desired velocity, while monitoring the changes for errors, until you are fully deployed. AWS CodeDeploy can be configured with a deployment configuration that will enable a canary deployment.
+
+https://martinfowler.com/bliki/BlueGreenDeployment.html[Blue/green deployment]:: is similar to the canary deployment except that a full fleet of the application is deployed in parallel. You alternate your deployments across the two stacks (blue and green). Once again, you can send traffic to the new version, and fall back to the old version if you see problems with the deployment. Commonly all traffic is switched at once, however you can also use fractions of your traffic to each version to dial up the adoption of the new version using the weighted DNS routing capabilities of Amazon Route 53. AWS CodeDeploy and AWS Elastic Beanstalk can be configured with a deployment configuration that will enable a blue/green deployment.
+
+[#img-blue-green-deployment]
+.Blue/green deployment with AWS Elastic Beanstalk and Amazon Route 53
+image::blue-green-deployment.png[]
+
+Benefits of immutable infrastructure:
+
+[horizontal]
+Reduction in configuration drifts:: By frequently replacing servers from a base, known and version-controlled configuration, the infrastructure is *reset* to a known state, avoiding configuration drifts.
+Simplified deployments:: Deployments are simplified because they don’t need to support upgrades. Upgrades are just new deployments.
+Reliable atomic deployments:: Deployments either complete successfully, or nothing changes. It gives more trust in the deployment process.
+Safer deployments with fast rollback and recovery processes:: Deployments are safer because the previous working version is not changed. You can roll back to it if errors are detected.
+Consistent testing and debugging environments:: Since all servers use the same image, there are no differences between environments. One build is deployed to multiple environments. It also prevents inconsistent environments and simplifies testing and debugging.
+Increased scalability:: Since servers use a base image, are consistent, and repeatable, automatic scaling is trivial.
+Simplified toolchain:: The toolchain is simplified since you can get rid of configuration management tools managing production software upgrades. No extra tools or agents are installed on servers. Changes are made to the base image, tested, and rolled-out.
+Increased security:: By denying all changes to servers, you can disable SSH on instances and remove keys. This reduces the attack vector, improving your organization’s security posture.
+
+==== Deploy changes with automation
+Deployments and patching are automated to eliminate negative impact.
+
+Making changes to production systems is one of the largest risk areas for many organizations. We consider deployments a first-class problem to be solved alongside the business problems that the software addresses. Today, this means the use of automation wherever practical in operations, including testing and deploying changes, adding or removing capacity, and migrating data. AWS CodePipeline lets you manage the steps required to release your workload. This includes a deployment state using AWS CodeDeploy to automate deployment of application code to Amazon EC2 instances, on-premises instances, serverless Lambda functions, or Amazon ECS services.
+
+[TIP]
+.Recommendation
+====
+Although conventional wisdom suggests that you keep humans in the loop for the most difficult operational procedures, we suggest that you automate the most difficult procedures for that very reason.
+====
