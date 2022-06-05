@@ -1,0 +1,11 @@
+= Strategic Planning
+:toc:
+:imagesdir: ./images
+
+== Guide from _CommunityToolBox_
+
+- link:1.overview.adoc[Section 1. An Overview of Strategic Planning or "VMOSA" (Vision, Mission, Objectives, Strategies, and Action Plans)]
+
+- link:2.proclaiming-your-dream.adoc[Proclaiming Your Dream: Developing Vision and Mission Statements]
+
+- link:3.creating-objectives.adoc[Creating Objectives]

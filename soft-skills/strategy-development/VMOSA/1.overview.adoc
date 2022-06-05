@@ -1,0 +1,199 @@
+= An Overview of Strategic Planning or "VMOSA" (Vision, Mission, Objectives, Strategies, and Action Plans)
+:toc:
+
+https://ctb.ku.edu/en/table-of-contents/structure/strategic-planning/vmosa/main
+
+== Main Section
+VMOSA (Vision, Mission, Objectives, Strategies, and Action Plans) is a practical planning process used to help community groups define a vision and develop practical ways to enact change. VMOSA helps your organization set and achieve short term goals while keeping sight of your long term vision. Implementing this planning process into your group's efforts supports developing a clear mission, building consensus, and grounding your group's dreams. This section explores how and when to implement VMOSA into your organization's planning process.
+
+=== What is VMOSA?
+
+One way to make that journey is through strategic planning, the process by which a group defines its own "VMOSA;" that is, its **V**ision, **M**ission, **O**bjectives, **S**trategies, and **A**ction Plans. VMOSA is a practical planning process that can be used by any community organization or initiative. This comprehensive planning tool can help your organization by providing a blueprint for moving from dreams to actions to positive outcomes for your community.
+
+In this section, we will give a general overview of the process, and touch briefly on each of the individual parts. In Examples, we'll show you how an initiative to prevent adolescent pregnancy used the VMOSA process effectively. Then, in Tools, we offer you a possible agenda for a planning retreat, should your organization decide to use this process. Finally, the remaining sections in this chapter will walk you through the steps needed to fully develop each portion of the process.
+
+=== Why should your organization use VMOSA?
+
+Why should your organization use this planning process? There are many good reasons, including all of the following:
+
+- The VMOSA process grounds your dreams. It makes good ideas possible by laying out what needs to happen in order to achieve your vision.
+- By creating this process in a group effort (taking care to involve both people affected by the problem and those with the abilities to change it), it allows your organization to build consensus around your focus and the necessary steps your organization should take.
+- The process gives you an opportunity to develop your vision and mission together with those in the community who will be affected by what you do.  That means that your work is much more likely to address the community’s real needs and desires, rather than what you think they might be.  It also means community ownership of the vision and mission, putting everyone on the same page and greatly increasing the chances that any effort will be successful.
+- VMOSA allows your organization to focus on your short-term goals while keeping sight of your long-term vision and mission.
+
+=== When should you use VMOSA?
+
+So, when should you use this strategic planning process? Of course, it always makes sense for your organization to have the direction and order it gives you, but there are some times it makes particularly good sense to use this process. These times include:
+
+- When you are starting a new organization.
+- When your organization is starting a new initiative or large project, or is going to begin work in a new direction.
+- When your group is moving into a new phase of an ongoing effort.
+- When you are trying to invigorate an older initiative that has lost its focus or momentum.
+- When you’re applying for new funding or to a new funder.  It’s important under these circumstances to clarify your vision and mission so that any funding you seek supports what your organization actually stands for.  Otherwise, you can wind up with strings attached to the money that require you to take a direction not in keeping with your organization’s real purpose or philosophy.
+
+Let's look briefly at each of the individual ingredients important in this process. Then, in the next few sections we'll look at each of these in a more in-depth manner, and explain how to go about developing each step of the planning process.
+
+==== Vision (the dream)
+
+Your vision communicates what your organization believes are the ideal conditions for your community – how things would look if the issue important to you were perfectly addressed. This utopian dream is generally described by one or more phrases or vision statements, which are brief proclamations that convey the community's dreams for the future. By developing a vision statement, your organization makes the beliefs and governing principles of your organization clear to the greater community (as well as to your own staff, participants, and volunteers).
+
+There are certain characteristics that most vision statements have in common. In general, vision statements should be:
+
+- Understood and shared by members of the community
+- Broad enough to encompass a variety of local perspectives
+- Inspiring and uplifting to everyone involved in your effort
+- Easy to communicate - for example, they should be short enough to fit on a T-shirt
+
+Here are a few vision statements which meet the above criteria:
+
+- Healthy children
+- Safe streets, safe neighborhoods
+- Every house a home
+- Education for all
+- Peace on earth
+
+==== Mission (the what and why)
+
+Developing _mission_ statements are the next step in the action planning process. An organization's mission statement describes _what_ the group is going to do, and _why_ it's going to do that. Mission statements are similar to vision statements, but they're more concrete, and they are definitely more "action-oriented" than vision statements. The mission might refer to a problem, such as an inadequate housing, or a goal, such as providing access to health care for everyone. And, while they don't go into a lot of detail, they start to hint - very broadly - at how your organization might go about fixing the problems it has noted. Some general guiding principles about mission statements are that they are:
+
+- _Concise_. Although not as short a phrase as a vision statement, a mission statement should still get its point across in one sentence.
+- _Outcome-oriented_. Mission statements explain the overarching outcomes your organization is working to achieve.
+- _Inclusive_. While mission statements do make statements about your group's overarching goals, it's very important that they do so very broadly. Good mission statements are not limiting in the strategies or sectors of the community that may become involved in the project.
+
+The following mission statements are examples that meet the above criteria.
+
+- "To promote child health and development through a comprehensive family and community initiative."
+- "To create a thriving African American community through development of jobs, education, housing, and cultural pride.
+- "To develop a safe and healthy neighborhood through collaborative planning, community action, and policy advocacy."
+
+    While vision and mission statements themselves should be short, it often makes sense for an organization to include its deeply held beliefs or philosophy, which may in fact define both its work and the organization itself. One way to do this without sacrificing the directness of the vision and mission statements is to include guiding principles as an addition to the statements. These can lay out the beliefs of the organization while keeping its vision and mission statements short and to the point.
+
+==== Objectives (how much of what will be accomplished by when)
+
+Once an organization has developed its mission statement, its next step is to develop the specific objectives that are focused on achieving that mission. Objectives refer to specific measurable results for the initiative's broad goals. An organization's objectives generally lay out how much of what will be accomplished by when. For example, one of several objectives for a community initiative to promote care and caring for older adults might be: "By 2015 (by when), to increase by 20% (how much) those elders reporting that they are in daily contact with someone who cares about them (of what)."
+
+*There are three basic types of objectives*. They are:
+
+- _Behavioral objectives_. These objectives look at changing the behaviors of people (what they are doing and saying) and the products (or results) of their behaviors. For example, a neighborhood improvement group might develop an objective around having an increased amount of home repair taking place (the behavior) or of improved housing (the result).
+- _Community-level outcome objectives_. These are related to behavioral outcome objectives, but are more focused more on a community level instead of an individual level. For example, the same group might suggest increasing the percentage of decent affordable housing in the community as a community-level outcome objective.
+- _Process objectives_. These are the objectives that refer to the implementation of activities necessary to achieve other objectives. For example, the group might adopt a comprehensive plan for improving neighborhood housing.
+
+It's important to understand that these different types of objectives aren't mutually exclusive. Most groups will develop objectives in all three categories. Examples of objectives include:
+
+- By December 2010, to increase by 30% parent engagement (i.e., talking, playing, reading) with children under 2 years of age. (_Behavioral objective_)
+- By 2012, to have made a 40% increase in youth graduating from high school. (_Community -level outcome objective_)
+- By the year 2006, increase by 30% the percentage of families that own their home. (_Community-level outcome objective_)
+- By December of this year, implement the volunteer training program for all volunteers. (_Process objective_)
+
+==== Strategies (the how)
+
+The next step in the process of VMOSA is developing your strategies. Strategies explain how the initiative will reach its objectives. Generally, organizations will have a wide variety of strategies that include people from all of the different parts, or sectors, of the community. These strategies range from the very broad, which encompass people and resources from many different parts of the community, to the very specific, which aim at carefully defined areas.
+
+Examples of broad strategies include:
+
+- A child health program might use social marketing to promote adult involvement with children
+- An adolescent pregnancy initiative might decide to increase access to contraceptives in the community
+- An urban revitalization project might enhance the artistic life of the community by encouraging artists to perform in the area
+
+*Five types of specific strategies can help guide most interventions*. They are:
+
+- Providing information and enhancing skills (e.g., offer skills training in conflict management)
+- Enhancing services and support (e.g., start a mentoring programs for high-risk youth)
+- Modify access, barriers, and opportunities (such as offering scholarships to students who would be otherwise unable to attend college)
+- Change the consequences of efforts (e.g., provide incentives for community members to volunteer)
+- Modify policies (e.g., change business policies to allow parents and guardians and volunteers to spend more time with young children)
+
+==== Action plan (what change will happen; who will do what by when to make it happen)
+
+Finally, an organization's action plan describes in great detail exactly how strategies will be implemented to accomplish the objectives developed earlier in this process. The plan refers to: a) specific (community and systems) changes to be sought, and b) the specific action steps necessary to bring about changes in all of the relevant sectors, or parts, of the community.
+
+The key aspects of the intervention or (community and systems) changes to be sought are outlined in the action plan. For example, in a program whose mission is to increase youth interest in politics, one of the strategies might be to teach students about the electoral system. Some of the action steps, then, might be to develop age-appropriate materials for students, to hold mock elections for candidates in local schools, and to include some teaching time in the curriculum.
+
+Action steps are developed for each component of the intervention or (community and systems) changes to be sought. These include:
+
+- Action step(s): What will happen
+- Person(s) responsible: Who will do what
+- Date to be completed: Timing of each action step
+- Resources required: Resources and support (both what is needed and what's available )
+- Barriers or resistance, and a plan to overcome them!
+- Collaborators: Who else should know about this action
+
+Here are two examples of action steps, graphed out so you can easily follow the flow:
+
+[cols="6*"]
+|===
+|Action Step|Person(s) Responsible|Date to be Completed|Resources Required|Potential Barriers or Resistance|Collaborators
+
+|Draft a social marketing plan
+|Terry McNeil (from marketing firm)
+|April 2006
+|$15,000 (remaining donated)
+|None anticipated
+|Members of the business action group
+
+|Ask local corporations to introduce flex-time for parents and mentors
+|Maria Suarez (from business action group)
+|September 2008
+|5 hours; 2 hour proposal prep; 3 hours for meeting and transportation
+|Corporation: may see this as expensive; must convince them of benefit of the plan for the corporation
+|Members of the business action group and the school action group
+
+|===
+
+Of course, once you have finished designing the strategic plan or "VMOSA" for your organization, you are just beginning in this work. Your action plan will need to be tried and tested and revised, then tried and tested and revised again. You'll need to obtain feedback from community members, and add and subtract elements of your plan based on that feedback.
+
+== Checklist
+
+_You have defined your group's:_
+
+___Vision (the dream)
+
+___Mission (what and why)
+
+___Objectives (how much of what by whom)
+
+___Strategies (how)
+
+___Action plans (who will do what by when)
+
+___You understand when to use VMOSA, the strategic planning process
+
+== Tools
+
+=== Defining Your Vision, Mission, Objectives, Strategies, and Action Plan
+What is the purpose of your organization? How will you achieve it? The VMOSA process helps your initiative develop a blueprint for moving from dreams to actions to positive outcomes for your community. VMOSA gives both direction and structure to your initiative.
+
+==== Vision
+
+Your group's vision is your dream, a picture of the ideal conditions for your community. As a unifying statement for your effort, it also reminds you what you are striving to reach and guides important decisions.
+
+A vision statement should be a few short phrases or a sentence that conveys your hopes for the future. Catchy phrases such as "Healthy teens," "Safe streets, safe neighborhoods" and "Education for all" illustrate the common characteristics of a vision statement. Craft a statement that is:
+
+- Understood and shared by members of the community
+- Broad enough to include a diverse variety of perspectives
+- Inspiring and uplifting
+- Easy to communicate (fits on a T-shirt!)
+
+==== Mission
+
+Your mission statement is more specific than your vision. As the next step in the action planning process, it expresses the "what and how" of your effort, describing what your group is going to do to make your vision a reality. An example of a mission statement: "Our mission is to develop a safe and healthy neighborhood through collaborative planning, community action, and policy advocacy."
+
+While your vision statement inspires people to dream, your mission statement should inspire them to action. Make it concise, outcome-oriented, and inclusive.
+
+==== Objectives
+
+Objectives are the specific, measurable steps that will help you achieve your mission. Develop objectives that are SMART+C: specific, measurable, achievable (eventually), relevant to your mission, and timed (with a date for completion.) An example of an objective would be: "By the year (x), 90 percent of the area's drug houses will be eliminated from our target area."
+
+The +C reminds you to adds another important quality to your goals: make them challenging. Stretch your group to make improvements that are significant to members of the community.
+
+==== Strategies
+
+Strategies explain how your group will reach its objectives. Broad approaches for making change include advocacy, coalition building, community development, education, networking and policy or legislative change. For example, a child health program could choose a broad strategy of social marketing to promote adult involvement with children.
+
+Specific strategies guide an intervention in more detail. To promote the health of children, you might also enhance people's skills (offer training in conflict management), modify opportunities (offer scholarships), or change the consequences of efforts (provide incentives for community members to volunteer as youth mentors).
+
+==== Action Plan
+
+Your action plan specifies in detail who will do what, by when, to make what changes happen. It may also note the resources needed, potential barriers or resistance, and collaborators or communication lines that need to be active.
+
+An action plan guides you to your dream through "do-able" steps. You can rely on this plan to know what actions you should take day by day.
