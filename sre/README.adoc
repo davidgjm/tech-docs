@@ -4,4 +4,6 @@
 == Learning Resources
 
 - https://adrianhynes.medium.com/sre-practices-for-kubernetes-platforms-part-1-da5b76eedfb5[SRE Practices for Kubernetes Platforms — Part 1]
+- https://adrianhynes.medium.com/sre-practices-for-kubernetes-platforms-part-2-59b1c17cc14d[SRE Practices for Kubernetes Platforms — Part 2]
+- https://adrianhynes.medium.com/sre-practices-for-kubernetes-platforms-part-3-2df757f44347[SRE Practices for Kubernetes Platforms — Part 3]
 - https://newrelic.com/blog/best-practices/best-practices-for-setting-slos-and-slis-for-modern-complex-systems[SLOs and SLIs best practices for systems]

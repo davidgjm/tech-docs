@@ -1,7 +1,7 @@
 = Monitoring
 :toc: auto
 
-== Metrics
+== Metrics Definition
 
 === The Four Golden Signals
 Google gave us a place to start in the excellent SRE Handbook with the notion of the “Four Golden Signals”:
@@ -51,8 +51,34 @@ The USE method is for resources and the RED method is for my services
 ____
 Ahhh! Now we have frame of reference on how to apply these simplifying abstractions to the the metrics in our Kubernetes system. In coming installments some of the metrics I will be talking about describe the resources in our system. Others metrics describe the applications that use those resources.
 
+== Optimizing Metrics in your monitoring system
 
+=== Guidelines for choosing what to monitor
 
-== Kubernetes
+[quote, SRE handbook]
+____
+In choosing what to monitor, keep the following guidelines in mind:
+
+- The rules that catch real incidents most often should be as simple, predictable, and reliable as possible.
+- Data collection, aggregation, and alerting configuration that is rarely exercised (e.g., less than once a quarter for some SRE teams) should be up for removal.
+- Signals that are collected, but not exposed in any prebaked dashboard nor used by any alert, are candidates for removal.
+____
+
+== Kubernetes Metrics
 
 - https://blog.freshtracks.io/a-deep-dive-into-kubernetes-metrics-b190cc97f0f6[A Deep Dive into Kubernetes Metrics]
+
+
+== Monitoring and Alerting
+
+=== Rules for monitoring and alerting
+
+[quote, p64 SRE Handbook]
+____
+- Every time the pager goes off, I should be able to react with a sense of urgency. I can only react with a sense of urgency a few times a day before I become fatigued.
+- Every page should be actionable.
+- Every page response should require intelligence. If a page merely merits a robotic response, it shouldn’t be a page.
+- Pages should be about a novel problem or an event that hasn’t been seen before.
+
+____
+
