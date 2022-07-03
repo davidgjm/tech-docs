@@ -1,0 +1,93 @@
+= Expenditure and Usage Awareness
+:toc:
+:icons: font
+:imagesdir: ./images
+
+Understanding your organization’s costs and drivers is critical for managing your cost and usage effectively, and identifying cost-reduction opportunities. Organizations typically operate multiple workloads run by multiple teams. These teams can be in different organization units, each with its own revenue stream. The capability to attribute resource costs to the workloads, individual organization, or product owners drives efficient usage behavior and helps reduce waste. Accurate cost and usage monitoring allows you to understand how profitable organization units and products are, and allows you to make more informed decisions about where to allocate resources within your organization. Awareness of usage at all levels in the organization is key to driving change, as change in usage drives changes in cost.
+
+Consider taking a multi-faceted approach to becoming aware of your usage and expenditures. Your team must gather data, analyze, and then report. Key factors to consider include:
+
+- Governance
+- Monitor cost and usage
+- Decommission resources
+
+== Governance
+
+=== Develop goals and targets
+Develop cost and usage goals and targets for your organization. Goals provide guidance and direction to your organization on expected outcomes. Targets provide specific measurable outcomes to be achieved. An example of a goal is: platform usage should increase significantly, with only a minor (non-linear) increase in cost. An example target is: a 20% increase in platform usage, with less than a 5% increase in costs. Another common goal is that workloads need to be more efficient every 6 months. The accompanying target would be that the cost per output of the workload needs to decrease by 5% every 6 months.
+
+A common goal for cloud workloads is to increase workload efficiency, which is to decrease the cost per business outcome of the workload over time. It is recommended to implement this goal for all workloads, and also set a target such as a 5% increase in efficiency every 6-12 months. This can be achieved in the cloud through building capability in cost optimization, and through the release of new services and service features.
+
+=== Account structure
+AWS has a one-parent-to-many-children account structure that is commonly known as a management account (the parent, formerly payer) account-member (the child, formerly linked) account. A best practice is to always have at least one management account with one member account, regardless of your organization size or usage. All workload resources should reside only within member accounts.
+
+There is no one-size-fits-all answer for how many AWS accounts you should have. Assess your current and future operational and cost models to ensure that the structure of your AWS accounts reflects your organization’s goals. Some companies create multiple AWS accounts for business reasons, for example:
+
+- Administrative and/or fiscal and billing isolation is required between organization units, cost centers, or specific workloads.
+- AWS service limits are set to be specific to particular workloads.
+- There is a requirement for isolation and separation between workloads and resources.
+
+Within http://aws.amazon.com/organizations/[AWS Organizations], https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/consolidated-billing.html[consolidated billing] creates the construct between one or more member accounts and the management account. Member accounts allow you to isolate and distinguish your cost and usage by groups. A common practice is to have separate member accounts for each organization unit (such as finance, marketing, and sales), or for each environment lifecycle (such as development, testing and production), or for each workload (workload a, b, and c), and then aggregate these linked accounts using consolidated billing.
+
+Consolidated billing allows you to consolidate payment for multiple member AWS accounts under a single management account, while still providing visibility for each linked account’s activity. As costs and usage are aggregated in the management account, this allows you to maximize your service volume discounts, and maximize the use of your commitment discounts (Savings Plans and Reserved Instances) to achieve the highest discounts.
+
+http://aws.amazon.com/controltower/[AWS Control Tower] can quickly set up and configure multiple AWS accounts, ensuring that governance is aligned with your organization’s requirements.
+
+=== Controls — Notifications
+A common first step in implementing cost controls is to setup notifications when cost or usage events occur outside of the policies. This enables you to act quickly and verify if corrective action is required, without restricting or negatively impacting workloads or new activity. After you know the workload and environment limits, you can enforce governance. In AWS, notifications are conducted with http://aws.amazon.com/aws-cost-management/aws-budgets/[AWS Budgets], which allows you to define a monthly budget for your AWS costs, usage, and commitment discounts (Savings Plans and Reserved Instances). You can create budgets at an aggregate cost level (for example, all costs), or at a more granular level where you include only specific dimensions such as linked accounts, services, tags, or Availability Zones. You can also attach email notifications to your budgets, which will trigger when current or forecasted costs or usage exceeds a defined percentage threshold.
+
+=== Controls — Enforcement
+As a second step, you can enforce governance policies in AWS through AWS Identity and Access Management (IAM), and AWS Organizations Service Control Policies (SCP). IAM allows you to securely manage access to AWS services and resources. Using IAM, you can control who can create and manage AWS resources, the type of resources that can be created, and where they can be created. This minimizes the creation of resources that are not required. Use the roles and groups created previously, and assign IAM policies to enforce the correct usage. SCP offers central control over the maximum available permissions for all accounts in your organization, ensuring that your accounts stay within your access control guidelines. SCPs are available only in an organization that has all features enabled, and you can configure the SCPs to either deny or allow actions for member accounts by default. Refer to the http://aws.amazon.com/architecture/well-architected/[Well-Architected Security Pillar whitepaper] for more details on implementing access management.
+
+=== Controls — Service Quotas
+Governance can also be implemented through management of Service Quotas. By ensuring Service Quotas are set with minimum overhead and accurately maintained, you can minimize resource creation outside of your organization’s requirements. To achieve this, you must understand how quickly your requirements can change, understand projects in progress (both creation and decommission of resources) and factor in how fast quota changes can be implemented. https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html[Service Quotas] can be used to increase your quotas when required.
+
+http://aws.amazon.com/aws-cost-management/[AWS Cost Management services] are integrated with the AWS Identity and Access Management (IAM) service. You use the IAM service in conjunction with Cost Management services to control access to your financial data and to the AWS tools in the billing console.
+
+=== Track workload lifecycle
+Ensure that you track the entire lifecycle of the workload. This ensures that when workloads or workload components are no longer required, they can be decommissioned or modified. This is especially useful when you release new services or features. The existing workloads and components may appear to be in use, but should be decommissioned to redirect customers to the new service. Notice previous stages of workloads — after a workload is in production, previous environments can be decommissioned or greatly reduced in capacity until they are required again.
+
+== Monitor Cost and Usage
+Enable teams to take action on their cost and usage through detailed visibility into the workload. Cost optimization begins with a granular understanding of the breakdown in cost and usage, the ability to model and forecast future spend, usage, and features, and the implementation of sufficient mechanisms to align cost and usage to your organization’s objectives. The following are required areas for monitoring your cost and usage:
+
+=== Configure detailed data sources
+Enable hourly granularity in Cost Explorer and create a http://aws.amazon.com/aws-cost-management/aws-cost-and-usage-reporting/[Cost and Usage Report (CUR)]. These data sources provide the most accurate view of cost and usage across your entire organization. The CUR provides daily or hourly usage granularity, rates, costs, and usage attributes for all chargeable AWS services. All possible dimensions are in the CUR including: tagging, location, resource attributes, and account IDs.
+
+Configure your CUR with the following customizations:
+
+- Include resource IDs
+
+- Automatically refresh the CUR
+
+- Hourly granularity
+
+- Versioning: Overwrite existing report
+
+- Data integration: Athena (Parquet format and compression)
+
+Use http://aws.amazon.com/glue/[AWS Glue] to prepare the data for analysis, and use http://aws.amazon.com/athena/[Amazon Athena] to perform data analysis, using SQL to query the data. You can also use http://aws.amazon.com/quicksight/[Amazon QuickSight] to build custom and complex visualizations and distribute them throughout your organization.
+
+=== Identify cost attribution categories
+Work with your finance team and other relevant stakeholders to understand the requirements of how costs must be allocated within your organization. Workload costs must be allocated throughout the entire lifecycle, including development, testing, production, and decommissioning. Understand how the costs incurred for learning, staff development, and idea creation are attributed in the organization. This can be helpful to correctly allocate accounts used for this purpose to training and development budgets, instead of generic IT cost budgets.
+
+=== Assign organization meaning to cost and usage
+Implement https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html[tagging in AWS] to add organization information to your resources, which will then be added to your cost and usage information. A tag is a key-value pair— the key is defined and must be unique across your organization, and the value is unique to a group of resources. An example of a key-value pair is the key is Environment, with a value of Production. All resources in the production environment will have this key-value pair. Tagging allows you categorize and track your costs with meaningful, relevant organization information. You can apply tags that represent organization categories (such as cost centers, application names, projects, or owners), and identify workloads and characteristics of workloads (such as, test or production) to attribute your costs and usage throughout your organization.
+
+When you apply tags to your AWS resources (such as EC2 instances or Amazon S3 buckets) and activate the tags, AWS adds this information to your Cost and Usage Reports. You can run reports and perform analysis, on tagged and untagged resources to allow greater compliance with internal cost management policies, and ensure accurate attribution.
+
+Creating and implementing an AWS tagging standard across your organization’s accounts enables you to manage and govern your AWS environments in a consistent and uniform manner. Use Tag Policies in AWS Organizations to define rules for how tags can be used on AWS resources in your accounts in AWS Organizations. Tag Policies allow you to easily adopt a standardized approach for tagging AWS resources.
+
+== Decommission Resources
+
+=== Track resources over their lifetime
+Decommission workload resources that are no longer required. A common example is resources used for testing, after testing has been completed, the resources can be removed. *Tracking resources with tags (and running reports on those tags) will help you identify assets for decommission.* Using tags is an effective way to track resources, by labeling the resource with its function, or a known date when it can be decommissioned. Reporting can then be run on these tags. Example values for feature tagging are “featureX testing” to identify the purpose of the resource in terms of the workload lifecycle.
+
+=== Implement a decommissioning process
+Implement a standardized process across your organization to identify and remove unused resources. The process should define the frequency searches are performed, and the processes to remove the resource to ensure that all organization requirements are met.
+
+=== Decommission resources
+The frequency and effort to search for unused resources should reflect the potential savings, so an account with a small cost should be analyzed less frequently than an account with larger costs. Searches and decommission events can be triggered by state changes in the workload, such as a product going end of life or being replaced. Searches and decommission events may also be triggered by external events, such as changes in market conditions or product termination.
+
+=== Decommission resources automatically
+Use automation to reduce or remove the associated costs of the decommissioning process. Designing your workload to perform automated decommissioning will reduce the overall workload costs during its lifetime. You can use http://aws.amazon.com/autoscaling/[AWS Auto Scaling] to perform the decommissioning process. You can also implement custom code using the http://aws.amazon.com/tools/[API or SDK] to decommission workload resources automatically.
+
