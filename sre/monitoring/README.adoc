@@ -82,3 +82,8 @@ ____
 
 ____
 
+== Questions/Open items
+
+== Items to be demystified
+
+- downsampling vs aggregation
