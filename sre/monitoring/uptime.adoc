@@ -1,6 +1,6 @@
 = Uptime
 :toc: auto
-:stem: asciimath
+:stem: latexmath
 
 == Readings/Materials
 
@@ -36,6 +36,23 @@ Uptime = 24 * 60 * 60 - sum downtime
 Availability = 1 - (sum downtime) / 86400 * 100
 ++++
 
+
+=== Health Check based uptime
+
+The uptime can be calculated as below for a health check endpoint which is polled every 30 seconds:
+
+==== Per day uptime
+
+The uptime will be following if health check fails for 3 times in a *24* hour time box.
+
 ====
-Uptime = 86400 - <sum of all other states>
+Uptime = 24 * 60 * 60 - 3 * 30 = 86400 - 90 = 86310
+====
+
+=== Per day availability
+
+Then the availability will be caclulated as
+
+====
+Availability = 86310 / 86400 * 100 = 99.8958%
 ====
