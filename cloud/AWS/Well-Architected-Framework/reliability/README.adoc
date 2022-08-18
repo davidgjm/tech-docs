@@ -1,5 +1,6 @@
 = Reliability Pillar
 :toc:
+:imagesdir: ./images
 
 == References
 

@@ -1,0 +1,7 @@
+= Time-Series Databse
+:toc:
+
+== Readings
+- https://www.influxdata.com/what-is-time-series-data/[What is time series data?]
+- https://www.influxdata.com/time-series-database/[Time series database (TSDB) explained]
+- https://cloud.tencent.com/developer/article/1809215[LSM与TSM原理分析]

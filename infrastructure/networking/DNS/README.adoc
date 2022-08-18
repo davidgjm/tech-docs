@@ -1,0 +1,14 @@
+= DNS
+:toc: auto
+
+
+
+== Concepts
+
+include::./dns-zone.adoc[leveloffset=+1]
+
+=== Authoritative name server
+
+
+include::./record-types.adoc[leveloffset=+1]
+

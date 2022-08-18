@@ -31,7 +31,7 @@ So yes, uptime can be an indicator of availability, but it is by no means a guar
 
 [stem]
 ++++
-Uptime = 24 * 60 * 60 - sum downtime
+uptime = 24 * 60 * 60 - sum downtime
 
 Availability = 1 - (sum downtime) / 86400 * 100
 ++++

@@ -1,0 +1,42 @@
+= DNS Record Types
+:toc: auto
+
+
+
+.References
+====
+- https://en.wikipedia.org/wiki/List_of_DNS_record_types[List of DNS record types]
+====
+
+== Common Record Types
+[cols="15m,20,20,45"]
+|===
+|Type|Defining RFC|Description|Function
+
+|A
+|RFC 1035
+|Address record
+|Returns a 32-bit IPv4 address, most commonly used to map hostnames to an IP address of the host, but it is also used for DNSBLs, storing subnet masks in RFC 1101, etc. 
+
+|AAAA
+|RFC 3596
+|IPv6 address record
+|Returns a 128-bit IPv6 address, most commonly used to map hostnames to an IP address of the host. 
+
+|CNAME
+|RFC 1035
+|Canonical name record
+|Alias of one name to another: the DNS lookup will continue by retrying the lookup with the new name. 
+
+|NS
+|RFC 1035
+|Name server record
+|Delegates a DNS zone to use the given authoritative name servers 
+
+|SRV
+|RFC 2782
+|Service locator 
+|Generalized service location record, used for newer protocols instead of creating protocol-specific records such as MX.
+
+
+|===
