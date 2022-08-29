@@ -1,6 +1,8 @@
-= API Design Guidelines
+= API Design
 
-== Recommended API Design Guidelines
+== API Design Guidelines
+
+=== Recommended API Design Guidelines
 
 * https://github.com/paypal/api-standards/blob/master/api-style-guide.md[Paypal - API Design Guidelines]
 * https://github.com/microsoft/api-guidelines[Microsoft REST API Guidelines]
@@ -8,5 +10,6 @@
 * https://mathieu.fenniak.net/the-api-checklist/[The Web API Checklist -- 43 Things To Think About When Designing, Testing, and Releasing your API]
 
 
-== References within the repository
+=== References within the repository
 * xref:../../cloud/Azure/application-architecture/best-practices/api-design.adoc[RESTful web API design]
+

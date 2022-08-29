@@ -1,0 +1,68 @@
+= OpenAPI Document Generation
+:toc:
+
+
+== Swagger UI
+
+=== The `docker` way
+You can host a Swagger UI mini site with Swagger-ui docker image by specifying your OpenAPI JSON/YAML either through mount volume (`SWAGGER_JSON`) or environment variable `SWAGGER_JSON_URL` for externally hosted file
+
+==== Specifying files on host
+The following snippet mounts host directory `/Users/david/code/schemas` to docker volume `apis` and uses `openapi.yaml` in the directory as the default Swagger yaml file.
+
+[source,shell]
+----
+docker run -p 80:8000 --name openapi \
+ -e SWAGGER_JSON=/apis/openapi.yaml \
+ -v /Users/david/code/schemas:/apis \
+ swaggerapi/swagger-ui:v4.14.0
+----
+
+==== Specifying remote files
+[source, shellscript]
+----
+docker run -p 80:8080 --name openapi \
+ -e SWAGGER_JSON_URL=https://foo.bar/openapi.yaml \
+swaggerapi/swagger-ui:v4.14.0
+----
+
+=== GitHub Pages
+This approach is to use GitHub repository https://github.com/peter-evans/swagger-github-pages[template] in order to use the Swagger UI to dynamically generate beautiful documentation for your API and host it for free with GitHub Pages.
+
+CAUTION: GitHub Pages only support `public` or `internal` repositories.
+
+
+== https://github.com/OpenAPITools/openapi-generator[OpenAPI Generator]
+
+
+=== Command Line
+
+==== Install the command line
+
+MacOS:: `brew install openapi-generator`
+
+
+==== Generate HTML2 and asciidoc
+
+HTML2::
++
+[source,bash]
+----
+openapi-generator generate -i openapi.yaml -g html2
+----
+asciidoc::
++
+[source,bash]
+----
+openapi-generator generate -i openapi.yaml -g asciidoc
+----
+
+=== Gradle Plugin
+[source, groovy]
+----
+plugins {
+  id "org.openapi.generator" version "6.0.1"
+}
+----
+See more documentation at https://github.com/OpenAPITools/openapi-generator/blob/v6.0.1/modules/openapi-generator-gradle-plugin/README.adoc[OpenAPI Generator Gradle Plugin]
+
