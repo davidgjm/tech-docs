@@ -27,9 +27,45 @@ swaggerapi/swagger-ui:v4.14.0
 ----
 
 === GitHub Pages
-This approach is to use GitHub repository https://github.com/peter-evans/swagger-github-pages[template] in order to use the Swagger UI to dynamically generate beautiful documentation for your API and host it for free with GitHub Pages.
-
 CAUTION: GitHub Pages only support `public` or `internal` repositories.
+
+The idea is to create an `index.html` page which contains Swagger UI js/css resources. In this file, you can define your OpenAPI file located in your repository.
+
+This method uses traditional GitHub Pages deployment process without using GitHub actions.
+
+==== `index.html`
+[source,html]
+----
+<html>
+    <head>
+        <!-- Load the latest Swagger UI code and style from npm using unpkg.com -->
+        <script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css"/>
+        <title>Environment Consistency API</title>
+    </head>
+    <body>
+        <div id="swagger-ui"></div> <!-- Div to hold the UI component -->
+        <script>
+            window.onload = function () {
+                // Begin Swagger UI call region
+                const ui = SwaggerUIBundle({
+                    url: "postman/schemas/openapi.yaml", //Location of Open API spec in the repo
+                    dom_id: '#swagger-ui',
+                    deepLinking: true,
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIBundle.SwaggerUIStandalonePreset
+                    ],
+                    plugins: [
+                        SwaggerUIBundle.plugins.DownloadUrl
+                    ],
+                })
+                window.ui = ui
+            }
+        </script>
+    </body>
+</html>
+----
 
 
 == https://github.com/OpenAPITools/openapi-generator[OpenAPI Generator]
