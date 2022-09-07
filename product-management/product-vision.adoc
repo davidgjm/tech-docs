@@ -1,0 +1,188 @@
+= Product Vision
+:toc:
+:imagesdir: ./images
+
+.Readings
+====
+- https://www.christianstrunk.com/blog/product-vision[How to define a product vision (with examples)]
+- https://www.productplan.com/glossary/product-vision/[Product Vision]
+- https://www.romanpichler.com/tools/product-vision-board/[Product Vision Board]
+- https://startinfinity.com/product-management-framework/product-strategy/defining-product-vision[How to Define a Product Vision to Guide Your Team]
+- https://www.romanpichler.com/podcast/six-qualities-of-a-great-product-vision/[Podcast - SIX QUALITIES OF A GREAT PRODUCT VISION]
+- https://uxstudioteam.com/ux-blog/product-vision/[How To Create a Compelling Product Vision That Will Drive Your Team]
+====
+
+Your product vision should capture the essence of what you want your product to accomplish. In one or two sentences, you should be able to explain where your product is headed and what its ultimate long-term goal is.
+
+In other words, you’ll need to determine the “why” behind your product, the reason for its existence on the market. You need to ask yourself “why am I creating this exact product?”
+
+image::product-vision_generic.png[]
+
+
+== What is a product vision?
+A product vision describes the future state of a product that a company or team desires to achieve. You can also define that future state as: *a goal*.
+
+But, the product vision isn’t just that! It’s a *foundation* for other big topics such as the
+
+- https://www.christianstrunk.com/writing/product-strategy[product strategy]
+- https://www.christianstrunk.com/blog/product-development-roadmap[product development roadmap]
+- https://www.christianstrunk.com/writing/5-steps-to-make-backlog-groomings-more-engaging[backlog & planning]
+- https://www.christianstrunk.com/writing/product-launch-checklists[execution & product launch]
+
+A great product vision will ease up the definition and alignment process for all of the above topics.
+
+image::product-vision_overview.png[]
+
+=== What information does a product vision contain?
+
+. The reason every company exists is because of its customers. Whether they’re end-customers (B2C) or businesses (B2B). That’s why the most important characteristic of a product vision is that it’s focused on the customer!
+
+. It’s looking into the future and outlining a clear state of the product/goal that the company and team(s) want to achieve. I recommend setting a *big* and *bold* goal!
+
+. This goal should be underlined with the motivation behind it. This motivation should answer the “why” (not how!).
+
+. The art of defining a great product vision that people want to follow is to make it catchy. Something that makes you want to pitch it to other people no matter if you’re the founder or an employee.
+
+. (optional) A product vision can have a time constraint, although, it’s better to define it as “timeless.”
+
+=== Product vision time frame
+A timeframe of *3-5 years* isn’t too close and not too far away.
+
+image::product-vision_timeframe.png[]
+
+=== What a product vision isn’t!
+A product vision isn’t a detailed plan that explains how to reach the goal. It’s important to leave the goal kind of “open” with some room for interpretation.
+
+
+== How to define a product vision (example)
+
+When creating a product vision statement, you need to have your end user in mind. So instead of focusing on what the product should accomplish for you and your company, you need to shift focus to the end user.
+
+What do you want your product to achieve for your users? As cheesy as it sounds — how are you planning to make the world a better place with your product?
+
+Having this in mind, the product vision needs to also capture the essence of your audience — their challenges, problems, and goals — and the way your product is ultimately going to make their lives better.
+
+Creating a product vision board will help you arrive at your vision statement.
+
+When it comes to the product management process, a product vision is a guiding light that will help you set up your whole product strategy.
+
+The product vision should help you:
+
+- Create a better product roadmap
+- Give your team directions along the way
+- Align your whole team while working toward the same goal.
+
+Even though all stakeholders should participate in developing the product vision statement, the product manager should have the final say and polish the final version.
+
+<<<
+
+To me, product vision creation is a two-part creation process
+
+. Defining key product information.
+. Phrasing the product vision in one inspiring sentence.
+
+Let’s take a deeper look into each step.
+
+=== 1. Defining key product information
+Before defining a product vision, it’s important to have some valid data. The whole product discovery process is obviously a great way to get data and find answers to open questions. Without the data, it doesn’t make sense to define a vision for the next couple of years. It’s, however, important to remind ourselves that a product vision needs to be regularly challenged, evaluated, and updated based on new data.
+
+According to Roman Pichler’s product vision board, it’s important to answer 4 key questions:
+
+. What’s the target group?
+. What are the customer needs?
+. What is and will be the product and it’s USP(s)?
+. What are the business goals?
+
+image::product-vision_board.png[]
+
+Alternatively, you can work with other models, e.g. the lean business model canvas focusing on the product. What’s most important is gaining a clear picture of your customer, your market, the problems you want to solve, and your business goals. You can build a product vision based on that.
+
+*Let’s look at the data we have for our example product (simplified example):*
+
+- A single product company producing card readers (credit & debit cards)
+- The buying persona/target customer is between 35-45 years old, owning a small business (max 20.000€ revenue p.a.),
+* They live in Germany, UK, Italy, or France
+* They want to be able to accept card payments
+* They want to have as little administrative efforts as possible (billing, tax declaration, etc.)
+* Payments have to be super fast (faster than cash)
+
+- The business goal is to move up to a 10% market share across the 4 mentioned countries (*bold*)
+- Provide the fastest and easiest onboarding (for business owner) and payment experience (for customers)
+
+Depending on the state of your product and research you may have more or less information. For the product vision statement/sentence it’s important to focus on the most important ones.
+
+=== 2. Phrasing the product vision in one inspiring sentence
+Before we think about a final sentence it’s important to ask ourselves two important questions:
+
+==== 1. What are the key values/attributes of our product?
+Our card readers enable merchants and customers to make fast and safe cashless payments.
+
+Looking at the Google Calendar application the main category is time management or self-organization.
+
+For the Spotify app, it’s music streaming. We could go deeper and connect music with creativity, joy, freedom, and many other things. I’m pretty sure you and the Spotify Product Managers know more than I do. 😉
+
+The reason I’m looking at this question is to identify the key value and connect it with strong verbs and adjectives that we can use for our vision statement.
+
+==== 2. What will our product do better/make outstanding in the future?
+
+I look at topics such as:
+
+- additional value/problem-solving features
+- improved performance/quality
+- competitive advantage
+- better usability/experience
+- … and more
+
+Are you familiar with the typical bold CEO product requirements that ignore all technical difficulties, legal requirements, or other important things :
+
+- __“It must be a super-fast transaction, less than a second!”__
+- __“We need a great one-click checkout like Amazon!”__
+- __“The data must be accessible at any time, even without an internet connection!”?__
+
+Great! These statements can be perfectly implemented into your product vision.
+
+===== Phrasing the inspiring product vision statement
+
+Going back to our card reader example, we do have the following key information in place:
+
+- Our customers are owners of small/medium-sized businesses (SMBs)
+- We empower the owners to accept card payments
+- End-customers will have a great, fast, and safe payment experience (faster than cash)
+- It’s easy to use and has a minimal administrative effort
+
+A way to phrase the vision statement could be:
+
+__“We believe in a world where small businesses can offer a super fast and safe payment experience to their customers, for minimal costs with no administrative efforts.“ __
+
+Obviously, that’s one way to phrase a vision. The way you phrase it depends on the length, complexity of the sentence, and your personal preferences.
+
+I’d like to share my three favorite vision statement templates:
+
+. We believe (in) a [*noun*: world, time, state, etc.] where [*persona*] can [*verb*: do, make, offer, etc.], for/by/with [*benefit/goal*].
+
+. To [*verb*: empower, unlock, enable, create, etc.] [*persona*] to [*benefit, goal, future state*].
+
+. Our vision is to [*verb*: build, design, provide], the [*goal, future state*], to [*verb*: help, enable, make it easier to...] [*persona*].
+
+== Product Vision Board
+According to Roman Pichler’s product vision board, it’s important to answer 4 key questions:
+
+. What’s the target group?
+. What are the customer needs?
+. What is and will be the product and it’s USP(s)?
+. What are the business goals?
+
+image::product-vision_board.png[]
+
+== What is a Product vision Statement Template?
+Geoffry Moore offers a https://uxstudioteam.com/ux-blog/product-vision/[simple template for drafting a vision statement], based on a fill-in-the-blank approach.
+
+[quote]
+____
+For [*our target customer*], who [*customer’s need*], the [*product*] is a [*product category or description*] that [*unique benefits and selling points*].
+
+Unlike [*competitors or current methods*], our product [*main differentiators*].
+____
+
+At this point, hopefully, you’ve identified what’s special about your product and why your target market needs it. Now you can use these key points—and the template above—to draft a compelling statement.
+
