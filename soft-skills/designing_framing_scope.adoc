@@ -1,0 +1,53 @@
+= Designing, Framing and Scoping
+:toc:
+
+.Readings
+====
+- https://medium.com/@charmingbird/what-is-the-discovery-framing-in-agile-product-management-b3cf34d6f733
+- http://wayswework.io/features/design-at-pivotal-labs
+====
+
+== Concepts
+
+[quote]
+____
+Discovery is where the Labs’ team collaborates with the client team to determine what problem it is they’re trying to solve. This stage involves open-ended research, workshops, interviews and any exploration needed to discover what the problem is.
+
+Framing is establishing how to solve the problem. During this stage, the team is focused on researching and validating their ideas.
+
+After Discovery and Framing, the project moves into delivery where designers and developers work in pairs to develop the solution that was uncovered during Discovery and Framing. This stage is iterative and involves continuous testing, user-research and validating that the solution is actually working.
+
+____
+
+== Introduction
+We also call Discovery and Framing D&F. The goals of the D&F are:
+
+- Validate the assumptions that you made about the product
+- Have validated user stories before spending time and effort to build it.
+- Build an MVP which is small enough just to validate your product value proposition.
+
+Namely, the whole D&F exercise is to ensure that you are building the RIGHT product before wasting time building it. It is part of the Lean Startup practice which encourages iterative “ Build, Validate, Learn” cycles.
+
+== Discovery
+A *Discovery* phase usually includes the following activities/workshops:
+
+- Assumptions Workshop
+- Prepare User Interview Questions
+- Synthesis user interview results
+
+The *Discovery* part is to go broad for exploratory research.
+
+== Framing
+A Framing phase usually includes the following activities/workshops:
+
+- Persona Analysis to find users’ Goals and Needs
+- How Might We Statement to help brain storm solutions
+- Idea generation and 2x2 feature prioritization
+- Define MVP
+- Scenario run though
+- Sketch to build low fidelity wire frames.
+- Validate the wire frames with real users.
+- Write user stories (up to this point, the user stories are validate)
+
+The Framing part is to narrow down based on all findings to find a solution and the road map.
+

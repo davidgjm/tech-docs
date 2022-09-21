@@ -6,7 +6,7 @@
 ====
 - https://www.christianstrunk.com/blog/product-vision[How to define a product vision (with examples)]
 - https://www.productplan.com/glossary/product-vision/[Product Vision]
-- https://www.romanpichler.com/tools/product-vision-board/[Product Vision Board]
+- https://www.romanpichler.com/blog/the-product-vision-board/[Product Vision Board]
 - https://startinfinity.com/product-management-framework/product-strategy/defining-product-vision[How to Define a Product Vision to Guide Your Team]
 - https://www.romanpichler.com/podcast/six-qualities-of-a-great-product-vision/[Podcast - SIX QUALITIES OF A GREAT PRODUCT VISION]
 - https://uxstudioteam.com/ux-blog/product-vision/[How To Create a Compelling Product Vision That Will Drive Your Team]

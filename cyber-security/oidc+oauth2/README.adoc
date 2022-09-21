@@ -1,0 +1,76 @@
+= OpenID 1.0 & OAuth 2.0
+:toc:
+
+== Specifications
+
+[cols="30,30,40"]
+|===
+|Name|Specification|Description
+
+|OAuth 2.0 Authorization Framework
+|https://www.rfc-editor.org/rfc/rfc6749[RFC6749]
+|
+
+|OAuth 2.0 Bearer Token Usage
+|https://www.rfc-editor.org/rfc/rfc6750[RFC6750]
+|
+
+|OAuth 2.0 Multiple Response Type Encoding Practices
+|https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html[OAuth.Responses]
+|
+
+|JSON Web Token (JWT)
+|https://datatracker.ietf.org/doc/html/rfc7519[RFC7519]
+|
+
+|JSON Web Signature (JWS)
+|https://datatracker.ietf.org/doc/html/rfc7515[RFC7515]
+|
+
+|JSON Web Encryption (JWE)
+|https://datatracker.ietf.org/doc/html/rfc7516[RFC7516]
+|
+
+
+
+|OpenID Connect Discovery 1.0,
+|https://openid.net/specs/openid-connect-discovery-1_0.html[OpenID.Discovery]
+|
+
+|OpenID Connect Dynamic Client Registration 1.0
+|https://openid.net/specs/openid-connect-registration-1_0.html[OpenID.Registration]
+|This specification defines how an OpenID Connect Relying Party can dynamically register with the End-User's OpenID Provider, providing information about itself to the OpenID Provider, and obtaining information needed to use it, including the OAuth 2.0 Client ID for this Relying Party.
+
+
+|===
+
+== Authentication
+
+=== Response types (`response_type`)
+
+[cols="50m,50"]
+|===
+|`response_type` value|Flow
+
+|code
+|Authorization Code Flow
+
+|id_token
+|Implicit Flow
+
+|id_token token
+|Implicit Flow
+
+|code id_token
+|Hybrid Flow
+
+|code token
+|Hybrid Flow
+
+|code id_token token
+|Hybrid Flow
+
+|===
+
+NOTE:  All but the code Response Type value, which is defined by OAuth 2.0 [RFC6749], are defined in the OAuth 2.0 Multiple Response Type Encoding Practices [OAuth.Responses] specification. NOTE: While OAuth 2.0 also defines the token Response Type value for the Implicit Flow, OpenID Connect does not use this Response Type, since no ID Token would be returned.
+
