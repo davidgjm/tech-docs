@@ -1,4 +1,4 @@
 = Product Management
 :toc:
 
-== link:product-vision.adoc[Product Vision]
+== xref:product-vision.adoc[Product Vision]
