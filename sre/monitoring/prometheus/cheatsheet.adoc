@@ -1,0 +1,4 @@
+= Prometheus Cheatsheet
+:toc:
+:imagesdir: ./images
+

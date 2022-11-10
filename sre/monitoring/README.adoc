@@ -71,6 +71,9 @@ ____
 
 == Monitoring and Alerting
 
+=== xref:prometheus/README.adoc[Prometheus]
+
+
 === Rules for monitoring and alerting
 
 [quote, p64 SRE Handbook]

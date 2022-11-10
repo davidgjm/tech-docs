@@ -1,0 +1,14 @@
+= Grafana
+:toc:
+:imagesdir: ./
+
+== Concepts
+== Variables
+
+=== `$__interval`
+
+==== https://www.metricfire.com/blog/understanding-the-prometheus-rate-function/[How the Prometheus rate() function works]
+[quote,Choosing the time range for range vectors]
+____
+One could also use the special variable in Grafana called $__interval - it is defined to be equal to the time range divided by the step’s size. It could seem like the perfect solution as it looks like all of the data points between each step would be considered, but it has the same problems as mentioned previously. It is impossible to see both very detailed graphs and broad trends at the same time. Also, your time interval becomes tied to your query step, so if your scrape interval ever changes then you might have problems with very small time ranges.
+____
