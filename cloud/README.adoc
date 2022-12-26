@@ -1,0 +1,34 @@
+= Cloud Architecture
+:toc:
+:imagesdir: ./images
+
+
+== Well Architected Framework
+
+=== https://aws.amazon.com/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc&wa-guidance-whitepapers.sort-by=item.additionalFields.sortDate&wa-guidance-whitepapers.sort-order=desc[AWS Well Architected Framework Pillars]
+
+- https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/welcome.html[Operational Excellence]
+- https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html[Security]
+- https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html[Reliability]
+- https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html[Performance Efficiency]
+- https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html[Cost Optimization]
+- https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html[Sustainability]
+
+=== https://learn.microsoft.com/en-us/azure/architecture/framework/[Microsoft Azure Well-Architected Framework]
+
+- https://learn.microsoft.com/en-us/azure/architecture/framework/#reliability[Reliability]
+- https://learn.microsoft.com/en-us/azure/architecture/framework/#security[Security]
+- https://learn.microsoft.com/en-us/azure/architecture/framework/#cost-optimization[Cost Optimization]
+- https://learn.microsoft.com/en-us/azure/architecture/framework/#operational-excellence[Operational Excellence]
+- https://learn.microsoft.com/en-us/azure/architecture/framework/#performance-efficiency[Performance Efficiency]
+
+=== https://cloud.google.com/architecture/framework[Google Cloud Architecture Framework]
+
+- https://cloud.google.com/architecture/framework/operational-excellence[Operational Excellence]
+- https://cloud.google.com/architecture/framework/security[Security, privacy, and compliance]
+- https://cloud.google.com/architecture/framework/reliability[Reliability]
+- https://cloud.google.com/architecture/framework/cost-optimization[Cost Optimization]
+- https://cloud.google.com/architecture/framework/performance-optimization[Performance Optimization]
+- https://cloud.google.com/architecture/framework/system-design[System design]
+
+image::gcp-cloud-architecture-framework.svg[]

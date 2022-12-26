@@ -1,0 +1,92 @@
+= SLO
+:toc:
+:imagesdir: ./images
+
+.Readings
+====
+- https://sre.google/sre-book/service-level-objectives/[Chapter 4 Service Level Objectives, Google SRE Handbook]
+- https://sre.google/workbook/implementing-slos/[Implementing SLOs, Google SRE workbook]
+====
+
+== Basics
+
+=== What to Measure: Using SLIs
+
+[quote, Implementing SLOs, SRE Workbook]
+____
+
+What to Measure: Using SLIs
+
+Once you agree that 100% is the wrong number, how do you determine the right number? And what are you measuring, anyway? Here, service level indicators come into play: an SLI is an indicator of the level of service that you are providing.
+
+While many numbers can function as an SLI, we generally recommend treating the SLI as the ratio of two numbers: the number of good events divided by the total number of events. For example:
+
+- Number of successful HTTP requests / total HTTP requests (success rate)
+- Number of gRPC calls that completed successfully in < 100 ms / total gRPC requests
+- Number of search results that used the entire corpus / total number of search results, including those that degraded gracefully
+- Number of “stock check count” requests from product searches that used stock data fresher than 10 minutes / total number of stock check requests
+- Number of “good user minutes” according to some extended list of criteria for that metric / total number of user minutes
+
+SLIs of this form have a couple of particularly useful properties. The SLI ranges from 0% to 100%, where 0% means nothing works, and 100% means nothing is broken. We have found this scale intuitive, and this style lends itself easily to the concept of an error budget: the SLO is a target percentage and the error budget is 100% minus the SLO. For example, if you have a 99.9% success ratio SLO, then a service that receives 3 million requests over a four-week period had a budget of 3,000 (0.1%) errors over that period. If a single outage is responsible for 1,500 errors, that error costs 50% of the error budget.4
+____
+
+=== Maturity Level (SLO)
+[quote, Implementing SLOs, SRE Workbook]
+____
+Your system’s maturity level might be one of the following:
+
+- A greenfield development, with nothing currently deployed
+- A system in production with some monitoring to notify you when things go awry, but no formal objectives, no concept of an error budget, and an unspoken goal of 100% uptime
+- A running deployment with an SLO below 100%, but without a common understanding about its importance or how to leverage it to make continuous improvement choices—in other words, an SLO without teeth
+____
+
+[cols="4*"]
+|===
+|Application Maturity Level|Monitoring|Service Level Objectives (SLO)|Value Created
+
+|Level 0 - Greenfield
+|NO
+|NO
+|NO
+
+|Level 1 - Basic
+|Some monitoring in place
+|No formal objectives
+|NO
+
+|Level 2 - Medium
+|Monitoring in place
+|YES
+|No. No common understanding about how to leverage it to make continuous improvement choices
+
+|Level 3 - Advanced (Mature)
+|Appropriate monitoring in place
+|YES with feasible objectives aligned
+|YES. Used for decision-making and prioritizing
+|===
+
+=== error budget-based approach
+
+[quote, Implementing SLOs, SRE Workbook]
+____
+In order to adopt an error budget-based approach to Site Reliability Engineering, you need to reach a state where the following hold true:
+
+There are SLOs that all stakeholders in the organization have approved as being fit for the product.
+The people responsible for ensuring that the service meets its SLO have agreed that it is possible to meet this SLO under normal circumstances.
+The organization has committed to using the error budget for decision making and prioritizing. This commitment is formalized in an error budget policy.
+There is a process in place for refining the SLO.
+Otherwise, you won’t be able to adopt an error budget–based approach to reliability. SLO compliance will simply be another KPI (key performance indicator) or reporting metric, rather than a decision-making tool.
+____
+
+== Creating first set of SLOs
+To create your first set of SLOs, you need to decide upon a few key SLI specifications that matter to your service. *Availability* and *latency* SLOs are pretty common; *freshness, durability, correctness, quality, and coverage* SLOs also have their place (we’ll talk more about those later).
+
+If you are having trouble figuring out what sort of SLIs to start with, it helps to start simple:
+
+- Choose one application for which you want to define SLOs. If your product comprises many applications, you can add those later.
+- Decide clearly who the “users” are in this situation. These are the people whose happiness you are optimizing.
+- Consider the common ways your users interact with your system—common tasks and critical activities.
+- Draw a high-level architecture diagram of your system; show the key components, the request flow, the data flow, and the critical dependencies. Group these components into categories listed in the following section (there may be some overlap and ambiguity; use your intuition and don’t let perfect be the enemy of the good).
+
+You should think carefully about exactly what you select as your SLIs, but you also shouldn’t overcomplicate things. Especially if you’re just starting your SLI journey, pick an aspect of your system that’s relevant but easy to measure—you can always iterate and refine later.
+
