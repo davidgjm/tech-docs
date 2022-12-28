@@ -37,6 +37,8 @@ image::architecture-process.png[]
 * Not always known to the client or analyst
 * Much more important than regular requirements
 
+See more at xref:nfr.adoc[Non-Functional Requirements].
+
 === Map the Components
 * Represent the tasks of the system
 * Two goals:

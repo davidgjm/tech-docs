@@ -1,0 +1,85 @@
+= Non-Functional Requirements
+:toc:
+:imagesdir: ./images
+
+Non-Functional Requirements mainly answer the following question:
+
+What should the system deal with?
+
+== Performance
+* Always talk in numbers. Rule of thumb:
+- B2C scenarios: end-2-end latency in **1 second**
+- B2B scenarios: within ** 100 ms**
+* Latency & throughput
+
+=== Latency & throughput
+
+==== Latency
+
+[quote]
+____
+How much does it take to perform a single task?
+____
+
+==== Throughput
+[quote]
+____
+How many tasks can be performed in a given time unit?
+____
+
+Examples:
+- How many users can be saved in the database in a minute?
+- How many files can be read in a second?
+
+== Load
+* Quantity of work without crashing
+
+TIP: Always plan for extreme cases
+
+=== Examples
+- In Web API - How many concurrent requests without crashing?
+
+== Data Volume
+* How much data the system will accumulate over time?
+* helps with
+- deciding on database type
+- designing queries
+- storage planning
+* Two aspects
+- Data required on "day one"
+- Data growth
+
+=== Example
+* Day one: 500 MB
+* Annual Growth: 2 TB
+
+
+== Concurrent Users
+[quote]
+____
+How many users will be using the system simultaneously?
+____
+
+=== Concurrent users vs load
+
+[cols="2"]
+|===
+|Concurrent Users
+|Including "Dead times"
+
+|Load
+|Actual Requests
+
+|===
+
+.Rule of thumb
+====
+Concurrent = Load X 10
+====
+
+
+== SLA
+[quote]
+____
+Required uptime for the system
+____
