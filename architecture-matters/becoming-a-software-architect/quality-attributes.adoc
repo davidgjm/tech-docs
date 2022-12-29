@@ -1,0 +1,54 @@
+= Quality Attributes
+:toc:
+:imagesdir: ./images
+
+Technical capabilities that should be used in order to fulfill the non-functional requirements
+
+====
+https://en.wikipedia.org/wiki/List_of_system_quality_attributes[List of system quality attributes]
+====
+
+* Scalability
+* Manageability
+* Modularity
+* Extensibility
+* Testability
+
+== Relationship between Non-Functional Requirements and quality attributes
+
+image::quality-attributes_01.png[]
+
+== Scalability
+
+====
+Adding computing resources without any interruption
+====
+
+== Manageability
+
+====
+Know what’s going on and take actions accordingly”
+====
+
+image::quality-attributes_manageability.png[]
+
+image::quality-attributes_manageability_who.png[]
+
+== Modularity
+====
+A system that is built from building blocks, that can be changed or replaced without affecting the whole system.
+====
+
+== Extensibility
+====
+A system that its functionality can be extended without modifying its existing code.
+====
+
+== Testability
+====
+How easy is it to test the application?
+====
+
+=== Testability’s Characteristics
+- Independent modules and methods
+- Single responsibility

@@ -1,0 +1,121 @@
+= Selecting Technology Stack
+:toc:
+:imagesdir: ./images
+
+== Overview
+
+=== Decision making
+
+Decisions must be:
+
+- made with clear mind
+- heavily documented
+- group effort
+
+=== Technology Stack Considerations
+- Can perform the task
+- Community
+- Popularity
+
+=== Backend and Service Technology
+
+Backend technology includes:
+
+- Web apps
+- Web API
+- Console
+- Service
+
+==== Reference Table
+
+[cols="7"]
+|===
+| | App Types | Type System | Cross Platform | Community | Performance | Learning Curve
+
+|.Net
+|All
+|Static
+|No
+|Large
+|OK
+|Long
+
+|.NET Core
+| Web apps, Web API, Console, Service
+|Static
+|Yes
+|Medium and growing rapidly
+|Great
+|Long
+
+|Java
+|All
+|Static
+|Yes
+|Huge
+|OK
+|Long
+
+|node.js
+|Web apps, Web API
+|Dynamic
+|Yes
+|Large
+|Great
+|Medium
+
+|PHP
+|Web apps, Web API
+|Dynamic
+|Yes
+|Large
+|OK -
+|Medium
+
+|Python
+|All
+|Dynamic
+|Yes
+|Huge
+|OK -
+|Short
+
+|===
+
+== Data Store
+
+=== SQL Database
+
+* Store data in tables
+* Tables have concrete set of columns
+
+==== SQL Database - Transactions
+
+* Atomic set of actions
+* ACID
+- Atomicity
+- Consistency
+- Isolation
+- Durability
+
+
+==== SQL Database - querying
+* Using SQL
+* Structured Query Language
+* Very mature
+
+=== NoSQL
+
+* Emphasis on scale and performance
+* Schema-less
+* Data usually stored in JSON format
+
+==== NoSQL - Transactions
+
+* Eventual Consistency
+* Data can be temporarily inconsistent
+
+==== NoSQL - Querying
+* No Standard
+* Can be frustrating
+
