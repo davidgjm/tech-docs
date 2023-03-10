@@ -1,0 +1,32 @@
+= Operating model
+:toc:
+:imagesdir: ./images
+
+Your teams must understand their part in achieving business outcomes. Teams need to understand their roles in the success of other teams, the role of other teams in their success, and have shared goals. Understanding responsibility, ownership, how decisions are made, and who has authority to make decisions will help focus efforts and maximize the benefits from your teams.
+
+The needs of a team will be shaped by their industry, their organization, the makeup of the team, and the characteristics of their workload. It is unreasonable to expect a single operating model to be able to support all teams and their workloads.
+
+The number of operating models present in an organization is likely to increase with the number of development teams. You may need to use a combination of operating models.
+
+Adopting standards and consuming services can simplify operations and limit the support burden in your operating model. The benefit of development efforts on shared standards is magnified by the number of teams who have adopted the standard and who will adopt new features.
+
+It’s critical that mechanisms exist to request additions, changes, and exceptions to standards in support of the teams’ activities. Without this option, standards become a constraint on innovation. Requests should be approved where viable and determined to be appropriate after an evaluation of benefits and risks.
+
+A well-defined set of responsibilities will reduce the frequency of conflicting and redundant efforts. Business outcomes are easier to achieve when there is strong alignment and relationships between business, development, and operations teams.
+
+== Operating model 2 by 2 representations
+
+These operating model 2 by 2 representations are illustrations to help you understand the relationships between teams in your environment. These diagrams focus on who does what and the relationships between teams, but we will also discuss governance and decision making in context of these examples.
+
+Our teams may have responsibilities in multiple parts of multiple models depending on the workloads they support. You may wish to break out more specialized discipline areas than the high-level ones described. There is the potential for endless variation on these models as you separate or aggregate activities, or overlay teams and provide more specific detail.
+
+image::ops-model_01.png[width=300]
+image:ops-model_02.png[width=300]
+image:ops-model_03.png[width=300]
+image:ops-model_04.png[width=300]
+image:ops-model_05.png[width=300]
+
+include::operating-model_01.adoc[leveloffset=+1]
+include::operating-model_02.adoc[leveloffset=+1]
+include::operating-model_03.adoc[leveloffset=+1]
+include::operating-model_04.adoc[leveloffset=+1]
