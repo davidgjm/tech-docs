@@ -20,11 +20,11 @@ These operating model 2 by 2 representations are illustrations to help you under
 
 Our teams may have responsibilities in multiple parts of multiple models depending on the workloads they support. You may wish to break out more specialized discipline areas than the high-level ones described. There is the potential for endless variation on these models as you separate or aggregate activities, or overlay teams and provide more specific detail.
 
-image::ops-model_01.png[width=300]
-image:ops-model_02.png[width=300]
-image:ops-model_03.png[width=300]
-image:ops-model_04.png[width=300]
-image:ops-model_05.png[width=300]
+image::ops-model_01.png[width=800]
+image:ops-model_02.png[width=400]
+image:ops-model_03.png[width=400]
+image:ops-model_04.png[width=400]
+image:ops-model_05.png[width=400]
 
 include::operating-model_01.adoc[leveloffset=+1]
 include::operating-model_02.adoc[leveloffset=+1]

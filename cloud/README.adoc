@@ -7,7 +7,7 @@
 
 === https://aws.amazon.com/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc&wa-guidance-whitepapers.sort-by=item.additionalFields.sortDate&wa-guidance-whitepapers.sort-order=desc[AWS Well Architected Framework Pillars]
 
-- https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/welcome.html[Operational Excellence]
+- xref:AWS/Well-Architected-Framework/operations-excellence/index.adoc[Operational Excellence]
 - https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html[Security]
 - https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html[Reliability]
 - https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html[Performance Efficiency]
