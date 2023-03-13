@@ -1,0 +1,7 @@
+= Prepare
+
+To prepare for operational excellence, you have to understand your workloads and their expected behaviors. You will then be able to design them to provide insight to their status and build the procedures to support them.
+
+To prepare for operational excellence, you need to perform the following topics:
+
+* xref:design-telemetry.adoc[Design telemetry]

@@ -36,4 +36,4 @@ There may be risks inherent in the operation of your workload. You must understa
 
 == Organization
 
-xref:operating-model.adoc[Operating Model]
+xref:organization/02_operating-model.adoc[Operating Model]

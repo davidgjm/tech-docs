@@ -11,7 +11,7 @@
 - https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html[Security]
 - https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html[Reliability]
 - https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html[Performance Efficiency]
-- https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html[Cost Optimization]
+- xref:AWS/Well-Architected-Framework/cost-optimization/README.adoc[Cost Optimization]
 - https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html[Sustainability]
 
 === https://learn.microsoft.com/en-us/azure/architecture/framework/[Microsoft Azure Well-Architected Framework]

@@ -26,7 +26,16 @@ image:ops-model_03.png[width=400]
 image:ops-model_04.png[width=400]
 image:ops-model_05.png[width=400]
 
-include::operating-model_01.adoc[leveloffset=+1]
-include::operating-model_02.adoc[leveloffset=+1]
-include::operating-model_03.adoc[leveloffset=+1]
-include::operating-model_04.adoc[leveloffset=+1]
+include::operating-model_01.adoc[leveloffset=+2]
+include::operating-model_02.adoc[leveloffset=+2]
+include::operating-model_03.adoc[leveloffset=+2]
+include::operating-model_04.adoc[leveloffset=+2]
+
+== Relationships and ownership
+Your operating model defines the relationships between teams and supports identifiable ownership and responsibility.
+
+include::relationship-and-ownership_bp_01.adoc[leveloffset=+2]
+include::relationship-and-ownership_bp_02.adoc[leveloffset=+2]
+include::relationship-and-ownership_bp_03.adoc[leveloffset=+2]
+include::relationship-and-ownership_bp_04.adoc[leveloffset=+2]
+include::relationship-and-ownership_bp_05.adoc[leveloffset=+2]

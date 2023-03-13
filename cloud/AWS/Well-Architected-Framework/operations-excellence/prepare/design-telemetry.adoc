@@ -1,0 +1,15 @@
+= Design telemetry
+:toc:
+
+Design your workload so that it provides the information necessary for you to understand its internal state (for example, metrics, logs, events, and traces) across all components in support of observability and investigating issues. Iterate to develop the telemetry necessary to monitor the health of your workload, identify when outcomes are at risk, and enable effective responses.
+
+In AWS, you can emit and collect logs, metrics, and events from your applications and workloads components to enable you to understand their internal state and health. You can integrate distributed tracing to track requests as they travel through your workload. Use this data to understand how your application and underlying components interact and to analyze issues and performance.
+
+When instrumenting your workload, capture a broad set of information to enable situational awareness (for example, changes in state, user activity, privilege access, utilization counters), knowing that you can use filters to select the most useful information over time.
+
+== Best Practices
+
+* xref:OPS04-BP01.adoc[OPS04-BP01 Implement application telemetry]
+* xref:OPS04-BP02.adoc[OPS04-BP02 Implement and configure workload telemetry]
+* xref:OPS04-BP03.adoc[OPS04-BP03 Implement user activity telemetry]
+* xref:OPS04-BP04.adoc[OPS04-BP04 Implement dependency telemetry]
