@@ -1,0 +1,8 @@
+= Design for operations
+
+Adopt approaches that improve the flow of changes into production and that enable refactoring, fast feedback on quality, and bug fixing. These accelerate beneficial changes entering production, limit issues deployed, and enable rapid identification and remediation of issues introduced through deployment activities.
+
+In AWS, you can view your entire workload (applications, infrastructure, policy, governance, and operations) as code. It can all be defined in and updated using code. This means you can apply the same engineering discipline that you use for application code to every element of your stack.
+
+Best practices::
+- xref:OPS05-BP03.adoc[OPS05-BP03 Use configuration management systems]
