@@ -32,3 +32,12 @@
 - https://cloud.google.com/architecture/framework/system-design[System design]
 
 image::gcp-cloud-architecture-framework.svg[]
+
+== Cloud Operations
+
+== Operational Readiness
+
+- https://medium.com/the-cloud-architect/operational-readiness-review-template-e23a4bfd8d79[Operational Readiness Review Template by Adrian Hornsby]
+
+- https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html[Operational Readiness Reviews (ORR) Whitepaper]
+- xref:AWS/Well-Architected-Framework/operations-excellence/prepare/OPS04-BP02.adoc[OPS07-BP02 Ensure a consistent review of operational readiness]
