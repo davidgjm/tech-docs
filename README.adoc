@@ -6,6 +6,9 @@ TIP: Repository for technology knowledge sharing
 
 == Reading Guide
 
+=== Cheatsheets for tools
+. xref:tools/jq.adoc[jq]
+
 === xref:cloud/README.adoc[Cloud Architecting]
 
 Cloud oriented design patterns, solutions and best practices.
