@@ -1,4 +1,3 @@
 :linkcss:
-// :stylesdir: https://raw.githubusercontent.com/darshandsoni/asciidoctor-skins/gh-pages/css
 :stylesdir: https://darshandsoni.com/asciidoctor-skins/css
 :stylesheet: material-orange.css
