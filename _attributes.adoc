@@ -10,3 +10,4 @@
 :icons: font
 :hide-uri-scheme:
 :docinfo: shared,private
+:stylesheet: adoc-github.css
