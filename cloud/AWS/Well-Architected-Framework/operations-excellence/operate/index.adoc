@@ -1,0 +1,11 @@
+= Operate
+
+Success is the achievement of business outcomes as measured by the metrics you define. By understanding the health of your workload and operations, you can identify when organizational and business outcomes may become at risk, or are at risk, and respond appropriately.
+
+To be successful, you must be able to:
+
+Topics::
+- xref:understanding-workload-health.adoc[Understanding workload health]
+- Understanding operational health
+- Responding to events
+

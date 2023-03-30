@@ -5,3 +5,5 @@ To prepare for operational excellence, you have to understand your workloads and
 To prepare for operational excellence, you need to perform the following topics:
 
 * xref:design-telemetry.adoc[Design telemetry]
+* xref:design-for-operations.adoc[Design for operations]
+* xref:operational-readiness-and-change-management.adoc[Operational readiness and change management]

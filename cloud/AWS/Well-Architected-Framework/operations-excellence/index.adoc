@@ -35,5 +35,10 @@ Your organization’s leadership defines business objectives. Your organization 
 There may be risks inherent in the operation of your workload. You must understand those risks and make an informed decision to enter production. Your teams must be able to support your workload. Business and operational metrics derived from desired business outcomes will enable you to understand the health of your workload, your operations activities, and respond to incidents. Your priorities will change as your business needs and business environment changes. Use these as a feedback loop to continually drive improvement for your organization and the operation of your workload.
 
 == Organization
+- xref:organization/01_organization-priorities.adoc[Organization priorities]
+- xref:organization/02_operating-model.adoc[Operating Model]
+- xref:organization/03_organizational-culture.adoc[Organizational culture]
 
-xref:organization/02_operating-model.adoc[Operating Model]
+== Prepare
+
+- xref:prepare/index.adoc[Prepare]

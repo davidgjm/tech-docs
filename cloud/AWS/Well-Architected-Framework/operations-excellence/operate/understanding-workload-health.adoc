@@ -1,0 +1,18 @@
+= Understanding workload health
+
+Define, capture, and analyze workload metrics to gain visibility to workload events so that you can take appropriate action.
+
+Your team should be able to understand the health of your workload easily. You will want to use metrics based on workload outcomes to gain useful insights. You should use these metrics to implement dashboards with business and technical viewpoints that will help team members make informed decisions.
+
+AWS makes it easy to bring together and analyze your workload logs so that you can generate metrics, understand the health of your workload, and gain insight from operations over time.
+
+== Best Practices
+
+. xref:OPS08-BP01.adoc[OPS08-BP01 Identify key performance indicators]
+. xref:OPS08-BP02.adoc[OPS08-BP02 Define workload metrics]
+. xref:OPS08-BP03.adoc[OPS08-BP03 Collect and analyze workload metrics]
+. xref:OPS08-BP04.adoc[OPS08-BP04 Establish workload metrics baselines]
+. Learn expected patterns of activity for workload
+. Alert when workload outcomes are at risk
+. Alert when workload anomalies are detected
+. Validate the achievement of outcomes and the effectiveness of KPIs and metrics
