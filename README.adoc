@@ -4,11 +4,66 @@ include::_attributes.adoc[]
 
 TIP: Repository for technology knowledge sharing
 
-== Reading Guide
 
-=== Cheatsheets for tools
+== Cheatsheets for tools
 . xref:tools/jq.adoc[jq]
 
-=== xref:cloud/README.adoc[Cloud Architecting]
+== Topics by domain
 
-Cloud oriented design patterns, solutions and best practices.
+
+=== Software Architecting
+
+[cols="*"]
+|===
+|Area|Topic|Description
+
+|Design Patterns
+|xref:design-patterns/README.adoc[Design Patterns]
+|Typical design patterns
+
+|API Design
+|xref:system-design/api-design/README.adoc[API Design]
+|Restful API design
+
+
+|===
+
+
+=== Cloud
+
+[cols="*"]
+|===
+|Area|Topic|Description
+
+|Architecting
+|xref:cloud/index.adoc[Cloud Architecting]
+|Cloud oriented design patterns, solutions and best practices.
+
+
+|===
+
+
+=== DevOps/SRE
+
+[cols="*"]
+|===
+|Area|Topic|Description
+
+|Generic
+|xref:devops/measuring-success/index.adoc[Measuring DevOps Success]
+|
+
+|Generic
+|xref:sre/discipline/README.adoc[SRE Culture & discipline]
+| SRE Basics
+
+|Tools
+|xref:devops/terraform/README.adoc[Terraform]
+|Terraform related
+
+|Monitoring
+|xref:sre/monitoring/README.adoc[Monitoring]
+| Monitoring tooling and metrics
+
+
+|===
