@@ -4,7 +4,6 @@
 
 
 
-
 == KPIs
 === DevOps KPIs
 - https://www.devops-research.com/research.html[Explore DORA's research program]
@@ -16,10 +15,10 @@
 
 === Cloud KPIs
 .Readings
-====
+****
 - https://cloudcheckr.com/cloud-management/50-essential-cloud-kpis/[Map Your Cloud Journey: 50 Essential Cloud KPIs to Guide the Way]
 - https://www.cloudzero.com/blog/cloud-metrics[The 25 Most Important Cloud Metrics For SaaS Companies To Monitor]
-====
+****
 
 
 
@@ -30,11 +29,11 @@
 - Title
 
 .Concept Clarification
+[NOTE]
 ====
 * https://www.perdoo.com/resources/what-is-a-key-result/[The anatomy of a Key Result]
 * https://www.perdoo.com/kpi-guide/[The ultimate KPI guide]
 ====
-
 
 == How to Achieve Cloud Operational Excellence
 
@@ -66,3 +65,4 @@ Here are some potential cloud performance metrics compiled from several cloud pr
 The journey to cloud excellence starts with developing the metrics that are most relevant to your business goals. Picking the right metrics with the right scale matters. #As a rule of thumb, generally right beats precisely wrong.#
 
 == Metrics aggregation
+

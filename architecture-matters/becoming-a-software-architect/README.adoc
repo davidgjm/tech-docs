@@ -10,7 +10,7 @@
 * Reliable
 * Easy to maintain
 
-TIP: Think about Well Architected Framework from AWS/Azure. See xref:../../cloud/README.adoc[Cloud Architecture] for details
+TIP: Think about Well Architected Framework from AWS/Azure. See xref:../../cloud/index.adoc[Cloud Architecture] for details
 
 == Why an architect should code
 

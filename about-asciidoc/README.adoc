@@ -52,6 +52,21 @@ TIP: Did you know Asciidoctor is awesome?
 
 ====
 
+== Lists
+
+== Nested lists
+
+----
+* item 1
+** item 1.1
+* item 2
+* item 3
+----
+
+* item 1
+** item 1.1
+* item 2
+* item 3
 
 == Using icon fonts
 
@@ -75,8 +90,13 @@ https://docs.asciidoctor.org/asciidoc/latest/macros/icon-macro/[Icon Macro]
 ----
 The above directives will create the following:
 
-.icon:sticky-note[2x, role=lime] Open Questions
+.icon:sticky-note[role=lime] Open Questions
 [sidebar]
 ****
 * How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?
+****
+
+.icon:book[role=yeti] Readings
+****
+asdfasdfasdf
 ****
