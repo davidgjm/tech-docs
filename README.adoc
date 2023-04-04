@@ -67,3 +67,20 @@ TIP: Repository for technology knowledge sharing
 
 
 |===
+
+
+=== Product Management
+
+[cols="*"]
+|===
+|Area|Topic|Description
+
+|Platform as a product
+|xref:product-management/platform-as-a-product/README.adoc[Measuring DevOps Success]
+| An approach to run internal developer platforms as a product
+
+|Platform as a product
+|xref:product-management/platform-as-a-product/Whitepaper_ State of Platform Engineering Report.pdf[State of Platform Engineering Report]
+|White paper from humanitec.com
+
+|===
