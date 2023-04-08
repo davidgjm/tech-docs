@@ -3,11 +3,18 @@
 :icons: font
 :source-highlighter: rouge
 
+.icon:book[] jq references
+[sidebar]
+****
+* https://stedolan.github.io/jq/[jq web site]
+****
+
 == Cheatsheet
 
 .External sources
 [sidebar]
 ****
+
 * https://gist.github.com/olih/f7437fb6962fb3ee9fe95bda8d2c8fa4[Processing JSON using jq]
 ****
 
@@ -19,6 +26,9 @@
 | Query by attribute name|`az account list-locations \| jq -r ".[].name"`
 |===
 
+===== data types
+
+with type been arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars
 ==== Slicing and Filtering
 
 [cols="30,70"]
@@ -53,6 +63,69 @@ m| `jq '.[] &#124; select(.id == "second")'`
 
 |===
 
-===== data types
+=== Sum values in an array
 
-with type been arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars
+To sum all values in `issueCount` field in the following json example, run the jq command below
+
+[source,shell]
+----
+cat example.json| jq "[.records[].issueCount]|add"
+----
+
+[source,json]
+----
+{
+    "metadata": {
+        "totalCount": 195,
+        "totalPages": 1,
+        "page": 1,
+        "pageSize": 195
+    },
+    "source": "sb1",
+    "target": "cnp0",
+    "records": [
+        {
+            "service": "unknown",
+            "resultCount": 34,
+            "issueCount": 39,
+            "commentCount": 0,
+            "team": "accounts-identity,cnc,cv-platform,historical,platform-usage,streams,ui"
+        },
+        {
+            "service": "aba-swap-detector",
+            "resultCount": 2,
+            "issueCount": 2,
+            "commentCount": 0,
+            "team": "canis-minor"
+        },
+        {
+            "service": "account-service",
+            "resultCount": 1,
+            "issueCount": 12,
+            "commentCount": 0,
+            "team": "accounts-identity"
+        },
+        {
+            "service": "assets-account-consistency-monitor",
+            "resultCount": 1,
+            "issueCount": 1,
+            "commentCount": 0,
+            "team": "inventory"
+        },
+        {
+            "service": "assets-cache-consistency-monitor",
+            "resultCount": 1,
+            "issueCount": 1,
+            "commentCount": 0,
+            "team": "inventory"
+        },
+        {
+            "service": "assets-cache-writer",
+            "resultCount": 2,
+            "issueCount": 2,
+            "commentCount": 0,
+            "team": "inventory"
+        }
+    ]
+}
+----
