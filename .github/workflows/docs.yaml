@@ -30,6 +30,7 @@ jobs:
           --attribute=stylesheet=https://darshandsoni.com/asciidoctor-skins/css/ubuntu.css
           --attribute=docinfodir=/github/workspace/.asciidoctor
           --attribute=docinfo=shared
+          --attribute=allow-uri-read
         # adoc_file_ext: .ascii # default is .adoc
         # source_dir: docs/ # default is .
         # slides_build: true
