@@ -27,7 +27,7 @@ jobs:
       with:
         pdf_build: false
         asciidoctor_params: |
-          --attribute=stylesheet=https://darshandsoni.com/asciidoctor-skins/css/ubuntu.css
+          --attribute=stylesheet=https://darshandsoni.com/asciidoctor-skins/css/fedora.css
           --attribute=docinfodir=/github/workspace/.asciidoctor
           --attribute=docinfo=shared
           --attribute=allow-uri-read
