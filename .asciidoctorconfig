@@ -1,11 +1,11 @@
 :icons: font
 
 // :linkcss:
-// :stylesdir: https://darshandsoni.com/asciidoctor-skins/css
-:stylesdir: {asciidoctorconfigdir}/.asciidoctor
-// :stylesheet: ubuntu.css
+:stylesdir: https://darshandsoni.com/asciidoctor-skins/css
+// :stylesdir: {asciidoctorconfigdir}/.asciidoctor
+:stylesheet: ubuntu.css
 // :stylesheet: fedora.css
-:stylesheet: asciidoctor.css
+// :stylesheet: asciidoctor.css
 
 :docinfodir: {asciidoctorconfigdir}/.asciidoctor
 :docinfo: shared
