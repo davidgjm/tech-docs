@@ -1,0 +1,378 @@
+= CI Pipeline Feature Comparison
+:toc:
+:icons: font
+:imagesdir: ./images
+
+== Azure DevOps
+
+image::azure-pipelines-key-concepts-overview.svg[]
+
+- A trigger tells a Pipeline to run.
+- A pipeline is made up of one or more stages. A pipeline can deploy to one or more environments.
+- A stage is a way of organizing jobs in a pipeline and each stage can have one or more jobs.
+- Each job runs on one agent. A job can also be agentless.
+- Each agent runs a job that contains one or more steps.
+- A step can be a task or script and is the smallest building block of a pipeline.
+- A task is a pre-packaged script that performs an action, such as invoking a REST API or publishing a build artifact.
+- An artifact is a collection of files or packages published by a run.
+
+=== Jobs
+
+=== Dependencies
+
+.Syntax
+[source,yaml]
+----
+jobs:
+- job: string
+  dependsOn: string
+  condition: string
+----
+
+==== Sequential jobs
+[source,yaml]
+----
+jobs:
+- job: Debug
+  steps:
+  - script: echo hello from the Debug build
+- job: Release
+  dependsOn: Debug
+  steps:
+  - script: echo hello from the Release build
+----
+
+==== Parallel jobs (#no dependencies#):
+[source,yaml]
+----
+jobs:
+- job: Windows
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - script: echo hello from Windows
+- job: macOS
+  pool:
+    vmImage: 'macOS-latest'
+  steps:
+  - script: echo hello from macOS
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: echo hello from Linux
+----
+
+==== Fan-out
+[source,yaml]
+----
+jobs:
+- job: InitialJob
+  steps:
+  - script: echo hello from initial job
+- job: SubsequentA
+  dependsOn: InitialJob
+  steps:
+  - script: echo hello from subsequent A
+- job: SubsequentB
+  dependsOn: InitialJob
+  steps:
+  - script: echo hello from subsequent B
+----
+
+==== Fan-in
+
+[source,yaml]
+----
+jobs:
+- job: InitialA
+  steps:
+  - script: echo hello from initial A
+- job: InitialB
+  steps:
+  - script: echo hello from initial B
+- job: Subsequent
+  dependsOn:
+  - InitialA
+  - InitialB
+  steps:
+  - script: echo hello from subsequent
+----
+
+=== Conditions
+You can specify the conditions under which each job runs. #By default, a job runs if it does not depend on any other job, or if all of the jobs that it depends on have completed and succeeded.# You can customize this behavior by forcing a job to run even if a previous job fails or by specifying a custom condition.
+
+
+[cols="20m,40,40"]
+|===
+|Status check function |Explanation |Example
+
+|always()
+|Always evaluates to `True` (even when canceled).
+a|
+[source,yaml]
+----
+jobs:
+- job: Foo
+
+  steps:
+  - script: echo Hello!
+    condition: always() # this step will always run, even if the pipeline is canceled
+
+- job: Bar
+  dependsOn: Foo
+  condition: failed() # this job will only run if Foo fails
+----
+
+|canceled()
+|Evaluates to `True` if the pipeline was canceled.
+|
+
+|failed()
+a|For a job:
+
+- With no arguments, evaluates to `True` only if any previous job in the dependency graph failed.
+- With job names as arguments, evaluates to True only if any of those jobs failed.
+|
+
+|succeeded()
+a|For a job:
+
+- With no arguments, evaluates to `True` only if all previous jobs in the dependency graph succeeded or partially succeeded.
+- With job names as arguments, evaluates to `True` if all of those jobs succeeded or partially succeeded.
+- Evaluates to `False` if the pipeline is canceled.
+|
+
+|succeededOrFailed()
+a|For a job:
+
+- With no arguments, evaluates to `True` regardless of whether any jobs in the dependency graph succeeded or failed.
+- With job names as arguments, evaluates to `True` whether any of those jobs succeeded or failed.
+
+This is like `always()`, except it will evaluate `False` when the pipeline is canceled.
+
+|
+
+|===
+
+
+==== variables in conditions
+
+[source,yaml]
+----
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+stages:
+- stage: A
+  jobs:
+  - job: A1
+    steps:
+      - script: echo Hello Stage A!
+
+- stage: B
+  condition: and(succeeded(), eq(variables.isMain, true))
+  jobs:
+  - job: B1
+    steps:
+      - script: echo Hello Stage B!
+      - script: echo $(isMain)
+----
+
+== Tekton
+
+image::tekton-concept-tasks-pipelines.png[]
+
+== GitLab
+Pipelines are the top-level component of continuous integration, delivery, and deployment.
+
+Pipelines comprise:
+
+- *Jobs*, which define _what_ to do. For example, jobs that compile or test code.
+- *Stages*, which define _when_ to run the jobs. For example, stages that run tests after stages that compile the code.
+Jobs are executed by runners. Multiple jobs in the same stage are executed in parallel, if there are enough concurrent runners.
+
+If _all_ jobs in a stage succeed, the pipeline moves on to the next stage.
+
+If _any_ job in a stage fails, the next stage is not (usually) executed and the pipeline ends early.
+
+In general, pipelines are executed automatically and require no intervention once created. However, there are also times when you can manually interact with a pipeline.
+
+A typical pipeline might consist of four stages, executed in the following order:
+
+. A `build` stage, with a job called `compile`.
+. A `test` stage, with two jobs called `test1` and `test2`.
+. A `staging` stage, with a job called `deploy-to-stage`.
+. A `production` stage, with a job called `deploy-to-prod`.
+
+image::gitlab_workflow_example_extended_v12_3.png[]
+
+== GitHub Actions
+
+image::github-overview-actions-simple.webp[]
+
+== Pipeline functionalities
+
+[cols="*"]
+|===
+|Feature |Azure DevOps |Tekton |GitLab CI/CD|GitHub Actions|circleci|BuildKite
+
+|Pipeline structure
+|*pipeline/stages/jobs/steps* icon:play[role=red] agent
+|*pipeline/Tasks/steps* icon:play[] k8s Pod
+|*pipeline/[stages]/jobs* icon:play[] runners
+|*workflow/jobs/actions/steps* icon:play[] runners
+|pipeline/workflows/jobs/steps icon:play[]
+|pipeline/steps
+
+|Dynamic Pipelines
+| icon:question-circle[role=Fuchsia]
+| icon:question-circle[role=Fuchsia]
+| icon:check-circle[role=teal], Dynamic child pipelines
+| icon:question-circle[role=Fuchsia]
+| icon:pause-circle[role=orange], dynamic configuration only
+| icon:check-circle[role=teal]
+
+|Unit of Work
+|*step*:
+
+A https://learn.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops#step[step] can be a https://learn.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops#task[task] or https://learn.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops#script[script] and is the smallest building block of a pipeline. Builtin tasks and custom tasks are available.
+
+a|*https://tekton.dev/docs/pipelines/tasks/#defining-steps[Steps] as containers*
+
+A `Step` is a reference to a container image that executes a specific tool on a specific input and produces a specific output.
+
+|flattened with at least one `script` clause
+|Each step is either a shell script that will be executed, or an _action_ that will be run. Steps are executed in order and are dependent on each other.
+|Steps are collections of executable commands, which are run during a job.
+The `checkout` key is required under `steps` to checkout your code. The `run` key enables addition of arbitrary, multi-line shell command scripting.
+
+In addition to the `run` key, keys for `when`, `save_cache`, `restore_cache`, `store_artifacts`, `store_test_results`, and `add_ssh_keys` are nested under Steps.
+a|*Step* types:
+
+- Command step
+- Wait step
+- Block step
+- Input step
+- Trigger step
+- Group step
+
+|dependency syntax (DAG)
+a|`depends_on`
+a|`runAfter`
+a|`needs`
+a|`needs`
+a|`requires`
+a|`depends_on`
+
+|dependency scope
+a|one or more jobs
+
+- stage to stage
+- job to job
+- step to step
+a|one or more `Task`s.
+|Column 4, row 1
+a| job to job
+|Column 6, row 1
+| steps
+
+|condition (_when to run_)
+|`condition`: job status functions
+a|`when` expression
+
+components: `input`, `operator` and `values`
+a|`when`
+
+Use `when` to configure the conditions for when jobs run. If not defined in a job, the default value is `when: on_success`.
+
+|`if`
+a|`when` for workflows and steps
+
+- for `workflow` - defines whether to a workflow
+- `when` steps - defines whether to run a set of nested steps
+a|`if`
+
+|Concurrency Support
+|Column 2, row 3
+|Column 3, row 3
+|Column 4, row 3
+a| job or workflow level
+
+Use `concurrency` to ensure that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression.
+|Column 6, row 3
+|
+
+
+|Environment Variables
+|Column 2, row 3
+|Column 3, row 3
+|Column 4, row 3
+a|`env`
+
+- workflow level
+- job level
+- step level
+|Column 6, row 3
+a|`env`, pipeline settings, steps
+
+|Variables sharing
+|Column 2, row 3
+|Column 3, row 3
+|Column 4, row 3
+|Column 5, row 3
+a| `parameters` at job level and pipeline level
+
+- https://circleci.com/docs/pipeline-variables/[Pipeline values and parameters]
+- https://circleci.com/docs/jobs-steps/#passing-parameters-to-jobs[Passing parameters to jobs]
+|
+
+|Secrets & keys
+|Column 2, row 4
+|Column 3, row 4
+|Column 4, row 4
+|Column 5, row 4
+|Column 6, row 4
+|secrets storage service via plugins
+
+|Triggers
+a|Flexible triggers
+
+- CI triggers
+- PR triggers
+- Github pull request comment triggers
+- scheduled triggers
+- pipeline completion triggers
+- https://github.com/marketplace/actions/azure-pipelines-action[Azure Pipelines Action]
+|https://tekton.dev/docs/triggers/[Tekton triggers] (kubernetes based)
+|schedules, trigger api
+a|Workflow event triggers:
+
+- Events that occur in your workflow's repository
+- Events that occur outside of GitHub and trigger a repository_dispatch event on GitHub
+- Scheduled times
+- Manual
+|actions or schedules
+|schedules & Webhooks
+
+|timeouts
+|`timeoutInMinutes`
+|`timeout`: "0h1m30s"
+|Column 4, row 4
+a|`jobs.<job_id>.timeout-minutes`
+
+The maximum number of minutes to let a job run before GitHub automatically cancels it. Default: 360
+
+If the timeout exceeds the job execution time limit for the runner, the job will be canceled when the execution time limit is met instead.
+|Column 6, row 4
+|`timeout_in_minutes` for steps
+
+|runners
+|`timeoutInMinutes`
+|Kubernetes pod
+|Column 4, row 4
+|Column 5, row 4
+a|
+- docker
+- virtual machine
+|===
