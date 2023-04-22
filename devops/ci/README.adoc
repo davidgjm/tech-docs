@@ -1,0 +1,8 @@
+= CI Pipelines
+:toc:
+:icons: font
+:imagesdir: ./images
+
+== CI Pipelines engine feature comparison
+
+- xref:ci-pipeline-features.adoc[CI Pipeline Feature Comparison]
