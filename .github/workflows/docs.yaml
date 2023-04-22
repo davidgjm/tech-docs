@@ -27,10 +27,13 @@ jobs:
       with:
         pdf_build: false
         asciidoctor_params: |
-          --attribute=stylesheet=https://darshandsoni.com/asciidoctor-skins/css/fedora.css
+          --attribute=stylesheet=https://darshandsoni.com/asciidoctor-skins/css/material-teal.css
+          --attribute=linkcss
           --attribute=docinfodir=/github/workspace/.asciidoctor
           --attribute=docinfo=shared
+          --attribute=toc=left
           --attribute=allow-uri-read
+          --attribute=experimental
         # adoc_file_ext: .ascii # default is .adoc
         # source_dir: docs/ # default is .
         # slides_build: true
