@@ -43,7 +43,7 @@ TIP: Repository for technology knowledge sharing
 |===
 
 
-=== DevOps/SRE
+=== Platform Engineering/DevOps/SRE
 
 [cols="*"]
 |===
@@ -52,6 +52,10 @@ TIP: Repository for technology knowledge sharing
 |Generic
 |xref:devops/measuring-success/index.adoc[Measuring DevOps Success]
 |
+
+|CI/CD
+|xref:devops/ci/README.adoc[CI Pipelines]
+|CI Pipelines features
 
 |Generic
 |xref:sre/discipline/README.adoc[SRE Culture & discipline]
