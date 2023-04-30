@@ -367,6 +367,16 @@ If the timeout exceeds the job execution time limit for the runner, the job will
 |Column 6, row 4
 |`timeout_in_minutes` for steps
 
+|Retry mechanism
+a| NOTE: information to be added
+|`retries` field provided for pipeline tasks. Check https://tekton.dev/docs/pipelines/pipelines/#using-the-retries-and-retry-count-variable-substitutions[details].
+|Column 4, row 4
+|Column 5, row 4
+a|
+- docker
+- virtual machine
+
+
 |runners
 |`timeoutInMinutes`
 |Kubernetes pod
@@ -375,4 +385,6 @@ If the timeout exceeds the job execution time limit for the runner, the job will
 a|
 - docker
 - virtual machine
+
+
 |===
