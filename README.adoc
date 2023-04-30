@@ -45,6 +45,10 @@ TIP: Repository for technology knowledge sharing
 
 |===
 
+== Virtualization
+Virtualization is the creation of virtual versions of hardware, operating systems, storage devices, and other IT resources, allowing multiple systems to operate independently on a single physical machine.
+
+- xref:virtualization/README.adoc[virtualization entry point - overview and learning]
 
 == Monitoring & Observability
 

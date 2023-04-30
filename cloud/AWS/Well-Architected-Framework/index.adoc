@@ -1,5 +1,12 @@
 = AWS Well-Architected Framework
 :toc:
-:imagesdir: ./images
 
-include::reliability/README.adoc[leveloffset=+1]
+== Overview
+=== https://aws.amazon.com/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc&wa-guidance-whitepapers.sort-by=item.additionalFields.sortDate&wa-guidance-whitepapers.sort-order=desc[AWS Well Architected Framework Pillars]
+
+- xref:operations-excellence/index.adoc[Operational Excellence]
+- https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html[Security]
+- xref:reliability/README.adoc[Reliability]
+- https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html[Performance Efficiency]
+- xref:cost-optimization/README.adoc[Cost Optimization]
+- https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html[Sustainability]
