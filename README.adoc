@@ -1,4 +1,5 @@
 = Personal Knowledge Base
+:toc:
 
 include::_attributes.adoc[]
 
@@ -8,28 +9,26 @@ TIP: Repository for technology knowledge sharing
 == Cheatsheets for tools
 . xref:tools/jq.adoc[jq]
 
-== Topics by domain
 
-
-=== Software Architecting
+== Software Design
 
 [cols="*"]
 |===
 |Area|Topic|Description
 
 |Design Patterns
-|xref:design-patterns/README.adoc[Design Patterns]
+|xref:software-design/design-patterns/README.adoc[Design Patterns]
 |Typical design patterns
 
 |API Design
-|xref:system-design/api-design/README.adoc[API Design]
+|xref:software-design/api-design/README.adoc[API Design]
 |Restful API design
 
 
 |===
 
 
-=== Cloud
+== Cloud Computing
 
 [cols="*"]
 |===
@@ -47,48 +46,78 @@ TIP: Repository for technology knowledge sharing
 |===
 
 
-=== Platform Engineering/DevOps/SRE
+== Monitoring & Observability
 
 [cols="*"]
 |===
 |Area|Topic|Description
 
+|Monitoring
+|xref:monitoring/README.adoc[Monitoring]
+| Monitoring tooling and metrics
+
+|Observability
+|xref:observability/README.adoc[What is observability?]
+|overview
+
+|Observability
+|xref:observability/open-telemetry.adoc[OpenTelemetry]
+|
+
+|Column 1, row 4
+|Column 2, row 4
+|Column 3, row 4
+|===
+
+
+== DevOps
+[cols="*"]
+|===
+|Area|Topic|Description
+
 |Generic
-|xref:devops/measuring-success/index.adoc[Measuring DevOps Success]
+|xref:DevOps/measuring-success/index.adoc[Measuring DevOps Success]
 |
 
 |CI/CD
-|xref:devops/ci/README.adoc[CI Pipelines]
+|xref:DevOps/ci/README.adoc[CI Pipelines]
 |CI Pipelines features
 
-|Generic
-|xref:sre/discipline/README.adoc[SRE Culture & discipline]
-| SRE Basics
 
-|Tools
-|xref:devops/terraform/README.adoc[Terraform]
+|Infrastructure as Code(IaC)
+|xref:DevOps/iac/terraform/README.adoc[Terraform]
 |Terraform related
-
-|Monitoring
-|xref:sre/monitoring/README.adoc[Monitoring]
-| Monitoring tooling and metrics
-
 
 |===
 
 
-=== Product Management
+== SRE
+
+[cols="*"]
+|===
+|Area|Topic|Description
+
+|Generic
+|xref:SRE/discipline/README.adoc[SRE Culture & discipline]
+| SRE Basics
+
+|===
+
+
+
+
+== Product Management
 
 [cols="*"]
 |===
 |Area|Topic|Description
 
 |Platform as a product
-|xref:product-management/platform-as-a-product/README.adoc[Measuring DevOps Success]
+|xref:non-technical/product-management/platform-as-a-product/README.adoc[Measuring DevOps Success]
 | An approach to run internal developer platforms as a product
 
 |Platform as a product
-|xref:product-management/platform-as-a-product/Whitepaper_ State of Platform Engineering Report.pdf[State of Platform Engineering Report]
+|xref:non-technical/product-management/platform-as-a-product/Whitepaper_ State of Platform Engineering Report.pdf[State of Platform Engineering Report]
 |White paper from humanitec.com
 
 |===

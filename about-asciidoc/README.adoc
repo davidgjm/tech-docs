@@ -96,7 +96,19 @@ The above directives will create the following:
 * How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?
 ****
 
+=== Readings
+
+[source,asciidoc]
+----
 .icon:book[role=yeti] Readings
 ****
 asdfasdfasdf
 ****
+----
+
+.icon:book[role=yeti] Readings
+****
+* asdfasdfasdf
+****
+
+

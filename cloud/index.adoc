@@ -3,6 +3,26 @@
 :imagesdir: ./images
 
 
+== Overview
+
+=== Core Technologies in Cloud Computing
+
+There are several core technologies in cloud computing that are essential for a cloud architect to understand and master to become an expert in the field. These technologies are:
+
+1. Virtualization: Virtualization is the foundation of cloud computing. It enables multiple operating systems to run on a single physical machine, making it possible to create virtual machines (VMs) that can be used to run applications and services in the cloud.
+
+2. Containers: Containers are a lightweight alternative to virtual machines that provide a way to package and deploy applications in a consistent and reproducible manner. They allow for greater flexibility and portability than traditional VMs.
+
+3. Infrastructure as Code (IaC): IaC is the practice of managing infrastructure (e.g., servers, networks, storage) using machine-readable code instead of manual configuration. This enables automation and simplifies the process of deploying and managing resources in the cloud.
+
+4. Microservices: Microservices architecture is a way of designing applications as a collection of small, independent services that can be deployed and scaled independently. This approach allows for greater flexibility and agility in the development and deployment of applications.
+
+5. Serverless computing: Serverless computing is a cloud computing model in which the cloud provider manages the infrastructure and automatically allocates resources as needed to execute and scale applications. This approach eliminates the need for developers to manage servers or infrastructure.
+
+6. Data storage and processing: Cloud computing provides various options for storing and processing data, such as object storage, file storage, and database services. A cloud architect should have a good understanding of these services and their respective use cases.
+
+To become an excellent cloud architect, it's essential to gain expertise in these core technologies. It's also important to stay up-to-date with emerging technologies and trends in the cloud computing industry. Additionally, having a good understanding of the underlying principles of cloud computing, such as security, scalability, and fault tolerance, is crucial.
+
 == Well Architected Framework
 
 === https://aws.amazon.com/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc&wa-guidance-whitepapers.sort-by=item.additionalFields.sortDate&wa-guidance-whitepapers.sort-order=desc[AWS Well Architected Framework Pillars]

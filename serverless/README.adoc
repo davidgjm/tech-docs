@@ -1,0 +1,17 @@
+= Serverless Computing
+:toc:
+:icons: font
+:imagesdir: ./images
+
+.icon:book[role=yeti] Readings
+****
+* https://martinfowler.com/articles/serverless.html[Martin Fowler, Serverless Architectures]
+* https://www.openfaas.com/blog/plonk-stack/[Introducing the PLONK Stack for Cloud Native Developers]
+* https://blog.alexellis.io/getting-started-with-the-plonk-stack-and-serverless/[Getting Started with the PLONK Stack]
+* https://nubenetes.com/serverless/[Serverless Architectures and Frameworks]
+* https://youtu.be/NckMekZXRt8[youtube, Getting Started with the PLONK Stack and Serverless 2.0]
+
+*NATS*
+
+* https://docs.nats.io/nats-concepts/overview[NATS Overview]
+****

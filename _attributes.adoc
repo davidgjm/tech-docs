@@ -10,4 +10,5 @@
 :icons: font
 :hide-uri-scheme:
 :docinfo: shared,private
+:toc:
 // :stylesheet: material-teal.css
