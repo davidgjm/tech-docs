@@ -1,0 +1,32 @@
+= node.js overview
+:toc:
+:imagesdir: ./images
+:icons: font
+
+
+.icon:book[role=yeti] Readings
+****
+- https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/
+- https://nodejs.org/en/docs/guides/dont-block-the-event-loop/
+****
+
+
+   ┌───────────────────────────┐
+┌─>│           timers          │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │     pending callbacks     │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │       idle, prepare       │
+│  └─────────────┬─────────────┘      ┌───────────────┐
+│  ┌─────────────┴─────────────┐      │   incoming:   │
+│  │           poll            │<─────┤  connections, │
+│  └─────────────┬─────────────┘      │   data, etc.  │
+│  ┌─────────────┴─────────────┐      └───────────────┘
+│  │           check           │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+└──┤      close callbacks      │
+   └───────────────────────────┘
+

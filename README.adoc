@@ -20,6 +20,10 @@ TIP: Repository for technology knowledge sharing
 |===
 |Area|Topic|Description
 
+|Design Principles
+|xref:software-design/design-principles/README.adoc[Design Principles]
+|design principles for Azure apps and other types of applications
+
 |Design Patterns
 |xref:software-design/design-patterns/README.adoc[Design Patterns]
 |Typical design patterns

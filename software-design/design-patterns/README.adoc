@@ -8,6 +8,8 @@
 .Readings/Papers
 [sidebar]
 ****
+- https://sourcemaking.com/design_patterns
+- https://refactoring.guru/design-patterns
 - https://www.enterpriseintegrationpatterns.com/index.html[Enterprise Integration Patterns]
 - https://docs.microsoft.com/en-us/azure/architecture/patterns/[Azure Cloud Design Patterns]
 - https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns, Jonathan Oliver's blog]
