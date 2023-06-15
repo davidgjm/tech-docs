@@ -11,5 +11,5 @@
 
 
 === References within the repository
-* xref:../../cloud/Azure/application-architecture/best-practices/api-design.adoc[RESTful web API design]
+* xref:../../cloud/Azure/architecture/best-practices/api-design.adoc[RESTful web API design]
 

@@ -1,0 +1,8 @@
+= Azure Active Directory
+:toc:
+:icons: font
+
+
+== Key Topics
+- xref:roles.adoc[Roles in Azure AD and Azure]
+- xref:apps.adoc[Applications and service principals]

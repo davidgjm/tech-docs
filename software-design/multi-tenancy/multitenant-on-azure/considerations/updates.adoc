@@ -92,7 +92,7 @@ https://docs.microsoft.com/en-us/azure/devops/migrate/phase-rollout-with-rings[D
 
 === API versions
 
-If your service exposes an external API, consider that any updates you apply might affect the way that customers or partners integrate with your platform.In particular, you need to be conscious of breaking changes to your APIs.Consider using an xref:../../../../cloud/Azure/application-architecture/best-practices/api-design.adoc#_versioning_a_restful_web_api[API versioning strategy] to mitigate the risk of updates to your API.
+If your service exposes an external API, consider that any updates you apply might affect the way that customers or partners integrate with your platform.In particular, you need to be conscious of breaking changes to your APIs.Consider using an xref:../../../../cloud/Azure/architecture/best-practices/api-design.adoc#_versioning_a_restful_web_api[API versioning strategy] to mitigate the risk of updates to your API.
 
 == Next steps
 

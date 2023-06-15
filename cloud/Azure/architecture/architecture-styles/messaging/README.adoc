@@ -1,0 +1,11 @@
+= Architectural considerations for messaging scenarios
+:toc:
+:icons: font
+:imagesdir: ./images
+
+.icon:book[role=yeti] Readings
+****
+- https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/messaging[Asynchronous messaging options]
+- https://learn.microsoft.com/en-us/azure/service-bus-messaging/compare-messaging-services[Choose between Azure messaging services - Event Grid, Event Hubs, and Service Bus]
+- https://azure.microsoft.com/en-us/blog/events-data-points-and-messages-choosing-the-right-azure-messaging-service-for-your-data/[Events, Data Points, and Messages - Choosing the right Azure messaging service for your data]
+****

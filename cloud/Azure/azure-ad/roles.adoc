@@ -1,0 +1,39 @@
+= Azure AD Roles
+:toc:
+:imagesdir: ./images
+:icons: font
+
+https://learn.microsoft.com/en-us/azure/active-directory/roles/custom-overview[Azure AD roles] are used to manage Azure AD resources in a directory such as create or edit users, assign administrative roles to others, reset user passwords, manage user licenses, and manage domains. The following table describes a few of the more important Azure AD roles.
+
+[cols="25,45a,30"]
+|===
+|Azure AD role |Permissions |Notes
+
+|https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference#global-administrator[Global Administrator]
+|
+- Manage access to all administrative features in Azure Active Directory, as well as services that federate to Azure Active Directory
+- Assign administrator roles to others
+- Reset the password for any user and all other administrators
+|The person who signs up for the Azure Active Directory tenant becomes a Global Administrator.
+
+|https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference#user-administrator[User Administrator]
+|
+- Create and manage all aspects of users and groups
+- Manage support tickets
+- Monitor service health
+- Change passwords for users, Helpdesk administrators, and other User Administrators
+|
+
+|https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference#billing-administrator[Billing Administrator]
+|
+- Make purchases
+- Manage subscriptions
+- Manage support tickets
+- Monitors service health
+|
+
+|===
+
+In the Azure portal, you can see the list of Azure AD roles on the *Roles and administrators* page. For a list of all the Azure AD roles, see https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference[Administrator role permissions in Azure Active Directory].
+
+

@@ -1,0 +1,24 @@
+= Load-balancing options
+:toc:
+:imagesdir: ./images
+:icons: font
+
+== Decision dimensions
+
+Internet facing:: Applications that are publicly accessible from the internet.
+Global:: End users or clients are located beyond a small geographical area
+HTTP/HTTPS:: HTTP(S) load-balancing services are Layer 7 load balancers that only accept HTTP(S) traffic. They are intended for web applications or other HTTP(S) endpoints. They include features such as SSL offload, web application firewall, path-based load balancing, and session affinity. *Non-HTTP/S* load-balancing services can handle non-HTTP(S) traffic and are recommended for non-web workloads.
+SSL offloading:: whether the load balancing service offloads CPU intensive SSL termination so that the backend services don't have to work on SSL encryption/decryption.
+
+== AWS Load Balancers
+
+* https://aws.amazon.com/elasticloadbalancing/features/#Product_comparisons[Elastic Load Balancing features]
+
+== Azure load balancing options
+
+.icon:book[]
+****
+- https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/load-balancing-overview[Load balancing options]
+****
+
+image:azure_load-balancing-decision-tree.png[]

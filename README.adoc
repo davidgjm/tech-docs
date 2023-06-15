@@ -9,6 +9,10 @@ TIP: Repository for technology knowledge sharing
 == Cheatsheets for tools
 . xref:tools/jq.adoc[jq]
 
+== Linux References
+
+. xref:os/linux/tools/README.adoc[Linux tools]
+
 
 == Software Design
 

@@ -1,0 +1,53 @@
+= Azure RBAC
+:toc:
+:icons: font
+:imagesdir: ./images
+
+== Azure roles, Azure AD roles, and classic subscription administrator roles
+
+=== How the roles are related
+To better understand roles in Azure, it helps to know some of the history. When Azure was initially released, access to resources was managed with just three administrator roles: Account Administrator, Service Administrator, and Co-Administrator. Later, Azure role-based access control (Azure RBAC) was added. Azure RBAC is a newer authorization system that provides fine-grained access management to Azure resources. Azure RBAC includes many built-in roles, can be assigned at different scopes, and allows you to create your own custom roles. To manage resources in Azure AD, such as users, groups, and domains, there are several Azure AD roles.
+
+The following diagram is a high-level view of how the Azure roles, Azure AD roles, and classic subscription administrator roles are related.
+
+image:rbac-admin-roles.png[]
+
+image:azure-roles-azure-ad-roles.png[]]
+
+=== Azure Roles
+https://learn.microsoft.com/en-us/azure/role-based-access-control/overview[Azure RBAC] is an authorization system built on https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/overview[Azure Resource Manager] that provides fine-grained access management to Azure resources, such as compute and storage. Azure RBAC includes over 70 built-in roles. There are four fundamental Azure roles. The first three apply to all resource types:
+
+[cols="25,40a,35"]
+|===
+|Azure role |Permissions |Notes
+
+|https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner[Owner]
+|
+- Full access to all resources
+- Delegate access to others
+|The Service Administrator and Co-Administrators are assigned the Owner role at the subscription scope
+Applies to all resource types.
+
+|https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor[Contributor]
+|
+- Create and manage all of types of Azure resources
+- Create a new tenant in Azure Active Directory
+- Can't grant access to others
+|Applies to all resource types.
+
+|https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#reader[Reader]
+|
+- View Azure resources
+|Applies to all resource types.
+
+|https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator[User Access Administrator]
+|
+- Manage user access to Azure resources
+|
+
+|===
+
+The rest of the built-in roles allow management of specific Azure resources. For example, the Virtual Machine Contributor role allows the user to create and manage virtual machines. For a list of all the built-in roles, see https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[Azure built-in roles].
+
+
+include::../../azure-ad/roles.adoc[leveloffset=+1]
