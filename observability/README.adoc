@@ -17,7 +17,7 @@
 - https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html[Chapter 4. The Three Pillars of Observability, Distributed Systems Observability] by Cindy Sridharan.
 - https://opentelemetry.io/docs/concepts/data-sources/
 - https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md[OpenTelemetry Specification]
-
+- https://www.ibm.com/cloud/learn/observability
 - https://en.wikipedia.org/wiki/Reliable_Event_Logging_Protocol[Reliable Event Logging Protocol]
 
 

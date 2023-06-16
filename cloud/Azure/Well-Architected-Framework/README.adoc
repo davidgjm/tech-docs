@@ -1,11 +1,11 @@
 = Azure Well Architected Framework
 :toc:
-
+:imagesdir: ./images
 
 .icon:book[role=yeti] Readings
 ****
 Learning Paths
-
+* https://learn.microsoft.com/en-us/azure/well-architected/
 * https://learn.microsoft.com/en-us/azure/architecture/framework/[Microsoft Azure Well-Architected Framework]
 * https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-introduction/
 * https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-cost-optimization/
@@ -17,6 +17,8 @@ Learning Paths
 
 
 == Overview
+
+image::azure-waf-diagram.png[]
 
 === Pillars
 

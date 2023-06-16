@@ -115,8 +115,21 @@ Virtualization is the creation of virtual versions of hardware, operating system
 
 |===
 
+== Cyber Security
 
+[cols="*"]
+|===
+|Area|Topic|Description
 
+|Authentication & Authorization
+|xref:security/oidc-oauth2/README.adoc[OIDC & OAuth2]
+|OpenIDConnect & OAUTH2
+
+|Authentication
+|xref:security/sasl/README.adoc[SASL]
+|
+
+|===
 
 == Product Management
 

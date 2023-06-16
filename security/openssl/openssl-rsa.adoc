@@ -1,0 +1,36 @@
+= OpenSSL RSA
+
+
+References:
+https://www.openssl.org/docs/manmaster/man1/openssl-rsa.html
+
+This openssl rsa command primarily creates and processes certificate requests in PKCS#10 format. It can additionally create self signed certificates for use as root CAs for example.
+
+Export the RSA Public Key to a File
+This is a command that is
+openssl rsa -in rootCA.pem -outform PEM -pubout -out rootCA.pub
+The -pubout flag is really important. Be sure to include it.
+Next open the public.pem and ensure that it starts with -----BEGIN PUBLIC KEY-----. This is how you know that this file is the public key of the pair and not a private key.
+To check the file from the command line you can use the less command, like this:
+less rootCA.pub
+
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2DZP2sB5/t5HHESrbmhx
+NmIXTiTMNpzjImUoJRmOiSsbZfkWHp3TrUdsN4cAewTuC2ctlp2CpCtnQlRShI+c
+yWe1PP5SZ8uVuVoMFdM/Isv61S7fxyQv82nIsqiIvZkiKrtZdry8s/YF+EzMa5nH
+cfStluopqO4zNl/MVWs4UlWr8aeVcZq4UkZhuDReHOqt86P2VYQViv+qSWTHWxcv
+6XjQSjmFEKW2hXCSB7wr4ZewOCLlap8pAFKdG6CJ7zHReOkeql87YxinSz18snuT
+vMLJZ+NI2wEHUBdGjMl1aYY79LeHG2gqr3jYmgX/QAl3MmEIxuzoVPAHIdaVpK+o
+DwIDAQAB
+-----END PUBLIC KEY-----
+
+
+
+Arguments
+-aes128, -aes192, -aes256, -aria128, -aria192, -aria256, -camellia128, -camellia192, -camellia256, -des, -des3, -idea
+These options encrypt the private key with the specified cipher before outputting it. A pass phrase is prompted for. If none of these options is specified the key is written in plain text. This means that this command can be used to remove the pass phrase from a key by not giving any encryption option is given, or to add or change the pass phrase by setting them. These options can only be used with PEM format output files.
+
+-pubout
+By default a private key is output: with this option a public key will be output instead. This option is automatically set if the input is a public key.
+
+

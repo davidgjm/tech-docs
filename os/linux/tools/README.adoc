@@ -35,6 +35,5 @@ echo "syntax on" >> ~/.vimrc
 echo "autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab" >> ~/.vimrc
 ----
 
-
-== ps
-See xref:ps.adoc[process management with ps] for more details
+== Other tools available in Linux distributions
+- `ps`, see xref:ps.adoc[process management with ps] for more details
