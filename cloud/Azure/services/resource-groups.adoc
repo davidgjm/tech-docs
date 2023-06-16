@@ -1,5 +1,0 @@
-= Resource Groups
-
-== Best Practices
-
-#Content to be added#
