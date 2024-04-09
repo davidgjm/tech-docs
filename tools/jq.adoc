@@ -18,7 +18,7 @@
 * https://gist.github.com/olih/f7437fb6962fb3ee9fe95bda8d2c8fa4[Processing JSON using jq]
 ****
 
-=== Dealing with json arrays
+=== JSON arrays
 
 [cols="30,70"]
 |===
@@ -29,6 +29,7 @@
 ===== data types
 
 with type been arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars
+
 ==== Slicing and Filtering
 
 [cols="30,70"]
@@ -55,11 +56,15 @@ with type been arrays, objects, iterables, booleans, numbers, normals, finites, 
 | Select array of int by value
 | `jq 'map(select(. >= 2))'`
 
-| Select array of objects by value
+| Select array of objects by array item property value
 m| `jq '.[] &#124; select(.id == "second")'`
 
 | Select by type
 | `jq '.[] &#124; numbers'` ^*^
+
+
+|List Azure role assignments with principalType == `Group`
+m|`az role assignment list --all | jq '.[]|select(.principalType == "Group")'`
 
 |===
 
