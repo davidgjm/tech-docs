@@ -64,7 +64,7 @@ m| `jq '.[] &#124; select(.id == "second")'`
 
 
 |List Azure role assignments with principalType == `Group`
-m|`az role assignment list --all \| jq '.[]|select(.principalType == "Group")'`
+m|`az role assignment list --all \| jq '.[]\|select(.principalType == "Group")'`
 
 |===
 
