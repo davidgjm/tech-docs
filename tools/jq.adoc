@@ -66,7 +66,73 @@ m| `jq '.[] &#124; select(.id == "second")'`
 |List Azure role assignments with principalType == `Group`
 m|`az role assignment list --all \| jq '.[]\|select(.principalType == "Group")'`
 
+|Filter a property of object array by array item value
+|`cat assignments-china.json\| jq '[.assignments[|select(.identityType=="Group") ]'`
+
 |===
+
+===== Filtering an array property by item value
+===== Given json
+
+The command below filters values whose `identityType=="Group"`
+[source,shell]
+----
+cat assignments.json| jq '[.assignments[]|select(.identityType=="Group") ]'
+----
+
+
+[source,json]
+----
+{
+    "assignments": [
+        {
+            "identity": "azure-tenant-admin",
+            "identityType": "Group",
+            "role": "Contributor",
+            "scope": "tenant root",
+            "assignment": "PIM"
+        },
+        {
+            "identity": "12345688asdf32",
+            "identityType": "ServicePrincipal",
+            "role": "Contributor",
+            "scope": "Contosoo-root",
+            "assignment": "RBAC"
+        },
+        {
+            "identity": "finops",
+            "identityType": "Group",
+            "role": "Cost Management Contributor",
+            "scope": "Contosoo-root",
+            "assignment": "RBAC"
+        }
+
+    ]
+}
+----
+
+
+====== Output
+
+[source,json]
+----
+[
+  {
+    "identity": "azure-tenant-admin",
+    "identityType": "Group",
+    "role": "Contributor",
+    "scope": "tenant root",
+    "assignment": "PIM"
+  },
+  {
+    "identity": "finops",
+    "identityType": "Group",
+    "role": "Cost Management Contributor",
+    "scope": "Contosoo-root",
+    "assignment": "RBAC"
+  }
+]
+----
 
 === Sum values in an array
 
