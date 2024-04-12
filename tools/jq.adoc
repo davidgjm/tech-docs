@@ -7,6 +7,7 @@
 [sidebar]
 ****
 * https://stedolan.github.io/jq/[jq web site]
+* https://maas.io/blog/improving-cli-output-with-jq[Improving CLI output with jq]
 ****
 
 == Cheatsheet
