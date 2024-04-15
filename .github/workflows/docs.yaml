@@ -22,12 +22,13 @@ jobs:
 
     # Includes the AsciiDoctor GitHub Pages Action to convert adoc files to html and publish to gh-pages branch
     # --attribute=stylesheet=/github/workspace/.asciidoctor/ubuntu.css
+    #--attribute=stylesheet=https://darshandsoni.com/asciidoctor-skins/css/material-teal.css
     - name: asciidoctor-ghpages
       uses: manoelcampos/asciidoctor-ghpages-action@v2.3.0
       with:
         pdf_build: false
         asciidoctor_params: |
-          --attribute=stylesheet=https://darshandsoni.com/asciidoctor-skins/css/material-teal.css
+          --attribute=stylesheet=/github/workspace/.asciidoctor/material-teal.css
           --attribute=linkcss
           --attribute=docinfodir=/github/workspace/.asciidoctor
           --attribute=docinfo=shared
