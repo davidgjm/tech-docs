@@ -28,7 +28,6 @@ jobs:
       with:
         pdf_build: false
         asciidoctor_params: |
-          --attribute=stylesheet=https://raw.githubusercontent.com/darshandsoni/asciidoctor-skins/gh-pages/css/material-teal.css
           --attribute=linkcss
           --attribute=docinfodir=/github/workspace/.asciidoctor
           --attribute=docinfo=shared
