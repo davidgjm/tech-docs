@@ -27,7 +27,7 @@
 | Query by attribute name|`az account list-locations \| jq -r ".[].name"`
 |===
 
-===== data types
+==== data types
 
 with type been arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars
 
