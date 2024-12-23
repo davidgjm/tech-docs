@@ -1,3 +1,0 @@
-= Network
-
-- https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli

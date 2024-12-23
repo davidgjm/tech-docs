@@ -1,8 +1,0 @@
-= Circuit Breaker pattern
-
-.References
-[sidebar]
-****
-- https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker[Aure cloud design patterns - Circuit Breaker pattern]
-****
-
