@@ -1,0 +1,52 @@
+# Postgres Command examples
+
+## Listing tables
+```
+\dt
+```
+output
+```
+                 List of relations
+ Schema |         Name          | Type  |  Owner   
+--------+-----------------------+-------+----------
+ public | flyway_schema_history | table | postgres
+ public | inventory             | table | postgres
+ public | tile_data             | table | postgres
+(3 rows)
+```
+
+## Describe table schema
+
+> \d[S+]  NAME           describe table, view, sequence, or index
+
+```
+\dS+ inventory
+```
+### Output
+```
+                                                                 Table "public.inventory"
+        Column        |            Type             | Collation | Nullable |                Default                | Storage  | Stats target | Description 
+----------------------+-----------------------------+-----------+----------+---------------------------------------+----------+--------------+-------------
+ id                   | integer                     |           | not null | nextval('inventory_id_seq'::regclass) | plain    |              | 
+ uuid                 | uuid                        |           | not null |                                       | plain    |              | 
+ vendor               | text                        |           | not null |                                       | extended |              | 
+ area                 | text                        |           | not null |                                       | extended |              | 
+ vendor_creation_date | date                        |           | not null |                                       | plain    |              | 
+ codec_major_version  | integer                     |           | not null |                                       | plain    |              | 
+ codec_minor_version  | integer                     |           | not null |                                       | plain    |              | 
+ default_latitude     | double precision            |           | not null |                                       | plain    |              | 
+ default_longitude    | double precision            |           | not null |                                       | plain    |              | 
+ map_layer_type       | map_layer_type              |           | not null |                                       | plain    |              | 
+ compatible_with      | integer                     |           |          |                                       | plain    |              | 
+ inserted_timestamp   | timestamp without time zone |           | not null | now()                                 | plain    |              | 
+Indexes:
+    "inventory_pkey" PRIMARY KEY, btree (id)
+    "inventory_unique_uuid" UNIQUE CONSTRAINT, btree (uuid)
+Foreign-key constraints:
+    "inventory_compatible_with_fkey" FOREIGN KEY (compatible_with) REFERENCES inventory(id)
+Referenced by:
+    TABLE "inventory" CONSTRAINT "inventory_compatible_with_fkey" FOREIGN KEY (compatible_with) REFERENCES inventory(id)
+    TABLE "tile_data" CONSTRAINT "tile_data_inventory_id_fkey" FOREIGN KEY (inventory_id) REFERENCES inventory(id)
+
+
+```
