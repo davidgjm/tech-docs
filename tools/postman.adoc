@@ -1,0 +1,19 @@
+= Postman
+:toc:
+
+== Postman tests
+
+=== Printing response header
+[source,js]
+----
+console.log('status: ', responseCode.code)
+console.log('RateLimit', pm.response.headers.get("X-RateLimit-Remaining"))
+tests["Status 200"] = responseCode.code === 200;
+pm.test("X-RateLimit-Remaining is present", function () {
+    pm.response.to.have.header("X-RateLimit-Remaining");
+});
+----
+
+=== Dynamic Variables
+https://learning.postman.com/docs/writing-scripts/script-references/variables-list/
+

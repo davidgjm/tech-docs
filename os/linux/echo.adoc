@@ -1,0 +1,67 @@
+== Code sample
+
+=== Common Usage (may introduce issues)
+[source, shell]
+----
+$ echo "hello" | md5sum 
+b1946ac92492d2347c6235b4d2611184  -
+----
+
+=== Portable use in scripts
+
+[source, shell]
+----
+$ echo -n "hello" | md5sum 
+5d41402abc4b2a76b9719d911017c592  -
+----
+
+== Explanation
+
+Normally echo will print all provided textual content and append a newline. This behavior is safe if you want to dump the content into a file.
+
+*But* you will likely run into problems when you just want the provided text as input for a different command/program. Notice the different hash values above. The first `md5sum` command takes the `hello` string as well as *newline* non-printable character as input while the command in the second example just takes the string *hello* as input.
+
+The argument `-n` will not output the trailing newline.
+
+=== Reference doucmentation
+
+==== echo
+
+https://www.gnu.org/software/coreutils/manual/html_node/echo-invocation.html#echo-invocation
+
+____
+
+POSIX does not require support for any options, and says that the behavior of echo is implementation-defined if any string contains a backslash or if the first argument is -n. ==Portable programs can use the printf command if they need to omit trailing newlines or output control characters or backslashes==. See printf invocation.
+
+____
+
+==== printf
+
+https://www.gnu.org/software/coreutils/manual/html_node/printf-invocation.html#printf-invocation
+
+____
+
+printf does formatted printing of text. Synopsis:
+
+printf format [argument]…
+printf prints the format string, interpreting ‘%’ directives and ‘\’ escapes to format numeric and string arguments in a way that is mostly similar to the C ‘printf’ function. See printf format directives in The GNU C Library Reference Manual, for details. The differences are listed below.
+
+Due to shell aliases and built-in printf functions, using an unadorned printf interactively or in a script may get you different functionality than that described here. Invoke it via env (i.e., env printf …) to avoid interference from the shell.
+
+____
+
+== How to use in scripts
+
+Either use `echo -n` with the additional argument or simply use `printf`. So the above md5 hash value computation can be changed to below:
+
+----
+$ echo -n "hello" | md5sum 
+5d41402abc4b2a76b9719d911017c592  -
+----
+
+*Or*
+
+----
+$ printf "hello" | md5sum 
+5d41402abc4b2a76b9719d911017c592  -
+----

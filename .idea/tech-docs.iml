@@ -2,10 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/programming/java/gradle/multi-module/multi-module-example-01/application/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/programming/java/gradle/multi-module/multi-module-example-01/application/src/main/resources" type="java-resource" />
-    </content>
+    <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
