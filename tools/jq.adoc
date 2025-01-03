@@ -76,6 +76,7 @@ m|`az role assignment list --all \| jq '[.[]\|select(.principalType == "Group")]
 ===== Given json
 
 The command below filters values whose `identityType=="Group"`
+
 [source,shell]
 ----
 cat assignments.json| jq '[.assignments[]|select(.identityType=="Group") ]'
@@ -139,11 +140,13 @@ cat assignments.json| jq '[.assignments[]|select(.identityType=="Group") ]'
 
 To sum all values in `issueCount` field in the following json example, run the jq command below
 
+==== Expression
 [source,shell]
 ----
-cat example.json| jq "[.records[].issueCount]|add"
+[.records[].issueCount]|add
 ----
 
+==== Input
 [source,json]
 ----
 {
@@ -200,4 +203,96 @@ cat example.json| jq "[.records[].issueCount]|add"
         }
     ]
 }
+----
+==== Output
+```
+57
+```
+
+=== Filter by property in object array
+
+Gets a list of strings from a property from a subset of an object array.
+
+==== Expression
+
+[source, bash]
+----
+.value[]|select(.mail !=null)|.userPrincipalName|rtrimstr("@example.com")
+----
+
+==== Input
+[source,json]
+----
+{
+	"@odata.context": "https://microsoftgraph.chinacloudapi.cn/v1.0/$metadata#users(id,userPrincipalName,displayName,accountEnabled,appId,mail,onPremisesSyncEnabled,deviceId)",
+	"@odata.count": 292,
+	"value": [
+		{
+			"id": "00d2896d-1cf1-4aa5-8288-55164a29a0a2",
+			"userPrincipalName": "FZPY74@example.com",
+			"displayName": "Lulu Olson",
+			"accountEnabled": true,
+			"mail": "FZPY74@example.com",
+			"onPremisesSyncEnabled": true
+		},
+		{
+			"id": "016c5530-1cfb-4d8d-9eb3-b67896f72cbe",
+			"userPrincipalName": "NZJFV1@example.com",
+			"displayName": "Franklin McGee",
+			"accountEnabled": true,
+			"mail": null,
+			"onPremisesSyncEnabled": true
+		},
+		{
+			"id": "017f6ae3-c7f1-4fb7-8050-8f88097b2b7b",
+			"userPrincipalName": "NZ8P8N@example.com",
+			"displayName": "Agnes Gill",
+			"accountEnabled": true,
+			"mail": "NZ8P8N@example.com",
+			"onPremisesSyncEnabled": true
+		},
+		{
+			"id": "01d1566f-d4ef-433a-8480-d7272d640e41",
+			"userPrincipalName": "NZD0L1@example.com",
+			"displayName": "Cecelia Casey",
+			"accountEnabled": true,
+			"mail": "NZD0L1@example.com",
+			"onPremisesSyncEnabled": true
+		},
+		{
+			"id": "03180156-9719-4950-baef-4e2baa679f10",
+			"userPrincipalName": "RZGF6Q@example.com",
+			"displayName": "Cameron Norris",
+			"accountEnabled": true,
+			"mail": "RZGF6Q@example.com",
+			"onPremisesSyncEnabled": true
+		},
+		{
+			"id": "03fbe4ba-b87c-47d6-bd32-28f00d29f7ff",
+			"userPrincipalName": "BZHQ0G@example.com",
+			"displayName": "Rex Flores",
+			"accountEnabled": true,
+			"mail": null,
+			"onPremisesSyncEnabled": true
+		},
+		{
+			"id": "05e44699-3292-4bef-a4f1-636c1fa991e4",
+			"userPrincipalName": "KZ51WZ@example.com",
+			"displayName": "Leila Bailey",
+			"accountEnabled": true,
+			"mail": "KZ51WZ@example.com",
+			"onPremisesSyncEnabled": true
+		}
+	]
+}
+----
+
+==== Output
+[source,bash]
+----
+"FZPY74"
+"NZ8P8N"
+"NZD0L1"
+"RZGF6Q"
+"KZ51WZ"
 ----
