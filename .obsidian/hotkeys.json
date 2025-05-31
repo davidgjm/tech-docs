@@ -1,0 +1,10 @@
+{
+  "asciidoctor-editor:create-adoc": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "A"
+    }
+  ]
+}

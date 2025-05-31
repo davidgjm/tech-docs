@@ -1,5 +1,6 @@
 = containerd
 :toc:
+:imagesdir: ../../images
 
 == Readings/References
 
@@ -9,6 +10,12 @@
 * https://faun.pub/docker-containerd-standalone-runtimes-heres-what-you-should-know-b834ef155426[Docker, Containerd & Standalone Runtimes — Here’s What You Should Know]
 
 ****
+
+image::containerd-01.png[]
+
+== Architecture
+
+image::containerd-architecture.png[architecture,1024,]
 
 == Introduction
 Containerd is one of the recent projects in the Docker ecosystem and its purpose is breaking up more modularity to Docker architecture and more neutrality visà-vis the other industry actors (Cloud providers and other orchestration services).

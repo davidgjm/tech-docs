@@ -1,0 +1,205 @@
+{
+  "main": {
+    "id": "ed32fd374d981cb0",
+    "type": "split",
+    "children": [
+      {
+        "id": "d83a16237a0d5a13",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "293df79fede4d082",
+            "type": "leaf",
+            "state": {
+              "type": "asciidoc-editor-view",
+              "state": {
+                "file": "cloud-native/container/containerd/README.adoc"
+              },
+              "icon": "lucide-file",
+              "title": "README"
+            }
+          },
+          {
+            "id": "b87bb9afc12f80da",
+            "type": "leaf",
+            "state": {
+              "type": "asciidoc-editor-view",
+              "state": {
+                "file": "cloud-native/kubernetes/etcd/quick-runbook.adoc"
+              },
+              "icon": "lucide-file",
+              "title": "quick-runbook"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "eb9262b5060dfb8d",
+    "type": "split",
+    "children": [
+      {
+        "id": "81bbb845a4ba7a51",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8c1464191d168f93",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "88bdc9b11d7382ae",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "7e49314c27ba3235",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 394.5
+  },
+  "right": {
+    "id": "ae8ffecf2e599031",
+    "type": "split",
+    "children": [
+      {
+        "id": "eb3d79214ea1d0a7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "237ed65df845cfd0",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "cloud-native/container/containerd/README.adoc",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for README"
+            }
+          },
+          {
+            "id": "c27f38812bf41106",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "9cf89f993bff0f22",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "2b2339bce590d506",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "cloud-native/kubernetes/etcd/quick-runbook.adoc",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of quick-runbook"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "publish:Publish changes...": false,
+      "github-sync:Sync with Remote": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "asciidoctor-editor:New asciidoc file": false
+    }
+  },
+  "active": "b87bb9afc12f80da",
+  "lastOpenFiles": [
+    "cloud-native/container/containerd/README.adoc",
+    "cloud-native/kubernetes/etcd/quick-runbook.adoc",
+    "cloud-native/kubernetes/etcd",
+    "cloud-native/kubernetes/kubernetes.drawio",
+    "cloud-native/images/containerd-architecture.png",
+    "cloud-native/container/docker/cgroups/README.adoc",
+    "cloud-native/container/docker/cheat-sheet.adoc",
+    "cloud-native/container/docker/docker-on-mac.adoc",
+    "cloud-native/container/docker/README.adoc",
+    "cloud-native/container/docker/rootfs.adoc",
+    "cloud-native/container/oci/README.adoc",
+    "about-asciidoc/README.adoc",
+    "cloud-native/images/container-ecosystem-docker.drawio.png",
+    "cloud-native/images/containerd-01.png",
+    "cloud-native/images/container-ecosystem.drawio.png",
+    "cloud-native/images/cni-overview.jpg",
+    "cloud-native/images/cni-overview 1.jpg",
+    "Untitled.md"
+  ]
+}

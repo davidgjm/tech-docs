@@ -10,14 +10,14 @@
 
 == Different terms (OCI,CRI,etc)
 
-image::container-ecosystem.drawio.png[]
+image::../images/container-ecosystem.drawio.png[]
 
 == Docker
 We have to start with Docker because it’s the most popular developer tool for working with containers. And for a lot of people, the name “Docker” itself is synonymous with the word “container”.
 
 Docker kick-started this whole revolution. Docker created a very ergonomic (nice-to-use) tool for working with containers – also called #docker#.
 
-image::container-ecosystem-docker.drawio.png[]
+image::../images/container-ecosystem-docker.drawio.png[]
 
 docker is designed to be installed on a workstation or server and comes with a bunch of tools to make it easy to build and run containers as a developer, or DevOps person.
 

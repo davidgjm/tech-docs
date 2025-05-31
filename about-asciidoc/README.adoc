@@ -9,6 +9,27 @@
 * https://blog.mrhaki.com/2014/06/awesome-asciidoc-use-inline-icons.html[Awesome Asciidoctor: Use Inline Icons]
 ****
 
+== Embedding images
+
+. Use directive `:imagesdir:` in the document metadata to define the base directory of the images
+. Use image names directly in text
+
+=== Example
+
+[source, asciidoc]
+----
+= document title
+:toc:
+:imagesdir: ./images
+
+
+This is the introduction text and now I need the image below for illustration
+
+image::ops-model_02.png[]
+
+----
+
+
 == Styling tips & tricks
 
 === Numbered list continuation

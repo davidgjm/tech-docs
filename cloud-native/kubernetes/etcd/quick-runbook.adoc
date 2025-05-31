@@ -1,0 +1,29 @@
+= Access etcd for kubernetes information
+:toc:
+
+NOTE: The default prefix for kubernetes data is `registry`
+
+
+
+.etcd commands for getting Kubernetes configuration information
+[cols="2,4m,4m"]
+|===
+|User case |Command| Example
+
+|List all keys
+m|etcdctl --endpoints=$ENDPOINTS $ETCD_OPTIONS get / --prefix --keys-only
+|
+
+
+|Get cluster service IP range
+|etcdctl --endpoints=$ENDPOINTS $ETCD_OPTIONS get -w protobuf /registry/ranges/serviceips
+|/registry/ranges/serviceips
+k8s
+
+v1RangeAllocation"
+
+"*28B
+     10.32.0.0/24"
+
+     
+|===
