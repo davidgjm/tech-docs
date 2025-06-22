@@ -25,10 +25,10 @@
             "state": {
               "type": "asciidoc-editor-view",
               "state": {
-                "file": "cloud-native/kubernetes/etcd/quick-runbook.adoc"
+                "file": "cloud-native/kubernetes/README.adoc"
               },
               "icon": "lucide-file",
-              "title": "quick-runbook"
+              "title": "README"
             }
           }
         ],
@@ -152,13 +152,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "cloud-native/kubernetes/etcd/quick-runbook.adoc",
+                "file": "cloud-native/kubernetes/README.adoc",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of quick-runbook"
+              "title": "Outline of README"
             }
           }
         ],
@@ -183,8 +183,11 @@
   },
   "active": "b87bb9afc12f80da",
   "lastOpenFiles": [
-    "cloud-native/container/containerd/README.adoc",
     "cloud-native/kubernetes/etcd/quick-runbook.adoc",
+    "cloud-native/kubernetes/architecture/authentication.adoc",
+    "cloud-native/kubernetes/architecture/authentication.md",
+    "cloud-native/kubernetes/architecture",
+    "cloud-native/container/containerd/README.adoc",
     "cloud-native/kubernetes/etcd",
     "cloud-native/kubernetes/kubernetes.drawio",
     "cloud-native/images/containerd-architecture.png",
@@ -192,9 +195,6 @@
     "cloud-native/container/docker/cheat-sheet.adoc",
     "cloud-native/container/docker/docker-on-mac.adoc",
     "cloud-native/container/docker/README.adoc",
-    "cloud-native/container/docker/rootfs.adoc",
-    "cloud-native/container/oci/README.adoc",
-    "about-asciidoc/README.adoc",
     "cloud-native/images/container-ecosystem-docker.drawio.png",
     "cloud-native/images/containerd-01.png",
     "cloud-native/images/container-ecosystem.drawio.png",
