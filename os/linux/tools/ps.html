@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Process management with ps</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Process management with <code>ps</code></h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_print_process_tree">Print process tree</a></li>
+<li><a href="#_print_thread_information_for_a_process">Print thread information for a process</a></li>
+<li><a href="#_check_a_process_is_running_on_which_cpu">Check a process is running on which CPU</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_print_process_tree">Print process tree</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">ps axjf</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">ps -ejH</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_print_thread_information_for_a_process">Print thread information for a process</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">ps -Lf -p &lt;pid&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">ps axms</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_check_a_process_is_running_on_which_cpu">Check a process is running on which CPU</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The output format can be customized through <code>-o</code> argument. The following command can be used to display which CPU the process is running on</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">ps -eo pid,args,psr</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>arguments：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>pid - process id</p>
+</li>
+<li>
+<p>args - command line arguments for the process when executed</p>
+</li>
+<li>
+<p>psr - CPU allocated to the process</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

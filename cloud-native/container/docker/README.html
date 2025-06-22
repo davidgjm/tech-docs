@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>docker materials</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>docker materials</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_cgroups">Cgroups</a></li>
+<li><a href="#_union_file_systems">Union File Systems</a></li>
+<li><a href="#_container_format">Container Format</a></li>
+<li><a href="#_security">Security</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Readings</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://medium.com/@BeNitinAgarwal/understanding-the-docker-internals-7ccb052ce9fe">Understanding the Docker Internals</a></p>
+</li>
+<li>
+<p><a href="https://medium.com/@kasunmaduraeng/docker-namespace-and-cgroups-dece27c209c7">Docker Namespace and Cgroups</a></p>
+</li>
+<li>
+<p><a href="https://opensource.com/article/19/10/namespaces-and-containers-linux">Demystifying namespaces and containers in Linux</a></p>
+</li>
+<li>
+<p><a href="https://faun.pub/docker-containerd-standalone-runtimes-heres-what-you-should-know-b834ef155426" class="bare">https://faun.pub/docker-containerd-standalone-runtimes-heres-what-you-should-know-b834ef155426</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cgroups">Cgroups</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Docker also makes use of kernel control groups for resource allocation and isolation. A cgroup limits an application to a specific set of resources. Control groups allow Docker Engine to share available hardware resources to containers and optionally enforce limits and constraints.</p>
+</div>
+<div class="paragraph">
+<p>Docker Engine uses the following cgroups:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Memory cgroup</strong> for managing accounting, limits and notifications.</p>
+</li>
+<li>
+<p><strong>HugeTBL cgroup</strong> for accounting usage of huge pages by process group.</p>
+</li>
+<li>
+<p><strong>CPU group</strong> for managing user / system CPU time and usage.</p>
+</li>
+<li>
+<p><strong>CPUSet cgroup</strong> for binding a group to specific CPU. Useful for real time applications and NUMA systems with localized memory per CPU.</p>
+</li>
+<li>
+<p><strong>BlkIO cgroup</strong> for measuring &amp; limiting amount of blckIO by group.</p>
+</li>
+<li>
+<p><strong>net_cls</strong> and <strong>net_prio</strong> cgroup for tagging the traffic control.</p>
+</li>
+<li>
+<p><strong>Devices cgroup</strong> for reading / writing access devices.</p>
+</li>
+<li>
+<p><strong>Freezer cgroup</strong> for freezing a group. Useful for cluster batch scheduling, process migration and debugging without affecting prtrace.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://miro.medium.com/max/700/1*gVgi1TEvAF4ufVDr-LK4ZA.png" alt="1*gVgi1TEvAF4ufVDr LK4ZA">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_union_file_systems">Union File Systems</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Union file systems operate by creating layers, making them very lightweight and fast. Docker Engine uses UnionFS to provide the building blocks for containers. Docker Engine can use multiple UnionFS variants, including AUFS, btrfs, vfs, and devicemapper.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://miro.medium.com/max/700/1*EFssPAwoLd67AgbafmTx5A.png" alt="1*EFssPAwoLd67AgbafmTx5A">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_container_format">Container Format</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Docker Engine combines the namespaces, control groups and UnionFS into a wrapper called a container format. The default container format is <em>libcontainer</em>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_security">Security</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Docker Engine makes use of AppArmor, Seccomp, Capabilities kernel features for security purposes.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>AppArmor</strong> allows to restrict programs capabilities with per-program profiles.</p>
+</li>
+<li>
+<p><strong>Seccomp</strong> used for filtering syscalls issued by a program.</p>
+</li>
+<li>
+<p><strong>Capabilties</strong> for performing permission checks.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

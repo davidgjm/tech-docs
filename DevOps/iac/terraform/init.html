@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Terraform init</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Terraform <code>init</code></h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_remote_state_azure">Remote state - Azure</a>
+<ul class="sectlevel2">
+<li><a href="#_references">References</a></li>
+<li><a href="#_environment_setup">Environment setup</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_remote_state_azure">Remote state - Azure</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_references">References</h3>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.terraform.io/language/settings/backends/azurerm" class="bare">https://www.terraform.io/language/settings/backends/azurerm</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash" class="bare">https://docs.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli" class="bare">https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli</a></p>
+</li>
+<li>
+<p><a href="https://www.terraform.io/language/state/backends" class="bare">https://www.terraform.io/language/state/backends</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_environment_setup">Environment setup</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c">#!/usr/bin/env bash</span>
+
+<span class="nv">RESOURCE_GROUP_NAME</span><span class="o">=</span>your_resource_group
+<span class="nv">STORAGE_ACCOUNT_NAME</span><span class="o">=</span>tfstate
+<span class="nv">CONTAINER_NAME</span><span class="o">=</span>state
+<span class="nv">STATE_FILE_NAME</span><span class="o">=</span>terraform.tfstate
+
+<span class="nb">export </span><span class="nv">ARM_TENANT_ID</span><span class="o">=</span><span class="k">${</span><span class="nv">AZURE_TENANT_ID</span><span class="k">}</span>
+<span class="nb">export </span><span class="nv">ARM_SUBSCRIPTION_ID</span><span class="o">=</span><span class="k">${</span><span class="nv">AZURE_SUBSCRIPTION_ID</span><span class="k">}</span>
+
+<span class="nb">echo</span> <span class="s2">"Getting access key for storage account </span><span class="k">${</span><span class="nv">STORAGE_ACCOUNT_NAME</span><span class="k">}</span><span class="s2">"</span>
+<span class="nv">ACCOUNT_KEY</span><span class="o">=</span><span class="si">$(</span>az storage account keys list <span class="nt">--resource-group</span> <span class="nv">$RESOURCE_GROUP_NAME</span> <span class="nt">--account-name</span> <span class="nv">$STORAGE_ACCOUNT_NAME</span> <span class="nt">--query</span> <span class="s1">'[0].value'</span> <span class="nt">-o</span> tsv<span class="si">)</span>
+<span class="nb">export </span><span class="nv">ARM_ACCESS_KEY</span><span class="o">=</span><span class="nv">$ACCOUNT_KEY</span>
+
+<span class="nb">echo</span> <span class="s2">"Initializing terraform backend"</span>
+terraform init <span class="se">\</span>
+<span class="nt">-backend</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+<span class="nt">-backend-config</span><span class="o">=</span><span class="nv">storage_account_name</span><span class="o">=</span><span class="k">${</span><span class="nv">STORAGE_ACCOUNT_NAME</span><span class="k">}</span> <span class="se">\</span>
+<span class="nt">-backend-config</span><span class="o">=</span><span class="nv">container_name</span><span class="o">=</span><span class="k">${</span><span class="nv">CONTAINER_NAME</span><span class="k">}</span> <span class="se">\</span>
+<span class="nt">-backend-config</span><span class="o">=</span><span class="nv">resource_group_name</span><span class="o">=</span><span class="k">${</span><span class="nv">RESOURCE_GROUP_NAME</span><span class="k">}</span> <span class="se">\</span>
+<span class="nt">-backend-config</span><span class="o">=</span><span class="nv">key</span><span class="o">=</span><span class="k">${</span><span class="nv">STATE_FILE_NAME</span><span class="k">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

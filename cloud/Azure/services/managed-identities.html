@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Managed Identities</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body id="_managed_identities" class="article toc2 toc-left">
+<div id="header">
+<h1>Managed Identities</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_work_with_azure_cli">Work with Azure CLI</a>
+<ul class="sectlevel2">
+<li><a href="#_listing_identities">Listing identities</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_work_with_azure_cli">Work with Azure CLI</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_listing_identities">Listing identities</h3>
+<div class="paragraph">
+<p>The following command lists all managed identities for the specified resource group</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">az identity list -g rg-aks-nodes-map-westeurope</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Sample output</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">[
+  {
+    "clientId": "fc3e52fc-b482-4124-8597-49b147d867e8",
+    "id": "/subscriptions/98ce2f4e-c279-42ee-bc8d-cf65b81d8fc4/resourcegroups/rg-aks-nodes-map-westeurope/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurepolicy-aks-map-westeurope",
+    "location": "westeurope",
+    "name": "azurepolicy-aks-map-westeurope",
+    "principalId": "60f5d122-8691-484d-adba-ec8433c26878",
+    "resourceGroup": "rg-aks-nodes-map-westeurope",
+    "tags": {},
+    "tenantId": "2add9d3d-b354-49e2-a68d-ee84001ffd34",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  },
+  {
+    "clientId": "fd600dab-64cb-43b0-a317-70deab1f6bd7",
+    "id": "/subscriptions/98ce2f4e-c279-42ee-bc8d-cf65b81d8fc4/resourcegroups/rg-aks-nodes-map-westeurope/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-map-westeurope-agentpool",
+    "location": "westeurope",
+    "name": "aks-map-westeurope-agentpool",
+    "principalId": "2a92a16c-9eaf-4d6b-a13e-4489fafd7225",
+    "resourceGroup": "rg-aks-nodes-map-westeurope",
+    "tags": {},
+    "tenantId": "2add9d3d-b354-49e2-a68d-ee84001ffd34",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  },
+  {
+    "clientId": "281560cf-6725-4760-b34d-19819ec62b9f",
+    "id": "/subscriptions/98ce2f4e-c279-42ee-bc8d-cf65b81d8fc4/resourcegroups/rg-aks-nodes-map-westeurope/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-aks-map-westeurope",
+    "location": "westeurope",
+    "name": "azurekeyvaultsecretsprovider-aks-map-westeurope",
+    "principalId": "6f6c4e19-5622-4c32-b3e1-f3fc3d91b379",
+    "resourceGroup": "rg-aks-nodes-map-westeurope",
+    "tags": {},
+    "tenantId": "2add9d3d-b354-49e2-a68d-ee84001ffd34",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  }
+]</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

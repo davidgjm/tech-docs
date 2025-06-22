@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>SASL</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>SASL</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_overview">Overview</a>
+<ul class="sectlevel2">
+<li><a href="#_references">References</a></li>
+</ul>
+</li>
+<li><a href="#_sasl_specification">SASL Specification</a></li>
+<li><a href="#_sasl_mechanisms">SASL mechanisms</a></li>
+<li><a href="#_sasl_aware_application_protocols">SASL-aware application protocols</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_overview">Overview</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_references">References</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer" class="bare">https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer</a></p>
+</li>
+<li>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc4422" class="bare">https://datatracker.ietf.org/doc/html/rfc4422</a></p>
+</li>
+<li>
+<p><a href="https://www.gnu.org/software/gsasl/manual/html_node/index.html" class="bare">https://www.gnu.org/software/gsasl/manual/html_node/index.html</a></p>
+</li>
+<li>
+<p><a href="https://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml" class="bare">https://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml</a></p>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/cd/E23824_01/html/819-2145/sasl.intro.20.html" class="bare">https://docs.oracle.com/cd/E23824_01/html/819-2145/sasl.intro.20.html</a></p>
+</li>
+<li>
+<p><a href="https://www.rfc-editor.org/rfc/rfc4752.html" class="bare">https://www.rfc-editor.org/rfc/rfc4752.html</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sasl_specification">SASL Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>John Gardiner Myers wrote the original SASL specification (RFC 2222) in 1997 while at <a href="https://en.wikipedia.org/wiki/Carnegie_Mellon_University">Carnegie Mellon University</a>.
+In 2006, that document was replaced by RFC 4422 authored by Alexey Melnikov and Kurt D.
+Zeilenga.
+SASL, as defined by RFC 4422 is an <a href="https://en.wikipedia.org/wiki/IETF">IETF</a> <em>Standard Track</em> protocol and is, as of 2006, a <em><a href="https://en.wikipedia.org/wiki/Internet_Standard">Proposed Standard</a></em>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sasl_mechanisms">SASL mechanisms</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A SASL mechanism implements a series of challenges and responses.
+Defined SASL mechanisms[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-1">1]</a> include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>EXTERNAL, where authentication is implicit in the context (e.g., for protocols already using <a href="https://en.wikipedia.org/wiki/IPsec">IPsec</a> or <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a>)</p>
+</li>
+<li>
+<p>ANONYMOUS, for unauthenticated guest access</p>
+</li>
+<li>
+<p>PLAIN, a simple <a href="https://en.wikipedia.org/wiki/Cleartext">cleartext</a> <a href="https://en.wikipedia.org/wiki/Password">password</a> mechanism, defined in RFC 4616</p>
+</li>
+<li>
+<p>OTP, a <a href="https://en.wikipedia.org/wiki/One-time_password">one-time password</a> mechanism.
+Obsoletes the SKEY mechanism.</p>
+</li>
+<li>
+<p>SKEY, an <a href="https://en.wikipedia.org/wiki/S/KEY">S/KEY</a> mechanism.</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/CRAM-MD5">CRAM-MD5</a>, a simple challenge-response scheme based on <a href="https://en.wikipedia.org/wiki/HMAC">HMAC-MD5</a>.</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Digest_access_authentication">DIGEST-MD5</a> <em>(historic[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-2">2]</a>)</em>, partially <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> Digest compatible challenge-response scheme based upon MD5.
+DIGEST-MD5 offered a data security layer.</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism">SCRAM</a> (RFC 5802), modern challenge-response scheme based mechanism with channel binding support</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/NTLM">NTLM</a>, an NT LAN Manager authentication mechanism</p>
+</li>
+<li>
+<p>GS2- family of mechanisms supports arbitrary <a href="https://en.wikipedia.org/wiki/GSS-API">GSS-API</a> mechanisms in SASL.[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-3">3]</a> It is now standardized as RFC 5801.</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/GSSAPI">GSSAPI</a>, for <a href="https://en.wikipedia.org/wiki/Kerberos_protocol">Kerberos</a> V5 authentication via the <a href="https://en.wikipedia.org/wiki/Generic_Security_Services_Application_Program_Interface">GSSAPI</a>.
+GSSAPI offers a data-security layer.</p>
+</li>
+<li>
+<p>BROWSERID-AES128, for <a href="https://en.wikipedia.org/wiki/Mozilla_Persona">Mozilla Persona</a> authentication[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-4">4]</a></p>
+</li>
+<li>
+<p>EAP-AES128, for GSS EAP authentication[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-5">5]</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/MSN_Chat#GateKeeper_and_GateKeeperPassport">GateKeeper</a> (&amp; <a href="https://en.wikipedia.org/wiki/MSN_Chat#GateKeeper_and_GateKeeperPassport">GateKeeperPassport</a>), a challenge-response mechanism developed by <a href="https://en.wikipedia.org/wiki/Microsoft">Microsoft</a> for <a href="https://en.wikipedia.org/wiki/MSN_Chat">MSN Chat</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/OAuth#OAuth_2.0">OAUTHBEARER</a>, <a href="https://en.wikipedia.org/wiki/OAuth#OAuth_2.0">OAuth 2.0</a> bearer tokens (RFC 6750), communicated through TLS[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-rfc7628-6">6]</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/OAuth">OAUTH10A</a>, <a href="https://en.wikipedia.org/wiki/OAuth">OAuth</a> 1.0a message-authentication-code tokens (RFC 5849, Section 3.4.2)[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-rfc7628-6">6]</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sasl_aware_application_protocols">SASL-aware application protocols</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Application protocols define their representation of SASL exchanges with a <em>profile</em>.
+A protocol has a <em>service name</em> such as "ldap" in a registry shared with <a href="https://en.wikipedia.org/wiki/Generic_Security_Services_Application_Program_Interface">GSSAPI</a> and <a href="https://en.wikipedia.org/wiki/Kerberos_protocol">Kerberos</a>.[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-7">7]</a></p>
+</div>
+<div class="paragraph">
+<p>As of 2012 protocols currently supporting SASL include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Application_Configuration_Access_Protocol">Application Configuration Access Protocol</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol">Advanced Message Queuing Protocol</a> (AMQP)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Blocks_Extensible_Exchange_Protocol">Blocks Extensible Exchange Protocol</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">Internet Message Access Protocol</a> (IMAP)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/IMSP">Internet Message Support Protocol</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">Internet Relay Chat</a> (IRC) (with <a href="https://en.wikipedia.org/wiki/IRCX">IRCX</a> or the <a href="http://ircv3.net/specs/extensions/sasl-3.1.html">IRCv3 SASL extension</a>)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">Lightweight Directory Access Protocol</a> (LDAP)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Libvirt">libvirt</a></p>
+</li>
+<li>
+<p>ManageSieve (RFC 5804)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Memcached">memcached</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Post_Office_Protocol">Post Office Protocol</a> (POP)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/RFB_protocol">Remote framebuffer protocol</a>[<a href="https://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer#cite_note-8">8]</a> used by <a href="https://en.wikipedia.org/wiki/VNC">VNC</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol">Simple Mail Transfer Protocol</a> (SMTP)</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Apache_Subversion">Subversion</a> svn protocol</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Extensible_Messaging_and_Presence_Protocol">Extensible Messaging and Presence Protocol</a> (XMPP)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

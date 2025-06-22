@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Availability monitoring</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body id="_availability_monitoring" class="article toc2 toc-left">
+<div id="header">
+<h1>Availability monitoring</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_requirements_for_availability_monitoring">Requirements for availability monitoring</a></li>
+<li><a href="#_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</a></li>
+<li><a href="#_analyzing_availability_data">Analyzing availability data</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A truly healthy system requires that the components and subsystems that compose the system are available. Availability monitoring is closely related to health monitoring. But whereas health monitoring provides an immediate view of the current health of the system, <mark>availability monitoring is concerned with tracking the availability of the system and its components to generate statistics about the uptime of the system.</mark></p>
+</div>
+<div class="paragraph">
+<p>In many systems, some components (such as a database) are configured with built-in redundancy to permit rapid failover in the event of a serious fault or loss of connectivity. Ideally, users should not be aware that such a failure has occurred. But from an availability monitoring perspective, it&#8217;s necessary to gather as much information as possible about such failures to determine the cause and take corrective actions to prevent them from recurring.</p>
+</div>
+<div class="paragraph">
+<p>The data that&#8217;s required to track availability might depend on a number of lower-level factors. Many of these factors might be specific to the application, system, and environment. An effective monitoring system captures the availability data that corresponds to these low-level factors and then aggregates them to give an overall picture of the system. For example, in an e-commerce system, the business functionality that enables a customer to place orders might depend on the repository where order details are stored and the payment system that handles the monetary transactions for paying for these orders. The availability of the order-placement part of the system is therefore a function of the availability of the repository and the payment subsystem.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements_for_availability_monitoring">Requirements for availability monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An operator should also be able to view the historical availability of each system and subsystem, and use this information to spot any trends that might cause one or more subsystems to periodically fail. (Do services start to fail at a particular time of day that corresponds to peak processing hours?)</p>
+</div>
+<div class="paragraph">
+<p>A monitoring solution should provide an immediate and historical view of the availability or unavailability of each subsystem. It should also be capable of quickly alerting an operator when one or more services fail or when users can&#8217;t connect to services. This is a matter of not only monitoring each service, but also examining the actions that each user performs if these actions fail when they attempt to communicate with a service. To some extent, a degree of connectivity failure is normal and might be due to transient errors. But it might be useful to allow the system to raise an alert for the number of connectivity failures to a specified subsystem that occur during a specific period.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As with health monitoring, the raw data that&#8217;s required to support availability monitoring can be generated as a result of synthetic user monitoring and logging any exceptions, faults, and warnings that might occur. In addition, availability data can be obtained from performing endpoint monitoring. The application can expose one or more health endpoints, each testing access to a functional area within the system. The monitoring system can ping each endpoint by following a defined schedule and collect the results (success or fail).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+All timeouts, network connectivity failures, and connection retry attempts must be recorded. All data should be timestamped.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzing_availability_data">Analyzing availability data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The instrumentation data must be aggregated and correlated to support the following types of analysis:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The immediate availability of the system and subsystems.</p>
+</li>
+<li>
+<p>The availability failure rates of the system and subsystems. Ideally, an operator should be able to correlate failures with specific activities: what was happening when the system failed?</p>
+</li>
+<li>
+<p>A historical view of failure rates of the system or any subsystems across any specified period, and the load on the system (number of user requests, for example) when a failure occurred.</p>
+</li>
+<li>
+<p>The reasons for unavailability of the system or any subsystems. For example, the reasons might be service not running, connectivity lost, connected but timing out, and connected but returning errors.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can calculate the percentage availability of a service over a period of time by using the following formula:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="console"><span class="go">%Availability =  ((Total Time – Total Downtime) / Total Time ) * 100</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is useful for SLA purposes. (<a href="#_sla-monitoring">[_sla-monitoring]</a> is described in more detail later in this guidance.) The definition of <em>downtime</em> depends on the service. For example, Visual Studio Team Services Build Service defines downtime as the period (total accumulated minutes) during which Build Service is unavailable. A minute is considered unavailable if all continuous HTTP requests to Build Service to perform customer-initiated operations throughout the minute either result in an error code or do not return a response.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

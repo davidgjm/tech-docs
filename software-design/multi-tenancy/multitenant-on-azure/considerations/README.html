@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Architectural considerations for a multitenant solution</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Architectural considerations for a multitenant solution</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_next_steps">Next steps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>When you&#8217;re considering a multitenant architecture, there are several decisions you need to make and elements you need to consider.</p>
+</div>
+<div class="paragraph">
+<p>In a multitenant architecture, you share some or all of your resources between tenants. This process means that a multitenant architecture can give you cost and operational efficiency. However, multitenancy introduces complexities, including the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>How do you define what a tenant is, for your specific solution? Does a tenant correspond to a customer, a user, or a group of users (like a team)?</p>
+</li>
+<li>
+<p>How will you deploy your infrastructure to support multitenancy, and how much isolation will you have between tenants?</p>
+</li>
+<li>
+<p>What commercial pricing models will your solution offer, and how will your pricing models affect your multitenancy requirements?</p>
+</li>
+<li>
+<p>What level of service do you need to provide to your tenants? Consider performance, resiliency, security, and compliance requirements, like data residency.</p>
+</li>
+<li>
+<p>How do you plan to grow your business or solution, and will it scale to the number of tenants you expect?</p>
+</li>
+<li>
+<p>Do any of your tenants have unusual or special requirements? For example, does your biggest customer need higher performance or stronger guarantees than others?</p>
+</li>
+<li>
+<p>How will you monitor, manage, automate, scale, and govern your Azure environment, and how will multitenancy impact this?</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Whatever your architecture, it&#8217;s essential that you have a clear understanding of your customers' or tenants' requirements. If you have made sales commitments to customers, or if you have contractual obligations or compliance requirements to meet, then you need to know what those requirements are, when you architect your solution. But equally, your customers may have implicit expectations about how things should work, or how you should behave, which could affect the way you design a multitenant solution.</p>
+</div>
+<div class="paragraph">
+<p>As an example, imagine you&#8217;re building a multitenant solution that you sell to businesses in the financial services industry. Your customers have very strict security requirements, and they need you to provide a comprehensive list of every domain name that your solution uses, so they can add it to their firewall&#8217;s allowlist. This requirement affects the Azure services you use and the level of isolation that you have to provide between your tenants. They also require that their solution has a minimum level of resiliency. There may be many similar expectations, both explicit and implicit, that you need to consider across your whole solution.</p>
+</div>
+<div class="paragraph">
+<p>In this section, we outline the considerations that you should give, the requirements you should elicit, and some of the tradeoffs you need to make, when you are planning a multitenant architecture.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Refer to the following sections for deep dive considerations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="tenancy-models.html">tenancy models</a></p>
+</li>
+<li>
+<p><a href="tenant-lifecycle.html">tenant lifecycle</a></p>
+</li>
+<li>
+<p><a href="pricing-models.html">pricing models</a></p>
+</li>
+<li>
+<p><a href="measure-consumption.html">Measure consumption</a></p>
+</li>
+<li>
+<p><a href="updates.html">Deploy updates</a></p>
+</li>
+<li>
+<p><a href="map-requests.html">Map requests to tenants</a></p>
+</li>
+<li>
+<p><a href="domain-names.html">Domain names</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

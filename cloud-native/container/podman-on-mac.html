@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Docker Desktop replacement on MacOS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1><em>Docker Desktop</em> replacement on MacOS</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_hyberkit_virtualization_solution_for_macos">hyberkit virtualization solution for MacOS</a></li>
+<li><a href="#_installing_multipass">Installing multipass</a>
+<ul class="sectlevel2">
+<li><a href="#_find_available_images">Find available images</a></li>
+<li><a href="#_lauch_an_ubuntu_image">Lauch an Ubuntu image</a></li>
+</ul>
+</li>
+<li><a href="#_install_and_setup_podman">Install and setup podman</a>
+<ul class="sectlevel2">
+<li><a href="#_installing_on_macos">Installing on MacOS</a></li>
+<li><a href="#_installing_on_ubuntu">Installing on Ubuntu</a></li>
+<li><a href="#_configuring_podman_to_use_vm_from_multipass">Configuring podman to use vm from multipass</a></li>
+</ul>
+</li>
+<li><a href="#_configuring_environment_for_minikube">Configuring environment for minikube</a>
+<ul class="sectlevel2">
+<li><a href="#_starting_minikube">Starting minikube</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_hyberkit_virtualization_solution_for_macos">hyberkit virtualization solution for MacOS</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installing_multipass">Installing multipass</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">brew install multipass</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_find_available_images">Find available images</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">s0001321@mC02FG16BML85 ~ % multipass find
+Image                       Aliases           Version          Description
+18.04                       bionic            20211129         Ubuntu 18.04 LTS
+20.04                       focal,lts         20211129         Ubuntu 20.04 LTS
+21.04                       hirsute           20211130         Ubuntu 21.04
+21.10                       impish            20211209         Ubuntu 21.10
+anbox-cloud-appliance                         latest           Anbox Cloud Appliance
+minikube                                      latest           minikube is local Kubernetes</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lauch_an_ubuntu_image">Lauch an Ubuntu image</h3>
+<div class="sect3">
+<h4 id="_launch_an_ubuntu_20_04_instance">Launch an Ubuntu 20.04 instance</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">multipass launch --name ubuntu 20.04</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_list_created_instances">List created instances</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">s0001321@mC02FG16BML85 ~ % multipass list
+Name                    State             IPv4             Image
+minikube                Running           192.168.64.8     Ubuntu 20.04 LTS
+sandbox                 Stopped           --               Ubuntu 20.04 LTS</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_install_and_setup_podman">Install and setup podman</h2>
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.atlantic.net/dedicated-server-hosting/how-to-install-and-use-podman-on-ubuntu-20-04/" class="bare">https://www.atlantic.net/dedicated-server-hosting/how-to-install-and-use-podman-on-ubuntu-20-04/</a></p>
+</li>
+<li>
+<p><a href="https://podman.io/getting-started/installation" class="bare">https://podman.io/getting-started/installation</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It is used to present information related to the main content.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installing_on_macos">Installing on MacOS</h3>
+<div class="paragraph">
+<p>Podman is a tool for running Linux containers. You can do this from a MacOS desktop as long as you have access to a linux box either running inside of a VM on the host, or available via the network. Podman includes a command, podman machine that automatically manages VM’s.</p>
+</div>
+<div class="paragraph">
+<p>The Mac client is available through Homebrew:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">brew install podman</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can then verify the installation information using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">podman info</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installing_on_ubuntu">Installing on Ubuntu</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The podman package is available in the official repositories for Ubuntu 20.10 and newer.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_ubuntu_20_10_and_newer">Ubuntu 20.10 and newer</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">sudo apt-get -y update
+sudo apt-get -y install podman</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ubuntu_earlier_versions">Ubuntu earlier versions</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">. /etc/os-release
+echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | sudo apt-key add -
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get -y install podman</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can then verify the installation information using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">podman info</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuring_podman_to_use_vm_from_multipass">Configuring podman to use vm from multipass</h3>
+<div class="sect3">
+<h4 id="_setup_podman_in_multipass_vm_ubuntu">Setup podman in multipass vm (ubuntu)</h4>
+<div class="paragraph">
+<p>See previous section.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_setup_podman_remote_connection">Setup podman remote connection</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuring_environment_for_minikube">Configuring environment for minikube</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://minikube.sigs.k8s.io/docs/drivers/ssh/" class="bare">https://minikube.sigs.k8s.io/docs/drivers/ssh/</a></p>
+</li>
+<li>
+<p><a href="https://computingforgeeks.com/install-cri-o-container-runtime-on-ubuntu-linux/" class="bare">https://computingforgeeks.com/install-cri-o-container-runtime-on-ubuntu-linux/</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_starting_minikube">Starting minikube</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">minikube start --driver=ssh --ssh-ip-address=192.168.64.9 --ssh-key=~/.ssh/id_rsa --ssh-user=root</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

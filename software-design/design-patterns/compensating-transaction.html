@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Compensating Transaction pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Compensating Transaction pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_related_resources">Related resources</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://vasters.com/archive/Sagas.html">Sagas strategy, Clemens Vasters' blog</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Undo the work performed by a series of steps, which together define an eventually consistent operation, if one or more of the steps fail. Operations that follow the eventual consistency model are commonly found in cloud-hosted applications that implement complex business processes and workflows.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Applications running in the cloud frequently modify data. This data might be spread across various data sources held in different geographic locations. To avoid contention and improve performance in a distributed environment, an application shouldn&#8217;t try to provide strong transactional consistency. Rather, the application should implement eventual consistency. In this model, a typical business operation consists of a series of separate steps. While these steps are being performed, the overall view of the system state might be inconsistent, but when the operation has completed and all of the steps have been executed the system should become consistent again.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The <a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589800(v=pandp.10)">Data Consistency Primer</a> provides information about why distributed transactions don&#8217;t scale well, and the principles of the eventual consistency model.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A challenge in the eventual consistency model is how to handle a step that has failed. In this case, it might be necessary to undo all of the work completed by the previous steps in the operation. However, the data can&#8217;t simply be rolled back because other concurrent instances of the application might have changed it. Even in cases where the data hasn&#8217;t been changed by a concurrent instance, undoing a step might not simply be a matter of restoring the original state. It might be necessary to apply various business-specific rules (see the travel website described in the Example section).</p>
+</div>
+<div class="paragraph">
+<p>If an operation that implements eventual consistency spans several heterogeneous data stores, undoing the steps in the operation will require visiting each data store in turn. The work performed in every data store must be undone reliably to prevent the system from remaining inconsistent.</p>
+</div>
+<div class="paragraph">
+<p>Not all data affected by an operation that implements eventual consistency might be held in a database. In a service-oriented architecture (SOA) environment, an operation could invoke an action in a service, and cause a change in the state held by that service. To undo the operation, this state change must also be undone. This process can involve invoking the service again and performing another action that reverses the effects of the first.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The solution is to implement a compensating transaction. The steps in a compensating transaction must undo the effects of the steps in the original operation. A compensating transaction might not be able to simply replace the current state with the state the system was in at the start of the operation because this approach could overwrite changes made by other concurrent instances of an application. Instead, it must be an intelligent process that takes into account any work done by concurrent instances. This process will usually be application-specific, driven by the nature of the work performed by the original operation.</p>
+</div>
+<div class="paragraph">
+<p>A common approach is to use a workflow to implement an eventually consistent operation that requires compensation. As the original operation proceeds, the system records information about each step and how the work performed by that step can be undone. If the operation fails at any point, the workflow rewinds back through the steps it&#8217;s completed and performs the work that reverses each step. Note that a compensating transaction might not have to undo the work in the exact reverse order of the original operation, and it might be possible to perform some of the undo steps in parallel.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This approach is similar to the Sagas strategy discussed in <a href="https://vasters.com/archive/Sagas.html">Clemens Vasters' blog</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A compensating transaction is also an eventually consistent operation and it could also fail. The system should be able to resume the compensating transaction at the point of failure and continue. It might be necessary to repeat a step that&#8217;s failed, so the steps in a compensating transaction should be defined as idempotent commands. For more information, see <a href="idempotency-patterns.html">Idempotency Patterns</a> on Jonathan Oliver&#8217;s blog.</p>
+</div>
+<div class="paragraph">
+<p>In some cases it might not be possible to recover from a step that has failed except through manual intervention. In these situations, the system should raise an alert and provide as much information as possible about the reason for the failure.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the following points when deciding how to implement this pattern:</p>
+</div>
+<div class="paragraph">
+<p>It might not be easy to determine when a step in an operation that implements eventual consistency has failed. A step might not fail immediately, but instead could block. It might be necessary to implement some form of time-out mechanism.</p>
+</div>
+<div class="paragraph">
+<p>Compensation logic isn&#8217;t easily generalized. A compensating transaction is application-specific. It relies on the application having sufficient information to be able to undo the effects of each step in a failed operation.</p>
+</div>
+<div class="paragraph">
+<p>Define the steps in a compensating transaction as idempotent commands. Then the steps can be repeated if the compensating transaction itself fails.</p>
+</div>
+<div class="paragraph">
+<p>The infrastructure that handles the steps in the original operation, and the compensating transaction, must be resilient. It must not lose the information required to compensate for a failing step, and it must be able to reliably monitor the progress of the compensation logic.</p>
+</div>
+<div class="paragraph">
+<p>A compensating transaction doesn&#8217;t necessarily return the data in the system to the state it was in at the start of the original operation. Instead, it compensates for the work performed by the steps that completed successfully before the operation failed.</p>
+</div>
+<div class="paragraph">
+<p>The order of the steps in the compensating transaction doesn&#8217;t necessarily have to be the exact opposite of the steps in the original operation. For example, one data store might be more sensitive to inconsistencies than another, and so the steps in the compensating transaction that undo the changes to this store should occur first.</p>
+</div>
+<div class="paragraph">
+<p>Placing a short-term timeout-based lock on each resource that&#8217;s required to complete an operation, and obtaining these resources in advance, can help increase the likelihood that the overall activity will succeed. The work should be performed only after all the resources have been acquired. All actions must be finalized before the locks expire.</p>
+</div>
+<div class="paragraph">
+<p>Consider using retry logic that is more forgiving than usual to minimize failures that trigger a compensating transaction. If a step in an operation that implements eventual consistency fails, try handling the failure as a transient exception and repeat the step. Only stop the operation and initiate a compensating transaction if a step fails repeatedly or cannot be recovered.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Many of the challenges of implementing a compensating transaction are the same as those with implementing eventual consistency. For more information, see the section Considerations for Implementing Eventual Consistency in the <a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589800(v=pandp.10)">Data Consistency Primer</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern only for operations that must be undone if they fail. If possible, design solutions to avoid the complexity of requiring compensating transactions.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A travel website lets customers book itineraries. A single itinerary might comprise a series of flights and hotels. A customer traveling from Seattle to London and then on to Paris could perform the following steps when creating an itinerary:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Book a seat on flight F1 from Seattle to London.</p>
+</li>
+<li>
+<p>Book a seat on flight F2 from London to Paris.</p>
+</li>
+<li>
+<p>Book a seat on flight F3 from Paris to Seattle.</p>
+</li>
+<li>
+<p>Reserve a room at hotel H1 in London.</p>
+</li>
+<li>
+<p>Reserve a room at hotel H2 in Paris.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>These steps constitute an eventually consistent operation, although each step is a separate action. Therefore, in addition to performing these steps, the system must also record the counter operations necessary to undo each step in case the customer decides to cancel the itinerary. The steps necessary to perform the counter operations can then run as a compensating transaction.</p>
+</div>
+<div class="paragraph">
+<p>Notice that the steps in the compensating transaction might not be the exact opposite of the original steps, and the logic in each step in the compensating transaction must take into account any business-specific rules. For example, unbooking a seat on a flight might not entitle the customer to a complete refund of any money paid. The figure illustrates generating a compensating transaction to undo a long-running transaction to book a travel itinerary.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/compensating-transaction-diagram.png" alt="Generating a compensating transaction to undo a long-running transaction to book a travel itinerary">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It might be possible for the steps in the compensating transaction to be performed in parallel, depending on how you&#8217;ve designed the compensating logic for each step.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In many business solutions, failure of a single step doesn&#8217;t always necessitate rolling back the system by using a compensating transaction. For example, if—after having booked flights F1, F2, and F3 in the travel website scenario—the customer is unable to reserve a room at hotel H1, it&#8217;s preferable to offer the customer a room at a different hotel in the same city rather than canceling the flights. The customer can still decide to cancel (in which case the compensating transaction runs and undoes the bookings made on flights F1, F2, and F3), but this decision should be made by the customer rather than by the system.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_resources">Related resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following patterns and guidance might also be relevant when implementing this pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589800(v=pandp.10)">Data Consistency Primer</a>. The Compensating Transaction pattern is often used to undo operations that implement the eventual consistency model. This primer provides information on the benefits and tradeoffs of eventual consistency.</p>
+</li>
+<li>
+<p><a href="scheduler-agent-supervisor.html">Scheduler-Agent-Supervisor pattern</a>. Describes how to implement resilient systems that perform business operations that use distributed services and resources. Sometimes, it might be necessary to undo the work performed by an operation by using a compensating transaction.</p>
+</li>
+<li>
+<p><a href="retry.html">Retry pattern</a>. Compensating transactions can be expensive to perform, and it might be possible to minimize their use by implementing an effective policy of retrying failing operations by following the Retry pattern.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

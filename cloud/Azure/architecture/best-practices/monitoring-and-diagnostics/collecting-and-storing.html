@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Collecting and storing data</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Collecting and storing data</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_strategies_for_collecting_instrumentation_data">Strategies for collecting instrumentation data</a>
+<ul class="sectlevel2">
+<li><a href="#_pulling_and_pushing_instrumentation_data">Pulling and pushing instrumentation data</a></li>
+<li><a href="#_consolidating_instrumentation_data">Consolidating instrumentation data</a></li>
+<li><a href="#_storing_instrumentation_data">Storing instrumentation data</a></li>
+<li><a href="#_log_rotation_and_data_retention">Log rotation and data retention</a></li>
+<li><a href="#_down_sampling">Down-sampling</a></li>
+<li><a href="#_best_practices_for_collecting_and_storing_logging_information">Best practices for collecting and storing logging information</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The collection stage of the monitoring process is concerned with retrieving the information that instrumentation generates, formatting this data to make it easier for the analysis/diagnosis stage to consume, and saving the transformed data in reliable storage. The instrumentation data that you gather from different parts of a distributed system can be held in a variety of locations and with varying formats. For example, your application code might generate trace log files and generate application event log data, whereas performance counters that monitor key aspects of the infrastructure that your application uses can be captured through other technologies. Any third-party components and services that your application uses might provide instrumentation information in different formats, by using separate trace files, blob storage, or even a custom data store.</p>
+</div>
+<div class="paragraph">
+<p>Data collection is often performed through a collection service that can run autonomously from the application that generates the instrumentation data. Figure 2 illustrates an example of this architecture, highlighting the instrumentation data-collection subsystem.</p>
+</div>
+<div id="img-telemetryservice" class="imageblock">
+<div class="content">
+<img src="./images/telemetryservice.png" alt="telemetryservice">
+</div>
+<div class="title">Figure 1. Collecting instrumentation data.</div>
+</div>
+<div class="paragraph">
+<p>Note that this is a simplified view. The collection service is not necessarily a single process and might comprise many constituent parts running on different machines, as described in the following sections. Additionally, if the analysis of some telemetry data must be performed quickly (hot analysis, as described in the section <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/monitoring#supporting-hot-warm-and-cold-analysis">Supporting hot, warm, and cold analysis</a> later in this document), local components that operate outside the collection service might perform the analysis tasks immediately. Figure 2 depicts this situation for selected events. After analytical processing, the results can be sent directly to the visualization and alerting subsystem. Data that&#8217;s subjected to warm or cold analysis is held in storage while it awaits processing.</p>
+</div>
+<div class="paragraph">
+<p>For Azure applications and services, Azure Diagnostics provides one possible solution for capturing data. Azure Diagnostics gathers data from the following sources for each compute node, aggregates it, and then uploads it to Azure Storage:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IIS logs</p>
+</li>
+<li>
+<p>IIS Failed Request logs</p>
+</li>
+<li>
+<p>Windows event logs</p>
+</li>
+<li>
+<p>Performance counters</p>
+</li>
+<li>
+<p>Crash dumps</p>
+</li>
+<li>
+<p>Azure Diagnostics infrastructure logs</p>
+</li>
+<li>
+<p>Custom error logs</p>
+</li>
+<li>
+<p>.NET EventSource</p>
+</li>
+<li>
+<p>Manifest-based ETW</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For more information, see the article Azure: <a href="https://social.technet.microsoft.com/wiki/contents/articles/18146.windows-azure-telemetry-basics-and-troubleshooting.aspx">Telemetry Basics and Troubleshooting</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strategies_for_collecting_instrumentation_data">Strategies for collecting instrumentation data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Considering the elastic nature of the cloud, and to avoid the necessity of manually retrieving telemetry data from every node in the system, you should arrange for the data to be transferred to a central location and consolidated. In a system that spans multiple datacenters, it might be useful to first collect, consolidate, and store data on a region-by-region basis, and then aggregate the regional data into a single central system.</p>
+</div>
+<div class="paragraph">
+<p>To optimize the use of bandwidth, you can elect to transfer less urgent data in chunks, as batches. However, the data must not be delayed indefinitely, especially if it contains time-sensitive information.</p>
+</div>
+<div class="sect2">
+<h3 id="_pulling_and_pushing_instrumentation_data">Pulling and pushing instrumentation data</h3>
+<div class="paragraph">
+<p>The instrumentation data-collection subsystem can actively retrieve instrumentation data from the various logs and other sources for each instance of the application (the <em>pull model</em>). Or, it can act as a passive receiver that waits for the data to be sent from the components that constitute each instance of the application (the<em> push model</em>).</p>
+</div>
+<div class="paragraph">
+<p>One approach to implementing the pull model is to use monitoring agents that run locally with each instance of the application. A monitoring agent is a separate process that periodically retrieves (pulls) telemetry data collected at the local node and writes this information directly to centralized storage that all instances of the application share. This is the mechanism that Azure Diagnostics implements. Each instance of an Azure web or worker role can be configured to capture diagnostic and other trace information that&#8217;s stored locally. The monitoring agent that runs alongside each instance copies the specified data to Azure Storage. The article Enabling Diagnostics in Azure Cloud Services and Virtual Machines provides more details on this process. Some elements, such as IIS logs, crash dumps, and custom error logs, are written to blob storage. Data from the Windows event log, ETW events, and performance counters is recorded in table storage. Figure 3 illustrates this mechanism.</p>
+</div>
+<div id="image-pullmodel" class="imageblock">
+<div class="content">
+<img src="./images/pullmodel.png" alt="pullmodel">
+</div>
+<div class="title">Figure 2. Using a monitoring agent to pull information and write to shared storage.</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Using a monitoring agent is ideally suited to capturing instrumentation data that&#8217;s naturally pulled from a data source. An example is information from SQL Server Dynamic Management Views or the length of an Azure Service Bus queue.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It&#8217;s feasible to use the approach just described to store telemetry data for a small-scale application running on a limited number of nodes in a single location. However, a complex, highly scalable, global cloud application might generate huge volumes of data from hundreds of web and worker roles, database shards, and other services. This flood of data can easily overwhelm the I/O bandwidth available with a single, central location. Therefore, your telemetry solution must be scalable to prevent it from acting as a bottleneck as the system expands. Ideally, your solution should incorporate a degree of redundancy to reduce the risks of losing important monitoring information (such as auditing or billing data) if part of the system fails.</p>
+</div>
+<div class="paragraph">
+<p>To address these issues, you can implement queuing, as shown in Figure 4. In this architecture, the local monitoring agent (if it can be configured appropriately) or custom data-collection service (if not) posts data to a queue.A separate process running asynchronously (the storage writing service in Figure 4) takes the data in this queue and writes it to shared storage.A message queue is suitable for this scenario because it provides "at least once" semantics that help ensure that queued data will not be lost after it&#8217;s posted.You can implement the storage writing service by using a separate worker role.</p>
+</div>
+<div id="img-buffered-queue" class="imageblock">
+<div class="content">
+<img src="./images/bufferedqueue.png" alt="bufferedqueue">
+</div>
+<div class="title">Figure 3. Using a queue to buffer instrumentation data.</div>
+</div>
+<div class="paragraph">
+<p>The local data-collection service can add data to a queue immediately after it&#8217;s received.The queue acts as a buffer, and the storage writing service can retrieve and write the data at its own pace.By default, a queue operates on a first-in, first-out basis.But you can prioritize messages to accelerate them through the queue if they contain data that must be handled more quickly.For more information, see the <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/priority-queue">Priority Queue pattern</a>.Alternatively, you can use different channels (such as Service Bus topics) to direct data to different destinations depending on the form of analytical processing that&#8217;s required.</p>
+</div>
+<div class="paragraph">
+<p>For scalability, you can run multiple instances of the storage writing service.If there is a high volume of events, you can use an event hub to dispatch the data to different compute resources for processing and storage.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consolidating_instrumentation_data">Consolidating instrumentation data</h3>
+<div class="paragraph">
+<p>The instrumentation data that the data-collection service retrieves from a single instance of an application gives a localized view of the health and performance of that instance.To assess the overall health of the system, it&#8217;s necessary to consolidate some aspects of the data in the local views.You can perform this after the data has been stored, but in some cases, you can also achieve it as the data is collected.Rather than being written directly to shared storage, the instrumentation data can pass through a separate data consolidation service that combines data and acts as a filter and cleanup process.For example, instrumentation data that includes the same correlation information such as an activity ID can be amalgamated.(It&#8217;s possible that a user starts performing a business operation on one node and then gets transferred to another node in the event of node failure, or depending on how load balancing is configured.) This process can also detect and remove any duplicated data (always a possibility if the telemetry service uses message queues to push instrumentation data out to storage).Figure 5 illustrates an example of this structure.</p>
+</div>
+<div id="img-consolidattion" class="imageblock">
+<div class="content">
+<img src="./images/consolidation.png" alt="consolidation">
+</div>
+<div class="title">Figure 4. Using a separate service to consolidate and clean up instrumentation data.</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_storing_instrumentation_data">Storing instrumentation data</h3>
+<div class="paragraph">
+<p>The previous discussions have depicted a rather simplistic view of the way in which instrumentation data is stored.In reality, it can make sense to store the different types of information by using technologies that are most appropriate to the way in which each type is likely to be used.</p>
+</div>
+<div class="paragraph">
+<p>For example, Azure blob and table storage have some similarities in the way in which they&#8217;re accessed.But they have limitations in the operations that you can perform by using them, and the granularity of the data that they hold is quite different.If you need to perform more analytical operations or require full-text search capabilities on the data, it might be more appropriate to use data storage that provides capabilities that are optimized for specific types of queries and data access.For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Performance counter data can be stored in a SQL database to enable ad hoc analysis.</p>
+</li>
+<li>
+<p>Trace logs might be better stored in Azure Cosmos DB.</p>
+</li>
+<li>
+<p>Security information can be written to HDFS.</p>
+</li>
+<li>
+<p>Information that requires full-text search can be stored through Elasticsearch (which can also speed searches by using rich indexing).</p>
+</li>
+</ul>
+</div>
+<div id="img-datastorage" class="imageblock">
+<div class="content">
+<img src="./images/consolidation.png" alt="consolidation">
+</div>
+<div class="title">Figure 5. Partitioning data according to analytical and storage requirements.</div>
+</div>
+<div class="paragraph">
+<p>The same instrumentation data might be required for more than one purpose. For example, performance counters can be used to provide a historical view of system performance over time. This information might be combined with other usage data to generate customer billing information. In these situations, the same data might be sent to more than one destination, such as a document database that can act as a long-term store for holding billing information, and a multidimensional store for handling complex performance analytics.</p>
+</div>
+<div class="paragraph">
+<p>You should also consider how urgently the data is required. Data that provides information for alerting must be accessed quickly, so it should be held in fast data storage and indexed or structured to optimize the queries that the alerting system performs. In some cases, it might be necessary for the telemetry service that gathers the data on each node to format and save data locally so that a local instance of the alerting system can quickly notify you of any issues. The same data can be dispatched to the storage writing service shown in the previous diagrams and stored centrally if it&#8217;s also required for other purposes.</p>
+</div>
+<div class="paragraph">
+<p>Information that&#8217;s used for more considered analysis, for reporting, and for spotting historical trends is less urgent and can be stored in a manner that supports data mining and ad hoc queries. For more information, see the section <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/monitoring#supporting-hot-warm-and-cold-analysis">Supporting hot, warm, and cold analysis</a> later in this document.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_log_rotation_and_data_retention">Log rotation and data retention</h3>
+<div class="paragraph">
+<p>Instrumentation can generate considerable volumes of data. This data can be held in several places, starting with the raw log files, trace files, and other information captured at each node to the consolidated, cleaned, and partitioned view of this data held in shared storage. In some cases, after the data has been processed and transferred, the original raw source data can be removed from each node. In other cases, it might be necessary or simply useful to save the raw information. For example, data that&#8217;s generated for debugging purposes might be best left available in its raw form but can then be discarded quickly after any bugs have been rectified.</p>
+</div>
+<div class="paragraph">
+<p>Performance data often has a longer life so that it can be used for spotting performance trends and for capacity planning. The consolidated view of this data is usually kept online for a finite period to enable fast access. After that, it can be archived or discarded.</p>
+</div>
+<div class="paragraph">
+<p>Data gathered for metering and billing customers might need to be saved indefinitely.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, regulatory requirements might dictate that information collected for auditing and security purposes also needs to be archived and saved. This data is also sensitive and might need to be encrypted or otherwise protected to prevent tampering. You should never record users' passwords or other information that might be used to commit identity fraud. Such details should be scrubbed from the data before it&#8217;s stored.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_down_sampling">Down-sampling</h3>
+<div class="paragraph">
+<p>It&#8217;s useful to store historical data so that you can spot long-term trends. Rather than saving old data in its entirety, it might be possible to down-sample the data to reduce its resolution and save storage costs. As an example, rather than saving minute-by-minute performance indicators, you can consolidate data that&#8217;s more than a month old to form an hour-by-hour view.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_best_practices_for_collecting_and_storing_logging_information">Best practices for collecting and storing logging information</h3>
+<div class="paragraph">
+<p>The following list summarizes best practices for capturing and storing logging information:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The monitoring agent or data-collection service should run as an out-of-process service and should be simple to deploy.</p>
+</li>
+<li>
+<p>All output from the monitoring agent or data-collection service should be an agnostic format that&#8217;s independent of the machine, operating system, or network protocol. For example, emit information in a self-describing format such as JSON, MessagePack, or Protobuf rather than ETL/ETW. Using a standard format enables the system to construct processing pipelines; components that read, transform, and send data in the agreed format can be easily integrated.</p>
+</li>
+<li>
+<p>The monitoring and data-collection process must be fail-safe and must not trigger any cascading error conditions.</p>
+</li>
+<li>
+<p>In the event of a transient failure in sending information to a data sink, the monitoring agent or data-collection service should be prepared to reorder telemetry data so that the newest information is sent first. (The monitoring agent/data-collection service might elect to drop the older data, or save it locally and transmit it later to catch up, at its own discretion.)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

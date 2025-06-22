@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>GitOps Best Practices</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>GitOps Best Practices</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_config_repo_structure">Config Repo structure</a>
+<ul class="sectlevel2">
+<li><a href="#_opinionated_gitops_repository_model_by_redhat_developer">Opinionated GitOps Repository model by Redhat developer</a></li>
+<li><a href="#_repository_structure_from_fluxcd_v2_w_kustomize">Repository structure from FluxCD v2 w/ Kustomize</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.weave.works/blog/gitops-compliance-and-secure-cicd">GitOps Part 4 - Application Delivery Compliance and Secure CICD</a></p>
+</li>
+<li>
+<p><a href="https://www.weave.works/blog/kubernetes-anti-patterns-let-s-do-gitops-not-ciops">Kubernetes anti-patterns: Let&#8217;s do GitOps, not CIOps!</a></p>
+</li>
+<li>
+<p><a href="https://boxboat.com/2018/07/05/gitops-kubernetes-rolling-update-configmap-secret-change/">GitOps Kubernetes Rolling Update when ConfigMaps and Secrets Change</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This is what we think you need to do:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Keep a record in Git of important interactions with the system: who made changes, when and why</p>
+</li>
+<li>
+<p>Don’t rebuild images from scratch unnecessarily, if you can update config instead. Build each container image just once and 'promote' it through each test sequence / environment, do not rebuild each time. But you must still update your declarative config changes in Git.</p>
+</li>
+<li>
+<p>Use pull based deployment - do not let CI push updates into the Kubernetes cluster or use kubectl by hand</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_config_repo_structure">Config Repo structure</h2>
+<div class="sectionbody">
+<div class="ulist">
+<div class="title">References</div>
+<ul>
+<li>
+<p><a href="https://github.com/redhat-developer/gitops-repo-example">Sample GitOps Repo</a></p>
+</li>
+<li>
+<p><a href="https://github.com/redhat-developer/kam">GitOps Application Manager</a></p>
+</li>
+<li>
+<p><a href="https://github.com/redhat-developer/kam/blob/master/docs/README.md">GitOps for Application Delivery</a></p>
+</li>
+<li>
+<p><a href="https://github.com/fluxcd/flux2-kustomize-helm-example">flux2-kustomize-helm-example</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_opinionated_gitops_repository_model_by_redhat_developer">Opinionated GitOps Repository model by <a href="https://github.com/redhat-developer/kam/tree/master/docs/model">Redhat developer</a></h3>
+<div class="paragraph">
+<p>A GitOps repository is just a Git repository organized to be used with GitOps tools. It organizes the Environments, Applications, and Services with any customization necessary for deployment.</p>
+</div>
+<div class="paragraph">
+<p>Different Environments are stored in different directories under the <code>environments/</code> directory in the GitOps repository. Configuration in is then separated into layers reflected by these sub-directories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>env/</code> - Configuration specific to the namespace / Environment.</p>
+</li>
+<li>
+<p><code>apps/*</code> - Configuration folders specific to each Application.</p>
+</li>
+<li>
+<p><code>services/*</code> - Configuration folders specific to each Service.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Each configuration directory will contain Kustomization files structured like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>.
+├── base
+│   ├── *.yaml
+│   └── kustomization.yaml
+└── overlays
+    ├── *.yaml
+    └── kustomization.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each Service is defined in its <code>&#8230;&#8203;/services/&lt;service-name&gt;/base/</code> directory in various YAML files, and its <code>overlays/</code> directory includes more specific details such as pod scaling and environment variables. The configuration of each service can be maintained by just a development team, and should be individually deployable with a `kubectl apply -k ` command, which allows for quick testing.</p>
+</div>
+<div class="paragraph">
+<p>Each Application’s <code>&#8230;&#8203;/apps/&lt;app-name&gt;/base/kustomization.yaml</code> will refer to each Service which it uses. Again, the <code>overlays/</code> directory will include new specific configuration files required for the application, for example new labels or other details to connect the services.</p>
+</div>
+<div class="paragraph">
+<p>Finally, the <code>&#8230;&#8203;/env/base/kustomization.yaml</code> will refer to each application which is to be deployed in the environment, and the <code>env/overlays/</code> directory will contain any specifics required for the environment. For example, details about service accounts and specific Ingress URLs could be specified here. It will also have a <code>&#8230;&#8203;/env/kustomization.yaml</code> file so that the fully-configured applications can be deployed into the environment with this command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ </span>oc apply <span class="nt">-k</span> environments/&lt;env-name&gt;/env/</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_repository_structure_from_fluxcd_v2_w_kustomize">Repository structure from FluxCD v2 w/ Kustomize</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+See detailed explanation at <a href="https://github.com/fluxcd/flux2-kustomize-helm-example/blob/main/README.md#repository-structure">Repository structure</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The Git repository contains the following top directories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>apps</strong> dir contains Helm releases with a custom configuration per cluster</p>
+</li>
+<li>
+<p><strong>infrastructure</strong> dir contains common infra tools such as NGINX ingress controller and Helm repository definitions</p>
+</li>
+<li>
+<p><strong>clusters</strong> dir contains the Flux configuration per cluster</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>├── apps
+│   ├── base
+│   ├── production
+│   └── staging
+├── infrastructure
+│   ├── nginx
+│   ├── redis
+│   └── sources
+└── clusters
+    ├── production
+    └── staging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The apps configuration is structured into:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>apps/base/</strong> dir contains namespaces and Helm release definitions</p>
+</li>
+<li>
+<p><strong>apps/production/</strong> dir contains the production Helm release values</p>
+</li>
+<li>
+<p><strong>apps/staging/</strong> dir contains the staging values</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

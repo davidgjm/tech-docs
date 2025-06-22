@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Separated AEO and IEO with decentralized governance</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article">
+<div id="header">
+<h1>Separated AEO and IEO with decentralized governance</h1>
+</div>
+<div id="content">
+<div class="paragraph">
+<p>This “Separated AEO and IEO” model follows a “you build it you run it” methodology.</p>
+</div>
+<div class="paragraph">
+<p>Your application engineers and developers perform both the engineering and the operation of their workloads. Similarly your infrastructure engineers perform both the engineering and operation of the platforms they use to support application teams.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ops-model_05.png" alt="ops model 05">
+</div>
+</div>
+<div class="paragraph">
+<p>For this example, we are going to treat governance as decentralized.</p>
+</div>
+<div class="paragraph">
+<p>Standards are still distributed, provided, or shared to application teams by the platform team, but application teams are free to engineer and operate new platform capabilities in support of their workload.</p>
+</div>
+<div class="paragraph">
+<p>In this model, there are fewer constraints on the application team, but that comes with a significant increase in responsibilities. Additional skills, and potentially team members, must be present to support the additional platform capabilities. The risk of significant rework is increased if skill sets are not adequate and defects are not recognized early.</p>
+</div>
+<div class="paragraph">
+<p>You should enforce policies that are not specifically delegated to application teams. Use tools or services that enable you to centrally govern your environments across accounts, such as <a href="http://aws.amazon.com/organizations/" target="_blank" rel="noopener">AWS Organizations</a>. Services like <a href="http://aws.amazon.com/controltower/features/" target="_blank" rel="noopener">AWS Control Tower</a> expand this management capability enabling you to define blueprints (supporting your operating models) for the setup of accounts, apply ongoing governance using AWS Organizations, and automate provisioning of new accounts.</p>
+</div>
+<div class="paragraph">
+<p>It’s beneficial to have mechanisms for the application team to request additions and changes to standards. They may be able to contribute new standards that can provide benefit to other application teams. The platform teams may decide that providing direct support for these additional capabilities is an effective support for business outcomes.</p>
+</div>
+<div class="paragraph">
+<p>This model limits constraints on innovation with significant skill and team member requirements. It addresses many of the bottlenecks and delays created by transition of tasks between teams while still promoting the development of effective relationships between teams and customers.</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

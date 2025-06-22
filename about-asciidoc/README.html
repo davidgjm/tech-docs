@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>asciidoc tips</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>asciidoc tips</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_embedding_images">Embedding images</a>
+<ul class="sectlevel2">
+<li><a href="#_example">Example</a></li>
+</ul>
+</li>
+<li><a href="#_styling_tips_tricks">Styling tips &amp; tricks</a>
+<ul class="sectlevel2">
+<li><a href="#_numbered_list_continuation">Numbered list continuation</a></li>
+</ul>
+</li>
+<li><a href="#_lists">Lists</a></li>
+<li><a href="#_nested_lists">Nested lists</a></li>
+<li><a href="#_using_icon_fonts">Using icon fonts</a></li>
+<li><a href="#_custom_styles">Custom styles</a>
+<ul class="sectlevel2">
+<li><a href="#_open_questions">Open Questions</a></li>
+<li><a href="#_readings">Readings</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Useful links</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.vogella.com/tutorials/AsciiDoc/article.html">Using AsciiDoc and Asciidoctor to write documentation - Tutorial</a></p>
+</li>
+<li>
+<p><a href="https://blog.mrhaki.com/2014/06/awesome-asciidoc-use-inline-icons.html">Awesome Asciidoctor: Use Inline Icons</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_embedding_images">Embedding images</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Use directive <code>:imagesdir:</code> in the document metadata to define the base directory of the images</p>
+</li>
+<li>
+<p>Use image names directly in text</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_example">Example</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">= document title
+:toc:
+:imagesdir: ./images
+
+
+This is the introduction text and now I need the image below for illustration
+
+image::ops-model_02.png[]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_styling_tips_tricks">Styling tips &amp; tricks</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_numbered_list_continuation">Numbered list continuation</h3>
+<div class="paragraph">
+<p>When we write a list in Asciidoctor we can simply create a list item by starting the line with a dot (.). To create a another list item we simply start a new line with a dot (.). But what if we want to add a list item with multiple paragraphs, or text and a source code block element. We can use the list item continuation (+) to indicate to Asciidoctor we want to keep these together for a single list item.</p>
+</div>
+<div class="paragraph">
+<p>In the following example we have a list in Asciidoctor markup. The second list item has multiple paragraphs , the third item has an extra admonition block and the fourth item contains a source code block:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">Sample list::
+
+. A very simple first item
+. This item consists of two paragraphs.
++
+By adding the `+` symbol we indicate this
+paragraph also belongs to the second list item.
+. We can even add for example an admonition.
++
+TIP: Did you know Asciidoctor is awesome?
+. A small code example:
++</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Will produce</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. Sample output</div>
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Sample list</dt>
+<dd>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A very simple first item</p>
+</li>
+<li>
+<p>This item consists of two paragraphs.</p>
+<div class="paragraph">
+<p>By adding the <code>+</code> symbol we indicate this
+paragraph also belongs to the second list item.</p>
+</div>
+</li>
+<li>
+<p>We can even add for example an admonition.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Did you know Asciidoctor is awesome?
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>A small code example:</p>
+</li>
+</ol>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lists">Lists</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_nested_lists">Nested lists</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>* item 1
+** item 1.1
+* item 2
+* item 3</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>item 1</p>
+<div class="ulist">
+<ul>
+<li>
+<p>item 1.1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>item 2</p>
+</li>
+<li>
+<p>item 3</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_icon_fonts">Using icon fonts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.asciidoctor.org/asciidoc/latest/macros/icon-macro/">Icon Macro</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>icon:android[2x, role=green]</code> produces <span class="icon green"><i class="fa fa-android fa-2x"></i></span></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_custom_styles">Custom styles</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_open_questions">Open Questions</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>.icon:sticky-note[2x, role=lime] Open Questions
+[sidebar]
+****
+* How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?
+****</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above directives will create the following:</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><span class="icon lime"><i class="fa fa-sticky-note"></i></span> Open Questions</div>
+<div class="ulist">
+<ul>
+<li>
+<p>How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_readings">Readings</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">.icon:book[role=yeti] Readings
+****
+asdfasdfasdf
+****</code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><span class="icon yeti"><i class="fa fa-book"></i></span> Readings</div>
+<div class="ulist">
+<ul>
+<li>
+<p>asdfasdfasdf</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Manage Demand and Supply Resources</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Manage Demand and Supply Resources</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_manage_demand">Manage Demand</a>
+<ul class="sectlevel2">
+<li><a href="#_manage_demand_throttling">Manage Demand – Throttling</a></li>
+<li><a href="#_manage_demand_buffer_based">Manage Demand – Buffer based</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_manage_demand">Manage Demand</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_manage_demand_throttling">Manage Demand – Throttling</h3>
+<div class="paragraph">
+<p>If the source of the demand has retry capability, then you can implement throttling. Throttling tells the source that if it cannot service the request at the current time it should try again later. The source will wait for a period of time and then re-try the request. Implementing throttling has the advantage of limiting the maximum amount of resources and costs of the workload. In AWS, you can use Amazon API Gateway to implement throttling. Refer to the Well-Architected Reliability pillar whitepaper for more details on implementing throttling.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manage_demand_buffer_based">Manage Demand – Buffer based</h3>
+<div class="paragraph">
+<p>Similar to throttling, a buffer defers request processing, allowing applications that run at different rates to communicate effectively. A buffer-based approach uses a queue to accept messages (units of work) from producers. Messages are read by consumers and processed, allowing the messages to run at the rate that meets the consumers’ business requirements. You don’t have to worry about producers having to deal with throttling issues, such as data durability and backpressure (where producers slow down because their consumer is running slowly).</p>
+</div>
+<div class="paragraph">
+<p>In AWS, you can choose from multiple services to implement a buffering approach. <a href="http://aws.amazon.com/sqs/">Amazon SQS</a> is a managed service that provides queues that allow a single consumer to read individual messages. <a href="http://aws.amazon.com/kinesis/">Amazon Kinesis</a> provides a stream that allows many consumers to read the same messages.</p>
+</div>
+<div class="paragraph">
+<p>When architecting with a buffer-based approach, ensure that you architect your workload to service the request in the required time, and that you are able to handle duplicate requests for work.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

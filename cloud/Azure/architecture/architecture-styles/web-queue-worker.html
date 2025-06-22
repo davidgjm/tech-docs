@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Web-Queue-Worker architecture style</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Web-Queue-Worker architecture style</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_when_to_use_this_architecture">When to use this architecture</a></li>
+<li><a href="#_benefits">Benefits</a></li>
+<li><a href="#_challenges">Challenges</a></li>
+<li><a href="#_best_practices">Best practices</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The core components of this architecture are a web front end that serves client requests, and a worker that performs resource-intensive tasks, long-running workflows, or batch jobs. The web front end communicates with the worker through a message queue.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/web-queue-worker-logical.svg" alt="web queue worker logical">
+</div>
+</div>
+<div class="paragraph">
+<p>Other components that are commonly incorporated into this architecture include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>One or more databases.</p>
+</li>
+<li>
+<p>A cache to store values from the database for quick reads.</p>
+</li>
+<li>
+<p>CDN to serve static content</p>
+</li>
+<li>
+<p>Remote services, such as email or SMS service. Often these are provided by third parties.</p>
+</li>
+<li>
+<p>Identity provider for authentication.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The web and worker are both stateless. Session state can be stored in a distributed cache. Any long-running work is done asynchronously by the worker. The worker can be triggered by messages on the queue, or run on a schedule for batch processing. The worker is an optional component. If there are no long-running operations, the worker can be omitted.</p>
+</div>
+<div class="paragraph">
+<p>The front end might consist of a web API. On the client side, the web API can be consumed by a single-page application that makes AJAX calls, or by a native client application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_architecture">When to use this architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Web-Queue-Worker architecture is typically implemented using managed compute services, either Azure App Service or Azure Cloud Services.</p>
+</div>
+<div class="paragraph">
+<p>Consider this architecture style for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Applications with a relatively simple domain.</p>
+</li>
+<li>
+<p>Applications with some long-running workflows or batch operations.</p>
+</li>
+<li>
+<p>When you want to use managed services, rather than infrastructure as a service (IaaS).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_benefits">Benefits</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Relatively simple architecture that is easy to understand.</p>
+</li>
+<li>
+<p>Easy to deploy and manage.</p>
+</li>
+<li>
+<p>Clear separation of concerns.</p>
+</li>
+<li>
+<p>The front end is decoupled from the worker using asynchronous messaging.</p>
+</li>
+<li>
+<p>The front end and the worker can be scaled independently.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_challenges">Challenges</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Without careful design, the front end and the worker can become large, monolithic components that are difficult to maintain and update.</p>
+</li>
+<li>
+<p>There may be hidden dependencies, if the front end and worker share data schemas or code modules.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices">Best practices</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Expose a well-designed API to the client. See <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design">API design best practices</a>.</p>
+</li>
+<li>
+<p>Autoscale to handle changes in load. See <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/auto-scaling">Autoscaling best practices</a>.</p>
+</li>
+<li>
+<p>Cache semi-static data. See <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching">Caching best practices</a>.</p>
+</li>
+<li>
+<p>Use a CDN to host static content. See <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/cdn">CDN best practices</a>.</p>
+</li>
+<li>
+<p>Use polyglot persistence when appropriate. See <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/use-the-best-data-store">Use the best data store for the job</a>.</p>
+</li>
+<li>
+<p>Partition data to improve scalability, reduce contention, and optimize performance. See <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/data-partitioning">Data partitioning best practices</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

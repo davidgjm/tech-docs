@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Competing Consumers pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Competing Consumers pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enable multiple concurrent consumers to process messages received on the same messaging channel. With multiple concurrent consumers, a system can process multiple messages concurrently to optimize throughput, to improve scalability and availability, and to balance the workload.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An application running in the cloud is expected to handle a large number of requests. Rather than process each request synchronously, a common technique is for the application to pass them through a messaging system to another service (a consumer service) that handles them asynchronously. This strategy helps to ensure that the business logic in the application isn&#8217;t blocked, while the requests are being processed.</p>
+</div>
+<div class="paragraph">
+<p>The number of requests can vary significantly over time for many reasons. A sudden increase in user activity or aggregated requests coming from multiple tenants can cause an unpredictable workload. At peak hours, a system might need to process many hundreds of requests per second, while at other times the number could be very small. Additionally, the nature of the work performed to handle these requests might be highly variable. By using a single instance of the consumer service, you can cause that instance to become flooded with requests. Or, the messaging system might be overloaded by an influx of messages that come from the application. To handle this fluctuating workload, the system can run multiple instances of the consumer service. However, these consumers must be coordinated to ensure that each message is only delivered to a single consumer. The workload also needs to be load balanced across consumers to prevent an instance from becoming a bottleneck.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use a message queue to implement the communication channel between the application and the instances of the consumer service. The application posts requests in the form of messages to the queue, and the consumer service instances receive messages from the queue and process them. This approach enables the same pool of consumer service instances to handle messages from any instance of the application. The figure illustrates using a message queue to distribute work to instances of a service.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/competing-consumers-diagram.png" alt="competing consumers diagram">
+</div>
+</div>
+<div class="paragraph">
+<p>This solution has the following benefits:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It provides a load-leveled system that can handle wide variations in the volume of requests sent by application instances. The queue acts as a buffer between the application instances and the consumer service instances. This buffer can help minimize the impact on availability and responsiveness, for both the application and the service instances. For more information, see <a href="queue-based-load-leveling.html">Queue-based Load Leveling pattern</a>. Handling a message that requires some long-running processing doesn&#8217;t prevent other messages from being handled concurrently by other instances of the consumer service.</p>
+</li>
+<li>
+<p>It improves reliability. If a producer communicates directly with a consumer instead of using this pattern, but doesn&#8217;t monitor the consumer, there&#8217;s a high probability that messages could be lost or fail to be processed if the consumer fails. In this pattern, messages aren&#8217;t sent to a specific service instance. A failed service instance won&#8217;t block a producer, and messages can be processed by any working service instance.</p>
+</li>
+<li>
+<p>It doesn&#8217;t require complex coordination between the consumers, or between the producer and the consumer instances. The message queue ensures that each message is delivered <strong>at least once</strong>.</p>
+</li>
+<li>
+<p>It&#8217;s scalable. The system can dynamically increase or decrease the number of instances of the consumer service as the volume of messages fluctuates.</p>
+</li>
+<li>
+<p>It can improve resiliency if the message queue provides transactional read operations. If a consumer service instance reads and processes the message as part of a transactional operation, and the consumer service instance fails, this pattern can ensure that the message will be returned to the queue to be picked up and handled by another instance of the consumer service.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the following points when deciding how to implement this pattern:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Message ordering.</dt>
+<dd>
+<p>The order in which consumer service instances receive messages isn&#8217;t guaranteed, and doesn&#8217;t necessarily reflect the order in which the messages were created. Design the system to ensure that message processing is idempotent because this will help to eliminate any dependency on the order in which messages are handled. For more information, see <a href="https://blog.jonathanoliver.com/idempotency-patterns/">Idempotency Patterns</a> on Jonathon Oliver&#8217;s blog.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Microsoft Azure Service Bus Queues can implement guaranteed first-in-first-out ordering of messages by using message sessions. For more information, see Messaging Patterns Using Sessions.
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Designing services for resiliency.</dt>
+<dd>
+<p>If the system is designed to detect and restart failed service instances, it might be necessary to implement the processing performed by the service instances as idempotent operations to minimize the effects of a single message being retrieved and processed more than once.</p>
+</dd>
+<dt class="hdlist1">Detecting poison messages.</dt>
+<dd>
+<p>A malformed message, or a task that requires access to resources that aren&#8217;t available, can cause a service instance to fail. The system should prevent such messages being returned to the queue, and instead capture and store the details of these messages elsewhere so that they can be analyzed if necessary.</p>
+</dd>
+<dt class="hdlist1">Handling results.</dt>
+<dd>
+<p>The service instance handling a message is fully decoupled from the application logic that generates the message, and they might not be able to communicate directly. If the service instance generates results that must be passed back to the application logic, this information must be stored in a location that&#8217;s accessible to both. In order to prevent the application logic from retrieving incomplete data the system must indicate when processing is complete.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you&#8217;re using Azure, a worker process can pass results back to the application logic by using a dedicated <strong>message reply queue</strong>. The application logic must be able to correlate these results with the original message. This scenario is described in more detail in the <a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589781(v=pandp.10)">Asynchronous Messaging Primer</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Scaling the messaging system.</dt>
+<dd>
+<p>In a large-scale solution, a single message queue could be overwhelmed by the number of messages and become a bottleneck in the system. In this situation, consider partitioning the messaging system to send messages from specific producers to a particular queue, or use load balancing to distribute messages across multiple message queues.</p>
+</dd>
+<dt class="hdlist1">Ensuring reliability of the messaging system.</dt>
+<dd>
+<p>A reliable messaging system is needed to guarantee that after the application enqueues a message it won&#8217;t be lost. This system is essential for ensuring that all messages are delivered at least once.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The workload for an application is divided into tasks that can run asynchronously.</p>
+</li>
+<li>
+<p>Tasks are independent and can run in parallel.</p>
+</li>
+<li>
+<p>The volume of work is highly variable, requiring a scalable solution.</p>
+</li>
+<li>
+<p>The solution must provide high availability, and must be resilient if the processing for a task fails.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern might not be useful when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It&#8217;s not easy to separate the application workload into discrete tasks, or there&#8217;s a high degree of dependence between tasks.</p>
+</li>
+<li>
+<p>Tasks must be performed synchronously, and the application logic must wait for a task to complete before continuing.</p>
+</li>
+<li>
+<p>Tasks must be performed in a specific sequence.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Some messaging systems support sessions that enable a producer to group messages together and ensure that they&#8217;re all handled by the same consumer. This mechanism can be used with prioritized messages (if they are supported) to implement a form of message ordering that delivers messages in sequence from a producer to a single consumer.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Azure provides Service Bus Queues and Azure Function queue triggers that, when combined, are a direct implementation of this cloud design pattern. Azure Functions integrate with Azure Service Bus via triggers and bindings. Integrating with Service Bus allows you to build functions that consume queue messages sent by publishers. The publishing application(s) will post messages to a queue, and consumers, implemented as Azure Functions, can retrieve messages from this queue and handle them.</p>
+</div>
+<div class="paragraph">
+<p>For resiliency, a Service Bus queue enables a consumer to use PeekLock mode when it retrieves a message from the queue; this mode doesn&#8217;t actually remove the message, but simply hides it from other consumers. The Azure Functions runtime receives a message in PeekLock mode, if the function finishes successfully it calls Complete on the message, or it may call Abandon if the function fails, and the message will become visible again, allowing another consumer to retrieve it. If the function runs for a period longer than the PeekLock timeout, the lock is automatically renewed as long as the function is running.</p>
+</div>
+<div class="paragraph">
+<p>Azure Functions can scale out/in based on the depth of the queue, all acting as competing consumers of the queue. If multiple instances of the functions are created they all compete by independently pulling and processing the messages.</p>
+</div>
+<div class="paragraph">
+<p>For detailed information on using Azure Service Bus queues, see <a href="https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions">Service Bus queues, topics, and subscriptions</a>.</p>
+</div>
+<div class="paragraph">
+<p>For information on Queue triggered Azure Functions, see <a href="https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-service-bus-trigger">Azure Service Bus trigger for Azure Functions</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following patterns and guidance might be relevant when implementing this pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="../distributed-systems/messaging/async-messaging-primer.html">Asynchronous Messaging Primer</a>. Message queues are an asynchronous communications mechanism. If a consumer service needs to send a reply to an application, it might be necessary to implement some form of response messaging. The Asynchronous Messaging Primer provides information on how to implement request/reply messaging using message queues.</p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589774(v=pandp.10)">Autoscaling Guidance</a>. It might be possible to start and stop instances of a consumer service since the length of the queue applications post messages on varies. Autoscaling can help to maintain throughput during times of peak processing.</p>
+</li>
+<li>
+<p><a href="queue-based-load-leveling.html">Queue-based Load Leveling pattern</a>. Introducing a message queue can add resiliency to the system, enabling service instances to handle widely varying volumes of requests from application instances. The message queue acts as a buffer, which levels the load. The Queue-based Load Leveling pattern describes this scenario in more detail.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

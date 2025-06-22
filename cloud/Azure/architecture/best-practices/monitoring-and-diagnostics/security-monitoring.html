@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Security Monitoring</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Security Monitoring</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_requirements_for_security_monitoring">Requirements for security monitoring</a></li>
+<li><a href="#_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</a></li>
+<li><a href="#_analyzing_security_data">Analyzing security data</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>All commercial systems that include sensitive data must implement a security structure. The complexity of the security mechanism is usually a function of the sensitivity of the data. In a system that requires users to be authenticated, you should record:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All sign-in attempts, whether they fail or succeed.</p>
+</li>
+<li>
+<p>All operations performed by—and the details of all resources accessed by—an authenticated user.</p>
+</li>
+<li>
+<p>When a user ends a session and signs out.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Monitoring might be able to help detect attacks on the system. For example, a large number of failed sign-in attempts might indicate a brute-force attack. An unexpected surge in requests might be the result of a distributed denial-of-service (DDoS) attack. <strong>You must be prepared to monitor all requests to all resources <mark>regardless of the source of these requests</mark>.</strong> A system that has a sign-in vulnerability might accidentally expose resources to the outside world without requiring a user to actually sign in.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements_for_security_monitoring">Requirements for security monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The most critical aspects of security monitoring should enable an operator to quickly:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Detect attempted intrusions by an unauthenticated entity.</p>
+</li>
+<li>
+<p>Identify attempts by entities to perform operations on data for which they have not been granted access.</p>
+</li>
+<li>
+<p>Determine whether the system, or some part of the system, is under attack from outside or inside. (For example, a malicious authenticated user might be attempting to bring the system down.)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>To support these requirements, an operator should be notified if:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>One account makes repeated failed sign-in attempts within a specified period.</p>
+</li>
+<li>
+<p>One authenticated account repeatedly tries to access a prohibited resource during a specified period.</p>
+</li>
+<li>
+<p>A large number of unauthenticated or unauthorized requests occur during a specified period.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The information that&#8217;s provided to an operator should include the host address of the source for each request. If security violations regularly arise from a particular range of addresses, these hosts might be blocked.</p>
+</div>
+<div class="paragraph">
+<p>A key part in maintaining the security of a system is being able to quickly detect actions that deviate from the usual pattern. Information such as the number of failed and/or successful sign-in requests can be displayed visually to help detect whether there is a spike in activity at an unusual time. (An example of this activity is users signing in at 3:00 AM and performing a large number of operations when their working day starts at 9:00 AM). This information can also be used to help configure time-based autoscaling. For example, if an operator observes that a large number of users regularly sign in at a particular time of day, the operator can arrange to start additional authentication services to handle the volume of work, and then shut down these additional services when the peak has passed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Security is an all-encompassing aspect of most distributed systems. The pertinent data is likely to be generated at multiple points throughout a system. You should consider adopting a <em>Security Information and Event Management (SIEM)</em> approach to gather the security-related information that results from events raised by the application, network equipment, servers, firewalls, antivirus software, and other intrusion-prevention elements.</p>
+</div>
+<div class="paragraph">
+<p>Security monitoring can incorporate data from tools that are not part of your application. These tools can include utilities that identify port-scanning activities by external agencies, or network filters that detect attempts to gain unauthenticated access to your application and data.</p>
+</div>
+<div class="paragraph">
+<p>In all cases, the gathered data must enable an administrator to determine the nature of any attack and take the appropriate countermeasures.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzing_security_data">Analyzing security data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A feature of security monitoring is the variety of sources from which the data arises. The different formats and level of detail often require complex analysis of the captured data to tie it together into a coherent thread of information. Apart from the simplest of cases (such as detecting a large number of failed sign-ins, or repeated attempts to gain unauthorized access to critical resources), it might not be possible to perform any complex automated processing of security data. Instead, it might be preferable to write this data, timestamped but otherwise in its original form, to a secure repository to allow for expert manual analysis.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

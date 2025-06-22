@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Event-driven architecture style</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Event-driven architecture style</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_when_to_use_this_architecture">When to use this architecture</a></li>
+<li><a href="#_benefits">Benefits</a></li>
+<li><a href="#_challenges">Challenges</a></li>
+<li><a href="#_additional_considerations">Additional considerations</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://martinfowler.com/articles/201701-event-driven.html">What do you mean by “Event-Driven”?</a></p>
+</li>
+<li>
+<p><a href="https://particular.net/blog/putting-your-events-on-a-diet">Putting your events on a diet</a></p>
+</li>
+<li>
+<p><a href="https://docs.particular.net/tutorials/nservicebus-step-by-step/" class="bare">https://docs.particular.net/tutorials/nservicebus-step-by-step/</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/serverless/cloud-automation">Azure - Event-based cloud automation</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>An event-driven architecture consists of <strong>event producers</strong> that generate a stream of events, and <strong>event consumers</strong> that listen for the events.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/event-driven.svg" alt="event driven">
+</div>
+</div>
+<div class="paragraph">
+<p>Events are delivered in near real time, so consumers can respond immediately to events as they occur. Producers are decoupled from consumers — a producer doesn&#8217;t know which consumers are listening. Consumers are also decoupled from each other, and every consumer sees all of the events. This differs from a Competing Consumers pattern, where consumers pull messages from a queue and a message is processed just once (assuming no errors). In some systems, such as IoT, events must be ingested at very high volumes.</p>
+</div>
+<div class="paragraph">
+<p>An event driven architecture can use a pub/sub model or an event stream model.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pub/sub</strong>: The messaging infrastructure keeps track of subscriptions. When an event is published, it sends the event to each subscriber. After an event is received, it cannot be replayed, and new subscribers do not see the event.</p>
+</li>
+<li>
+<p><strong>Event streaming</strong>: Events are written to a log. Events are strictly ordered (within a partition) and durable. Clients don&#8217;t subscribe to the stream, instead a client can read from any part of the stream. The client is responsible for advancing its position in the stream. That means a client can join at any time, and can replay events.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>On the consumer side, there are some common variations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Simple event processing</strong>. An event immediately triggers an action in the consumer. For example, you could use Azure Functions with a Service Bus trigger, so that a function executes whenever a message is published to a Service Bus topic.</p>
+</li>
+<li>
+<p><strong>Complex event processing</strong>. A consumer processes a series of events, looking for patterns in the event data, using a technology such as Azure Stream Analytics or Apache Storm. For example, you could aggregate readings from an embedded device over a time window, and generate a notification if the moving average crosses a certain threshold.</p>
+</li>
+<li>
+<p><strong>Event stream processing</strong>. Use a data streaming platform, such as Azure IoT Hub or Apache Kafka, as a pipeline to ingest events and feed them to stream processors. The stream processors act to process or transform the stream. There may be multiple stream processors for different subsystems of the application. This approach is a good fit for IoT workloads.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The source of the events may be external to the system, such as physical devices in an IoT solution. In that case, the system must be able to ingest the data at the volume and throughput that is required by the data source.</p>
+</div>
+<div class="paragraph">
+<p>In the logical diagram above, each type of consumer is shown as a single box. In practice, it&#8217;s common to have multiple instances of a consumer, to avoid having the consumer become a single point of failure in system. Multiple instances might also be necessary to handle the volume and frequency of events. Also, a single consumer might process events on multiple threads. This can create challenges if events must be processed in order or require exactly-once semantics. See <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/minimize-coordination">Minimize Coordination</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_architecture">When to use this architecture</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Multiple subsystems must process the same events.</p>
+</li>
+<li>
+<p>Real-time processing with minimum time lag.</p>
+</li>
+<li>
+<p>Complex event processing, such as pattern matching or aggregation over time windows.</p>
+</li>
+<li>
+<p>High volume and high velocity of data, such as IoT.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_benefits">Benefits</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Producers and consumers are decoupled.</p>
+</li>
+<li>
+<p>No point-to-point integrations. It&#8217;s easy to add new consumers to the system.</p>
+</li>
+<li>
+<p>Consumers can respond to events immediately as they arrive.</p>
+</li>
+<li>
+<p>Highly scalable and distributed.</p>
+</li>
+<li>
+<p>Subsystems have independent views of the event stream.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_challenges">Challenges</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Guaranteed delivery. In some systems, especially in IoT scenarios, it&#8217;s crucial to guarantee that events are delivered.</p>
+</li>
+<li>
+<p>Processing events in order or exactly once. Each consumer type typically runs in multiple instances, for resiliency and scalability. This can create a challenge if the events must be processed in order (within a consumer type), or if the processing logic is not idempotent.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_additional_considerations">Additional considerations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>The amount of data to include in an event can be a significant consideration that affects both performance and cost. Putting all the relevant information needed for processing in the event itself can simplify the processing code and save additional lookups. Putting the minimal amount of information in an event, like just a couple of identifiers, will reduce transport time and cost, but requires the processing code to look up any additional information it needs. For more information on this, take a look at this <a href="https://particular.net/blog/putting-your-events-on-a-diet">blog post</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

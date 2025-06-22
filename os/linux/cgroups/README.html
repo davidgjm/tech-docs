@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Control Groups (cgroups)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Control Groups (<code>cgroups</code>)</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_common_control_groups">Common control groups</a></li>
+</ul>
+</li>
+<li><a href="#_using_cgroups">Using cgroups</a>
+<ul class="sectlevel2">
+<li><a href="#_find_cgroups_info">Find cgroups info</a></li>
+<li><a href="#_use_cgroups_with_docker">Use cgroups with docker</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/index.html">Control Groups version 1</a></p>
+</li>
+<li>
+<p><a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html">Control Group v2</a></p>
+</li>
+<li>
+<p><a href="https://man7.org/linux/man-pages/man7/cgroups.7.html">cgroups(7) — Linux manual page</a></p>
+</li>
+<li>
+<p><a href="https://medium.com/@kasunmaduraeng/docker-namespace-and-cgroups-dece27c209c7">Docker Namespace and Cgroups</a></p>
+</li>
+<li>
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/resource_management_guide/sec-default_cgroup_hierarchies">DEFAULT CGROUP HIERARCHIES</a></p>
+</li>
+<li>
+<p><a href="https://opensource.com/article/20/10/cgroups">Managing resources with cgroups in systemd</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/cgroups" class="bare">https://wiki.archlinux.org/title/cgroups</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Cgroups</em> provide resource limitation and reporting capability within the container space. They allow granular control over what host resources are allocated to the containers and when they are allocated.</p>
+</div>
+<div class="paragraph">
+<p>Control groups can be accessed with various tools:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>using directives in systemd unit files to specify limits for services and slices;</p>
+</li>
+<li>
+<p>by accessing the cgroup filesystem directly;</p>
+</li>
+<li>
+<p>via tools like cgcreate, cgexec and cgclassify (part of the libcgroupAUR and libcgroup-gitAUR packages);</p>
+</li>
+<li>
+<p>using the "rules engine daemon" to automatically move certain users/groups/commands to groups (<code>/etc/cgrules.conf</code> and <code>/usr/lib/systemd/system/cgconfig.service</code>) (part of the libcgroupAUR and libcgroup-gitAUR packages); and</p>
+</li>
+<li>
+<p>through other software such as Linux Containers (LXC) virtualization.</p>
+</li>
+<li>
+<p>cgmanager is deprecated and unsupported as it does not work with systemd versions 232 and above.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_common_control_groups">Common control groups</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>CPU</p>
+</li>
+<li>
+<p>Memory</p>
+</li>
+<li>
+<p>Network Bandwidth</p>
+</li>
+<li>
+<p>Disk</p>
+</li>
+<li>
+<p>Priority</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_cgroups">Using cgroups</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_find_cgroups_info">Find cgroups info</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">sudo systemd-cgls
+sudo systemd-ctop</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_cgroups_with_docker">Use cgroups with docker</h3>
+<div class="paragraph">
+<p>Using these cgroup policies is very simple. If you for instance want to lock down a Docker container to the first CPU core, you’d append --cpuset-cpus=0 to your docker run command.And also you could setup the cpu shares which you required.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>$ docker run -d --name='kasun_priority_1' --cpuset-cpus=0 --cpu-shares=20 kasuntest1</p>
+</div>
+<div class="paragraph">
+<p>$ docker run -d --name='kasun_priority_2' --cpuset-cpus=2 --cpu-shares=30 kasuntest2</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>And we could use the below command to change running container CPU shards.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>sudo systemctl set-property docker-7d7ds9s7dhdsda044b29cb873cac460b429cfcbdd0e877c0868eb2a901dbf80.scope CPUShares=512</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>External Configuration Store Pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/external-configuration-store">External Configuration Store Pattern</a></h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a>
+<ul class="sectlevel2">
+<li><a href="#_access_control">access control</a></li>
+<li><a href="#_error_handling">error handling</a></li>
+<li><a href="#_configuration_management_flow_gitops">Configuration management flow (GitOps)</a></li>
+<li><a href="#_hot_update">Hot Update</a></li>
+<li><a href="#_what_may_happen_when_configuration_store_is_down">what may happen when configuration store is down</a></li>
+</ul>
+</li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_using_azure_app_configuration">Using Azure App Configuration</a></li>
+<li><a href="#_next_steps">Next steps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://samnewman.io/patterns/architectural/bff/">Pattern: Backends For Frontends</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Move configuration information out of the application deployment package to a centralized location. This can provide opportunities for easier management and control of configuration data, and for sharing configuration data across applications and application instances.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The majority of application runtime environments include configuration information that&#8217;s held in files deployed with the application. In some cases, it&#8217;s possible to edit these files to change the application behavior after it&#8217;s been deployed. However, changes to the configuration require the application be redeployed, often resulting in unacceptable downtime and other administrative overhead.</p>
+</div>
+<div class="paragraph">
+<p>Local configuration files also limit the configuration to a single application, but sometimes it would be useful to share configuration settings across multiple applications. Examples include database connection strings, UI theme information, or the URLs of queues and storage used by a related set of applications.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s challenging to manage changes to local configurations across multiple running instances of the application, especially in a cloud-hosted scenario. It can result in instances using different configuration settings while the update is being deployed.</p>
+</div>
+<div class="paragraph">
+<p>In addition, updates to applications and components might require changes to configuration schemas. Many configuration systems don&#8217;t support different versions of configuration information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Store the configuration information in external storage, and provide an interface that can be used to quickly and efficiently read and update configuration settings. The type of external store depends on the hosting and runtime environment of the application. In a cloud-hosted scenario it&#8217;s typically a cloud-based storage service or dedicated configuration service, but could be a hosted database or other custom system.</p>
+</div>
+<div class="paragraph">
+<p>The backing store you choose for configuration information should have an interface that provides consistent and easy-to-use access. It should expose the information in a correctly typed and structured format. The implementation might also need to authorize users' access in order to protect configuration data, and be flexible enough to allow storage of multiple versions of the configuration (such as development, staging, or production, including multiple release versions of each one).</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Many built-in configuration systems read the data when the application starts up, and cache the data in memory to provide fast access and minimize the impact on application performance. Depending on the type of backing store used, and the latency of this store, it might be helpful to implement a caching mechanism within the external configuration store. For more information, see the <a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589802(v=pandp.10)">Caching Guidance</a>. The figure illustrates an overview of the External Configuration Store pattern with optional local cache.
+</td>
+</tr>
+</table>
+</div>
+<div id="img_external-config" class="imageblock">
+<div class="content">
+<img src="./images/external-configuration-store-overview.png" alt="external configuration store overview">
+</div>
+<div class="title">Figure 1. An overview of the External Configuration Store pattern with optional local cache</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the following points when deciding how to implement this pattern:</p>
+</div>
+<div class="paragraph">
+<p>Choose a backing store that offers acceptable performance, high availability, robustness, and can be backed up as part of the application maintenance and administration process. In a cloud-hosted application, using a cloud storage mechanism or dedicated configuration platform service is usually a good choice to meet these requirements.</p>
+</div>
+<div class="paragraph">
+<p>Design the schema of the backing store to allow flexibility in the types of information it can hold. Ensure that it provides for all configuration requirements such as typed data, collections of settings, multiple versions of settings, and any other features that the applications using it require. The schema should be easy to extend to support additional settings as requirements change.</p>
+</div>
+<div class="paragraph">
+<p>Consider the physical capabilities of the backing store, how it relates to the way configuration information is stored, and the effects on performance. For example, storing an XML document containing configuration information will require either the configuration interface or the application to parse the document in order to read individual settings. It&#8217;ll make updating a setting more complicated, though caching the settings can help to offset slower read performance.</p>
+</div>
+<div class="sect2">
+<h3 id="_access_control">access control</h3>
+<div class="paragraph">
+<p>Consider how the configuration interface will permit control of the scope and inheritance of configuration settings. For example, it might be a requirement to scope configuration settings at the organization, application, and the machine level. It might need to support delegation of control over access to different scopes, and to prevent or allow individual applications to override settings.</p>
+</div>
+<div class="paragraph">
+<p>Ensure that the configuration interface can expose the configuration data in the required formats such as typed values, collections, key/value pairs, or property bags.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_error_handling">error handling</h3>
+<div class="paragraph">
+<p>Consider how the configuration store interface will behave when settings contain errors, or don&#8217;t exist in the backing store. It might be appropriate to return default settings and log errors. Also consider aspects such as the case sensitivity of configuration setting keys or names, the storage and handling of binary data, and the ways that null or empty values are handled.</p>
+</div>
+<div class="paragraph">
+<p>Consider how to protect the configuration data to allow access to only the appropriate users and applications. This is likely a feature of the configuration store interface, but it&#8217;s also necessary to ensure that the data in the backing store can&#8217;t be accessed directly without the appropriate permission. Ensure strict separation between the permissions required to read and to write configuration data. Also consider whether you need to encrypt some or all of the configuration settings, and how this&#8217;ll be implemented in the configuration store interface.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_management_flow_gitops">Configuration management flow (GitOps)</h3>
+<div class="paragraph">
+<p>Centrally stored configurations, which change application behavior during runtime, are critically important and should be deployed, updated, and managed using the same mechanisms as deploying application code. For example, changes that can affect more than one application must be carried out using a full test and staged deployment approach to ensure that the change is appropriate for all applications that use this configuration. If an administrator edits a setting to update one application, it could adversely impact other applications that use the same setting.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hot_update">Hot Update</h3>
+<div class="paragraph">
+<p>If an application caches configuration information, the application needs to be alerted if the configuration changes. It might be possible to implement an expiration policy over cached configuration data so that this information is automatically refreshed periodically and any changes picked up (and acted on).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_may_happen_when_configuration_store_is_down">what may happen when configuration store is down</h3>
+<div class="paragraph">
+<p>While caching configuration data can help address transient connectivity issues with the external configuration store at application runtime, this typically doesn&#8217;t solve the problem if the external store is down when the application is first starting. Ensure your application deployment pipeline can provide the last known set of configuration values in a configuration file as a fallback if your application cannot retrieve live values when it starts.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This pattern is useful for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Configuration settings that are shared between multiple applications and application instances, or where a standard configuration must be enforced across multiple applications and application instances.</p>
+</li>
+<li>
+<p>A standard configuration system that doesn&#8217;t support all of the required configuration settings, such as storing images or complex data types.</p>
+</li>
+<li>
+<p>As a complementary store for some of the settings for applications, perhaps allowing applications to override some or all of the centrally-stored settings.</p>
+</li>
+<li>
+<p>As a way to simplify administration of multiple applications, and optionally for monitoring use of configuration settings by logging some or all types of access to the configuration store.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_azure_app_configuration">Using Azure App Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>While building a custom configuration store might be necessary in some situations, many applications can instead use <a href="https://docs.microsoft.com/en-us/azure/azure-app-configuration/overview">Azure App Configuration</a>. Azure App Configuration supports key-value pairs that can be namespaced. The keys are typed and are individually versioned. Azure App Configuration also supports point-in-time snapshots of configuration so that you can easily inspect or even roll back to prior configuration values. Configuration values can be exported such that a copy of the configuration can ship with your application in case the service is unreachable when the application is starting.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>See additional <a href="https://github.com/Azure/AppConfiguration/tree/main/examples">App Configuration Samples</a></p>
+</li>
+<li>
+<p>Learn how to <a href="https://docs.microsoft.com/en-us/azure/azure-app-configuration/integrate-kubernetes-deployment-helm">integrate Azure App Configuration with Kubernetes deployments</a></p>
+</li>
+<li>
+<p>Learn how Azure App Configuration also can help <a href="https://docs.microsoft.com/en-us/azure/azure-app-configuration/manage-feature-flags">manage feature flags</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

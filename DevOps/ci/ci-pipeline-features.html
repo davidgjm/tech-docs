@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>CI Pipeline Feature Comparison</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>CI Pipeline Feature Comparison</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_azure_devops">Azure DevOps</a>
+<ul class="sectlevel2">
+<li><a href="#_jobs">Jobs</a></li>
+<li><a href="#_dependencies">Dependencies</a></li>
+<li><a href="#_conditions">Conditions</a></li>
+</ul>
+</li>
+<li><a href="#_tekton">Tekton</a></li>
+<li><a href="#_gitlab">GitLab</a></li>
+<li><a href="#_github_actions">GitHub Actions</a></li>
+<li><a href="#_pipeline_functionalities">Pipeline functionalities</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_azure_devops">Azure DevOps</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="./images/azure-pipelines-key-concepts-overview.svg" alt="azure pipelines key concepts overview">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A trigger tells a Pipeline to run.</p>
+</li>
+<li>
+<p>A pipeline is made up of one or more stages. A pipeline can deploy to one or more environments.</p>
+</li>
+<li>
+<p>A stage is a way of organizing jobs in a pipeline and each stage can have one or more jobs.</p>
+</li>
+<li>
+<p>Each job runs on one agent. A job can also be agentless.</p>
+</li>
+<li>
+<p>Each agent runs a job that contains one or more steps.</p>
+</li>
+<li>
+<p>A step can be a task or script and is the smallest building block of a pipeline.</p>
+</li>
+<li>
+<p>A task is a pre-packaged script that performs an action, such as invoking a REST API or publishing a build artifact.</p>
+</li>
+<li>
+<p>An artifact is a collection of files or packages published by a run.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_jobs">Jobs</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_dependencies">Dependencies</h3>
+<div class="listingblock">
+<div class="title">Syntax</div>
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">jobs:
+- job: string
+  dependsOn: string
+  condition: string</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sequential_jobs">Sequential jobs</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">jobs:
+- job: Debug
+  steps:
+  - script: echo hello from the Debug build
+- job: Release
+  dependsOn: Debug
+  steps:
+  - script: echo hello from the Release build</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_parallel_jobs_no_dependencies">Parallel jobs (<mark>no dependencies</mark>):</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">jobs:
+- job: Windows
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - script: echo hello from Windows
+- job: macOS
+  pool:
+    vmImage: 'macOS-latest'
+  steps:
+  - script: echo hello from macOS
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: echo hello from Linux</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_fan_out">Fan-out</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">jobs:
+- job: InitialJob
+  steps:
+  - script: echo hello from initial job
+- job: SubsequentA
+  dependsOn: InitialJob
+  steps:
+  - script: echo hello from subsequent A
+- job: SubsequentB
+  dependsOn: InitialJob
+  steps:
+  - script: echo hello from subsequent B</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_fan_in">Fan-in</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">jobs:
+- job: InitialA
+  steps:
+  - script: echo hello from initial A
+- job: InitialB
+  steps:
+  - script: echo hello from initial B
+- job: Subsequent
+  dependsOn:
+  - InitialA
+  - InitialB
+  steps:
+  - script: echo hello from subsequent</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conditions">Conditions</h3>
+<div class="paragraph">
+<p>You can specify the conditions under which each job runs. <mark>By default, a job runs if it does not depend on any other job, or if all of the jobs that it depends on have completed and succeeded.</mark> You can customize this behavior by forcing a job to run even if a previous job fails or by specifying a custom condition.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status check function</th>
+<th class="tableblock halign-left valign-top">Explanation</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>always()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always evaluates to <code>True</code> (even when canceled).</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">jobs:
+- job: Foo
+
+  steps:
+  - script: echo Hello!
+    condition: always() # this step will always run, even if the pipeline is canceled
+
+- job: Bar
+  dependsOn: Foo
+  condition: failed() # this job will only run if Foo fails</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>canceled()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to <code>True</code> if the pipeline was canceled.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>failed()</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>For a job:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>With no arguments, evaluates to <code>True</code> only if any previous job in the dependency graph failed.</p>
+</li>
+<li>
+<p>With job names as arguments, evaluates to True only if any of those jobs failed.</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>succeeded()</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>For a job:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>With no arguments, evaluates to <code>True</code> only if all previous jobs in the dependency graph succeeded or partially succeeded.</p>
+</li>
+<li>
+<p>With job names as arguments, evaluates to <code>True</code> if all of those jobs succeeded or partially succeeded.</p>
+</li>
+<li>
+<p>Evaluates to <code>False</code> if the pipeline is canceled.</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>succeededOrFailed()</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>For a job:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>With no arguments, evaluates to <code>True</code> regardless of whether any jobs in the dependency graph succeeded or failed.</p>
+</li>
+<li>
+<p>With job names as arguments, evaluates to <code>True</code> whether any of those jobs succeeded or failed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is like <code>always()</code>, except it will evaluate <code>False</code> when the pipeline is canceled.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_variables_in_conditions">variables in conditions</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+stages:
+- stage: A
+  jobs:
+  - job: A1
+    steps:
+      - script: echo Hello Stage A!
+
+- stage: B
+  condition: and(succeeded(), eq(variables.isMain, true))
+  jobs:
+  - job: B1
+    steps:
+      - script: echo Hello Stage B!
+      - script: echo $(isMain)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tekton">Tekton</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="./images/tekton-concept-tasks-pipelines.png" alt="tekton concept tasks pipelines">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gitlab">GitLab</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Pipelines are the top-level component of continuous integration, delivery, and deployment.</p>
+</div>
+<div class="paragraph">
+<p>Pipelines comprise:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Jobs</strong>, which define <em>what</em> to do. For example, jobs that compile or test code.</p>
+</li>
+<li>
+<p><strong>Stages</strong>, which define <em>when</em> to run the jobs. For example, stages that run tests after stages that compile the code.
+Jobs are executed by runners. Multiple jobs in the same stage are executed in parallel, if there are enough concurrent runners.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If <em>all</em> jobs in a stage succeed, the pipeline moves on to the next stage.</p>
+</div>
+<div class="paragraph">
+<p>If <em>any</em> job in a stage fails, the next stage is not (usually) executed and the pipeline ends early.</p>
+</div>
+<div class="paragraph">
+<p>In general, pipelines are executed automatically and require no intervention once created. However, there are also times when you can manually interact with a pipeline.</p>
+</div>
+<div class="paragraph">
+<p>A typical pipeline might consist of four stages, executed in the following order:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A <code>build</code> stage, with a job called <code>compile</code>.</p>
+</li>
+<li>
+<p>A <code>test</code> stage, with two jobs called <code>test1</code> and <code>test2</code>.</p>
+</li>
+<li>
+<p>A <code>staging</code> stage, with a job called <code>deploy-to-stage</code>.</p>
+</li>
+<li>
+<p>A <code>production</code> stage, with a job called <code>deploy-to-prod</code>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/gitlab_workflow_example_extended_v12_3.png" alt="gitlab workflow example extended v12 3">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_github_actions">GitHub Actions</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="./images/github-overview-actions-simple.webp" alt="github overview actions simple">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pipeline_functionalities">Pipeline functionalities</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Feature</th>
+<th class="tableblock halign-left valign-top">Azure DevOps</th>
+<th class="tableblock halign-left valign-top">Tekton</th>
+<th class="tableblock halign-left valign-top">GitLab CI/CD</th>
+<th class="tableblock halign-left valign-top">GitHub Actions</th>
+<th class="tableblock halign-left valign-top">circleci</th>
+<th class="tableblock halign-left valign-top">BuildKite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pipeline structure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>pipeline/stages/jobs/steps</strong> <span class="icon red"><i class="fa fa-play"></i></span> agent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>pipeline/Tasks/steps</strong> <span class="icon"><i class="fa fa-play"></i></span> k8s Pod</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>pipeline/[stages]/jobs</strong> <span class="icon"><i class="fa fa-play"></i></span> runners</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>workflow/jobs/actions/steps</strong> <span class="icon"><i class="fa fa-play"></i></span> runners</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pipeline/workflows/jobs/steps <span class="icon"><i class="fa fa-play"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pipeline/steps</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamic Pipelines</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon Fuchsia"><i class="fa fa-question-circle"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon Fuchsia"><i class="fa fa-question-circle"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon teal"><i class="fa fa-check-circle"></i></span>, Dynamic child pipelines</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon Fuchsia"><i class="fa fa-question-circle"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon orange"><i class="fa fa-pause-circle"></i></span>, dynamic configuration only</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon teal"><i class="fa fa-check-circle"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unit of Work</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>step</strong>:</p>
+<p class="tableblock">A <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops#step">step</a> can be a <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops#task">task</a> or <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops#script">script</a> and is the smallest building block of a pipeline. Builtin tasks and custom tasks are available.</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong><a href="https://tekton.dev/docs/pipelines/tasks/#defining-steps">Steps</a> as containers</strong></p>
+</div>
+<div class="paragraph">
+<p>A <code>Step</code> is a reference to a container image that executes a specific tool on a specific input and produces a specific output.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flattened with at least one <code>script</code> clause</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Each step is either a shell script that will be executed, or an <em>action</em> that will be run. Steps are executed in order and are dependent on each other.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Steps are collections of executable commands, which are run during a job.
+The <code>checkout</code> key is required under <code>steps</code> to checkout your code. The <code>run</code> key enables addition of arbitrary, multi-line shell command scripting.</p>
+<p class="tableblock">In addition to the <code>run</code> key, keys for <code>when</code>, <code>save_cache</code>, <code>restore_cache</code>, <code>store_artifacts</code>, <code>store_test_results</code>, and <code>add_ssh_keys</code> are nested under Steps.</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Step</strong> types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Command step</p>
+</li>
+<li>
+<p>Wait step</p>
+</li>
+<li>
+<p>Block step</p>
+</li>
+<li>
+<p>Input step</p>
+</li>
+<li>
+<p>Trigger step</p>
+</li>
+<li>
+<p>Group step</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dependency syntax (DAG)</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>depends_on</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>runAfter</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>needs</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>needs</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>requires</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>depends_on</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dependency scope</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>one or more jobs</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>stage to stage</p>
+</li>
+<li>
+<p>job to job</p>
+</li>
+<li>
+<p>step to step</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>one or more `Task`s.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 1</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>job to job</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 6, row 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">steps</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">condition (<em>when to run</em>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>condition</code>: job status functions</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>when</code> expression</p>
+</div>
+<div class="paragraph">
+<p>components: <code>input</code>, <code>operator</code> and <code>values</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>when</code></p>
+</div>
+<div class="paragraph">
+<p>Use <code>when</code> to configure the conditions for when jobs run. If not defined in a job, the default value is <code>when: on_success</code>.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>if</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>when</code> for workflows and steps</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>for <code>workflow</code> - defines whether to a workflow</p>
+</li>
+<li>
+<p><code>when</code> steps - defines whether to run a set of nested steps</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>if</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Concurrency Support</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 2, row 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 3, row 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 3</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>job or workflow level</p>
+</div>
+<div class="paragraph">
+<p>Use <code>concurrency</code> to ensure that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 6, row 3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Environment Variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 2, row 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 3, row 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 3</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>env</code></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>workflow level</p>
+</li>
+<li>
+<p>job level</p>
+</li>
+<li>
+<p>step level</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 6, row 3</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>env</code>, pipeline settings, steps</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Variables sharing</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 2, row 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 3, row 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 5, row 3</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>parameters</code> at job level and pipeline level</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://circleci.com/docs/pipeline-variables/">Pipeline values and parameters</a></p>
+</li>
+<li>
+<p><a href="https://circleci.com/docs/jobs-steps/#passing-parameters-to-jobs">Passing parameters to jobs</a></p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Secrets &amp; keys</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 2, row 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 3, row 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 5, row 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 6, row 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">secrets storage service via plugins</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Triggers</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Flexible triggers</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CI triggers</p>
+</li>
+<li>
+<p>PR triggers</p>
+</li>
+<li>
+<p>Github pull request comment triggers</p>
+</li>
+<li>
+<p>scheduled triggers</p>
+</li>
+<li>
+<p>pipeline completion triggers</p>
+</li>
+<li>
+<p><a href="https://github.com/marketplace/actions/azure-pipelines-action">Azure Pipelines Action</a></p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://tekton.dev/docs/triggers/">Tekton triggers</a> (kubernetes based)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">schedules, trigger api</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Workflow event triggers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Events that occur in your workflow&#8217;s repository</p>
+</li>
+<li>
+<p>Events that occur outside of GitHub and trigger a repository_dispatch event on GitHub</p>
+</li>
+<li>
+<p>Scheduled times</p>
+</li>
+<li>
+<p>Manual</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">actions or schedules</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">schedules &amp; Webhooks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timeouts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeoutInMinutes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeout</code>: "0h1m30s"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 4</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>jobs.&lt;job_id&gt;.timeout-minutes</code></p>
+</div>
+<div class="paragraph">
+<p>The maximum number of minutes to let a job run before GitHub automatically cancels it. Default: 360</p>
+</div>
+<div class="paragraph">
+<p>If the timeout exceeds the job execution time limit for the runner, the job will be canceled when the execution time limit is met instead.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 6, row 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeout_in_minutes</code> for steps</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retry mechanism</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+information to be added
+</td>
+</tr>
+</table>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>retries</code> field provided for pipeline tasks. Check <a href="https://tekton.dev/docs/pipelines/pipelines/#using-the-retries-and-retry-count-variable-substitutions">details</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 5, row 4</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>docker</p>
+</li>
+<li>
+<p>virtual machine</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runners</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

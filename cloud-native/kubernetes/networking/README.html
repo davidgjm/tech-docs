@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Kubernetes Networking</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Kubernetes Networking</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_kubernetes_network_model">Kubernetes Network Model</a>
+<ul class="sectlevel2">
+<li><a href="#_each_pod_in_a_cluster_gets_its_own_unique_cluster_wide_ip_address">Each pod in a cluster gets its own unique cluster-wide IP address.</a></li>
+<li><a href="#_the_pod_network_also_called_a_cluster_network_handles_communication_between_pods_it_ensures_that_barring_intentional_network_segmentation">The pod network (also called a cluster network) handles communication between pods. It ensures that (barring intentional network segmentation):</a></li>
+<li><a href="#_the_service_api_lets_you_provide_a_stable_long_lived_ip_address_or_hostname_for_a_service_implemented_by_one_or_more_backend_pods_where_the_individual_pods_making_up_the_service_can_change_over_time">The Service API lets you provide a stable (long lived) IP address or hostname for a service implemented by one or more backend pods, where the individual pods making up the service can change over time.</a></li>
+<li><a href="#_the_gateway_api_or_its_predecessor_ingress_allows_you_to_make_services_accessible_to_clients_that_are_outside_the_cluster">The Gateway API (or its predecessor, Ingress) allows you to make Services accessible to clients that are outside the cluster.</a></li>
+</ul>
+</li>
+<li><a href="#_network_plugin_requirements">Network Plugin Requirements</a>
+<ul class="sectlevel2">
+<li><a href="#_loopback_cni">Loopback CNI</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_kubernetes_network_model">Kubernetes Network Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Kubernetes network model is built out of several pieces:</p>
+</div>
+<div class="sect2">
+<h3 id="_each_pod_in_a_cluster_gets_its_own_unique_cluster_wide_ip_address">Each pod in a cluster gets its own unique cluster-wide IP address.</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A pod has its own private network namespace which is shared by all of the containers within the pod. Processes running in different containers in the same pod can communicate with each other over localhost.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_pod_network_also_called_a_cluster_network_handles_communication_between_pods_it_ensures_that_barring_intentional_network_segmentation">The pod network (also called a cluster network) handles communication between pods. It ensures that (barring intentional network segmentation):</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>All pods can communicate with all other pods, whether they are on the same node or on different nodes. Pods can communicate with each other directly, without the use of proxies or address translation (NAT).
+\
+On Windows, this rule does not apply to host-network pods.</p>
+</li>
+<li>
+<p>Agents on a node (such as system daemons, or kubelet) can communicate with all pods on that node.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_service_api_lets_you_provide_a_stable_long_lived_ip_address_or_hostname_for_a_service_implemented_by_one_or_more_backend_pods_where_the_individual_pods_making_up_the_service_can_change_over_time">The Service API lets you provide a stable (long lived) IP address or hostname for a service implemented by one or more backend pods, where the individual pods making up the service can change over time.</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Kubernetes automatically manages EndpointSlice objects to provide information about the pods currently backing a Service.</p>
+</li>
+<li>
+<p>A service proxy implementation monitors the set of Service and EndpointSlice objects, and programs the data plane to route service traffic to its backends, by using operating system or cloud provider APIs to intercept or rewrite packets.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_gateway_api_or_its_predecessor_ingress_allows_you_to_make_services_accessible_to_clients_that_are_outside_the_cluster">The Gateway API (or its predecessor, Ingress) allows you to make Services accessible to clients that are outside the cluster.</h3>
+<div class="paragraph">
+<p>A simpler, but less-configurable, mechanism for cluster ingress is available via the Service API&#8217;s type: LoadBalancer, when using a supported Cloud Provider.
+=== NetworkPolicy is a built-in Kubernetes API that allows you to control traffic between pods, or between pods and the outside world.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_network_plugin_requirements">Network Plugin Requirements</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_loopback_cni">Loopback CNI</h3>
+<div class="paragraph">
+<p>In addition to the CNI plugin installed on the nodes for implementing the Kubernetes network model, Kubernetes also requires the container runtimes to provide a loopback interface <code>lo</code>, which is used for each sandbox (pod sandboxes, vm sandboxes, &#8230;&#8203;). Implementing the loopback interface can be accomplished by re-using the CNI loopback plugin. or by developing your own code to achieve this (see this example from CRI-O).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OPS04-BP04 Implement dependency telemetry</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OPS04-BP04 Implement dependency telemetry</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implementation_guidance">Implementation guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Design and configure your workload to emit information about the status (for example, reachability or response time) of resources it depends on. Examples of external dependencies can include, external databases, DNS, and network connectivity. Use this information to determine when a response is required.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Common anti-patterns</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>You are unable to determine if the reason your application is unreachable is a DNS issue without manually performing a check to see if your DNS provider is working.</p>
+</li>
+<li>
+<p>Your shopping cart application is unable to complete transactions. You are unable to determine if it&#8217;s a problem with your credit card processing provider without contacting them to verify.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Benefits of establishing this best practice</dt>
+<dd>
+<p>Understanding the health of your dependencies enables you to respond if necessary.</p>
+</dd>
+<dt class="hdlist1">Level of risk exposed if this best practice is not established</dt>
+<dd>
+<p>Medium</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_guidance">Implementation guidance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Implement dependency telemetry: Design and configure your workload to emit information about the state and status of systems it depends on. Some examples include: external databases, DNS, network connectivity, and external credit card processing services.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://aws.amazon.com/blogs/aws/new-amazon-cloudwatch-agent-with-aws-systems-manager-integration-unified-metrics-log-collection-for-linux-windows/">Amazon CloudWatch Agent with AWS Systems Manager integration - unified metrics &amp; log collection for Linux &amp; Windows</a></p>
+</li>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">Collect metrics and logs from Amazon EC2 instances and on-premises servers with the CloudWatch Agent</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

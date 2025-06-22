@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Load-balancing options</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Load-balancing options</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_decision_dimensions">Decision dimensions</a></li>
+<li><a href="#_aws_load_balancers">AWS Load Balancers</a></li>
+<li><a href="#_azure_load_balancing_options">Azure load balancing options</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_decision_dimensions">Decision dimensions</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Internet facing</dt>
+<dd>
+<p>Applications that are publicly accessible from the internet.</p>
+</dd>
+<dt class="hdlist1">Global</dt>
+<dd>
+<p>End users or clients are located beyond a small geographical area</p>
+</dd>
+<dt class="hdlist1">HTTP/HTTPS</dt>
+<dd>
+<p>HTTP(S) load-balancing services are Layer 7 load balancers that only accept HTTP(S) traffic. They are intended for web applications or other HTTP(S) endpoints. They include features such as SSL offload, web application firewall, path-based load balancing, and session affinity. <strong>Non-HTTP/S</strong> load-balancing services can handle non-HTTP(S) traffic and are recommended for non-web workloads.</p>
+</dd>
+<dt class="hdlist1">SSL offloading</dt>
+<dd>
+<p>whether the load balancing service offloads CPU intensive SSL termination so that the backend services don&#8217;t have to work on SSL encryption/decryption.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_aws_load_balancers">AWS Load Balancers</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://aws.amazon.com/elasticloadbalancing/features/#Product_comparisons">Elastic Load Balancing features</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_azure_load_balancing_options">Azure load balancing options</h2>
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><span class="icon"><i class="fa fa-book"></i></span></div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/load-balancing-overview">Load balancing options</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/azure_load-balancing-decision-tree.png" alt="azure load balancing decision tree"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

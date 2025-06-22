@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Uptime</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Uptime</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_readingsmaterials">Readings/Materials</a></li>
+<li><a href="#_what_is_uptime">What is uptime?</a></li>
+<li><a href="#_how_to_calculate">How to calculate?</a>
+<ul class="sectlevel2">
+<li><a href="#_health_check_based_uptime">Health Check based uptime</a></li>
+<li><a href="#_per_day_availability">Per day availability</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_readingsmaterials">Readings/Materials</h2>
+<div class="sectionbody">
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Uptime" class="bare">https://en.wikipedia.org/wiki/Uptime</a></p>
+</li>
+<li>
+<p><a href="https://www.logicmonitor.com/blog/uptime-vs-availability" class="bare">https://www.logicmonitor.com/blog/uptime-vs-availability</a></p>
+</li>
+<li>
+<p><a href="https://www.manageengine.com/network-monitoring/faq/calculate-device-availability-uptime.html" class="bare">https://www.manageengine.com/network-monitoring/faq/calculate-device-availability-uptime.html</a></p>
+</li>
+<li>
+<p><a href="https://blog.paessler.com/why-uptime-does-not-mean-availability" class="bare">https://blog.paessler.com/why-uptime-does-not-mean-availability</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_uptime">What is uptime?</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Uptime is a measure of system reliability, expressed as the percentage of time a machine, typically a computer, has been working and available.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; wikipedia
+</div>
+</div>
+<div class="paragraph">
+<p>Uptime refers to the percentage of time a system is ready for operation under normal circumstances. This metric measures system, solution, or infrastructure reliability and most commonly refers to a computer.</p>
+</div>
+<div class="paragraph">
+<p>So, <strong>uptime is how long a machine has been working and available, expressed as a percentage of time</strong>. However, uptime does not necessarily mean all services and applications are available and ready for use.</p>
+</div>
+<div class="paragraph">
+<p>When looking at a service-level agreement (SLA), guaranteed uptime is determined by past performance. However, it is not an indicator of what will happen in the future.</p>
+</div>
+<div class="paragraph">
+<p>So yes, uptime can be an indicator of availability, but it is by no means a guarantee.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_to_calculate">How to calculate?</h2>
+<div class="sectionbody">
+<div class="stemblock">
+<div class="content">
+\[uptime = 24 * 60 * 60 - sum downtime
+
+Availability = 1 - (sum downtime) / 86400 * 100\]
+</div>
+</div>
+<div class="sect2">
+<h3 id="_health_check_based_uptime">Health Check based uptime</h3>
+<div class="paragraph">
+<p>The uptime can be calculated as below for a health check endpoint which is polled every 30 seconds:</p>
+</div>
+<div class="sect3">
+<h4 id="_per_day_uptime">Per day uptime</h4>
+<div class="paragraph">
+<p>The uptime will be following if health check fails for 3 times in a <strong>24</strong> hour time box.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Uptime = 24 * 60 * 60 - 3 * 30 = 86400 - 90 = 86310</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_per_day_availability">Per day availability</h3>
+<div class="paragraph">
+<p>Then the availability will be caclulated as</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Availability = 86310 / 86400 * 100 = 99.8958%</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>

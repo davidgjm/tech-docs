@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Open Container Initiative (OCI)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Open Container Initiative (OCI)</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Open Container Initiative (OCI) is a lightweight, open governance structure (project), formed under the auspices of the Linux Foundation, for the express purpose of creating open industry standards around container formats and runtime. The OCI was launched on June 22nd 2015 by Docker, CoreOS and other leaders in the container industry</p>
+</div>
+<div class="paragraph">
+<p>The OCI currently contains two specifications: the <strong>Runtime Specification</strong> (runtime-spec) and the <strong>Image Specification</strong> (image-spec). The Runtime Specification outlines how to run a “filesystem bundle” that is unpacked on disk. At a high-level an OCI implementation would download an OCI Image then unpack that image into an OCI Runtime filesystem bundle. At this point the OCI Runtime Bundle would be run by an OCI Runtime.</p>
+</div>
+<div class="paragraph">
+<p>This entire workflow should support the UX that users have come to expect from container engines like Docker and rkt: primarily, the ability to run an image with no additional arguments:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>docker run example.com/org/app:v1.0.0
+rkt run example.com/org/app,version=v1.0.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To support this UX the OCI Image Format contains sufficient information to launch the application on the target platform (e.g. command, arguments, environment variables, etc). This specification defines how to create an OCI Image, which will generally be done by a build system, and output an image manifest, a filesystem (layer) serialization, and an image configuration. At a high level the image manifest contains metadata about the contents and dependencies of the image including the content-addressable identity of one or more filesystem serialization archives that will be unpacked to make up the final runnable filesystem. The image configuration includes information such as application arguments, environments, etc. The combination of the image manifest, image configuration, and one or more filesystem serializations is called the OCI Image.</p>
+</div>
+<div class="paragraph">
+<p>Docker is donating its container format and runtime, runC, to the OCI to serve as the cornerstone of this new effort. It is available now at <a href="https://github.com/opencontainers/runc" class="bare">https://github.com/opencontainers/runc</a>.</p>
+</div>
+<div class="paragraph">
+<p>The Open Container Initiative is an open governance structure for the express purpose of creating open industry standards around container formats and runtime. Projects associated with the Open Container Initiative can be found at <a href="https://github.com/opencontainers" class="bare">https://github.com/opencontainers</a> and we recommend you get involved with the community at <a href="https://www.opencontainers.org/community" class="bare">https://www.opencontainers.org/community</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Foundations</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Foundations</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_plan_your_network_topology">Plan your Network Topology</a>
+<ul class="sectlevel2">
+<li><a href="#_ensure_ip_subnet_allocation_accounts_for_expansion_and_availability">Ensure IP subnet allocation accounts for expansion and availability</a></li>
+<li><a href="#_prefer_hub_and_spoke_topologies_over_many_to_many_mesh">Prefer hub-and-spoke topologies over many-to-many mesh</a></li>
+<li><a href="#_enforce_non_overlapping_private_ip_address_ranges_in_all_private_address_spaces_where_they_are_connected">Enforce non-overlapping private IP address ranges in all private address spaces where they are connected</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_plan_your_network_topology">Plan your Network Topology</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_ensure_ip_subnet_allocation_accounts_for_expansion_and_availability">Ensure IP subnet allocation accounts for expansion and availability</h3>
+<div class="paragraph">
+<p>Amazon VPC IP address ranges must be large enough to accommodate workload requirements, including factoring in future expansion and allocation of IP addresses to subnets across Availability Zones. This includes load balancers, EC2 instances, and container-based applications.</p>
+</div>
+<div class="paragraph">
+<p>When you plan your network topology, the first step is to define the IP address space itself. Private IP address ranges (following RFC 1918 guidelines) should be allocated for each VPC. Accommodate the following requirements as part of this process:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Allow IP address space for more than one VPC per Region.</p>
+</li>
+<li>
+<p>Within a VPC, allow space for multiple subnets that span multiple Availability Zones.</p>
+</li>
+<li>
+<p>Always leave unused CIDR block space within a VPC for future expansion.</p>
+</li>
+<li>
+<p>Ensure that there is IP address space to meet the needs of any transient fleets of EC2 instances that you might use, such as Spot Fleets for machine learning, Amazon EMR clusters, or Amazon Redshift clusters.</p>
+</li>
+<li>
+<p>Note that the first four IP addresses and the last IP address in each subnet CIDR block are reserved and not available for your use.</p>
+<div class="paragraph">
+<p>You should plan on deploying large VPC CIDR blocks. Note that the initial VPC CIDR block allocated to your VPC cannot be changed or deleted, but you can add additional non-overlapping CIDR blocks to the VPC. Subnet IPv4 CIDRs cannot be changed, however IPv6 CIDRs can. Keep in mind that deploying the largest VPC possible (/16) results in over 65,000 IP addresses. In the base 10.x.x.x IP address space alone, you could provision 255 such VPCs. You should therefore err on the side of being too large rather than too small to make it easier to manage your VPCs.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prefer_hub_and_spoke_topologies_over_many_to_many_mesh">Prefer hub-and-spoke topologies over many-to-many mesh</h3>
+<div class="paragraph">
+<p>If more than two network address spaces (for example, VPCs and on-premises networks) are connected via VPC peering, AWS Direct Connect, or VPN, then use a hub-and-spoke model, like those provided by AWS Transit Gateway.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>If you have only two such networks, you can simply connect them to each other, but as the number of networks grows, the complexity of such meshed connections becomes untenable. AWS Transit Gateway provides an easy to maintain hub-and-spoke model, allowing the routing of traffic across your multiple networks.</pre>
+</div>
+</div>
+<div id="img-hub-spoke" class="imageblock">
+<div class="content">
+<img src="./images/network-vpc-peering.png" alt="network vpc peering">
+</div>
+<div class="title">Figure 1. Without AWS Transit Gateway: You need to peer each Amazon VPC to each other and to each onsite location using a VPN connection, which can become complex as it scales.</div>
+</div>
+<div id="img-transit-gateway" class="imageblock">
+<div class="content">
+<img src="./images/network-hub-spoke-transit-gateway.png" alt="network hub spoke transit gateway">
+</div>
+<div class="title">Figure 2. With AWS Transit Gateway: You simply connect each Amazon VPC or VPN to the AWS Transit Gateway and it routes traffic to and from each VPC or VPN.</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enforce_non_overlapping_private_ip_address_ranges_in_all_private_address_spaces_where_they_are_connected">Enforce non-overlapping private IP address ranges in all private address spaces where they are connected</h3>
+<div class="paragraph">
+<p>The IP address ranges of each of your VPCs must not overlap when peered or connected via VPN. You must similarly avoid IP address conflicts between a VPC and on-premises environments or with other cloud providers that you use. You must also have a way to allocate private IP address ranges when needed.</p>
+</div>
+<div class="paragraph">
+<p>An IP address management (IPAM) system can help with this. Several IPAMs are available from the AWS Marketplace.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

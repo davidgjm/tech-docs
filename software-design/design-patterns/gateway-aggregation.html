@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Gateway Aggregation pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Gateway Aggregation pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use a gateway to aggregate multiple individual requests into a single request. This pattern is useful when a client must make multiple calls to different backend systems to perform an operation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To perform a single task, a client may have to make multiple calls to various backend services. An application that relies on many services to perform a task must expend resources on each request. When any new feature or service is added to the application, additional requests are needed, further increasing resource requirements and network calls. This chattiness between a client and a backend can adversely impact the performance and scale of the application. Microservice architectures have made this problem more common, as applications built around many smaller services naturally have a higher amount of cross-service calls.</p>
+</div>
+<div class="paragraph">
+<p>In the following diagram, the client sends requests to each service (1,2,3). Each service processes the request and sends the response back to the application (4,5,6). Over a cellular network with typically high latency, using individual requests in this manner is inefficient and could result in broken connectivity or incomplete requests. While each request may be done in parallel, the application must send, wait, and process data for each request, all on separate connections, increasing the chance of failure.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/gateway-aggregation-problem.png" alt="gateway aggregation problem">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use a gateway to reduce chattiness between the client and the services. The gateway receives client requests, dispatches requests to the various backend systems, and then aggregates the results and sends them back to the requesting client.</p>
+</div>
+<div class="paragraph">
+<p>This pattern can reduce the number of requests that the application makes to backend services, and improve application performance over high-latency networks.</p>
+</div>
+<div class="paragraph">
+<p>In the following diagram, the application sends a request to the gateway (1). The request contains a package of additional requests. The gateway decomposes these and processes each request by sending it to the relevant service (2). Each service returns a response to the gateway (3). The gateway combines the responses from each service and sends the response to the application (4). The application makes a single request and receives only a single response from the gateway.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/gateway-aggregation.png" alt="gateway aggregation">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>The gateway should not introduce service coupling across the backend services.</p>
+</li>
+<li>
+<p>The gateway should be located near the backend services to reduce latency as much as possible.</p>
+</li>
+<li>
+<p>The gateway service may introduce a single point of failure. Ensure the gateway is properly designed to meet your application&#8217;s availability requirements.</p>
+</li>
+<li>
+<p>The gateway may introduce a bottleneck. Ensure the gateway has adequate performance to handle load and can be scaled to meet your anticipated growth.</p>
+</li>
+<li>
+<p>Perform load testing against the gateway to ensure you don&#8217;t introduce cascading failures for services.</p>
+</li>
+<li>
+<p>Implement a resilient design, using techniques such as bulkheads, circuit breaking, retry, and timeouts.</p>
+</li>
+<li>
+<p>If one or more service calls takes too long, it may be acceptable to timeout and return a partial set of data. Consider how your application will handle this scenario.</p>
+</li>
+<li>
+<p>Use asynchronous I/O to ensure that a delay at the backend doesn&#8217;t cause performance issues in the application.</p>
+</li>
+<li>
+<p>Implement distributed tracing using correlation IDs to track each individual call.</p>
+</li>
+<li>
+<p>Monitor request metrics and response sizes.</p>
+</li>
+<li>
+<p>Consider returning cached data as a failover strategy to handle failures.</p>
+</li>
+<li>
+<p>Instead of building aggregation into the gateway, consider placing an aggregation service behind the gateway. Request aggregation will likely have different resource requirements than other services in the gateway and may impact the gateway&#8217;s routing and offloading functionality.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A client needs to communicate with multiple backend services to perform an operation.</p>
+</li>
+<li>
+<p>The client may use networks with significant latency, such as cellular networks.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern may not be suitable when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You want to reduce the number of calls between a client and a single service across multiple operations. In that scenario, it may be better to add a batch operation to the service.</p>
+</li>
+<li>
+<p>The client or application is located near the backend services and latency is not a significant factor.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following example illustrates how to create a simple a gateway aggregation NGINX service using Lua.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="lua"><span class="n">worker_processes</span>  <span class="mi">4</span><span class="p">;</span>
+
+<span class="n">events</span> <span class="p">{</span>
+  <span class="n">worker_connections</span> <span class="mi">1024</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">http</span> <span class="p">{</span>
+  <span class="n">server</span> <span class="p">{</span>
+    <span class="n">listen</span> <span class="mi">80</span><span class="p">;</span>
+
+    <span class="n">location</span> <span class="o">=</span> <span class="o">/</span><span class="n">batch</span> <span class="p">{</span>
+      <span class="n">content_by_lua</span> <span class="s1">'
+        ngx.req.read_body()
+
+        -- read json body content
+        local cjson = require "cjson"
+        local batch = cjson.decode(ngx.req.get_body_data())["batch"]
+
+        -- create capture_multi table
+        local requests = {}
+        for i, item in ipairs(batch) do
+          table.insert(requests, {item.relative_url, { method = ngx.HTTP_GET}})
+        end
+
+        -- execute batch requests in parallel
+        local results = {}
+        local resps = { ngx.location.capture_multi(requests) }
+        for i, res in ipairs(resps) do
+          table.insert(results, {status = res.status, body = cjson.decode(res.body), header = res.header})
+        end
+
+        ngx.say(cjson.encode({results = results}))
+      '</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">location</span> <span class="o">=</span> <span class="o">/</span><span class="n">service1</span> <span class="p">{</span>
+      <span class="n">default_type</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="p">;</span>
+      <span class="n">echo</span> <span class="s1">'{"attr1":"val1"}'</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">location</span> <span class="o">=</span> <span class="o">/</span><span class="n">service2</span> <span class="p">{</span>
+      <span class="n">default_type</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="p">;</span>
+      <span class="n">echo</span> <span class="s1">'{"attr2":"val2"}'</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="backends-for-frontends.html">Backends for Frontends pattern</a></p>
+</li>
+<li>
+<p><a href="gateway-offloading.html">Gateway Offloading pattern</a></p>
+</li>
+<li>
+<p><a href="gateway-routing.html">Gateway Routing pattern</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

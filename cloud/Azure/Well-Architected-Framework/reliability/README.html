@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Build a highly available architecture</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_build_a_highly_available_architecture">Build a highly available architecture</a></li>
+<li><a href="#_azures_highly_available_platform">Azure&#8217;s highly available platform</a></li>
+<li><a href="#_develop_a_disaster_recovery_strategy">Develop a disaster recovery strategy</a></li>
+<li><a href="#_protect_your_data_with_backup_and_restore">Protect your data with backup and restore</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_build_a_highly_available_architecture">Build a highly available architecture</h3>
+<div class="paragraph">
+<p>High availability is ultimately about the ability to handle the loss or severe degradation of a component of a system. This might be due to a virtual machine that&#8217;s hosting an application going offline because the host failed. It could be due to planned maintenance for a system upgrade. It could even be caused by the failure of a service in the cloud. Identifying the places where your system can fail, and building in the capabilities to handle those failures, will ensure that the services you offer to your customers can stay online.</p>
+</div>
+<div class="sect3">
+<h4 id="_evaluate_high_availability_for_your_architecture">Evaluate high availability for your architecture</h4>
+<div class="paragraph">
+<p>There are three steps to evaluate an application for high availability:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Determine the service-level agreement of your application</p>
+</li>
+<li>
+<p>Evaluate the HA capabilities of the application</p>
+</li>
+<li>
+<p>Evaluate the HA capabilities of dependent applications</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s explore these steps in detail.</p>
+</div>
+<div class="sect4">
+<h5 id="_determine_the_service_level_agreement_of_your_application">Determine the service-level agreement of your application</h5>
+<div class="paragraph">
+<p>A service-level agreement (SLA) is an agreement between a service provider and a service consumer in which the service provider commits to a standard of service based on measurable metrics and defined responsibilities. SLAs can be strict, legally bound, contractual agreements, or assumed expectations of availability by customers. Service metrics typically focus on service throughput, capacity, and availability, all of which can be measured in various ways. Regardless of the specific metrics that make up the SLA, failure to meet the SLA can have serious financial ramifications for the service provider. A common component of service agreements is guaranteed financial reimbursement for missed SLAs.</p>
+</div>
+<div class="paragraph">
+<p>Service-level objectives (SLO) are the values of target metrics that are used to measure performance, reliability, or availability. These could be metrics defining <strong>the performance of request processing in milliseconds, the availability of services in minutes per month, or the number of requests processed per hour</strong>. By evaluating the metrics exposed by your application and understanding what customers use as a measure of quality, you can define the acceptable and unacceptable ranges for these SLOs. By defining these objectives, you clearly set goals and expectations with both the teams supporting the services and customers who are consuming these services. These SLOs will be used to determine if your overall SLA is being met.</p>
+</div>
+<div class="paragraph">
+<p>Here are some other considerations when defining an SLA:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To achieve four 9&#8217;s (99.99%), you probably can&#8217;t rely on manual intervention to recover from failures. The application must be self-diagnosing and self-healing.</p>
+</li>
+<li>
+<p>Beyond four 9&#8217;s, it is challenging to detect outages quickly enough to meet the SLA.</p>
+</li>
+<li>
+<p>Think about the time window that your SLA is measured against. The smaller the window, the tighter the tolerances. It probably doesn&#8217;t make sense to define your SLA in terms of hourly or daily uptime.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_evaluate_the_ha_capabilities_of_the_application">Evaluate the HA capabilities of the application</h5>
+<div class="paragraph">
+<p>To evaluate the HA capabilities of your application, perform a failure analysis. Focus on single points of failure and critical components that would have a large impact on the application if they were unreachable, misconfigured, or started behaving unexpectedly. For areas that do have redundancy, determine whether the application is capable of detecting error conditions and self-healing.</p>
+</div>
+<div class="paragraph">
+<p>You&#8217;ll need to carefully evaluate all components of your application, including the pieces designed to provide HA functionality, such as load balancers. Single points of failure will either need to be modified to have HA capabilities integrated, or will need to be replaced with services that can provide HA capabilities.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azures_highly_available_platform">Azure&#8217;s highly available platform</h3>
+<div class="paragraph">
+<p>There are several core concepts when considering HA for your architecture on Azure:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Availability sets</p>
+</li>
+<li>
+<p>Availability zones</p>
+</li>
+<li>
+<p>Load balancing</p>
+</li>
+<li>
+<p>Platform as a service (PaaS) HA capabilities</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_availability_sets">Availability sets</h4>
+<div class="paragraph">
+<p>Availability sets are a way for you to inform Azure that VMs that belong to the same application workload should be distributed to prevent simultaneous impact from hardware failure and scheduled maintenance. Availability sets are made up of <em>update domains</em> and <em>fault domains</em>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/2-availability-sets.png" alt="2 availability sets">
+</div>
+</div>
+<div class="paragraph">
+<p>Update domains ensure that a subset of your application&#8217;s servers always remain running when the virtual machine hosts in an Azure datacenter require downtime for maintenance. Most updates can be performed with no impact to the VMs running on them, but there are times when this isn&#8217;t possible. To ensure that updates don&#8217;t happen to a whole datacenter at once, the Azure datacenter is logically sectioned into update domains (UD). When a maintenance event, such as a performance update and critical security patch that needs to be applied to the host, the update is sequenced through update domains. The use of sequencing updates using update domains ensures that the whole datacenter isn&#8217;t unavailable during platform updates and patching.</p>
+</div>
+<div class="paragraph">
+<p>While update domains represent a logical section of the datacenter, fault domains (FD) represent physical sections of the datacenter and ensure rack diversity of servers in an availability set. Fault domains align to the physical separation of shared hardware in the datacenter. This includes power, cooling, and network hardware that supports the physical servers located in server racks. In the event the hardware that supports a server rack has become unavailable, only that rack of servers would be affected by the outage. By placing your VMs in an availability set, your VMs will be automatically spread across multiple FDs so that in the event of a hardware failure only part of your VMs will be impacted.</p>
+</div>
+<div class="paragraph">
+<p>With availability sets, you can ensure your application remains online if a high-impact maintenance event is required or hardware failures occur.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_availability_zones">Availability zones</h4>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/2-availability-zones.png" alt="2 availability zones">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Availability zones are mutually exclusive with availability sets. When using availability zones, you no longer need to define an availability set for your systems. You&#8217;ll have diversity at the data center level, and updates will never be performed to multiple availability zones at the same time.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_load_balancing">Load balancing</h4>
+<div class="paragraph">
+<p>Azure possesses three load balancing technology services that are distinct in their abilities to route network traffic:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Azure Traffic Manager</strong> provides global DNS load balancing. You would consider using Traffic Manager to provide load balancing of DNS endpoints within or across Azure regions. Traffic manager will distribute requests to available endpoints, and use endpoint monitoring to detect and remove failed endpoints from load.</p>
+</li>
+<li>
+<p><strong>Azure Application Gateway</strong> provides Layer 7 load-balancing capabilities, such as round-robin distribution of incoming traffic, cookie-based session affinity, URL path-based routing, and the ability to host multiple websites behind a single application gateway. Application Gateway by default monitors the health of all resources in its back-end pool and automatically removes any resource considered unhealthy from the pool. Application Gateway continues to monitor the unhealthy instances and adds them back to the healthy back-end pool once they become available and respond to health probes.</p>
+</li>
+<li>
+<p><strong>Azure Load Balancer</strong> is a layer 4 load balancer. You can configure public and internal load-balanced endpoints and define rules to map inbound connections to back-end pool destinations by using TCP and HTTP health-probing options to manage service availability.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/2-azure-load-balancer.png" alt="2 azure load balancer">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_paas_ha_capabilities">PaaS HA capabilities</h4>
+<div class="paragraph">
+<p>PaaS services come with high availability built in. Services such as Azure SQL Database, Azure App Service, and Azure Service Bus include high availability features and ensure that failures of an individual component of the service will be seamless to your application. Using PaaS services is one of the best ways to ensure that your architecture is highly available.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+When architecting for high availability, you&#8217;ll want to understand the SLA that you&#8217;re committing to your customers. Then evaluate both the HA capabilities that your application has, and the HA capabilities and SLAs of dependent systems. After those have been established, use Azure features, such as availability sets, availability zones, and various load-balancing technologies, to add HA capabilities to your application. Any PaaS services you should choose to use will have HA capabilities built in.
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_develop_a_disaster_recovery_strategy">Develop a disaster recovery strategy</h3>
+<div class="paragraph">
+<p>Designing for high availability helps keep an application or process running despite unfavorable events and adverse conditions. But what do you do when something so significant happens that you&#8217;ve lost data and it&#8217;s impossible to keep your apps and processes from going down? When disaster strikes, you need to have a plan to get your services running again. You should know what your goals and expectations are for recovering, what are the costs and limitations of your plan, and how to execute on it.</p>
+</div>
+<div class="sect3">
+<h4 id="_what_is_disaster_recovery">What is disaster recovery?</h4>
+<div class="paragraph">
+<p>Regardless of its cause, the best remedy for a disaster once it has occurred is a well-defined, tested disaster recovery plan and an application that actively supports disaster recovery efforts through its design.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_how_to_create_a_disaster_recovery_plan">How to create a disaster recovery plan</h4>
+<div class="paragraph">
+<p>A disaster recovery plan is a single document that details the procedures that are required to recover from data loss and downtime caused by a disaster, and identifies who&#8217;s in charge of directing those procedures. Operators should be able to use the plan as a manual to restore application connectivity and recover data after a disaster occurs. A detailed, written plan that&#8217;s dedicated to disaster recovery is critical to ensuring a favorable outcome. The process of creating the plan will help to assemble a complete picture of the application. The resulting written steps will promote good decision-making and follow-through in the panicked, chaotic aftermath of a disaster event.</p>
+</div>
+<div class="paragraph">
+<p>Creating a disaster recovery plan requires expert knowledge of the application&#8217;s workflows, data, infrastructure, and dependencies.</p>
+</div>
+<div class="sect4">
+<h5 id="_risk_assessment_and_process_inventory">Risk assessment and process inventory</h5>
+<div class="paragraph">
+<p>The first step in creating a disaster recovery plan is performing a risk analysis that examines the impact of different kinds of disasters on the application. The exact nature of a disaster isn&#8217;t as important to the risk analysis as its potential impact through data loss and application downtime. Explore various kinds of hypothetical disasters and try to be specific when thinking about their effects. For example, a targeted malicious attack may modify code or data that results in a different kind of impact than an earthquake that disrupts network connectivity and datacenter availability.</p>
+</div>
+<div class="paragraph">
+<p>The risk assessment needs to consider every process that can&#8217;t afford unlimited downtime, and every category of data that can&#8217;t afford unlimited loss. When a disaster that affects multiple application components occurs, it&#8217;s critical that the plan owners can use the plan to take a complete inventory of what needs attention and how to prioritize each item.</p>
+</div>
+<div class="paragraph">
+<p>Some apps may only constitute a single process or classification of data. This is still important to note, as the application will likely be one component of a larger disaster recovery plan that includes multiple applications with the organization.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_recovery_objectives">Recovery objectives</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Recovery Point Objective (RPO)</strong>: The maximum duration of acceptable data loss. RPO is measured in units of time, not volume: "30 minutes of data", "four hours of data", and so on. RPO is about limiting and recovering from data loss, not data theft.</p>
+</li>
+<li>
+<p><strong>Recovery Time Objective (RTO)</strong>: The maximum duration of acceptable downtime, where "downtime" needs to be defined by your specification. For example, if the acceptable downtime duration is eight hours in the event of a disaster, then your RTO is eight hours.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/3-rto-rpo.png" alt="3 rto rpo">
+</div>
+</div>
+<div class="paragraph">
+<p>Each major process or workload that&#8217;s implemented by an app should have separate RPO and RTO values. Even if you arrive at the same values for different processes, each one should be generated through a separate analysis that examines disaster scenario risks and potential recovery strategies for each respective process.</p>
+</div>
+<div class="paragraph">
+<p>The process of specifying an RPO and RTO is effectively the creation of disaster recovery requirements for your application. It requires establishing the priority of each workload and category of data and performing a cost-benefit analysis. The analysis includes concerns, such as implementation and maintenance cost, operational expense, process overhead, performance impact, and the impact of downtime and lost data. You&#8217;ll need to define exactly what "downtime" means for your application, and in some cases, you may establish separate RPO and RTO values for different levels of functionality. Specifying RPO and RTO should be more than simply choosing arbitrary values. Much of the value of a disaster recovery plan comes from the research and analysis that goes into discovering the potential impact of a disaster and the cost of mitigating the risks.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_detailing_recovery_steps">Detailing recovery steps</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Backups</strong>: How often they&#8217;re created, where they&#8217;re located, and how to restore data from them.</p>
+</li>
+<li>
+<p><strong>Data replicas</strong>: The number and locations of replicas, the nature and consistency characteristics of the replicated data, and how to switch over to a different replica.</p>
+</li>
+<li>
+<p><strong>Deployments</strong>: How deployments are executed, how rollbacks occur, and failure scenarios for deployments.</p>
+</li>
+<li>
+<p><strong>Infrastructure</strong>: On-premises and cloud resources, network infrastructure, and hardware inventory.</p>
+</li>
+<li>
+<p><strong>Dependencies</strong>: External services that are used by the application, including SLAs and contact information.</p>
+</li>
+<li>
+<p><strong>Configuration and notification</strong>: <em>Flags or options that can be set to gracefully degrade the application, and services that are used to notify users of application impact</em>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_designing_for_disaster_recovery">Designing for disaster recovery</h4>
+<div class="paragraph">
+<p>Designing for disaster recovery has two main concerns:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Data recovery</strong>: Using backups and replication to restore lost data.</p>
+</li>
+<li>
+<p><strong>Process recovery</strong>: Recovering services and deploying code to recover from outages.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/3-region-pairs.png" alt="3 region pairs">
+</div>
+</div>
+<div class="sect4">
+<h5 id="_data_recovery_and_replication">Data recovery and replication</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">Replication &amp; Backup</div>
+<div class="paragraph">
+<p><em>Replication duplicates stored data between multiple data store replicas. Unlike backup, which creates long-lived, read-only snapshots of data for use in recovery, replication creates real-time or near-real-time copies of live data.</em> The goal of replication is to keep replicas synchronized with as little latency as possible while maintaining application responsiveness. Replication is a key component of designing for high availability and disaster recovery, and is a common feature of production-grade applications.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Replication is used to mitigate a failed or unreachable data store by executing a <strong>failover</strong>: changing application configuration to route data requests to a working replica. Failover is often automated, triggered by error detection built into a data storage product, or detection that you implement through your monitoring solution. Depending on the implementation and the scenario, failover may need to be manually executed by system operators.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Replication is not something you implement from scratch. Most fully featured database systems and other data storage products and services include some kind of replication as a tightly integrated feature due to its functional and performance requirements. However, it&#8217;s up to you to include these features in your application design and make appropriate use of them.</p>
+</div>
+<div class="paragraph">
+<p>Many different replication designs exist that place different priorities on data consistency, performance, and cost. Active replication requires updates to take place on multiple replicas simultaneously, guaranteeing consistency at the cost of throughput. In contrast, passive replication performs synchronization in the background, removing replication as a constraint on application performance, but increasing RPO. Active-active or multi-master replication enables multiple replicas to be used simultaneously, enabling load balancing at the cost of complicating data consistency, while active-passive replication reserves replicas for live use only during failover.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_process_recovery">Process recovery</h5>
+<div class="paragraph">
+<p>After a disaster, business data isn&#8217;t the only asset that needs recovering. Disaster scenarios will also commonly result in downtime, whether it&#8217;s due to network connectivity problems, datacenter outages, or damaged VM instances or software deployments. <strong>The design of your application needs to enable you to restore it to a working state.</strong></p>
+</div>
+<div class="paragraph">
+<p>In most cases, process restoration involves failover to a separate, working deployment. Depending on the scenario, geographic location may be a critical aspect. For example, a large-scale natural disaster that brings an entire Azure region offline will necessitate restoring service in another region. Your application&#8217;s disaster recovery requirements, especially RTO, should drive your design and help you decide how many replicated environments you should have, where they should be located, and whether they should be maintained in a ready-to-run state or should be ready to accept a deployment in the event of disaster.</p>
+</div>
+<div class="sect5">
+<h6 id="_azure_site_recovery">Azure Site Recovery</h6>
+<div class="paragraph">
+<p>Azure Site Recovery is a service that&#8217;s dedicated to managing process recovery for workloads running on VMs deployed to Azure, VMs running on physical servers, and workloads running directly on physical servers.
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/3-azure-site-recovery.png[]</p>
+</div>
+<div class="paragraph">
+<p>Site Recovery supports replicating whole VMs and physical server images as well as individual workloads, where a workload may be an individual application or an entire VM or operating system with its applications. Any application workload can be replicated, but Site Recovery has first-class integrated support for many Microsoft server applications, such as SQL Server and SharePoint, as well as a handful of third-party applications like SAP.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_testing_a_disaster_recovery_plan">Testing a disaster recovery plan</h4>
+<div class="paragraph">
+<p>Disaster recovery planning doesn&#8217;t end once you have a completed plan in hand. Testing the plan is a crucial aspect of disaster recovery, to ensure that the directions and explanations are clear and up-to-date.</p>
+</div>
+<div class="paragraph">
+<p>Choose intervals to perform different types and scopes of tests, such as testing backups and failover mechanisms every month, and performing a full-scale disaster recovery simulation every six months. Always follow the steps and details exactly as they&#8217;re documented in the plan, and consider having someone unfamiliar with the plan give perspective on anything that could be made clearer. As you execute the test, identify gaps, areas of improvement, and places to automate and add these enhancements to your plan.</p>
+</div>
+<div class="paragraph">
+<p>Make sure to include your monitoring system in your testing as well. For example, if your application supports automated failover, introduce failures in a dependency or other critical component to ensure that the application behaves correctly end-to-end, including detection of the failure and triggering of the automated failover.</p>
+</div>
+<div class="paragraph">
+<p>By carefully identifying your requirements and laying out a plan, you&#8217;ll be able to determine what types of services you&#8217;ll need to use to meet your recovery objectives. Azure provides several services and features to help you meet these objectives.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_protect_your_data_with_backup_and_restore">Protect your data with backup and restore</h3>
+<div class="sect3">
+<h4 id="_establish_backup_and_restoration_requirements">Establish backup and restoration requirements</h4>
+<div class="paragraph">
+<p>As with a disaster recovery strategy, backup requirements are based on a cost-benefit analysis. Analysis of your app&#8217;s data should be guided by the relative importance of the different categories of data the app manages, as well as external requirements, such as data retention laws.</p>
+</div>
+<div class="paragraph">
+<p>To establish backup requirements for your app, group your application&#8217;s data based on the following requirements:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>How much of this type of data can afford to be lost, measured in duration</p>
+</li>
+<li>
+<p>The maximum amount of time a restore of this type of data should require</p>
+</li>
+<li>
+<p>Backup retention requirements: how long and at what frequency do backups need to remain available</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These concepts map neatly to the concepts of Recovery Point Objective and Recovery Time Objective (RPO and RTO). The duration of acceptable loss will generally translate directly to required backup intervals and RPO. The maximum amount of time a restore takes corresponds to the RTO for the data component of your application. Both requirements should be developed relative to the cost of achieving them. Every organization would like to say that they truly can&#8217;t afford to lose <em>any</em> data, but often that&#8217;s not the case when the cost of achieving that requirement is considered.</p>
+</div>
+<div class="paragraph">
+<p>Backup absolutely plays a role in disaster recovery (DR), but backups, restores and their associated scenarios extend beyond the scope of DR. Backups may need to be restored in non-disaster situations, including those where RTO and RPO aren&#8217;t of great concern. For example, if a small amount of data older than your backup interval is corrupted or deleted, but the application doesn&#8217;t experience downtime, your application may never be in danger of missing its SLA and a successful restore will result in no data lost. Your disaster recovery plan may or may not include guidance on performing restores in non-disaster situations.</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. Tip</div>
+<div class="content">
+<div class="paragraph">
+<p>Don&#8217;t confuse <em>archival, replication, and backup</em>. Archival is the storage of data for long-term preservation and read access. Replication is the near-real-time copying of data between replicas to support high availability and certain disaster recovery scenarios. Some requirements, such as data retention laws, may influence your strategies for all three of these concerns. Archival, replication, and backup all require separate analysis and implementation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_azure_backup_and_restore_capabilities">Azure backup and restore capabilities</h4>
+<div class="sect4">
+<h5 id="_azure_backup">Azure Backup</h5>
+<div class="paragraph">
+<p>Azure Backup is a family of backup products that back up data to Azure Recovery Services vaults for storage and recovery. Recovery Service vaults are storage resources in Azure that are dedicated to holding data and configuration backups for virtual machines, servers, and individual workstations and workloads.</p>
+</div>
+<div class="paragraph">
+<p>Azure Backup serves as a general-purpose backup solution for cloud and on-premises workflows that run on VMs or physical servers. It&#8217;s designed to be a drop-in replacement for traditional backup solutions that stores data in Azure instead of archive tapes or other local physical media.</p>
+</div>
+<div class="paragraph">
+<p>image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-reliability/media/4-azure-backup.png []</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_azure_blob_storage">Azure Blob storage</h5>
+<div class="paragraph">
+<p>Azure Storage doesn&#8217;t include an automated backup feature, but blobs are commonly used to back up all kinds of data from various sources. Many services that provide backup capabilities use blobs to store their data, and blobs are a common target for scripts and tools in every kind of backup scenario.</p>
+</div>
+<div class="paragraph">
+<p>Immutable blob storage is configurable to be non-erasable and non-modifiable for a user-specified interval. Immutable blob storage was designed primarily to fulfill strict requirements for certain kinds of data, such as financial data. It&#8217;s a great option for ensuring that backups are protected against accidental deletion or modification.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_azure_sql_database">Azure SQL Database</h5>
+<div class="paragraph">
+<p>Comprehensive, automatic backup functionality is included with Azure SQL Database at no extra charge. Full backups are created weekly, with differential backups performed every 12 hours, and log backups created every five minutes. Backups created by the service can be used to restore a database to a specific point in time, even if it&#8217;s been deleted. Restores can be performed using the Azure portal, PowerShell, or the REST API. Backups for databases encrypted with Transparent Data Encryption, enabled by default, are also encrypted.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_azure_app_service">Azure App Service</h5>
+<div class="paragraph">
+<p>Web applications hosted in the Azure App Service Standard and Premium tiers support turnkey scheduled and manual backups. Backups include configuration and file contents as well as contents of databases used by the app. They also support simple filters for excluding files. Restore operations can target different App Service instances, making App Service backup a simple way to move one app&#8217;s contents to another.</p>
+</div>
+<div class="paragraph">
+<p>App Service backups are limited to 10 GB total, including app and database content. They&#8217;re a good solution for new apps under development and small-scale apps. More mature applications won&#8217;t generally use App Service backup. They will instead rely on robust deployment and rollback procedures, storage strategies that don&#8217;t use application disk storage, and dedicated backup strategies for databases and persistent storage.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_backups_and_test_restore_procedures">Verify backups and test restore procedures</h4>
+<div class="paragraph">
+<p>No backup system is complete without a strategy for verifying backups and testing restore procedures. Even if you use a dedicated backup service or product, you should still document and practice recovery procedures to ensure that they&#8217;re well-understood and return the system to the expected state.</p>
+</div>
+<div class="paragraph">
+<p>Strategies for verifying backups vary and will depend on the nature of your infrastructure. You may want to consider techniques, such as creating a new deployment of the application, restoring the backup to it, and comparing the state of the two instances. In many cases, this technique closely mimics actual disaster recovery procedures. Simply performing a comparison of a subset of the backup data with the live data immediately after creating a backup is enough. A common component of backup verification is attempting to restore old backups to ensure that they&#8217;re still available and operational, and that the backup system hasn&#8217;t changed in a way that renders them incompatible.</p>
+</div>
+<div class="paragraph">
+<p>Any strategy is better than finding out that your backups are corrupted or incomplete while attempting to recover from a disaster.</p>
+</div>
+<div class="paragraph">
+<p>A backup and restore strategy is an important part of ensuring your architecture can recover from the loss or corruption of data. Review your architecture to define your backup and restore requirements. Azure provides several services and features to provide backup and restore capabilities to any architecture.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Spring Kafka</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Spring Kafka</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_spring_kafka_usage_notes">Spring Kafka usage notes</a>
+<ul class="sectlevel2">
+<li><a href="#_consumer_autocommit_setting">Consumer AutoCommit setting</a></li>
+<li><a href="#_kafkalistner_annotation_setting">KafkaListner annotation setting</a></li>
+<li><a href="#_record_listeners">Record Listeners</a></li>
+<li><a href="#_spring_boot_auto_configuration">Spring Boot auto configuration</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_spring_kafka_usage_notes">Spring Kafka usage notes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_consumer_autocommit_setting">Consumer AutoCommit setting</h3>
+<div class="listingblock">
+<div class="title">org.springframework.boot.autoconfigure.kafka.KafkaProperties</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="n">spring</span><span class="o">.</span><span class="na">kafka</span><span class="o">.</span><span class="na">consumer</span><span class="o">.</span><span class="na">enableAutoCommit</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kafkalistner_annotation_setting">KafkaListner annotation setting</h3>
+<div class="paragraph">
+<p><code>org.springframework.boot.autoconfigure.kafka.KafkaAnnotationDrivenConfiguration</code></p>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.spring.io/spring-kafka/docs/current/reference/html/#kafka-listener-annotation" class="bare">https://docs.spring.io/spring-kafka/docs/current/reference/html/#kafka-listener-annotation</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_record_listeners">Record Listeners</h3>
+<div class="paragraph">
+<p>The <code>@KafkaListener</code> annotation provides a mechanism for simple POJO listeners.
+The following example shows how to use it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Listener</span> <span class="o">{</span>
+
+    <span class="nd">@KafkaListener</span><span class="o">(</span><span class="n">id</span> <span class="o">=</span> <span class="s">"foo"</span><span class="o">,</span> <span class="n">topics</span> <span class="o">=</span> <span class="s">"myTopic"</span><span class="o">,</span> <span class="n">clientIdPrefix</span> <span class="o">=</span> <span class="s">"myClientId"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">listen</span><span class="o">(</span><span class="nc">String</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spring_boot_auto_configuration">Spring Boot auto configuration</h3>
+<div class="listingblock">
+<div class="title">org.springframework.boot.autoconfigure.kafka.KafkaAnnotationDrivenConfiguration</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Bean</span>
+<span class="nd">@ConditionalOnMissingBean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"kafkaListenerContainerFactory"</span><span class="o">)</span>
+<span class="nc">ConcurrentKafkaListenerContainerFactory</span><span class="o">&lt;?,</span> <span class="o">?&gt;</span> <span class="n">kafkaListenerContainerFactory</span><span class="o">(</span>
+      <span class="nc">ConcurrentKafkaListenerContainerFactoryConfigurer</span> <span class="n">configurer</span><span class="o">,</span>
+      <span class="nc">ObjectProvider</span><span class="o">&lt;</span><span class="nc">ConsumerFactory</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;&gt;</span> <span class="n">kafkaConsumerFactory</span><span class="o">)</span> <span class="o">{</span>
+   <span class="nc">ConcurrentKafkaListenerContainerFactory</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ConcurrentKafkaListenerContainerFactory</span><span class="o">&lt;&gt;();</span>
+   <span class="n">configurer</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">factory</span><span class="o">,</span> <span class="n">kafkaConsumerFactory</span>
+         <span class="o">.</span><span class="na">getIfAvailable</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">DefaultKafkaConsumerFactory</span><span class="o">&lt;&gt;(</span><span class="k">this</span><span class="o">.</span><span class="na">properties</span><span class="o">.</span><span class="na">buildConsumerProperties</span><span class="o">())));</span>
+   <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@Configuration</span><span class="o">(</span><span class="n">proxyBeanMethods</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
+<span class="nd">@EnableKafka</span>
+<span class="nd">@ConditionalOnMissingBean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="nc">KafkaListenerConfigUtils</span><span class="o">.</span><span class="na">KAFKA_LISTENER_ANNOTATION_PROCESSOR_BEAN_NAME</span><span class="o">)</span>
+<span class="kd">static</span> <span class="kd">class</span> <span class="nc">EnableKafkaConfiguration</span> <span class="o">{</span>
+
+<span class="o">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

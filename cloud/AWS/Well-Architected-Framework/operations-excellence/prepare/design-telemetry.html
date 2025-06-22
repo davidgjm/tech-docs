@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Design telemetry</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Design telemetry</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_best_practices">Best Practices</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Design your workload so that it provides the information necessary for you to understand its internal state (for example, metrics, logs, events, and traces) across all components in support of observability and investigating issues. Iterate to develop the telemetry necessary to monitor the health of your workload, identify when outcomes are at risk, and enable effective responses.</p>
+</div>
+<div class="paragraph">
+<p>In AWS, you can emit and collect logs, metrics, and events from your applications and workloads components to enable you to understand their internal state and health. You can integrate distributed tracing to track requests as they travel through your workload. Use this data to understand how your application and underlying components interact and to analyze issues and performance.</p>
+</div>
+<div class="paragraph">
+<p>When instrumenting your workload, capture a broad set of information to enable situational awareness (for example, changes in state, user activity, privilege access, utilization counters), knowing that you can use filters to select the most useful information over time.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices">Best Practices</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="OPS04-BP01.html">OPS04-BP01 Implement application telemetry</a></p>
+</li>
+<li>
+<p><a href="OPS04-BP02.html">OPS04-BP02 Implement and configure workload telemetry</a></p>
+</li>
+<li>
+<p><a href="OPS04-BP03.html">OPS04-BP03 Implement user activity telemetry</a></p>
+</li>
+<li>
+<p><a href="OPS04-BP04.html">OPS04-BP04 Implement dependency telemetry</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

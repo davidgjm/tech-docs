@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Big compute architecture style</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Big compute architecture style</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_when_to_use_this_architecture">When to use this architecture</a></li>
+<li><a href="#_benefits">Benefits</a></li>
+<li><a href="#_challenges">Challenges</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The term <em>big compute</em> describes large-scale workloads that require a large number of cores, often numbering in the hundreds or thousands. Scenarios include image rendering, fluid dynamics, financial risk modeling, oil exploration, drug design, and engineering stress analysis, among others.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/big-compute-logical.png" alt="big compute logical">
+</div>
+</div>
+<div class="paragraph">
+<p>Here are some typical characteristics of big compute applications:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The work can be split into discrete tasks, which can be run across many cores simultaneously.</p>
+</li>
+<li>
+<p>Each task is finite. It takes some input, does some processing, and produces output. The entire application runs for a finite amount of time (minutes to days). A common pattern is to provision a large number of cores in a burst, and then spin down to zero once the application completes.</p>
+</li>
+<li>
+<p>The application does not need to stay up 24/7. However, the system must handle node failures or application crashes.</p>
+</li>
+<li>
+<p>For some applications, tasks are independent and can run in parallel. In other cases, tasks are tightly coupled, meaning they must interact or exchange intermediate results. In that case, consider using high-speed networking technologies such as InfiniBand and remote direct memory access (RDMA).</p>
+</li>
+<li>
+<p>Depending on your workload, you might use compute-intensive VM sizes (H16r, H16mr, and A9).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_architecture">When to use this architecture</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Computationally intensive operations such as simulation and number crunching.</p>
+</li>
+<li>
+<p>Simulations that are computationally intensive and must be split across CPUs in multiple computers (10-1000s).</p>
+</li>
+<li>
+<p>Simulations that require too much memory for one computer, and must be split across multiple computers.</p>
+</li>
+<li>
+<p>Long-running computations that would take too long to complete on a single computer.</p>
+</li>
+<li>
+<p>Smaller computations that must be run 100s or 1000s of times, such as Monte Carlo simulations.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_benefits">Benefits</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>High performance with "embarrassingly parallel" processing.</p>
+</li>
+<li>
+<p>Can harness hundreds or thousands of computer cores to solve large problems faster.</p>
+</li>
+<li>
+<p>Access to specialized high-performance hardware, with dedicated high-speed InfiniBand networks.</p>
+</li>
+<li>
+<p>You can provision VMs as needed to do work, and then tear them down.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_challenges">Challenges</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Managing the VM infrastructure.</p>
+</li>
+<li>
+<p>Managing the volume of number crunching</p>
+</li>
+<li>
+<p>Provisioning thousands of cores in a timely manner.</p>
+</li>
+<li>
+<p>For tightly coupled tasks, adding more cores can have diminishing returns. You may need to experiment to find the optimum number of cores.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

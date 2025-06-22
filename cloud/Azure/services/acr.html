@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Azure Container Registry</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Azure Container Registry</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_list_latest_version_of_a_helm_repo">List latest version of a helm repo</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_list_latest_version_of_a_helm_repo">List latest version of a helm repo</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The first element in the json array is the latest version item.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">az acr helm list --name lzmapdev --query '"my-helm-chart"[0]'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "annotations": {
+    "azurecr.io/manifest-digest": "sha256:2ca3c7fce0a03820ed1d954153a8e537f8eb3023a4e88a15b398f958aba5e44c"
+  },
+  "apiVersion": "v2",
+  "appVersion": "2022.1.0",
+  "created": "2022-05-10T16:13:55.0382546Z",
+  "description": "Sample helm chart",
+  "digest": "3f319d5562bfcab64d4efa859612715574bfa9441311785d1eb9f62e8f7dc326",
+  "name": "my-helm-chart",
+  "urls": [
+    "_blobs/my-helm-chart-1.0.0.tgz"
+  ],
+  "version": "1.0.0"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Bulkhead pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Bulkhead pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://samnewman.io/patterns/architectural/bff/">Pattern: Backends For Frontends</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The Bulkhead pattern is a type of application design that is tolerant of failure. In a bulkhead architecture, elements of an application are isolated into pools so that if one fails, the others will continue to function. It&#8217;s named after the sectioned partitions (bulkheads) of a ship&#8217;s hull. If the hull of a ship is compromised, only the damaged section fills with water, which prevents the ship from sinking.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A cloud-based application may include multiple services, with each service having one or more consumers. Excessive load or failure in a service will impact all consumers of the service.</p>
+</div>
+<div class="paragraph">
+<p>Moreover, a consumer may send requests to multiple services simultaneously, using resources for each request. When the consumer sends a request to a service that is misconfigured or not responding, the resources used by the client&#8217;s request may not be freed in a timely manner. As requests to the service continue, those resources may be exhausted. For example, the client&#8217;s connection pool may be exhausted. At that point, requests by the consumer to other services are affected. Eventually the consumer can no longer send requests to other services, not just the original unresponsive service.</p>
+</div>
+<div class="paragraph">
+<p>The same issue of resource exhaustion affects services with multiple consumers. A large number of requests originating from one client may exhaust available resources in the service. Other consumers are no longer able to consume the service, causing a cascading failure effect.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Partition service instances into different groups, based on consumer load and availability requirements. This design helps to isolate failures, and allows you to sustain service functionality for some consumers, even during a failure.</p>
+</div>
+<div class="paragraph">
+<p>A consumer can also partition resources, to ensure that resources used to call one service don&#8217;t affect the resources used to call another service. For example, a consumer that calls multiple services may be assigned a connection pool for each service. If a service begins to fail, it only affects the connection pool assigned for that service, allowing the consumer to continue using the other services.</p>
+</div>
+<div class="paragraph">
+<p>The benefits of this pattern include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Isolates consumers and services from cascading failures. An issue affecting a consumer or service can be isolated within its own bulkhead, preventing the entire solution from failing.
+Allows you to preserve some functionality in the event of a service failure. Other services and features of the application will continue to work.</p>
+</li>
+<li>
+<p>Allows you to deploy services that offer a different quality of service for consuming applications. A high-priority consumer pool can be configured to use high-priority services.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following diagram shows bulkheads structured around connection pools that call individual services. If Service A fails or causes some other issue, the connection pool is isolated, so only workloads using the thread pool assigned to Service A are affected. Workloads that use Service B and C are not affected and can continue working without interruption.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/bulkhead-1.png" alt="bulkhead 1">
+</div>
+</div>
+<div class="paragraph">
+<p>The next diagram shows multiple clients calling a single service. Each client is assigned a separate service instance. Client 1 has made too many requests and overwhelmed its instance. Because each service instance is isolated from the others, the other clients can continue making calls.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/bulkhead-2.png" alt="bulkhead 2">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Define partitions around the business and technical requirements of the application.</p>
+</li>
+<li>
+<p>When partitioning services or consumers into bulkheads, consider the level of isolation offered by the technology as well as the overhead in terms of cost, performance and manageability.</p>
+</li>
+<li>
+<p>Consider combining bulkheads with retry, circuit breaker, and throttling patterns to provide more sophisticated fault handling.</p>
+</li>
+<li>
+<p>When partitioning consumers into bulkheads, consider using processes, thread pools, and semaphores. Projects like <a href="https://github.com/resilience4j/resilience4j">resilience4j</a> and <a href="https://github.com/App-vNext/Polly">Polly</a> offer a framework for creating consumer bulkheads.</p>
+</li>
+<li>
+<p>When partitioning services into bulkheads, consider deploying them into separate virtual machines, containers, or processes. Containers offer a good balance of resource isolation with fairly low overhead.</p>
+</li>
+<li>
+<p>Services that communicate using asynchronous messages can be isolated through different sets of queues. Each queue can have a dedicated set of instances processing messages on the queue, or a single group of instances using an algorithm to dequeue and dispatch processing.</p>
+</li>
+<li>
+<p>Determine the level of granularity for the bulkheads. For example, if you want to distribute tenants across partitions, you could place each tenant into a separate partition, or put several tenants into one partition.</p>
+</li>
+<li>
+<p>Monitor each partition&#8217;s performance and SLA.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Isolate resources used to consume a set of backend services, especially if the application can provide some level of functionality even when one of the services is not responding.</p>
+</li>
+<li>
+<p>Isolate critical consumers from standard consumers.</p>
+</li>
+<li>
+<p>Protect the application from cascading failures.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern may not be suitable when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Less efficient use of resources may not be acceptable in the project.</p>
+</li>
+<li>
+<p>The added complexity is not necessary</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following Kubernetes configuration file creates an isolated container to run a single service, with its own CPU and memory resources and limits.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">drone-management</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">drone-management-container</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">drone-service</span>
+    <span class="na">resources</span><span class="pi">:</span>
+      <span class="na">requests</span><span class="pi">:</span>
+        <span class="na">memory</span><span class="pi">:</span> <span class="s2">"</span><span class="s">64Mi"</span>
+        <span class="na">cpu</span><span class="pi">:</span> <span class="s2">"</span><span class="s">250m"</span>
+      <span class="na">limits</span><span class="pi">:</span>
+        <span class="na">memory</span><span class="pi">:</span> <span class="s2">"</span><span class="s">128Mi"</span>
+        <span class="na">cpu</span><span class="pi">:</span> <span class="s2">"</span><span class="s">1"</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/app-design">esigning reliable Azure applications</a></p>
+</li>
+<li>
+<p><a href="circuit-breaker/README.html">Circuit Breaker pattern</a></p>
+</li>
+<li>
+<p><a href="retry.html">Retry pattern</a></p>
+</li>
+<li>
+<p><a href="throttling.html">Throttling pattern</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

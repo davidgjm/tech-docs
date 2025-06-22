@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Product As a Product</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Product As a Product</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_what_is_a_platform">What is a Platform?</a>
+<ul class="sectlevel2">
+<li><a href="#_characteristics_of_platforms">Characteristics of platforms</a></li>
+</ul>
+</li>
+<li><a href="#_why_and_how_to_build_internal_developer_platform">Why and how to build Internal Developer Platform</a></li>
+<li><a href="#_platform_as_a_product">Platform As A Product</a>
+<ul class="sectlevel2">
+<li><a href="#_insights_from_martin_fowler_what_i_talk_about_when_i_talk_about_platforms">Insights from Martin Fowler (What I Talk About When I Talk About Platforms)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><span class="icon yeti"><i class="fa fa-book"></i></span> Resources</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://tomgeraghty.co.uk/index.php/platform-as-a-product/">Platform as a Product</a></p>
+</li>
+<li>
+<p><a href="https://tomgeraghty.co.uk/index.php/platform-vs-product/">Platform Engineering and the Platform Operating Model</a></p>
+</li>
+<li>
+<p><a href="https://martinfowler.com/articles/talk-about-platforms.html">What I Talk About When I Talk About Platforms</a></p>
+</li>
+<li>
+<p><a href="https://thenewstack.io/platform-as-a-product-true-devops/">Platform as a Product: True DevOps?</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=O3vvo2Sinww">#ProductCon: Platform Product Management: Changing What’s Possible by The New York Times SVP of Prod</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=bPIpteB-qtk">How to Understand the Product Platform by American Express Sr PM</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=b8YHCDMxqfg">https://www.youtube.com/watch?v=b8YHCDMxqfg</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=PDBapcenckk">Webinar: Building Platform Products by LinkedIn Product Lead, Seema Jethani</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_a_platform">What is a Platform?</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>A digital platform is a foundation of self-service APIs, tools, services, knowledge and support which are arranged as a compelling internal product. Autonomous delivery teams can make use of the platform to deliver product features at a higher pace, with reduced co-ordination.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; From Evan Bottcher<br>
+<cite>2018</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>From <a href="https://martinfowler.com/articles/talk-about-platforms.html">What I Talk About When I Talk About Platforms</a> by Martin Fowler</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>A digital platform is a foundation of self-service APIs, tools, services, knowledge and support which are arranged as a compelling internal product. Autonomous delivery teams can make use of the platform to deliver product features at a higher pace, with reduced co-ordination.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Martin Fowler
+</div>
+</div>
+<div class="sect2">
+<h3 id="_characteristics_of_platforms">Characteristics of platforms</h3>
+<div class="paragraph">
+<p><strong>A platform should:</strong></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Reduce Developer Cognitive Load</dt>
+<dd>
+<p>– software developers can be overloaded with system complexity, tooling, documentation, and organisational noise. The PaaP approach intends to reduce that cognitive load so that developers can focus on solving the problem and providing business value, quickly.</p>
+</dd>
+<dt class="hdlist1">Reduce Operational Burden</dt>
+<dd>
+<p>– this includes everything from reducing utilisation of people, reducing friction and handoffs, improving observability, to capacity management, and documentation. Basically – making everyone’s jobs easier alongside maximising the technology ROI for the business.</p>
+</dd>
+<dt class="hdlist1">Optimise for Fast Flow</dt>
+<dd>
+<p>– most, maybe all, organisations want to reduce the time it takes for an idea to begin returning value. This is true of commercial businesses, public sector, and other organisations such as charities.  This involves optimising the technology for flow (automation, CI/CD tooling etc) as well as people, processes and practices. This is why we can’t separate the People from the Platform: the PaaP approach is not solely technological.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_and_how_to_build_internal_developer_platform">Why and how to build Internal Developer Platform</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In his latest Gartner report, <a href="https://www.gartner.com/analyst/55907/Manjunath-Bhat">Manjunath Bhat</a>, focuses on three key pillars around <a href="https://humanitec.com/blog/gartner-internal-developer-platforms-platform-engineering">why and how to build your IDP</a>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Improve developer experience by building internal developer platforms to reduce cognitive load, developer toil and repetitive manual work.</p>
+</li>
+<li>
+<p>Platforms don’t enforce a specific toolset or approach. It is about making it easy for developers to build and deliver software while not abstracting away useful and differentiated capabilities of the underlying core services.</p>
+</li>
+<li>
+<p>Platform engineering teams treat platforms as a product (used by developers) and design the platform to be consumed in a self-service manner.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_platform_as_a_product">Platform As A Product</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I would strongly advise also looking at internalising <a href="https://servicedesigntools.org/">service design capabilities</a> and expertise to help teams design and build the platform. The platform as a product approach is fundamentally a practice to enable improved efficiency, improved product quality and reliability and faster speed to market, via reducing cognitive load for developers, faster flow of work, reduced handoffs, and enabling developers to focus on delivering value.</p>
+</div>
+<div class="sect2">
+<h3 id="_insights_from_martin_fowler_what_i_talk_about_when_i_talk_about_platforms">Insights from Martin Fowler (<a href="https://martinfowler.com/articles/talk-about-platforms.html">What I Talk About When I Talk About Platforms</a>)</h3>
+<div class="paragraph">
+<p>It is a real struggle to find the right balance between autonomous diversification and mandated consolidation, and that is even more difficult to predict up front. A key ingredient for success in finding this balance is that platforms must be compelling to use, they cannot stand on a mandate alone. Your existing shared infrastructure function has a monopoly and delivery teams have no viable alternative. A little competition is a necessary ingredient to drive the product thinking ensuring that every platform feature adds value instead of creating constraints and coupling.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>A key ingredient for success in finding this balance is that platforms must be compelling to use</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>What makes a platform compelling? Here are a few ideas:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The platform is self-service for the overwhelming majority of use cases.</p>
+</li>
+<li>
+<p>The platform is composable, containing discrete services that can be used independently.</p>
+</li>
+<li>
+<p>The platform does not force an inflexible way of working upon the delivery team.</p>
+</li>
+<li>
+<p>The platform is quick and cheap to start using, with an easy on-ramp (e.g. Quick start guides, documentation, code samples)</p>
+</li>
+<li>
+<p>The platform has a rich internal user community for sharing</p>
+</li>
+<li>
+<p>The platform is secure and compliant by default</p>
+</li>
+<li>
+<p>The platform is up to date</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ultimately the delivery infrastructure platform is compelling when it is easier to consume the platform capability than building and maintaining your own thing. Netflix describes their centralised tooling as ‘the paved road’ - teams do not have to make use of the tooling but are responsible for all the costs of maintaining their own alternatives.</p>
+</div>
+<div class="paragraph">
+<p>A platform should also be more than just software and APIs - it is documentation, and consulting, and support and evangelism, and templates and guidelines.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

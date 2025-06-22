@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Architectural approaches for networking in multitenant solutions</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Architectural approaches for networking in multitenant solutions</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_key_considerations_and_requirements">Key considerations and requirements</a>
+<ul class="sectlevel2">
+<li><a href="#_infrastructure_and_platform_services">Infrastructure and platform services</a></li>
+<li><a href="#_platform_services">Platform services</a></li>
+<li><a href="#_sizing_subnets">Sizing subnets</a></li>
+<li><a href="#_public_or_private_access">Public or private access</a></li>
+<li><a href="#_access_to_tenants_endpoints">Access to tenants' endpoints</a></li>
+</ul>
+</li>
+<li><a href="#_approaches_and_patterns_to_consider">Approaches and patterns to consider</a>
+<ul class="sectlevel2">
+<li><a href="#_tenant_specific_vnets_with_service_provider_selected_ip_addresses">Tenant-specific VNets with service provider-selected IP addresses</a></li>
+<li><a href="#_tenant_specific_vnets_with_tenant_selected_ip_addresses">Tenant-specific VNets with tenant-selected IP addresses</a></li>
+<li><a href="#_hub_and_spoke_topology">Hub and spoke topology</a></li>
+<li><a href="#_static_ip_addresses">Static IP addresses</a></li>
+<li><a href="#_agents">Agents</a></li>
+<li><a href="#_azure_private_link_service">Azure Private Link service</a></li>
+<li><a href="#_domain_names_subdomains_and_tls">Domain names, subdomains, and TLS</a></li>
+<li><a href="#_gateway_routing_and_gateway_offloading_patterns">Gateway Routing and Gateway Offloading patterns</a></li>
+<li><a href="#_static_content_hosting_pattern">Static Content Hosting pattern</a></li>
+</ul>
+</li>
+<li><a href="#_antipatterns_to_avoid">Antipatterns to avoid</a>
+<ul class="sectlevel2">
+<li><a href="#_failing_to_plan_for_vnet_connectivity">Failing to plan for VNet connectivity</a></li>
+<li><a href="#_not_planning_for_limits">Not planning for limits</a></li>
+<li><a href="#_small_subnets">Small subnets</a></li>
+<li><a href="#_improper_network_segmentation">Improper network segmentation</a></li>
+<li><a href="#_relying_only_on_network_layer_security_controls">Relying only on network-layer security controls</a></li>
+<li><a href="#_rewriting_host_headers_without_testing">Rewriting host headers without testing</a></li>
+</ul>
+</li>
+<li><a href="#_next_steps">Next steps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>All solutions deployed to Azure require networking of some kind. Depending on your solution design and the workload, the ways in which you interact with Azure&#8217;s networking services might be different. In this article, we provide considerations and guidance for the networking aspects of multitenant solutions on Azure. We include information about the lower-level networking components, like virtual networks, through to higher-level and application-tier approaches.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Azure itself is a multitenant environment, and Azure&#8217;s network components are designed for multitenancy. Although it&#8217;s not required to understand the details in order to design your own solution, you can learn more about how Azure isolates your virtual network traffic from other customers' traffic.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_key_considerations_and_requirements">Key considerations and requirements</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_infrastructure_and_platform_services">Infrastructure and platform services</h3>
+<div class="paragraph">
+<p>The concerns you have for your networking components will differ, depending on the category of services you use.
+Infrastructure services</p>
+</div>
+<div class="paragraph">
+<p>Whenever you use infrastructure services, like virtual machines or Azure Kubernetes Service, you need to consider and design the virtual networks, or VNets, that underpin your services' connectivity. You also need to consider the other layers of security and isolation that you need to incorporate in your design. <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/networking#relying-only-on-network-layer-security-controls">Avoid relying exclusively on network-layer controls</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_platform_services">Platform services</h3>
+<div class="paragraph">
+<p>If you use Azure&#8217;s platform services, like App Service, Azure Cosmos DB, or Azure SQL Database, then the specific architecture you use will determine the networking services you require.</p>
+</div>
+<div class="paragraph">
+<p>If you need to isolate your platform services from the internet, you need to use a VNet. Depending on the specific services you use, you might work with <a href="https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview">private endpoints</a> or VNet-integrated resources, like Application Gateway. However, you might also choose to make your platform services available through their public IP addresses, and use the services' own protections like firewalls and identity controls. In these situations, you might not need a VNet.</p>
+</div>
+<div class="paragraph">
+<p>The decision of whether to use VNets for platform services is based on many requirements, including the following factors:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Compliance requirements</dt>
+<dd>
+<p>You might need to meet a specific compliance standard. Some standards require your Azure environment to be configured in specific ways.</p>
+</dd>
+<dt class="hdlist1">Your tenants' requirements</dt>
+<dd>
+<p>Even if your own organization doesn&#8217;t have specific requirements for network-layer isolation or controls, your tenants might. Ensure you have a clear understanding of how your tenants will access your solution and whether they have any assumptions about its network design.</p>
+</dd>
+<dt class="hdlist1">Complexity</dt>
+<dd>
+<p>It can be more complex to understand and work with virtual networks. Ensure your team has a clear understanding of the principles involved, or you&#8217;re likely to deploy an insecure environment.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Ensure that you understand the <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/networking#antipatterns-to-avoid">implications of using private networking</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sizing_subnets">Sizing subnets</h3>
+<div class="paragraph">
+<p>When you need to deploy a VNet, it&#8217;s important to carefully consider the sizing and address space of the entire VNet and of the subnets within the VNet.</p>
+</div>
+<div class="paragraph">
+<p>Ensure you have a clear understanding of how you will deploy your Azure resources into VNets, and the number of IP addresses each resource consumes. If you deploy tenant-specific compute nodes, database servers, or other resources, ensure you create subnets that are large enough for your expected tenant growth and <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/design-scale">horizontal autoscaling of resources</a>.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, when you work with managed services, it&#8217;s important that you understand how IP addresses are consumed. For example, when you use Azure Kubernetes Service with <a href="https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni">Azure Container Networking Interface (Azure CNI)</a>, the number of IP addresses consumed from a subnet will be based on factors like the number of nodes, how you scale horizontally, and the service deployment process that you use. When you use Azure App Service and Azure Functions with VNet integration, <a href="https://docs.microsoft.com/en-us/azure/app-service/overview-vnet-integration#subnet-requirements">the number of IP addresses consumed is based on the number of plan instances</a>.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.microsoft.com/en-us/azure/security/fundamentals/network-best-practices#logically-segment-subnets">Review the subnet segmentation guidance</a> when planning your subnets.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_public_or_private_access">Public or private access</h3>
+<div class="paragraph">
+<p>Consider whether your tenants will access your services through the internet or through private IP addresses.</p>
+</div>
+<div class="paragraph">
+<p>For internet-based (public) access, you can use firewall rules, IP address allowlisting and denylisting, shared secrets and keys, and identity-based controls to secure your service.</p>
+</div>
+<div class="paragraph">
+<p>If you need to enable connectivity to your service by using private IP addresses, consider using <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/networking#azure-private-link-service">Azure Private Link Service</a> or <a href="https://docs.microsoft.com/en-us/azure/virtual-network/create-peering-different-subscriptions">cross-tenant virtual network peering</a>. For some limited scenarios, you might also consider using Azure ExpressRoute or Azure VPN Gateway to enable private access to your solution. We only advise that you use this approach, when you have dedicated networks for each tenant, and a small number of tenants.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_access_to_tenants_endpoints">Access to tenants' endpoints</h3>
+<div class="paragraph">
+<p>Consider whether you need to send data to endpoints within the tenants' networks, either within or outside of Azure. For example, will you need to invoke a webhook that&#8217;s provided by a customer, or do you need to send real-time messages to a tenant?</p>
+</div>
+<div class="paragraph">
+<p>If you do need to send data to tenants' endpoints, consider the following common approaches:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Initiate connections from your solution to tenants' endpoints through the internet. Consider whether the connections must originate from a <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/networking#static-ip-addresses">static IP address</a>. Depending on the Azure services you use, you might need to deploy a <a href="https://docs.microsoft.com/en-us/azure/virtual-network/nat-gateway/nat-overview">NAT Gateway</a>, firewall, or load balancer.</p>
+</li>
+<li>
+<p>Deploy an <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/networking#agents">agent</a> to enable connectivity between your Azure-hosted services and your customers' networks, regardless of where they are located.</p>
+</li>
+<li>
+<p>For one-way messaging, consider using a service like <a href="https://docs.microsoft.com/en-us/azure/event-grid/overview">Azure Event Grid</a>, with or without <a href="https://docs.microsoft.com/en-us/azure/event-grid/event-domains">event domains</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_approaches_and_patterns_to_consider">Approaches and patterns to consider</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this section, we describe some of the key networking approaches that you can consider in a multitenant solution. We begin by describing the lower-level approaches for core networking components, and then follow with the approaches that you can consider for HTTP and other application-layer concerns.</p>
+</div>
+<div class="sect2">
+<h3 id="_tenant_specific_vnets_with_service_provider_selected_ip_addresses">Tenant-specific VNets with service provider-selected IP addresses</h3>
+<div class="paragraph">
+<p>In some situations, you need to run dedicated VNet-connected resources in Azure on a tenant&#8217;s behalf. For example, you might run a virtual machine for each tenant, or you might need to use private endpoints to access tenant-specific databases.</p>
+</div>
+<div class="paragraph">
+<p>Consider deploying a VNet for each tenant, by using an IP address space that you control.This approach enables you to peer the VNets together for your own purposes, such as if you need to establish a <a href="#_hub_and_spoke_topology">hub and spoke topology</a> to centrally control traffic ingress and egress.</p>
+</div>
+<div class="paragraph">
+<p>However, service provider-selected IP addresses aren&#8217;t appropriate if tenants need to connect directly to the VNet you created, such as by using VNet peering.It&#8217;s likely that the address space you select will be incompatible with their own address spaces.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tenant_specific_vnets_with_tenant_selected_ip_addresses">Tenant-specific VNets with tenant-selected IP addresses</h3>
+<div class="paragraph">
+<p>If tenants need to peer their own VNets with the VNet you manage on their behalf, consider deploying tenant-specific VNets with an IP address space that the tenant selects.This system enables each tenant to ensure that the IP address ranges in the VNet you control do not overlap with their own VNets and are compatible for peering.</p>
+</div>
+<div class="paragraph">
+<p>However, this approach means it&#8217;s unlikely that you can peer your tenants' VNets together or adopt a <a href="#_hub_and_spoke_topology">hub and spoke topology</a>, because there are likely to be overlapping IP address ranges among VNets of different tenants.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hub_and_spoke_topology">Hub and spoke topology</h3>
+<div class="paragraph">
+<p>The <a href="https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke">hub and spoke VNet topology</a> enables you to peer a centralized hub VNet with multiple spoke VNets.You can centrally control the traffic ingress and egress for your VNets, and control whether the resources in each spoke&#8217;s VNet can communicate with each other.Each spoke VNet can also access shared components, like Azure Firewall, and it might be able to use services like Azure DDoS Protection.</p>
+</div>
+<div class="paragraph">
+<p>When you use a hub and spoke topology, ensure you plan around limits, <a href="https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview">such as the maximum number of peered VNets</a>, and ensure that you don&#8217;t use overlapping address spaces for each tenant&#8217;s VNet.</p>
+</div>
+<div class="paragraph">
+<p>The hub and spoke topology can be useful when you deploy tenant-specific VNets with IP addresses that you select.Each tenant&#8217;s VNet becomes a spoke, and can share your common resources in the hub VNet.You can also use the hub and spoke topology when you scale shared resources across multiple VNets for scale purposes, or when you use the <a href="../../../../design-patterns/deployment-stamp.html">Deployment Stamps pattern</a>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If your solution runs across multiple geographic regions, it&#8217;s usually a good practice to deploy separate hubs and hub resources in each region.While this practice incurs a higher resource cost, it avoids traffic going through multiple Azure regions unnecessarily, which can increase the latency of requests and incur global peering charges.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_ip_addresses">Static IP addresses</h3>
+<div class="paragraph">
+<p>Consider whether your tenants need your service to use static public IP addresses for inbound traffic, outbound traffic, or both. Different Azure services enable static IP addresses in different ways.</p>
+</div>
+<div class="paragraph">
+<p>When you work with virtual machines and other infrastructure components, consider using a load balancer or firewall for both inbound and outbound static IP addressing. Consider using NAT Gateway to control the IP address of outbound traffic.</p>
+</div>
+<div class="paragraph">
+<p>When you work with platform services, the specific service you use determines whether and how you can control IP addresses. You might need to configure the resource in a specific way, such as by deploying the resource into a VNet and by using a NAT Gateway or firewall. Or, you can request the current set of IP addresses that the service uses for outbound traffic. For example, <a href="https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-intermittent-outbound-connection-errors">App Service provides an API and web interface to obtain the current outbound IP addresses for your application</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_agents">Agents</h3>
+<div class="paragraph">
+<p>If you need to enable your tenants to receive messages that are initiated by your solution, or if you need to access data that exists in tenants' own networks, then consider providing an agent (sometimes called an on-premises gateway) that they can deploy within their network. This approach can work whether your tenants' networks are in Azure, in another cloud provider, or on premises.</p>
+</div>
+<div class="paragraph">
+<p>The agent initiates an outbound connection to an endpoint that you specify and control, and either keeps long-running connections alive or polls intermittently. Consider using <a href="https://docs.microsoft.com/en-us/azure/azure-relay/relay-what-is-it">Azure Relay</a> to establish and manage connections from your agent to your service. When the agent establishes the connection, it authenticates and includes some information about the tenant identifier so that your service can map the connection to the correct tenant.</p>
+</div>
+<div class="paragraph">
+<p>Agents typically simplify the security configuration for your tenants. It can be complex and risky to open inbound ports, especially in an on-premises environment. An agent avoids the need for tenants to take this risk.</p>
+</div>
+<div class="paragraph">
+<p>Examples of Microsoft services that provide agents for connectivity to tenants' networks include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime">Azure Data Factory&#8217;s self-hosted integration runtime</a>.</p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/app-service/app-service-hybrid-connections">Azure App Service Hybrid Connection</a>.</p>
+</li>
+<li>
+<p>Microsoft on-premises data gateway, which is used for Azure Logic Apps, Power BI, and other services.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_private_link_service">Azure Private Link service</h3>
+<div class="paragraph">
+<p><a href="https://docs.microsoft.com/en-us/azure/private-link/private-link-service-overview">Azure Private Link service</a> provides private connectivity from a tenant&#8217;s Azure environment to your solution. Tenants can also use Private Link service with their own VNet, to access your service from an on-premises environment.</p>
+</div>
+<div class="paragraph">
+<p>Tenants can deploy a private endpoint within their VNet and configure it to your Private Link service instance. Azure securely routes the traffic to the service. Azure Private Link service is used by many large SaaS providers, including Snowflake, Confluent Cloud, and MongoDB Atlas.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview#access-to-a-private-link-resource-using-approval-workflow">Private endpoints typically require approval</a>, when the destination resource is in a different Azure subscription to the resource. You can <a href="https://docs.microsoft.com/en-us/azure/private-link/manage-private-endpoint#manage-private-endpoint-connections-on-a-customerpartner-owned-private-link-service">automate the approval process</a> within your solution by using Azure PowerShell, the Azure CLI, and the Azure Resource Manager API.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain_names_subdomains_and_tls">Domain names, subdomains, and TLS</h3>
+<div class="paragraph">
+<p>When you work with domain names and transport-layer security (TLS) in a multitenant solution, there are a number of considerations. <a href="../considerations/domain-names.html">Review the considerations for multitenancy and domain names</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gateway_routing_and_gateway_offloading_patterns">Gateway Routing and Gateway Offloading patterns</h3>
+<div class="paragraph">
+<p>The <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/gateway-routing">Gateway Routing pattern</a> and the <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/gateway-offloading">Gateway Offloading pattern</a> involve deploying a layer 7 reverse proxy or gateway. Gateways are useful to provide core services for a multitenant application, including the following capabilities:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Routing requests to tenant-specific backends or deployment stamps.</p>
+</li>
+<li>
+<p>Handling tenant-specific domain names and TLS certificates.</p>
+</li>
+<li>
+<p>Inspecting requests for security threats, by using a <a href="https://azure.microsoft.com/services/web-application-firewall">web application firewall (WAF)</a>.</p>
+</li>
+<li>
+<p>Caching responses to improve performance.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Azure provides several services that can be used to achieve some or all of these goals, including Azure Front Door, Azure Application Gateway, and Azure API Management. You can also deploy your own custom solution, by using software like NGINX or HAProxy.</p>
+</div>
+<div class="paragraph">
+<p>If you plan to deploy a gateway for your solution, a good practice is to first build a complete prototype that includes all of the features you need, and to verify that your application components continue to function as you expect. You should also understand how the gateway component will scale to support your traffic and tenant growth.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_content_hosting_pattern">Static Content Hosting pattern</h3>
+<div class="paragraph">
+<p>The <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/static-content-hosting">Static Content Hosting pattern</a> involves serving web content from a cloud-native storage service, and using a content delivery network (CDN) to cache the content.</p>
+</div>
+<div class="paragraph">
+<p>You can use Azure Front Door or another CDN for your solution&#8217;s static components, such as single-page JavaScript applications, and for static content like image files and documents.</p>
+</div>
+<div class="paragraph">
+<p>Depending on how your solution is designed, you might also be able to cache tenant-specific files or data within a CDN, such as JSON-formatted API responses. This practice can help you improve the performance and scalability of your solution, but it&#8217;s important to consider whether tenant-specific data is isolated sufficiently to avoid leaking data across tenants. Consider how you plan to purge tenant-specific content from your cache, such as when data is updated or a new application version is deployed. By including the tenant identifier in the URL path, you can control whether you purge a specific file, all the files that relate to a specific tenant, or all the files for all the tenants.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_antipatterns_to_avoid">Antipatterns to avoid</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_failing_to_plan_for_vnet_connectivity">Failing to plan for VNet connectivity</h3>
+<div class="paragraph">
+<p>By deploying resources into VNets, you have a great deal of control over how traffic flows through your solution&#8217;s components. However, VNet integration also introduces additional complexity, cost, and other factors that you need to consider. This effect is especially true with platform at a service (PaaS) components.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s important to test and plan your network strategy, so that you uncover any issues before you implement it in a production environment.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_not_planning_for_limits">Not planning for limits</h3>
+<div class="paragraph">
+<p>Azure enforces a number of limits that affect networking resources. These limits include Azure resource limits and fundamental protocol and platform limits. For example, when you build a high-scale multitenant solution on platform services, such as Azure App Service and Azure Functions, you might need to consider the number of TCP connections and SNAT ports. When you work with virtual machines and load balancers, you also need to consider limitations for outbound rules and for SNAT ports.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_small_subnets">Small subnets</h3>
+<div class="paragraph">
+<p>It&#8217;s important to consider the size of each subnet to allow for the number of resources or instances of resources that you will deploy. When you work with platform as a service (PaaS) resources, ensure you understand how your resource&#8217;s configuration and scale will affect the number of IP addresses that are required in its subnet.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_improper_network_segmentation">Improper network segmentation</h3>
+<div class="paragraph">
+<p>If your solution requires virtual networks, consider how you configure <a href="https://docs.microsoft.com/en-us/azure/security/fundamentals/network-best-practices#logically-segment-subnets">network segmentation</a> to enable you to control inbound and outbound (north-south) traffic flows and the flows within your solution (east-west). Decide whether tenants should have their own VNets, or if you will deploy shared resources in shared VNets. Changing the approach can be difficult, so ensure you consider all of your requirements, and then select an approach that will work for your future growth targets.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_relying_only_on_network_layer_security_controls">Relying only on network-layer security controls</h3>
+<div class="paragraph">
+<p>In modern networks, it&#8217;s important to combine network-layer security with other security controls, and you should not rely only on firewalls or network segmentation. This is sometimes called zero-trust networking. Use identity-based controls to verify the client, caller, or user, at every layer of your solution. Consider using services that enable you to add additional layers of protection. The options you have available depend on the Azure services that you use. In AKS, consider using a service mesh for mutual TLS authentication, and network policies to control east-west traffic. In App Service, consider using the built-in support for authentication and authorization and access restrictions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rewriting_host_headers_without_testing">Rewriting host headers without testing</h3>
+<div class="paragraph">
+<p>When you use the <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/gateway-offloading">Gateway Offloading pattern</a>, you might consider rewriting the <code>Host</code> header of HTTP requests. This practice can simplify the configuration of your backend web application service by offloading the custom domain and TLS management to the gateway.</p>
+</div>
+<div class="paragraph">
+<p>However, <code>Host</code> header rewrites can cause problems for some backend services. If your application issues HTTP redirects or cookies, the mismatch in host names can break the application&#8217;s functionality. In particular, this issue can arise when you use backend services that are themselves multitenant, like Azure App Service, Azure Functions, and Azure Spring Cloud.</p>
+</div>
+<div class="paragraph">
+<p>Ensure you test your application&#8217;s behavior with the gateway configuration that you plan to use.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Review <a href="../considerations/domain-names.html">considerations when using domain names in a multitenant solution</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

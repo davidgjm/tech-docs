@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>containerd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>containerd</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_readingsreferences">Readings/References</a></li>
+<li><a href="#_architecture">Architecture</a></li>
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_open_container_initiative_oci">Open Container Initiative (OCI)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_readingsreferences">Readings/References</h2>
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://faun.pub/docker-containerd-standalone-runtimes-heres-what-you-should-know-b834ef155426">Docker, Containerd &amp; Standalone Runtimes — Here’s What You Should Know</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/containerd-01.png" alt="containerd 01">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_architecture">Architecture</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="../../images/containerd-architecture.png" alt="architecture" width="1024">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Containerd is one of the recent projects in the Docker ecosystem and its purpose is breaking up more modularity to Docker architecture and more neutrality visà-vis the other industry actors (Cloud providers and other orchestration services).</p>
+</div>
+<div class="paragraph">
+<p>According to Solomon Hykes, containerd is already deployed on millions of machines since April 2016 when it was included in Docker 1.11. The announced roadmap to extend containerd get its input from the cloud providers and actors like Alibaba Cloud, AWS, Google, IBM, Microsoft, and other active members of the container ecosystem.</p>
+</div>
+<div class="paragraph">
+<p>More Docker engine functionality will be added to containerd so that containerd 1.0 will provide all the core primitives you need to manage containers with parity on Linux and Windows hosts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Container execution and supervision</p>
+</li>
+<li>
+<p>Image distribution</p>
+</li>
+<li>
+<p>Network Interfaces Management</p>
+</li>
+<li>
+<p>Local storage</p>
+</li>
+<li>
+<p>Native plumbing level API</p>
+</li>
+<li>
+<p>Full OCI support, including the extended OCI image specification</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To build, ship and run containerized applications, you may continue to use Docker but if you are looking for specialized components you could consider containerd.</p>
+</div>
+<div class="paragraph">
+<p>Docker Engine 1.11 was the first release built on runC (a runtime based on Open Container Intiative technology) and containerd.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../images/containerd-integration-architecture.jpeg" alt="Containerd Integration Architecture">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_open_container_initiative_oci">Open Container Initiative (OCI)</h3>
+<div class="paragraph">
+<p>Formed in June 2015, the <strong>Open Container Initiative (OCI)</strong> aims to establish common standards for software containers in order to avoid a potential fragmentation and divisions inside the container ecosystem.</p>
+</div>
+<div class="paragraph">
+<p>It contains two specifications:
+- runtime-spec: The runtime specification
+- image-spec: The image specification</p>
+</div>
+<div class="paragraph">
+<p>The runtime specification outlines how to run a filesystem bundle that is unpacked on disk:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A standardized container bundle should contain the needed information and configurations to load and run a container in a config.json file residing in the root of the bundle directory.</p>
+</li>
+<li>
+<p>A standardized container bundle should contain a directory representing the root filesystem of the container. Generally this directory has a conventional name like rootfs.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

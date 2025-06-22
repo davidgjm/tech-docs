@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>kubernetes provider</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1><code>kubernetes</code> provider</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_argument_reference">Argument Reference</a>
+<ul class="sectlevel2">
+<li><a href="#_metadata">Metadata</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_argument_reference">Argument Reference</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_metadata">Metadata</h3>
+<div class="paragraph">
+<p>The following error will be reported if you directly reference the kubernetes resource name with <code>metadata.name</code>.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Error: Invalid operation</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>on foundation.tf line 59, in resource "kubernetes_persistent_volume_claim" "blob_source_map":
+59:     name      = kubernetes_storage_class.blob_source_map.metadata.name</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Block type "metadata" is represented by a list of objects, so it must be
+indexed using a numeric key, like .metadata[0].</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The corrected HCL should be written like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="hcl"><span class="nx">resource</span> <span class="s2">"kubernetes_persistent_volume_claim"</span> <span class="s2">"blob_pvc"</span> <span class="p">{</span>
+  <span class="nx">metadata</span> <span class="p">{</span>
+    <span class="nx">name</span>      <span class="o">=</span> <span class="nx">kubernetes_storage_class</span><span class="p">.</span><span class="nx">blob_mapping</span><span class="p">.</span><span class="nx">metadata</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span>
+    <span class="nx">namespace</span> <span class="o">=</span> <span class="nx">kubernetes_namespace</span><span class="p">.</span><span class="nx">my_namespace</span><span class="p">.</span><span class="nx">metadata</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span>
+    <span class="nx">labels</span>    <span class="o">=</span> <span class="p">{</span>
+      <span class="s2">"app.kubernetes.io/created-by"</span> <span class="o">:</span> <span class="s2">"terraform"</span>
+      <span class="s2">"app.kubernetes.io/component"</span> <span class="o">:</span> <span class="s2">"application-runtime"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">spec</span> <span class="p">{</span>
+    <span class="nx">access_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ReadWriteMany"</span><span class="p">]</span>
+    <span class="nx">resources</span> <span class="p">{</span>
+      <span class="nx">requests</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">storage</span> <span class="o">=</span> <span class="s2">"100Gi"</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">storage_class_name</span> <span class="o">=</span> <span class="nx">kubernetes_storage_class</span><span class="p">.</span><span class="nx">blob_mapping</span><span class="p">.</span><span class="nx">metadata</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span>
+  <span class="p">}</span>
+  <span class="nx">depends_on</span> <span class="o">=</span> <span class="p">[</span><span class="nx">kubernetes_storage_class</span><span class="p">.</span><span class="nx">blob_mapping</span><span class="p">]</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

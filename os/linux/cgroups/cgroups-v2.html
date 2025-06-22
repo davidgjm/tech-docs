@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Linux Control Groups v2 (cgroups v2)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Linux Control Groups v2 (cgroups v2)</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_terminology">Terminology</a></li>
+<li><a href="#_what_is_cgroup">What is cgroup?</a></li>
+</ul>
+</li>
+<li><a href="#_creating_cgroups_and_moving_processes">Creating cgroups and moving processes</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html" class="bare">https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html</a></p>
+</li>
+<li>
+<p><a href="https://man7.org/linux/man-pages/man7/cgroups.7.html#CGROUPS_VERSION_2">cgroups(7) — Linux manual page</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_terminology">Terminology</h3>
+<div class="paragraph">
+<p>“cgroup” stands for “control group” and is never capitalized. The singular form is used to designate the whole feature and also as a qualifier as in “cgroup controllers”. When explicitly referring to multiple individual control groups, the plural form “cgroups” is used.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_cgroup">What is cgroup?</h3>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Control groups, usually referred to as cgroups, are a Linux
+kernel feature which allow processes to be organized into
+hierarchical groups whose usage of various types of resources can
+then be limited and monitored.  The kernel&#8217;s cgroup interface is
+provided through a pseudo-filesystem called cgroupfs.  Grouping
+is implemented in the core cgroup kernel code, while resource
+tracking and limits are implemented in a set of per-resource-type
+subsystems (memory, CPU, and so on).</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>cgroup is a mechanism to organize processes hierarchically and distribute system resources along the hierarchy in a controlled and configurable manner.</p>
+</div>
+<div class="paragraph">
+<p>cgroup is largely composed of two parts - the core and controllers. cgroup core is primarily responsible for hierarchically organizing processes. A cgroup controller is usually responsible for distributing a specific type of system resource along the hierarchy although there are utility controllers which serve purposes other than resource distribution.</p>
+</div>
+<div class="paragraph">
+<p>cgroups form a tree structure and every process in the system belongs to one and only one cgroup. All threads of a process belong to the same cgroup. On creation, all processes are put in the cgroup that the parent process belongs to at the time. A process can be migrated to another cgroup. Migration of a process doesn’t affect already existing descendant processes.</p>
+</div>
+<div class="paragraph">
+<p>Following certain structural constraints, controllers may be enabled or disabled selectively on a cgroup. All controller behaviors are hierarchical - if a controller is enabled on a cgroup, it affects all processes which belong to the cgroups consisting the inclusive sub-hierarchy of the cgroup. When a controller is enabled on a nested cgroup, it always restricts the resource distribution further. The restrictions set closer to the root in the hierarchy can not be overridden from further away.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_cgroups_and_moving_processes">Creating cgroups and moving processes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A cgroup filesystem initially contains a single root cgroup, '/',
+which all processes belong to.  A new cgroup is created by
+creating a directory in the cgroup filesystem:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir /sys/fs/cgroup/cpu/cg1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This creates a new empty cgroup.</p>
+</div>
+<div class="paragraph">
+<p>A process may be moved to this cgroup by writing its PID into the
+cgroup&#8217;s cgroup.procs file:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>echo $$ &gt; /sys/fs/cgroup/cpu/cg1/cgroup.procs</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Only one PID at a time should be written to this file.</p>
+</div>
+<div class="paragraph">
+<p>Writing the value 0 to a cgroup.procs file causes the writing
+process to be moved to the corresponding cgroup.</p>
+</div>
+<div class="paragraph">
+<p>When writing a PID into the cgroup.procs, all threads in the
+process are moved into the new cgroup at once.</p>
+</div>
+<div class="paragraph">
+<p>Within a hierarchy, a process can be a member of exactly one
+cgroup.  Writing a process&#8217;s PID to a cgroup.procs file
+automatically removes it from the cgroup of which it was
+previously a member.</p>
+</div>
+<div class="paragraph">
+<p>The cgroup.procs file can be read to obtain a list of the
+processes that are members of a cgroup.  The returned list of
+PIDs is not guaranteed to be in order.  Nor is it guaranteed to
+be free of duplicates.  (For example, a PID may be recycled while
+reading from the list.)</p>
+</div>
+<div class="paragraph">
+<p>In cgroups v1, an individual thread can be moved to another
+cgroup by writing its thread ID (i.e., the kernel thread ID
+returned by clone(2) and gettid(2)) to the tasks file in a cgroup
+directory.  This file can be read to discover the set of threads
+that are members of the cgroup.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

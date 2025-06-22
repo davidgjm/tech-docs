@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Separated Application Engineering and Operations (AEO) and Infrastructure Engineering and Operations (IEO) with centralized governance</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article">
+<div id="header">
+<h1>Separated Application Engineering and Operations (AEO) and Infrastructure Engineering and Operations (IEO) with centralized governance</h1>
+</div>
+<div id="content">
+<div class="paragraph">
+<p>This “<em>Separated AEO and IEO</em>” model follows a “you build it you run it” methodology.</p>
+</div>
+<div class="paragraph">
+<p>Your application engineers and developers perform both the engineering and the operation of their workloads. Similarly, your infrastructure engineers perform both the engineering and operation of the platforms they use to support application teams.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ops-model_02.png" alt="ops model 02">
+</div>
+</div>
+<div class="paragraph">
+<p>For this example, we are going to treat governance as centralized. Standards are distributed, provided, or shared to the application teams.</p>
+</div>
+<div class="paragraph">
+<p>You should use tools or services that enable you to centrally govern your environments across accounts, such as <a href="http://aws.amazon.com/organizations/" target="_blank" rel="noopener">AWS Organizations</a>. Services like <a href="http://aws.amazon.com/controltower/features/" target="_blank" rel="noopener">AWS Control Tower</a> expand this management capability enabling you to define blueprints (supporting your operating models) for the setup of accounts, apply ongoing governance using AWS Organizations, and automate provisioning of new accounts.</p>
+</div>
+<div class="paragraph">
+<p>“You build it you run it” does not mean that the application team is responsible for the full stack, tool chain, and platform.</p>
+</div>
+<div class="paragraph">
+<p>The platform engineering team provides a standardized set of services (for example, development tools, monitoring tools, backup and recovery tools, and network) to the application team. The platform team may also provide the application team access to approved cloud provider services, specific configurations of the same, or both.</p>
+</div>
+<div class="paragraph">
+<p>Mechanisms that provide a self-service capability for deploying approved services and configurations, such as <a href="http://aws.amazon.com/servicecatalog/" target="_blank" rel="noopener">Service Catalog</a>, can help limit delays associated with fulfillment requests while enforcing governance.</p>
+</div>
+<div class="paragraph">
+<p>The platform team enables full stack visibility so that application teams can differentiate between issues with their application components and the services and infrastructure components their applications consume. The platform team may also provide assistance configuring these services and guidance on how to improve the applications teams’ operations.</p>
+</div>
+<div class="paragraph">
+<p>As discussed previously, it’s critical that mechanisms exist for the application team to request additions, changes, and exceptions to standards in support of teams’ activities and innovation of their application.</p>
+</div>
+<div class="paragraph">
+<p>The Separated AEO IEO model provides strong feedback loops to application teams. Day to day operations of a workload increases contact with customers either through direct interaction or indirectly through support and feature requests. This heightened visibility allows application teams to address issues more quickly. The deeper engagement and closer relationship provides insight to customer needs and enables more rapid innovation.</p>
+</div>
+<div class="paragraph">
+<p>All of this is also true for the platform team supporting the application teams.</p>
+</div>
+<div class="paragraph">
+<p>Adopted standards may be pre-approved for use, reducing the amount of review necessary to enter production. Consuming supported and tested standards provided by the platform team may reduce the frequency of issues with those services. Adoption of standards enables application teams to focus on differentiating their workloads.</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Architectural approaches for governance and compliance in multitenant solutions</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Architectural approaches for governance and compliance in multitenant solutions</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_key_considerations_and_requirements">Key considerations and requirements</a>
+<ul class="sectlevel2">
+<li><a href="#_resource_isolation">Resource isolation</a></li>
+<li><a href="#_data_management">Data management</a></li>
+<li><a href="#_isolation">Isolation</a></li>
+<li><a href="#_sovereignty">Sovereignty</a></li>
+<li><a href="#_tenants_access_to_data_that_you_store">Tenants' access to data that you store</a></li>
+<li><a href="#_your_access_to_tenants_data">Your access to tenants' data</a></li>
+<li><a href="#_aggregation_of_data_from_multiple_tenants">Aggregation of data from multiple tenants</a></li>
+<li><a href="#_compliance_requirements">Compliance requirements</a></li>
+</ul>
+</li>
+<li><a href="#_approaches_and_patterns_to_consider">Approaches and patterns to consider</a>
+<ul class="sectlevel2">
+<li><a href="#_resource_tags">Resource tags</a></li>
+<li><a href="#_access_control">Access control</a></li>
+<li><a href="#_azure_resource_graph">Azure Resource Graph</a></li>
+<li><a href="#_azure_purview">Azure Purview</a></li>
+<li><a href="#_verify_compliance_with_standards">Verify compliance with standards</a></li>
+<li><a href="#_generate_compliance_documentation">Generate compliance documentation</a></li>
+<li><a href="#_deployment_stamps_pattern">Deployment Stamps pattern</a></li>
+</ul>
+</li>
+<li><a href="#_antipatterns_to_avoid">Antipatterns to avoid</a></li>
+<li><a href="#_next_steps">Next steps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>As your use of Azure matures, it&#8217;s important to consider the governance of your cloud resources. Governance includes how tenants' data is stored and managed, and how you organize your Azure resources. You might also need to follow regulatory or legal standards. This article provides information about how to consider governance and compliance in a multitenant solution. It also suggests some of the key Azure platform features that support these concerns.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_key_considerations_and_requirements">Key considerations and requirements</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_resource_isolation">Resource isolation</h3>
+<div class="paragraph">
+<p>Ensure you configure your Azure resources to meet your tenants' isolation requirements. See <a href="resource-organization.html">Azure resource organization in multitenant solutions</a> for guidance on isolating your Azure resources.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_management">Data management</h3>
+<div class="paragraph">
+<p>When you store data on behalf of your tenants, you might have requirements or obligations that you need to meet. From a tenant&#8217;s perspective, they often expect ownership and control of their data. Consider how you isolate, store, access, and aggregate tenants' data. Uncover tenants' expectations and requirements that could affect how your solution works.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_isolation">Isolation</h3>
+<div class="paragraph">
+<p>Review the <a href="storage-data.html">Architectural approaches for storage and data in multitenant solutions</a> to understand how to isolate tenants' data. Consider whether tenants have requirements to use their own data encryption keys.</p>
+</div>
+<div class="paragraph">
+<p>Whichever isolation approaches you implement, be prepared for tenants to request an audit of their data. It&#8217;s a good practice to document all of the data stores in which tenants' data might be kept. Common data sources include the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Databases and storage accounts deployed as part of your solution.</p>
+</li>
+<li>
+<p>Identity systems, which are often shared between tenants.</p>
+</li>
+<li>
+<p>Logs.</p>
+</li>
+<li>
+<p>Data warehouses.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sovereignty">Sovereignty</h3>
+<div class="paragraph">
+<p>Understand whether there are any restrictions on the physical location for your tenants' data that&#8217;s to be stored or processed. Your tenants might require you store their data in specific geographic locations. They might also require that you don&#8217;t store their data in certain locations. Although these requirements are commonly based on legislation, they can also be based on cultural values and norms.</p>
+</div>
+<div class="paragraph">
+<p>For more information about data residency and sovereignty, see the whitepaper <a href="https://azure.microsoft.com/resources/achieving-compliant-data-residency-and-security-with-azure">Enabling Data Residency and Data Protection in Microsoft Azure Regions</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tenants_access_to_data_that_you_store">Tenants' access to data that you store</h3>
+<div class="paragraph">
+<p>Tenants sometimes request direct access to the data you store on their behalf. For example, they might want to ingest their data into their own data lake.</p>
+</div>
+<div class="paragraph">
+<p>Plan how you&#8217;ll respond to these requests. Consider whether any of the tenants' data is kept in shared data stores. If it is, plan how you&#8217;ll avoid tenants accessing other tenants' data.</p>
+</div>
+<div class="paragraph">
+<p>Avoid providing direct access to databases or storage accounts unless you designed for this requirement, such as by using the <a href="../../../../design-patterns/valet-key.html">Valet Key pattern</a>. Consider creating an API or automated data export process for integration purposes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_your_access_to_tenants_data">Your access to tenants' data</h3>
+<div class="paragraph">
+<p>Consider whether your tenants' requirements restrict the personnel who can work with their data or resources. For example, suppose you build a SaaS solution that&#8217;s used by many different customers. A government agency might require that only citizens of their country are allowed to access the infrastructure and data for their solution. You might meet this requirement by using separate Azure resource groups, subscriptions, or management groups for sensitive customer workloads. You can apply tightly scoped Azure role-based access controls (RBAC) role assignments for specific groups of users to work with these resources.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_aggregation_of_data_from_multiple_tenants">Aggregation of data from multiple tenants</h3>
+<div class="paragraph">
+<p>Consider whether you need to combine or aggregate data from multiple tenants. For example, do you analyze the aggregated data, or train machine learning models that could be applied to other tenants? Ensure your tenants understand the ways in which you use their data. Include any use of aggregated or anonymized data.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_compliance_requirements">Compliance requirements</h3>
+<div class="paragraph">
+<p>It&#8217;s important that you understand whether you need to meet any compliance standards. Compliance requirements might be introduced in several situations, including:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You, or any of your tenants, work within certain industries. For example, if any of your tenants work in the <a href="https://docs.microsoft.com/en-us/azure/architecture/industries/healthcare">healthcare industry</a>, you might need to comply with the HIPAA standard.</p>
+</li>
+<li>
+<p>You, or any of your tenants, are located in geographic or geopolitical regions that require compliance with local laws. For example, if any of your tenants are located in Europe, you might need to comply with <a href="https://docs.microsoft.com/en-us/compliance/regulatory/gdpr">General Data Protection Regulation (GDPR)</a>.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Compliance is a shared responsibility between Microsoft, you, and your tenants.</p>
+</div>
+<div class="paragraph">
+<p>Microsoft ensures that our services meet a specific set of compliance standards, and provides tools like <a href="https://docs.microsoft.com/en-us/azure/defender-for-cloud/defender-for-cloud-introduction">Microsoft Defender for Cloud</a> that help to verify your resources are configured according to those standards.</p>
+</div>
+<div class="paragraph">
+<p>However, ultimately it is your responsibility to fully understand the compliance requirements that apply to your solution, and how to configure your Azure resources according to those standards. See <a href="https://docs.microsoft.com/en-us/azure/compliance/offerings">Azure compliance offerings</a> for more detail.</p>
+</div>
+<div class="paragraph">
+<p>This article doesn&#8217;t provide specific guidance about how to become compliant with any particular standards. Instead, it provides some general guidance around how to consider compliance and governance in a multitenant solution.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If different tenants need you to follow different compliance standards, plan to comply with the most stringent standard across your entire environment. It&#8217;s easier to follow one strict standard than to follow different standards for different tenants.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_approaches_and_patterns_to_consider">Approaches and patterns to consider</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_resource_tags">Resource tags</h3>
+<div class="paragraph">
+<p>Use <a href="cost-management-allocation.html#_allocate_costs_by_using_resource_tags">resource tags</a> to track the tenant identifier for tenant-specific resources, or the stamp identifier when you scale using the <a href="#_deployment_stamps_pattern">Deployment Stamps pattern</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_access_control">Access control</h3>
+<div class="paragraph">
+<p>Use Azure RBAC to restrict access to the Azure resources that constitute the multitenant solution.Follow the <a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/best-practices">RBAC best practices</a>, such as applying role assignments to groups instead of users.Scope your role assignments so they provide the minimum permissions necessary.Avoid long-standing access to resources by using just-in-time access and features like Azure Active Directory Privileged Access Management.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_resource_graph">Azure Resource Graph</h3>
+<div class="paragraph">
+<p><a href="https://docs.microsoft.com/en-us/azure/governance/resource-graph/overview">Azure Resource Graph</a> enables you to work with Azure resource metadata. By using Resource Graph, you can query across a large number of Azure resources, even if they&#8217;re spread across multiple subscriptions. Resource Graph can query for the resources of a specific type, or to identify resources that have been configured in specific ways. It can also be used to track the history of a resource&#8217;s configuration.</p>
+</div>
+<div class="paragraph">
+<p>Resource Graph can be helpful to manage large Azure estates. For example, suppose you deploy tenant-specific Azure resources across multiple Azure subscriptions. By <a href="#_resource_tags">applying tags to your resources</a>, you can use the Resource Graph API to find resources that are used by specific tenants or deployment stamps.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_purview">Azure Purview</h3>
+<div class="paragraph">
+<p>Consider using Azure Purview to track and classify the data that you store. When tenants request access to their data, you can easily determine the data sources that you should include.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verify_compliance_with_standards">Verify compliance with standards</h3>
+<div class="paragraph">
+<p>Use tools like Azure Policy, Microsoft Defender for Cloud&#8217;s regulatory compliance portal, and Azure Advisor. These tools help you to configure your Azure resources to meet compliance requirements and to follow the recommended best practices.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generate_compliance_documentation">Generate compliance documentation</h3>
+<div class="paragraph">
+<p>Your tenants might require that you demonstrate your compliance with specific standards. Use the <a href="https://servicetrust.microsoft.com/">Service Trust Portal</a> to generate compliance documentation that you can provide to your tenants or to third-party auditors.</p>
+</div>
+<div class="paragraph">
+<p>Some multitenant solutions incorporate Microsoft 365 and use services like Microsoft OneDrive, Microsoft SharePoint, and Microsoft Exchange Online. The <a href="https://compliance.microsoft.com/">Microsoft 365 Compliance Center</a> helps you understand how these services comply with regulatory standards.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deployment_stamps_pattern">Deployment Stamps pattern</h3>
+<div class="paragraph">
+<p>Consider following the <a href="README.html#_deployment_stamps_pattern">Deployment Stamps pattern</a> when you need to comply with tenant-specific requirements.</p>
+</div>
+<div class="paragraph">
+<p>For example, you might deploy stamps of your solution into multiple Azure regions. Then, you can assign new tenants to stamps, based on the regions that they need to have their data located in.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, a new tenant might introduce strict compliance requirements that you can&#8217;t meet within your existing solution components. You can consider deploying a dedicated stamp for that tenant, and then configure it according to their requirements.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_antipatterns_to_avoid">Antipatterns to avoid</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Not understanding your tenants' compliance requirements.</dt>
+<dd>
+<p>It&#8217;s important not to make assumptions about the compliance requirements that your tenants might impose. If you plan to grow your solution into new markets, be mindful of the regulatory environment that your tenants are likely to operate within.</p>
+</dd>
+<dt class="hdlist1">Ignoring good practices.</dt>
+<dd>
+<p>If you don&#8217;t have any immediate need to adhere to compliance standards, you should still follow good practices when you deploy your Azure resources. For example, isolate your resources, apply policies to verify resource configuration, and apply role assignments to groups instead of users. By following good practices, you make it simpler to follow compliance standards when you eventually need to do so.</p>
+</dd>
+<dt class="hdlist1">Assuming there are no compliance requirements.</dt>
+<dd>
+<p>When you first launch a multitenant solution, you might not be aware of compliance requirements, or you might not need to follow any. As you grow, you&#8217;ll likely need to provide evidence that you comply with various standards. Use <a href="https://docs.microsoft.com/en-us/azure/defender-for-cloud/regulatory-compliance-dashboard">Microsoft Defender for Cloud</a> to monitor your compliance posture, even before you have an explicit requirement to do so.</p>
+</dd>
+<dt class="hdlist1">Not planning for management.</dt>
+<dd>
+<p>As you deploy your Azure resources, consider how you plan to manage them. If you need to make bulk updates to resources, ensure you have an understanding of automation tools, such as the Azure CLI, Azure PowerShell, Azure Resource Graph, and the Azure Resource Manager APIs.</p>
+</dd>
+<dt class="hdlist1">Not using management groups.</dt>
+<dd>
+<p>Plan your subscription and management group hierarchy, including access control and Azure Policy resources at each scope. It can be difficult and disruptive to introduce or change these elements when your resources are used in a production environment.</p>
+</dd>
+<dt class="hdlist1">Not planning your access control effectively.</dt>
+<dd>
+<p>Azure RBAC provides a high degree of control and flexibility in how you manage access to your resources. Ensure you use Azure AD groups to avoid assigning permissions to individual users. Assign roles at scopes that provide an appropriate balance between security and flexibility. Use built-in role definitions wherever possible, and assign roles that provide the minimum permissions required.</p>
+</dd>
+<dt class="hdlist1">Not using Azure Policy.</dt>
+<dd>
+<p>It&#8217;s important to use Azure Policy to govern your Azure environment. After you plan and deploy policies, ensure you monitor the policy compliance and carefully review any violations or exceptions.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Review <a href="cost-management-allocation.html">approaches for cost management and allocation</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

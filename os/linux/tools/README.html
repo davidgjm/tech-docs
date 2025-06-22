@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Linux Tools</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Linux Tools</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_linux_shell_scripts">Linux shell scripts</a>
+<ul class="sectlevel2">
+<li><a href="#_bash_tips_tricks">bash tips &amp; tricks</a></li>
+</ul>
+</li>
+<li><a href="#_find_files">Find files</a>
+<ul class="sectlevel2">
+<li><a href="#_find_files_by_extension">Find files by extension</a></li>
+</ul>
+</li>
+<li><a href="#_vim">vim</a>
+<ul class="sectlevel2">
+<li><a href="#_sample_vimrc_config">Sample <code>.vimrc</code> config</a></li>
+<li><a href="#_setup_syntax_highlighting">Setup syntax highlighting</a></li>
+</ul>
+</li>
+<li><a href="#_other_tools_available_in_linux_distributions">Other tools available in Linux distributions</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_linux_shell_scripts">Linux shell scripts</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_bash_tips_tricks">bash tips &amp; tricks</h3>
+<div class="paragraph">
+<p>See <a href="shellscriipts.html">tips and tricks</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_find_files">Find files</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_find_files_by_extension">Find files by extension</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">find / <span class="nt">-name</span> <span class="s2">"*.jar"</span> <span class="nt">-print</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_vim">vim</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_sample_vimrc_config">Sample <code>.vimrc</code> config</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell script">s0001321@mC02FG16BML85 statefulset % cat ~/.vimrc
+syntax on
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_setup_syntax_highlighting">Setup syntax highlighting</h3>
+<div class="listingblock">
+<div class="title"><em>.vimrc</em> file</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">echo</span> <span class="s2">"syntax on"</span> <span class="o">&gt;&gt;</span> ~/.vimrc
+<span class="nb">echo</span> <span class="s2">"autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab"</span> <span class="o">&gt;&gt;</span> ~/.vimrc</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_other_tools_available_in_linux_distributions">Other tools available in Linux distributions</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><code>ps</code>, see <a href="ps.html">process management with ps</a> for more details</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

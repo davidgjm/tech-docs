@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>PromQL Matters</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1><code>PromQL</code> Matters</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_arguments">Arguments</a>
+<ul class="sectlevel2">
+<li><a href="#_instant_vectors">instant vectors</a></li>
+<li><a href="#_range_vectors">range vectors</a></li>
+</ul>
+</li>
+<li><a href="#_functions">Functions</a>
+<ul class="sectlevel2">
+<li><a href="#_rates">Rates</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_arguments">Arguments</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_instant_vectors">instant vectors</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_range_vectors">range vectors</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_functions">Functions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_rates">Rates</h3>
+<div class="exampleblock">
+<div class="title">Example 1. Readings</div>
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://promlabs.com/blog/2021/01/29/how-exactly-does-promql-calculate-rates">How Exactly Does PromQL Calculate Rates?</a></p>
+</li>
+<li>
+<p><a href="https://www.metricfire.com/blog/understanding-the-prometheus-rate-function/">How the Prometheus rate() function works</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_overview">Overview</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">function</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rate()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This calculates the rate of increase per second, averaged over the entire provided time window. Example: <code>rate(http_requests_total[5m])</code> yields the per-second rate of HTTP requests as averaged over a time window of 5 minutes. This function is the most common, as it yields a nicely smoothed rate with a predictable per-second output unit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>irate()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">("instant rate"): This calculates the rate of increase per second just like <code>rate()</code>, but only considers the last two samples under the provided time window for the calculation and ignores all earlier ones. Example: <code>irate(http_requests_total[5m])</code> looks at the two last samples under the provided 5-minute window and calculates the per-second rate of increase between them. This function can be helpful if you want to make a zoomed-in graph show very quick responses to changes in a rate, but the output will be much more spiky than for <code>rate()</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>increase()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This function is <em>exactly equivalent</em> to <code>rate()</code> except that it does not convert the final unit to "per-second" (<code>1/s</code>). Instead, the final output unit is per-provided-time-window. Example: <code>increase(http_requests_total[5m])</code> yields the total increase in handled HTTP requests over a 5-minute window (unit: 1 / 5m). Thus <code>increase(foo[5m]) / (5 * 60)</code> is 100% equivalent to <code>rate(foo[5m])</code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_rate"><code>rate()</code></h4>
+<div class="paragraph">
+<p>As the name suggests, it lets you calculate the per-second average rate of how a value is increasing over a period of time. It is the function to use if you want, for instance, to calculate how the number of requests coming into your server changes over time, or the CPU usage of your servers.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+because of this automatic adjustment for resets, if you want to use any other aggregation together with rate() then you must apply rate() first, otherwise the counter resets will not be caught and you will get weird results.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+It is incorrect to use rate() with gauges because the reset detection logic will mistakenly catch the values going down as a “counter reset” and you will get wrong results.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_handling_counter_resets">Handling counter resets</h5>
+<div class="paragraph">
+<p>Although counters normally only go up, they reset to <code>0</code> whenever a process that tracks them restarts. To not interpret these resets as actual negative rates, the counter-related functions have logic to detect and deal with those resets: when iterating over the samples under the provided time window, the functions check whether any sample has a lower value than the previous one, and interpret this situation as a counter reset. Using the further assumption that counters always start at <code>0</code> after a reset, these functions then just add the new sample value to the previously seen one, to compensate for the reset.</p>
+</div>
+<div class="paragraph">
+<p>The following example diagram shows how a <code>rate()</code> calculation deals with a counter reset happening under the provided window. You can imagine this as rate() creating a set of "virtual" samples from the underlying "real" samples. The final rate is then calculated from the virtual samples, as if the resets had never taken place:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/rate-reset-correction.png" alt="rate reset correction">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

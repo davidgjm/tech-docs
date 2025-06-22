@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Azure Kubernetes Service</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Azure Kubernetes Service</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_storage_solution_for_aks">Storage solution for AKS</a>
+<ul class="sectlevel2">
+<li><a href="#_readings">Readings</a></li>
+<li><a href="#_azure_blobs_as_volumes">Azure Blobs as volumes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_storage_solution_for_aks">Storage solution for AKS</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_readings">Readings</h3>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/aks/operator-best-practices-storage#choose-the-appropriate-storage-type">Best practices for storage and backups in Azure Kubernetes Service (AKS)</a></p>
+</li>
+<li>
+<p><a href="https://medium.com/codex/mounting-azure-files-and-blobs-using-non-traditional-options-in-kubernetes-e12b1522f14f" class="bare">https://medium.com/codex/mounting-azure-files-and-blobs-using-non-traditional-options-in-kubernetes-e12b1522f14f</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_blobs_as_volumes">Azure Blobs as volumes</h3>
+<div class="sect3">
+<h4 id="_azure_blob_storage_csi_driver">Azure Blob Storage <a href="https://github.com/kubernetes-sigs/blob-csi-driver">CSI driver</a></h4>
+<div class="paragraph">
+<p>csi plugin name: <code>blob.csi.azure.com</code></p>
+</div>
+<div class="sect4">
+<h5 id="_install_azure_blob_storage_csi_driver_on_a_kubernetes_cluster">Install Azure Blob Storage CSI driver on a Kubernetes cluster</h5>
+<div class="paragraph">
+<p>See document <a href="https://github.com/kubernetes-sigs/blob-csi-driver/blob/master/docs/install-blob-csi-driver.md">Install Azure Blob Storage CSI driver on a Kubernetes cluster</a></p>
+</div>
+<div class="sect5">
+<h6 id="_v1_11_0">v1.11.0</h6>
+<div class="paragraph">
+<p><a href="https://github.com/kubernetes-sigs/blob-csi-driver/blob/master/docs/install-csi-driver-v1.11.0.md" class="bare">https://github.com/kubernetes-sigs/blob-csi-driver/blob/master/docs/install-csi-driver-v1.11.0.md</a></p>
+</div>
+<div class="sect6">
+<h7 id="_install_with_kubectl">Install with kubectl</h7>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Remote Install</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>curl -skSL https://raw.githubusercontent.com/kubernetes-sigs/blob-csi-driver/v1.11.0/deploy/install-driver.sh | bash -s v1.11.0 blobfuse-proxy --</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Local Install</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git clone https://github.com/kubernetes-sigs/blob-csi-driver.git
+cd blob-csi-driver
+./deploy/install-driver.sh v1.11.0 local,blobfuse-proxy</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect6">
+<h7 id="_check_pods_status">check pods status</h7>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl -n kube-system get pod -o wide -l app=csi-blob-controller
+kubectl -n kube-system get pod -o wide -l app=csi-blob-node</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_installation_on_aks">Installation on AKS</h5>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+See details at Set up CSI driver on <a href="https://github.com/kubernetes-sigs/blob-csi-driver/blob/master/docs/install-driver-on-aks.md">AKS cluster</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Setup right permissions</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Grant <code>Contributor</code> role to the user assigned identity (i.e.: <em>aks-map-westeurope-agentpool</em>) for the node resource group (i.e.: <em>rg-aks-nodes-map-westeurope</em>) in the target AKS cluster</p>
+</li>
+<li>
+<p>The same user assigned identity (i.e.: <em>aks-map-westeurope-agentpool</em>) needs to be granted <code>Storage Account Key Operator Service Role</code> for the target storage account so that the SAS key can be fetched silently at runtime.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><a href="https://github.com/kubernetes-sigs/blob-csi-driver/blob/master/docs/install-blob-csi-driver.md">Install CSI driver</a></p>
+</li>
+<li>
+<p>Set up new storage classes</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/blob-csi-driver/master/deploy/example/storageclass-blobfuse.yaml
+kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/blob-csi-driver/master/deploy/example/storageclass-blob-nfs.yaml</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_examples">Examples</h5>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">StorageClass</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: blob-source-map-data
+provisioner: blob.csi.azure.com
+parameters:
+  resourceGroup: rg-map-delivery-westeurope
+  storageAccount: mapdeliveryinternalweu
+  containerName: source-map
+  # server: SERVER_ADDRESS  # optional, provide a new address to replace default "accountname.blob.core.windows.net"
+reclaimPolicy: Retain  # if set as "Delete" container would be removed after pvc deletion
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - -o allow_other
+  - --file-cache-timeout-in-seconds=120
+  - --use-attr-cache=true
+  - --cancel-list-on-mount-seconds=60  # prevent billing charges on mounting
+  - -o attr_timeout=120
+  - -o entry_timeout=120
+  - -o negative_timeout=120
+  - --cache-size-mb=1000  # Default will be 80% of available memory, eviction will happen beyond that.</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">PVC</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-blob-source-map
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: blob-source-map-data</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Pod</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx-blob
+spec:
+  nodeSelector:
+    "kubernetes.io/os": linux
+  containers:
+    - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
+      name: nginx-blob
+      command:
+        - "/bin/sh"
+        - "-c"
+        - while true; do echo $(date) &gt;&gt; /mnt/blob/outfile; sleep 1; done
+      volumeMounts:
+        - name: blob01
+          mountPath: "/mnt/blob"
+  volumes:
+    - name: blob01
+      persistentVolumeClaim:
+        claimName: pvc-blob-source-map</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

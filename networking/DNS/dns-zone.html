@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>DNS Zone</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>DNS Zone</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_readings">Readings</a></li>
+<li><a href="#_concept">Concept</a>
+<ul class="sectlevel2">
+<li><a href="#_what_is_a_dns_zone">What is a DNS zone?</a></li>
+<li><a href="#_what_is_a_dns_zone_file">What is a DNS zone file?</a></li>
+<li><a href="#_what_is_a_reverse_lookup_zone">What is a Reverse Lookup Zone?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_readings">Readings</h2>
+<div class="sectionbody">
+<div class="exampleblock">
+<div class="title">Example 1. References</div>
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/DNS_zone">DNS zone</a></p>
+</li>
+<li>
+<p><a href="https://www.cloudflare.com/learning/dns/glossary/dns-zone/">What is a DNS zone?</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/DNS_Zone.png" alt="DNS Zone">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_concept">Concept</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_is_a_dns_zone">What is a DNS zone?</h3>
+<div class="paragraph">
+<p>The DNS is broken up into many different zones. These zones differentiate between distinctly managed areas in the DNS namespace. A DNS zone is a portion of the DNS namespace that is managed by a specific organization or administrator. A DNS zone is an administrative space which allows for more granular control of DNS components, such as authoritative nameservers. The domain name space is a hierarchical tree, with the DNS root domain at the top. A DNS zone starts at a domain within the tree and can also extend down into subdomains so that multiple subdomains can be managed by one entity.</p>
+</div>
+<div class="paragraph">
+<p>A common mistake is to associate a DNS zone with a domain name or a single DNS server. In fact, a DNS zone can contain multiple subdomains and multiple zones can exist on the same server. DNS zones are not necessarily physically separated from one another, zones are strictly used for delegating control.</p>
+</div>
+<div class="paragraph">
+<p>For example, imagine a hypothetical zone for the cloudflare.com domain and three of its subdomains: support.cloudflare.com, community.cloudflare.com, and blog.cloudflare.com. Suppose the blog is a robust, independent site that needs separate administration, but the support and community pages are more closely associated with cloudflare.com and can be managed in the same zone as the primary domain. In this case, cloudflare.com as well as the support and community sites would all be in one zone, while blog.cloudflare.com would exist in its own zone.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/dns-zone.png" alt="dns zone">
+</div>
+</div>
+<div class="paragraph">
+<p>All of the information for a zone is stored in what’s called a DNS zone file, which is the key to understanding how a DNS zone operates.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_a_dns_zone_file">What is a DNS zone file?</h3>
+<div class="paragraph">
+<p>A zone file is a plain text file stored in a DNS server that contains an actual representation of the zone and contains all the records for every domain within the zone. Zone files must always start with a Start of Authority (SOA) record, which contains important information including contact information for the zone administrator.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_a_reverse_lookup_zone">What is a Reverse Lookup Zone?</h3>
+<div class="paragraph">
+<p>A reverse lookup zone contains mapping from an IP address to the host (the opposite function of most DNS zones). These zones are used for troubleshooting, spam filtering, and bot detection.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

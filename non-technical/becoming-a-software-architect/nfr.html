@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Non-Functional Requirements</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Non-Functional Requirements</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_performance">Performance</a>
+<ul class="sectlevel2">
+<li><a href="#_latency_throughput">Latency &amp; throughput</a></li>
+</ul>
+</li>
+<li><a href="#_load">Load</a>
+<ul class="sectlevel2">
+<li><a href="#_examples">Examples</a></li>
+</ul>
+</li>
+<li><a href="#_data_volume">Data Volume</a>
+<ul class="sectlevel2">
+<li><a href="#_example">Example</a></li>
+</ul>
+</li>
+<li><a href="#_concurrent_users">Concurrent Users</a>
+<ul class="sectlevel2">
+<li><a href="#_concurrent_users_vs_load">Concurrent users vs load</a></li>
+</ul>
+</li>
+<li><a href="#_sla">SLA</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Non-Functional Requirements mainly answer the following question:</p>
+</div>
+<div class="paragraph">
+<p>What should the system deal with?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_performance">Performance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Always talk in numbers. Rule of thumb:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>B2C scenarios: end-2-end latency in <strong>1 second</strong></p>
+</li>
+<li>
+<p>B2B scenarios: within <strong> 100 ms</strong></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Latency &amp; throughput</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_latency_throughput">Latency &amp; throughput</h3>
+<div class="sect3">
+<h4 id="_latency">Latency</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>How much does it take to perform a single task?</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_throughput">Throughput</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>How many tasks can be performed in a given time unit?</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Examples:
+- How many users can be saved in the database in a minute?
+- How many files can be read in a second?</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_load">Load</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Quantity of work without crashing</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Always plan for extreme cases
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_examples">Examples</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>In Web API - How many concurrent requests without crashing?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_volume">Data Volume</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>How much data the system will accumulate over time?</p>
+</li>
+<li>
+<p>helps with</p>
+<div class="ulist">
+<ul>
+<li>
+<p>deciding on database type</p>
+</li>
+<li>
+<p>designing queries</p>
+</li>
+<li>
+<p>storage planning</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Two aspects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data required on "day one"</p>
+</li>
+<li>
+<p>Data growth</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_example">Example</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Day one: 500 MB</p>
+</li>
+<li>
+<p>Annual Growth: 2 TB</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_concurrent_users">Concurrent Users</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>How many users will be using the system simultaneously?</p>
+</div>
+</blockquote>
+</div>
+<div class="sect2">
+<h3 id="_concurrent_users_vs_load">Concurrent users vs load</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Concurrent Users</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Including "Dead times"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Load</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actual Requests</p></td>
+</tr>
+</tbody>
+</table>
+<div class="exampleblock">
+<div class="title">Example 1. Rule of thumb</div>
+<div class="content">
+<div class="paragraph">
+<p>Concurrent = Load X 10</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sla">SLA</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Required uptime for the system</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

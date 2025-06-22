@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Design Patterns</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Design Patterns</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_catalog_of_patterns">Catalog of patterns</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Readings/Papers</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://sourcemaking.com/design_patterns" class="bare">https://sourcemaking.com/design_patterns</a></p>
+</li>
+<li>
+<p><a href="https://refactoring.guru/design-patterns" class="bare">https://refactoring.guru/design-patterns</a></p>
+</li>
+<li>
+<p><a href="https://www.enterpriseintegrationpatterns.com/index.html">Enterprise Integration Patterns</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/">Azure Cloud Design Patterns</a></p>
+</li>
+<li>
+<p><a href="https://blog.jonathanoliver.com/idempotency-patterns/">Idempotency Patterns, Jonathan Oliver&#8217;s blog</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_catalog_of_patterns">Catalog of patterns</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pattern</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Category</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="ambassador.html">Ambassador</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create helper services that send network requests on behalf of a consumer service or application.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="anti-corruption-layer.html">Anti-Corruption Layer</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Implement a façade or adapter layer between a modern application and a legacy system.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="async-request-reply.html">Asynchronous Request-Reply</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Decouple backend processing from a frontend host, where backend processing needs to be asynchronous, but the frontend still needs a clear response.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="backends-for-frontends.html">Backends for Frontends</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create separate backend services to be consumed by specific frontend applications or interfaces.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="bulkhead.html">Bulkhead</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Isolate elements of an application into pools so that if one fails, the others will continue to function.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="choreography.html">Choreography pattern</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Let each service decide when and how a business operation is processed, instead of depending on a central orchestrator.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="cache-aside.html">Cache-Aside</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Load data on demand into a cache from a data store</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="claim-check.html">Claim Check</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Split a large message into a claim check and a payload to avoid overwhelming a message bus.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="compensating-transaction.html">Compensating Transaction</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Undo the work performed by a series of steps, which together define an eventually consistent operation.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="competing-consumers.html">Competing Consumers</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable multiple concurrent consumers to process messages received on the same messaging channel.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="cqrs.html">CQRS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Segregate operations that read data from operations that update data by using separate interfaces.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="deployment-stamp.html">Deployment Stamps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deploy multiple independent copies of application components, including data stores.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="event-sourcing.html">Event Sourcing</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use an append-only store to record the full series of events that describe actions taken on data in a domain.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="external-configuration-store.html">External Configuration Store</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Move configuration information out of the application deployment package to a centralized location.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="federated-identity.html">Federated Identity</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delegate authentication to an external identity provider.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/security/security-patterns">Security</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="gatekeeper.html">Gatekeeper</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Protect applications and services by using a dedicated host instance that acts as a broker between clients and the application or service, validates and sanitizes requests, and passes requests and data between them.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/security/security-patterns">Security</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="gateway-aggregation.html">Gateway Aggregation</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use a gateway to aggregate multiple individual requests into a single request.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="gateway-offloading.html">Gateway Offloading</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Offload shared or specialized service functionality to a gateway proxy.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="gateway-routing.html">Gateway Routing</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Route requests to multiple services using a single endpoint.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="geodes.html">Geodes</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deploy backend services into a set of geographical nodes, each of which can service any client request in any region.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="health-endpoint-monitoring.html">Health Endpoint Monitoring</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Implement functional checks in an application that external tools can access through exposed endpoints at regular intervals.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="index-table.html">Index Table</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create indexes over the fields in data stores that are frequently referenced by queries.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="leader-election.html">Leader Election</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Coordinate the actions performed by a collection of collaborating task instances in a distributed application by electing one instance as the leader that assumes responsibility for managing the other instances.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="materialized-view.html">Materialized View</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generate prepopulated views over the data in one or more data stores when the data isn&#8217;t ideally formatted for required query operations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="pipes-and-filters.html">Pipes and Filters</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Break down a task that performs complex processing into a series of separate elements that can be reused.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="priority-queue.html">Priority Queue</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="publisher-subscriber.html">Publisher/Subscriber</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable an application to announce events to multiple interested consumers asynchronously, without coupling the senders to the receivers.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="queue-based-load-leveling.html">Queue-Based Load Leveling</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use a queue that acts as a buffer between a task and a service that it invokes in order to smooth intermittent heavy loads.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Resiliency</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="retry.html">Retry</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that&#8217;s previously failed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="scheduler-agent-supervisor.html">Scheduler Agent Supervisor</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Coordinate a set of actions across a distributed set of services and other remote resources.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns">Reliability</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="sequential-convoy.html">Sequential Convoy</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Process a set of related messages in a defined order, without blocking processing of other groups of messages.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/messaging">Messaging</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="sharding.html">Sharding</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Divide a data store into a set of horizontal partitions or shards.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="sidecar.html">Sidecar</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deploy components of an application into a separate process or container to provide isolation and encapsulation.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="static-content-hosting.html">Static Content Hosting</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deploy static content to a cloud-based storage service that can deliver them directly to the client.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/scalability/performance-efficiency-patterns">Performance Efficiency</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="strangler-fig.html">Strangler Fig</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Incrementally migrate a legacy system by gradually replacing specific pieces of functionality with new applications and services.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/design-implementation">Design and Implementation</a>, <a href="https://docs.microsoft.com/en-us/azure/architecture/framework/devops/devops-patterns">Operational Excellence</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="valet-key.html">Valet Key</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use a token or key that provides clients with restricted direct access to a specific resource or service.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/category/data-management">Data Management</a>,
+<a href="https://docs.microsoft.com/en-us/azure/architecture/framework/security/security-patterns">Security</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

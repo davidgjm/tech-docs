@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Asynchronous Request-Reply pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Asynchronous Request-Reply pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/async-request-reply">Azure cloud patterns - Asynchronous Request-Reply</a></p>
+</li>
+<li>
+<p><a href="https://martinfowler.com/articles/201701-event-driven.html">What do you mean by “Event-Driven”?</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Decouple backend processing from a frontend host, where backend processing needs to be asynchronous, but the frontend still needs a clear response.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In modern application development, it&#8217;s normal for client applications — often code running in a web-client (browser) — to depend on remote APIs to provide business logic and compose functionality. These APIs may be directly related to the application or may be shared services provided by a third party. Commonly these API calls take place over the HTTP(S) protocol and follow REST semantics.</p>
+</div>
+<div class="paragraph">
+<p>In most cases, APIs for a client application are designed to respond quickly, on the order of 100 ms or less. Many factors can affect the response latency, including:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An application&#8217;s hosting stack.</p>
+</li>
+<li>
+<p>Security components.</p>
+</li>
+<li>
+<p>The relative geographic location of the caller and the backend.</p>
+</li>
+<li>
+<p>Network infrastructure.</p>
+</li>
+<li>
+<p>Current load.</p>
+</li>
+<li>
+<p>The size of the request payload.</p>
+</li>
+<li>
+<p>Processing queue length.</p>
+</li>
+<li>
+<p>The time for the backend to process the request.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Any of these factors can add latency to the response. Some can be mitigated by scaling out the backend. Others, such as network infrastructure, are largely out of the control of the application developer. Most APIs can respond quickly enough for responses to arrive back over the same connection. Application code can make a synchronous API call in a non-blocking way, giving the appearance of asynchronous processing, which is recommended for I/O-bound operations.</p>
+</div>
+<div class="paragraph">
+<p>In some scenarios, however, the work done by backend may be long-running, on the order of seconds, or might be a background process that is executed in minutes or even hours. In that case, it isn&#8217;t feasible to wait for the work to complete before responding to the request. This situation is a potential problem for any synchronous request-reply pattern.</p>
+</div>
+<div class="paragraph">
+<p>Some architectures solve this problem by using a message broker to separate the request and response stages. This separation is often achieved by use of the <a href="queue-based-load-leveling.html">Queue-Based Load Leveling pattern</a>. This separation can allow the client process and the backend API to scale independently. But this separation also brings additional complexity when the client requires success notification, as this step needs to become asynchronous.</p>
+</div>
+<div class="paragraph">
+<p>Many of the same considerations discussed for client applications also apply for server-to-server REST API calls in distributed systems — for example, in a microservices architecture.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One solution to this problem is to use HTTP polling. Polling is useful to client-side code, as it can be hard to provide call-back endpoints or use long running connections. Even when callbacks are possible, the extra libraries and services that are required can sometimes add too much extra complexity.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The client application makes a synchronous call to the API, triggering a long-running operation on the backend.</p>
+</li>
+<li>
+<p>The API responds synchronously as quickly as possible. It returns an HTTP 202 (Accepted) status code, acknowledging that the request has been received for processing.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The API should validate both the request and the action to be performed before starting the long running process. If the request is invalid, reply immediately with an error code such as HTTP 400 (Bad Request).
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The response holds a location reference pointing to an endpoint that the client can poll to check for the result of the long running operation.</p>
+</li>
+<li>
+<p>The API offloads processing to another component, such as a message queue.</p>
+</li>
+<li>
+<p>For every successful call to the status endpoint, it returns HTTP 200. While the work is still pending, the status endpoint returns a resource that indicates the work is still in progress. Once the work is complete, the status endpoint can either return a resource that indicates completion, or redirect to another resource URL. For example, if the asynchronous operation creates a new resource, the status endpoint would redirect to the URL for that resource.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following diagram shows a typical flow:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/async-request.png" alt="async request"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The client sends a request and receives an HTTP 202 (Accepted) response.</p>
+</li>
+<li>
+<p>The client sends an HTTP GET request to the status endpoint. The work is still pending, so this call also returns HTTP 202.</p>
+</li>
+<li>
+<p>At some point, the work is complete and the status endpoint returns 302 (Found) redirecting to the resource.</p>
+</li>
+<li>
+<p>The client fetches the resource at the specified URL.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>There are a number of possible ways to implement this pattern over HTTP and not all upstream services have the same semantics. For example, most services won&#8217;t return an HTTP 202 response back from a GET method when a remote process hasn&#8217;t finished. Following pure REST semantics, they should return HTTP 404 (Not Found). This response makes sense when you consider the result of the call isn&#8217;t present yet.</p>
+</li>
+<li>
+<p>An HTTP 202 response should indicate the location and frequency that the client should poll for the response. It should have the following additional headers:</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 30%;">
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Header</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A URL the client should poll for a response status.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This URL could be a SAS token with the <a href="valet-key.html">Valet Key Pattern</a> being appropriate if this location needs access control. The valet key pattern is also valid when response polling needs offloading to another backend</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Retry-After</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An estimate of when processing will complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This header is designed to prevent polling clients from overwhelming the back-end with retries.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p>You may need to use a processing proxy or facade to manipulate the response headers or payload depending on the underlying services used.</p>
+</li>
+<li>
+<p>If the status endpoint redirects on completion, either HTTP 302 or HTTP 303 are appropriate return codes, depending on the exact semantics you support.</p>
+</li>
+<li>
+<p>Upon successful processing, the resource specified by the Location header should return an appropriate HTTP response code such as 200 (OK), 201 (Created), or 204 (No Content).</p>
+</li>
+<li>
+<p>If an error occurs during processing, persist the error at the resource URL described in the Location header and ideally return an appropriate response code to the client from that resource (4xx code).</p>
+</li>
+<li>
+<p>Not all solutions will implement this pattern in the same way and some services will include additional or alternate headers. For example, Azure Resource Manager uses a modified variant of this pattern. For more information, see <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-async-operations">Azure Resource Manager Async Operations</a>.</p>
+</li>
+<li>
+<p>Legacy clients might not support this pattern. In that case, you might need to place a facade over the asynchronous API to hide the asynchronous processing from the original client. For example, Azure Logic Apps supports this pattern natively can be used as an integration layer between an asynchronous API and a client that makes synchronous calls. See <a href="https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-create-api-app#perform-long-running-tasks-with-the-webhook-action-pattern">Perform long-running tasks with the webhook action pattern</a>.</p>
+</li>
+<li>
+<p>In some scenarios, you might want to provide a way for clients to cancel a long-running request. In that case, the backend service must support some form of cancellation instruction.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Client-side code, such as browser applications, where it&#8217;s difficult to provide call-back endpoints, or the use of long-running connections adds too much additional complexity.</p>
+</li>
+<li>
+<p>Service calls where only the HTTP protocol is available and the return service can&#8217;t fire callbacks because of firewall restrictions on the client-side.</p>
+</li>
+<li>
+<p>Service calls that need to be integrated with legacy architectures that don&#8217;t support modern callback technologies such as WebSockets or webhooks.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern might not be suitable when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You can use a service built for asynchronous notifications instead, such as Azure Event Grid.</p>
+</li>
+<li>
+<p>Responses must stream in real time to the client.</p>
+</li>
+<li>
+<p>The client needs to collect many results, and received latency of those results is important. Consider a service bus pattern instead.</p>
+</li>
+<li>
+<p>You can use server-side persistent network connections such as WebSockets or SignalR. These services can be used to notify the caller of the result.</p>
+</li>
+<li>
+<p>The network design allows you to open up ports to receive asynchronous callbacks or webhooks.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following code shows excerpts from an application that uses Azure Functions to implement this pattern. There are three functions in the solution:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The asynchronous API endpoint.</p>
+</li>
+<li>
+<p>The status endpoint.</p>
+</li>
+<li>
+<p>A backend function that takes queued work items and executes them.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/async-request-fn.png" alt="async request fn"></span></p>
+</div>
+<div class="paragraph">
+<p>This sample is available on <a href="https://github.com/mspnp/cloud-design-patterns/tree/master/async-request-reply">GitHub</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends">Backends for Frontends pattern</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

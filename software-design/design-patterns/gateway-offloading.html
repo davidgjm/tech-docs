@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Gateway Offloading pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Gateway Offloading pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Offload shared or specialized service functionality to a gateway proxy. This pattern can simplify application development by moving shared service functionality, such as the use of SSL certificates, from other parts of the application into the gateway.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some features are commonly used across multiple services, and these features require configuration, management, and maintenance. A shared or specialized service that is distributed with every application deployment increases the administrative overhead and increases the likelihood of deployment error. Any updates to a shared feature must be deployed across all services that share that feature.</p>
+</div>
+<div class="paragraph">
+<p>Properly handling security issues (token validation, encryption, SSL certificate management) and other complex tasks can require team members to have highly specialized skills. For example, a certificate needed by an application must be configured and deployed on all application instances. With each new deployment, the certificate must be managed to ensure that it does not expire. Any common certificate that is due to expire must be updated, tested, and verified on every application deployment.</p>
+</div>
+<div class="paragraph">
+<p>Other common services such as authentication, authorization, logging, monitoring, or throttling can be difficult to implement and manage across a large number of deployments. It may be better to consolidate this type of functionality, in order to reduce overhead and the chance of errors.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Offload some features into a gateway, particularly <mark>cross-cutting concerns such as certificate management, authentication, SSL termination, monitoring, protocol translation, or throttling</mark>.</p>
+</div>
+<div class="paragraph">
+<p>The following diagram shows a gateway that terminates inbound SSL connections. It requests data on behalf of the original requestor from any HTTP server upstream of the gateway.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/gateway-offload.png" alt="gateway offload">
+</div>
+</div>
+<div class="paragraph">
+<p>Benefits of this pattern include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Simplify the development of services by removing the need to distribute and maintain supporting resources, such as web server certificates and configuration for secure websites. Simpler configuration results in easier management and scalability and makes service upgrades simpler.</p>
+</li>
+<li>
+<p>Allow dedicated teams to implement features that require specialized expertise, such as security. This allows your core team to focus on the application functionality, leaving these specialized but cross-cutting concerns to the relevant experts.</p>
+</li>
+<li>
+<p>Provide some consistency for request and response logging and monitoring. Even if a service is not correctly instrumented, the gateway can be configured to ensure a minimum level of monitoring and logging.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Ensure the gateway is highly available and resilient to failure. Avoid single points of failure by running multiple instances of your gateway.</p>
+</li>
+<li>
+<p>Ensure the gateway is designed for the capacity and scaling requirements of your application and endpoints. Make sure the gateway does not become a bottleneck for the application and is sufficiently scalable.</p>
+</li>
+<li>
+<p>Only offload features that are used by the entire application, such as security or data transfer.</p>
+</li>
+<li>
+<p>Business logic should never be offloaded to the gateway.</p>
+</li>
+<li>
+<p>If you need to track transactions, consider generating correlation IDs for logging purposes.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An application deployment has a shared concern such as SSL certificates or encryption.</p>
+</li>
+<li>
+<p>A feature that is common across application deployments that may have different resource requirements, such as memory resources, storage capacity or network connections.</p>
+</li>
+<li>
+<p>You wish to move the responsibility for issues such as network security, throttling, or other network boundary concerns to a more specialized team.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern may not be suitable if it introduces coupling across services.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using Nginx as the SSL offload appliance, the following configuration terminates an inbound SSL connection and distributes the connection to one of three upstream HTTP servers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="console"><span class="go">upstream iis {
+</span><span class="gp">        server  10.3.0.10    max_fails=3    fail_timeout=15s;</span><span class="w">
+</span><span class="gp">        server  10.3.0.20    max_fails=3    fail_timeout=15s;</span><span class="w">
+</span><span class="gp">        server  10.3.0.30    max_fails=3    fail_timeout=15s;</span><span class="w">
+</span><span class="go">}
+
+server {
+</span><span class="gp">        listen 443;</span><span class="w">
+</span><span class="gp">        ssl on;</span><span class="w">
+</span><span class="gp">        ssl_certificate /etc/nginx/ssl/domain.cer;</span><span class="w">
+</span><span class="gp">        ssl_certificate_key /etc/nginx/ssl/domain.key;</span><span class="w">
+</span><span class="go">
+        location / {
+</span><span class="gp">                set $</span>targ iis<span class="p">;</span>
+<span class="gp">                proxy_pass http://$</span>targ<span class="p">;</span>
+<span class="gp">                proxy_set_header X-Forwarded-For $</span>proxy_add_x_forwarded_for<span class="p">;</span>
+<span class="gp">                proxy_set_header X-Forwarded-Proto https;</span><span class="w">
+</span><span class="gp">proxy_set_header X-Real-IP $</span>remote_addr<span class="p">;</span>
+<span class="gp">                proxy_set_header Host $</span>host<span class="p">;</span>
+<span class="go">        }
+}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On Azure, this can be achieved by <a href="https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ssl-cli">setting up SSL termination on Application Gateway</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="backends-for-frontends.html">Backends for Frontends pattern</a></p>
+</li>
+<li>
+<p><a href="gateway-aggregation.html">Gateway Aggregation pattern</a></p>
+</li>
+<li>
+<p><a href="gateway-routing.html">Gateway Routing pattern</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

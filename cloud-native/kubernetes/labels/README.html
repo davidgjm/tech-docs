@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Using Labels</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Using Labels</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_recommended_labels">Recommended Labels</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/">Recommended Labels</a></p>
+</li>
+<li>
+<p><a href="https://blog.kubecost.com/blog/kubernetes-labels/">The Guide to Kubernetes Labels</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recommended_labels">Recommended Labels</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Example</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app.kubernetes.io/name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mysql</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app.kubernetes.io/instance</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A unique name identifying the instance of an application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mysql-abcxzy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app.kubernetes.io/version</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The current version of the application (e.g., a semantic version, revision hash, etc.)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>5.7.21</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app.kubernetes.io/component</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The component within the architecture</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>database</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app.kubernetes.io/part-of</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of a higher level application this one is part of</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>wordpress</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app.kubernetes.io/managed-by</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The tool being used to manage the operation of an application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>helm</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app.kubernetes.io/created-by</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The controller/user who created this resource</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>controller-manager</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To illustrate these labels in action, consider the following StatefulSet object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/instance: mysql-abcxzy
+    app.kubernetes.io/version: "5.7.21"
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: wordpress
+    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/created-by: controller-manager</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

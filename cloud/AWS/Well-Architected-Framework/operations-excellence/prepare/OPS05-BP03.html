@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OPS05-BP03 Use configuration management systems</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OPS05-BP03 Use configuration management systems</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implementation_guidance">Implementation guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use configuration management systems to make and track configuration changes. These systems reduce errors caused by manual processes and reduce the level of effort to deploy changes.</p>
+</div>
+<div class="paragraph">
+<p>Static configuration management sets values when initializing a resource that are expected to remain consistent throughout the resource’s lifetime. Some examples include setting the configuration for a web or application server on an instance, or defining the configuration of an AWS service within the AWS Management Console or through the AWS CLI.</p>
+</div>
+<div class="paragraph">
+<p>Dynamic configuration management sets values at initialization that can or are expected to change during the lifetime of a resource. For example, you could set a feature toggle to enable functionality in your code via a configuration change, or change the level of log detail during an incident to capture more data and then change back following the incident eliminating the now unnecessary logs and their associated expense.</p>
+</div>
+<div class="paragraph">
+<p>If you have dynamic configurations in your applications running on instances, containers, serverless functions, or devices, you can use <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html">AWS AppConfig</a> to manage and deploy them across your environments.</p>
+</div>
+<div class="paragraph">
+<p>On AWS, you can use <a href="https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html">AWS Config</a> to continuously monitor your AWS resource configurations across accounts and Regions. It enables you to track their configuration history, understand how a configuration change would affect other resources, and audit them against expected or desired configurations using <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">AWS Config Rules</a> and <a href="https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html">AWS Config Conformance Packs</a>.</p>
+</div>
+<div class="paragraph">
+<p>On AWS, you can build continuous integration/continuous deployment (CI/CD) pipelines using services such as AWS Developer Tools (for example, AWS CodeCommit, AWS CodeBuild, AWS CodePipeline, AWS CodeDeploy, and AWS CodeStar ).</p>
+</div>
+<div class="paragraph">
+<p>Have a change calendar and track when significant business or operational activities or events are planned that may be impacted by implementation of change. Adjust activities to manage risk around those plans. <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> provides a mechanism to document blocks of time as open or closed to changes and why, and share that information with other AWS accounts. AWS Systems Manager Automation scripts can be configured to adhere to the change calendar state.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-maintenance.html">AWS Systems Manager Maintenance Windows</a> can be used to schedule the performance of AWS SSM Run Command or Automation scripts, AWS Lambda invocations, or AWS Step Functions activities at specified times. Mark these activities in your change calendar so that they can be included in your evaluation.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Common anti-patterns</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>You manually update the web server configuration across your fleet and a number of servers become unresponsive due to update errors.</p>
+</li>
+<li>
+<p>You manually update your application server fleet over the course of many hours. The inconsistency in configuration during the change causes unexpected behaviors.</p>
+</li>
+<li>
+<p>Someone has updated your security groups and your web servers are no longer accessible. Without knowledge of what was changed you spend significant time investigating the issue extending your time to recovery.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Benefits of establishing this best practice</dt>
+<dd>
+<p>Adopting configuration management systems reduces the level of effort to make and track changes, and the frequency of errors caused by manual procedures.</p>
+</dd>
+<dt class="hdlist1">Level of risk exposed if this best practice is not established</dt>
+<dd>
+<p>Medium</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_guidance">Implementation guidance</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>Use configuration management systems: Use configuration management systems to track and implement changes, to reduce errors caused by manual processes, and reduce the level of effort.</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

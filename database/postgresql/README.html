@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Postgres Command examples</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Postgres Command examples</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_listing_tables">Listing tables</a></li>
+<li><a href="#_describe_table_schema">Describe table schema</a>
+<ul class="sectlevel2">
+<li><a href="#_output">Output</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_listing_tables">Listing tables</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>\dt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>output</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>                 List of relations
+ Schema |         Name          | Type  |  Owner
+--------+-----------------------+-------+----------
+ public | flyway_schema_history | table | postgres
+ public | inventory             | table | postgres
+ public | tile_data             | table | postgres
+(3 rows)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_describe_table_schema">Describe table schema</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>\d[S+]  NAME           describe table, view, sequence, or index</p>
+</div>
+</blockquote>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>\dS+ inventory</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_output">Output</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>                                                                 Table "public.inventory"
+        Column        |            Type             | Collation | Nullable |                Default                | Storage  | Stats target | Description
+----------------------+-----------------------------+-----------+----------+---------------------------------------+----------+--------------+-------------
+ id                   | integer                     |           | not null | nextval('inventory_id_seq'::regclass) | plain    |              |
+ uuid                 | uuid                        |           | not null |                                       | plain    |              |
+ vendor               | text                        |           | not null |                                       | extended |              |
+ area                 | text                        |           | not null |                                       | extended |              |
+ vendor_creation_date | date                        |           | not null |                                       | plain    |              |
+ codec_major_version  | integer                     |           | not null |                                       | plain    |              |
+ codec_minor_version  | integer                     |           | not null |                                       | plain    |              |
+ default_latitude     | double precision            |           | not null |                                       | plain    |              |
+ default_longitude    | double precision            |           | not null |                                       | plain    |              |
+ map_layer_type       | map_layer_type              |           | not null |                                       | plain    |              |
+ compatible_with      | integer                     |           |          |                                       | plain    |              |
+ inserted_timestamp   | timestamp without time zone |           | not null | now()                                 | plain    |              |
+Indexes:
+    "inventory_pkey" PRIMARY KEY, btree (id)
+    "inventory_unique_uuid" UNIQUE CONSTRAINT, btree (uuid)
+Foreign-key constraints:
+    "inventory_compatible_with_fkey" FOREIGN KEY (compatible_with) REFERENCES inventory(id)
+Referenced by:
+    TABLE "inventory" CONSTRAINT "inventory_compatible_with_fkey" FOREIGN KEY (compatible_with) REFERENCES inventory(id)
+    TABLE "tile_data" CONSTRAINT "tile_data_inventory_id_fkey" FOREIGN KEY (inventory_id) REFERENCES inventory(id)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

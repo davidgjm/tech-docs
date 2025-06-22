@@ -1,7 +1,0 @@
-= Design Principles
-:toc:
-
-- xref:10-principles-for-azure-apps.adoc[10 design principles for Azure applications]
-- xref:design-for-self-healing.adoc[Design for self healing]
-- xref:design-for-operations.adoc[Design for operations]
-- xref:design-for-evolution.adoc[Design for evolultion]

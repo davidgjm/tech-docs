@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Container Networking Interface (CNI))</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Container Networking Interface (CNI))</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_ovierview">Ovierview</a></li>
+<li><a href="#_cni_specification">CNI specification</a>
+<ul class="sectlevel2">
+<li><a href="#_important_notes">Important notes</a></li>
+<li><a href="#_execution_protocol">Execution Protocol</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Readings</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://kubesphere.io/zh/blogs/containerd-cni/">让容器通信变得简单：深度解析 Containerd 中的 CNI 插件</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ovierview">Ovierview</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="../images/cni-overview.jpg" alt="cni overview">
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">container</dt>
+<dd>
+<p>is a network isolation domain, though the actual isolation technology is not defined by the specification. This could be a network namespace or a virtual machine, for example.</p>
+</dd>
+<dt class="hdlist1">network</dt>
+<dd>
+<p>refers to a group of endpoints that are uniquely addressable that can communicate amongst each other. This could be either an individual container (as specified above), a machine, or some other network device (e.g. a router). Containers can be conceptually added to or removed from one or more networks.</p>
+</dd>
+<dt class="hdlist1">runtime</dt>
+<dd>
+<p>is the program responsible for executing CNI plugins.</p>
+</dd>
+<dt class="hdlist1">plugin</dt>
+<dd>
+<p>is a program that applies a specified network configuration.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cni_specification">CNI specification</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_important_notes">Important notes</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Area</th>
+<th class="tableblock halign-left valign-top">Keyword</th>
+<th class="tableblock halign-left valign-top">Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plugin configuration objects</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code> (string)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Matches the name of the CNI plugin binary on disk. Must not contain characters disallowed in file paths for the system (e.g. / or \).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Execution Protocol</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">execution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The CNI protocol is based on execution of binaries invoked by the container runtime. CNI defines the protocol between the plugin binary and the runtime.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_execution_protocol">Execution Protocol</h3>
+<div class="paragraph">
+<p>The CNI protocol is based on execution of binaries invoked by the container runtime. CNI defines the protocol between the plugin binary and the runtime.</p>
+</div>
+<div class="paragraph">
+<p>A CNI plugin is responsible for configuring a container’s network interface in some manner. Plugins fall in to two broad categories:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>“<strong>Interface</strong>” plugins, which create a network interface inside the container and ensure it has connectivity.</p>
+</li>
+<li>
+<p>“<strong>Chained</strong>” plugins, which adjust the configuration of an already-created interface (but may need to create more interfaces to do so).</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Linux Namespaces</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Linux Namespaces</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_wikipedia">Wikipedia</a></li>
+<li><a href="#_linux_manual_page">Linux Manual Page</a></li>
+</ul>
+</li>
+<li><a href="#_types_of_namespace">Types of namespace</a>
+<ul class="sectlevel2">
+<li><a href="#_cgroup">cgroup</a></li>
+<li><a href="#_inter_process_communicationipc">Inter-process communication(<code>ipc</code>)</a></li>
+<li><a href="#_networknet">Network(<code>net</code>)</a></li>
+<li><a href="#_mountmnt">Mount(<code>mnt</code>)</a></li>
+<li><a href="#_uts_unix_time_sharing">UTS (UNIX Time-Sharing)</a></li>
+<li><a href="#_user">user</a></li>
+<li><a href="#_time">time</a></li>
+<li><a href="#_processpid">Process(<code>pid</code>)</a></li>
+</ul>
+</li>
+<li><a href="#_namespace_lifetime">Namespace lifetime</a></li>
+<li><a href="#_the_procpidns_directory">The <code>/proc/[pid]/ns/</code> directory</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Readings</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.linux.com/news/understanding-and-securing-linux-namespaces/">Understanding and Securing Linux Namespaces</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Linux_namespaces" class="bare">https://en.wikipedia.org/wiki/Linux_namespaces</a></p>
+</li>
+<li>
+<p><a href="https://man7.org/linux/man-pages/man7/namespaces.7.html" class="bare">https://man7.org/linux/man-pages/man7/namespaces.7.html</a></p>
+</li>
+<li>
+<p><a href="https://www.cloudsavvyit.com/742/what-are-linux-namespaces-and-what-are-they-used-for/" class="bare">https://www.cloudsavvyit.com/742/what-are-linux-namespaces-and-what-are-they-used-for/</a></p>
+</li>
+<li>
+<p><a href="https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/" class="bare">https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/</a></p>
+</li>
+<li>
+<p><a href="https://opensource.com/article/19/10/namespaces-and-containers-linux" class="bare">https://opensource.com/article/19/10/namespaces-and-containers-linux</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_wikipedia">Wikipedia</h3>
+<div class="paragraph">
+<p>Namespaces are a feature of the Linux kernel that partitions kernel resources such that one set of processes sees one set of resources while another set of processes sees a different set of resources. The feature works by having the same namespace for a set of resources and processes, but those namespaces refer to distinct resources. Resources may exist in multiple spaces. Examples of such resources are process IDs, hostnames, user IDs, file names, and some names associated with network access, and interprocess communication.</p>
+</div>
+<div class="paragraph">
+<p>Namespaces are a fundamental aspect of containers on Linux.</p>
+</div>
+<div class="paragraph">
+<p>The term "<em>namespace</em>" is often used for a type of namespace (e.g. process ID) as well as for a particular space of names.</p>
+</div>
+<div class="paragraph">
+<p>A Linux system starts out with a single namespace of each type, used by all processes. Processes can create additional namespaces and join different namespaces.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_linux_manual_page">Linux Manual Page</h3>
+<div class="literalblock">
+<div class="content">
+<pre>A namespace wraps a global system resource in an abstraction that
+makes it appear to the processes within the namespace that they
+have their own isolated instance of the global resource.  Changes
+to the global resource are visible to other processes that are
+members of the namespace, but are invisible to other processes.
+One use of namespaces is to implement containers.</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_types_of_namespace">Types of namespace</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since kernel version 5.6, there are 8 kinds of namespaces. Namespace functionality is the same across all kinds: each process is associated with a namespace and can only see or use the resources associated with that namespace, and descendant namespaces where applicable. This way each process (or process group thereof) can have a unique view on the resources. Which resource is isolated depends on the kind of namespace that has been created for a given process group.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">NS</th>
+<th class="tableblock halign-left valign-top">Namespace</th>
+<th class="tableblock halign-left valign-top">Isolates</th>
+<th class="tableblock halign-left valign-top">When introduced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cgroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cgroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cgroup root directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linux 4.6 (March 2016)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ipc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IPC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System V IPC, POSIX message queues</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">net</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Network</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Network devices, stacks, ports, etc.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mnt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mount</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mount points</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Process IDs</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boot and monotonic clocks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linux 5.6 (March 2020)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User and group IDs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linux 3.8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">uts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UTS (UNIX Time-Sharing)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hostname and NIS domain name</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_cgroup">cgroup</h3>
+<div class="paragraph">
+<p>Cgroup is another kernel feature very similar to namespaces. Cgroups allow the system to define resource limits (CPU, memory, disk space, network traffic, etc.) to a group of processes. This is a useful feature for containerized apps, but it doesn’t do any kind of “information isolation” like namespaces would. The cgroup namespace is a separate thing, and only controls which cgroups a process can see, and does not assign it to a specific cgroup.</p>
+</div>
+<div class="paragraph">
+<p>The cgroup namespace type hides the identity of the control group of which process is a member. A process in such a namespace, checking which control group any process is part of, would see a path that is actually relative to the control group set at creation time, hiding its true control group position and identity.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inter_process_communicationipc">Inter-process communication(<code>ipc</code>)</h3>
+<div class="paragraph">
+<p>This namespace controls whether or not processes can talk directly to one another.</p>
+</div>
+<div class="paragraph">
+<p>IPC namespaces isolate processes from SysV style inter-process communication. This prevents processes in different IPC namespaces from using, for example, the SHM family of functions to establish a range of shared memory between the two processes. Instead each process will be able to use the same identifiers for a shared memory region and produce two such distinct regions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_networknet">Network(<code>net</code>)</h3>
+<div class="paragraph">
+<p>This namespace manages which network devices a process can see. However, this doesn’t automatically set up anything for you—you’ll still need to create virtual network devices, and manage the connection between global network interfaces and child network interfaces. Containerization software like Docker already has this figured out, and can manage networking for you.</p>
+</div>
+<div class="paragraph">
+<p>Network namespaces virtualize the network stack. On creation a network namespace contains only a loopback interface. Each network interface (physical or virtual) is present in exactly 1 namespace and can be moved between namespaces. Each namespace will have a private set of IP addresses, its own routing table, socket listing, connection tracking table, firewall, and other network-related resources. Destroying a network namespace destroys any virtual interfaces within it and moves any physical interfaces within it back to the initial network namespace.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mountmnt">Mount(<code>mnt</code>)</h3>
+<div class="paragraph">
+<p>Mount namespaces control mount points. Upon creation the mounts from the current mount namespace are copied to the new namespace, but mount points created afterwards do not propagate between namespaces (using shared subtrees, it is possible to propagate mount points between namespaces[4]). The clone flag used to create a new namespace of this type is CLONE_NEWNS - short for "NEW NameSpace". This term is not descriptive (as it doesn&#8217;t tell which kind of namespace is to be created) because mount namespaces were the first kind of namespace and designers did not anticipate there being any others.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uts_unix_time_sharing">UTS (UNIX Time-Sharing)</h3>
+<div class="paragraph">
+<p>UTS namespaces allow a single system to appear to have different host and domain names to different processes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_user">user</h3>
+<div class="paragraph">
+<p>This namespace allows process to have “virtual root” inside their own namespace, without having actual root access to the parent system. It also partitions off UID and GID information, so child namespaces can have their own user configurations.</p>
+</div>
+<div class="paragraph">
+<p>(<strong>rootless</strong>) User namespaces are a feature to provide both privilege isolation and user identification segregation across multiple sets of processes available.With administrative assistance it is possible to build a container with seeming administrative rights without actually giving elevated privileges to user processes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_time">time</h3>
+<div class="paragraph">
+<p>The time namespace allows processes to see different system times in a way similar to the UTS namespace</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_processpid">Process(<code>pid</code>)</h3>
+<div class="paragraph">
+<p>In Linux, the first processes spawn as children of PID 1, which forms the root of the process tree. The process namespace cuts off a branch of the PID tree, and doesn’t allow access further up the branch. Processes in child namespaces will actually have multiple PIDs—the first one representing the global PID used by the main system, and the second PID representing the PID within the child process tree, which will restart from 1.</p>
+</div>
+<div class="paragraph">
+<p>The PID namespace provides processes with an independent set of process IDs (PIDs) from other namespaces. PID namespaces are nested, meaning when a new process is created it will have a PID for each namespace from its current namespace up to the initial PID namespace. Hence the initial PID namespace is able to see all processes, albeit with different PIDs than other namespaces will see processes with. The first process created in a PID namespace is assigned the process id number 1 and receives most of the same special treatment as the normal init process, most notably that orphaned processes within the namespace are attached to it. This also means that the termination of this PID 1 process will immediately terminate all processes in its PID namespace and any descendants.[5]</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_namespace_lifetime">Namespace lifetime</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Absent any other factors, a namespace is automatically torn down
+when the last process in the namespace terminates or leaves the
+namespace.  However, there are a number of other factors that may
+pin a namespace into existence even though it has no member
+processes.  These factors include the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An open file descriptor or a bind mount exists for the corresponding <code>/proc/[pid]/ns/*</code> file.</p>
+</li>
+<li>
+<p>The namespace is hierarchical (i.e., a PID or user namespace), and has a child namespace.</p>
+</li>
+<li>
+<p>It is a user namespace that owns one or more nonuser namespaces.</p>
+</li>
+<li>
+<p>It is a PID namespace, and there is a process that refers to the namespace via a <code>/proc/[pid]/ns/pid_for_children</code> symbolic link.</p>
+</li>
+<li>
+<p>It is a time namespace, and there is a process that refers to the namespace via a <code>/proc/[pid]/ns/time_for_children</code> symbolic link.</p>
+</li>
+<li>
+<p>It is an IPC namespace, and a corresponding mount of an mqueue filesystem (see mq_overview(7)) refers to this namespace.</p>
+</li>
+<li>
+<p>It is a PID namespace, and a corresponding mount of a proc(5) filesystem refers to this namespace.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_procpidns_directory">The <code>/proc/[pid]/ns/</code> directory</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each process has a /proc/[pid]/ns/ subdirectory containing one
+entry for each namespace that supports being manipulated by
+setns(2):</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ ls -l /proc/$$/ns | awk '{print $1, $9, $10, $11}'
+total 0
+lrwxrwxrwx. cgroup -&gt; cgroup:[4026531835]
+lrwxrwxrwx. ipc -&gt; ipc:[4026531839]
+lrwxrwxrwx. mnt -&gt; mnt:[4026531840]
+lrwxrwxrwx. net -&gt; net:[4026531969]
+lrwxrwxrwx. pid -&gt; pid:[4026531836]
+lrwxrwxrwx. pid_for_children -&gt; pid:[4026531834]
+lrwxrwxrwx. time -&gt; time:[4026531834]
+lrwxrwxrwx. time_for_children -&gt; time:[4026531834]
+lrwxrwxrwx. user -&gt; user:[4026531837]
+lrwxrwxrwx. uts -&gt; uts:[4026531838]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Bind mounting (see mount(2)) one of the files in this directory
+to somewhere else in the filesystem keeps the corresponding
+namespace of the process specified by pid alive even if all
+processes currently in the namespace terminate.</p>
+</div>
+<div class="paragraph">
+<p>Opening one of the files in this directory (or a file that is
+bind mounted to one of these files) returns a file handle for the
+corresponding namespace of the process specified by pid.  As long
+as this file descriptor remains open, the namespace will remain
+alive, even if all processes in the namespace terminate.  The
+file descriptor can be passed to setns(2).</p>
+</div>
+<div class="paragraph">
+<p>The symbolic links in this subdirectory are as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/cgroup (since Linux 4.6)
+       This file is a handle for the cgroup namespace of the
+       process.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/ipc (since Linux 3.0)
+       This file is a handle for the IPC namespace of the
+       process.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/mnt (since Linux 3.8)
+       This file is a handle for the mount namespace of the
+       process.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/net (since Linux 3.0)
+       This file is a handle for the network namespace of the
+       process.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/pid (since Linux 3.8)
+       This file is a handle for the PID namespace of the
+       process.  This handle is permanent for the lifetime of the
+       process (i.e., a process's PID namespace membership never
+       changes).</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/pid_for_children (since Linux 4.12)
+       This file is a handle for the PID namespace of child
+       processes created by this process.  This can change as a
+       consequence of calls to unshare(2) and setns(2) (see
+       pid_namespaces(7)), so the file may differ from
+       /proc/[pid]/ns/pid.  The symbolic link gains a value only
+       after the first child process is created in the namespace.
+       (Beforehand, readlink(2) of the symbolic link will return
+       an empty buffer.)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/time (since Linux 5.6)
+       This file is a handle for the time namespace of the
+       process.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/time_for_children (since Linux 5.6)
+       This file is a handle for the time namespace of child
+       processes created by this process.  This can change as a
+       consequence of calls to unshare(2) and setns(2) (see
+       time_namespaces(7)), so the file may differ from
+       /proc/[pid]/ns/time.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/user (since Linux 3.8)
+       This file is a handle for the user namespace of the
+       process.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/proc/[pid]/ns/uts (since Linux 3.0)
+       This file is a handle for the UTS namespace of the
+       process.</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

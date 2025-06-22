@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Performance monitoring</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Performance monitoring</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_requirements_for_performance_monitoring">Requirements for performance monitoring</a></li>
+<li><a href="#_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</a></li>
+<li><a href="#_analyzing_performance_data">Analyzing performance data</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><span class="icon lime"><i class="fa fa-sticky-note fa-2x"></i></span> Open Questions</div>
+<div class="ulist">
+<ul>
+<li>
+<p>How to achieve this with Spring Cloud/Spring Boot on Kubernetes in Azure?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>System performance depends on a number of factors. Each factor is typically measured through key performance indicators (KPIs), such as the number of database transactions per second or the volume of network requests that are successfully serviced in a specified time frame. Some of these KPIs might be available as specific performance measures, whereas others might be derived from a combination of metrics.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Determining poor or good performance requires that you understand the level of performance at which the system should be capable of running. This requires observing the system while it&#8217;s functioning under a typical load and capturing the data for each KPI over a period of time. This might involve running the system under a simulated load in a test environment and gathering the appropriate data before deploying the system to a production environment.</p>
+</div>
+<div class="paragraph">
+<p>You should also ensure that monitoring for performance purposes does not become a burden on the system. You might be able to dynamically adjust the level of detail for the data that the performance monitoring process gathers.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements_for_performance_monitoring">Requirements for performance monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To examine system performance, an operator typically needs to see information that includes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The response rates for user requests.</p>
+</li>
+<li>
+<p>The number of concurrent user requests.</p>
+</li>
+<li>
+<p>The volume of network traffic.</p>
+</li>
+<li>
+<p>The rates at which business transactions are being completed.</p>
+</li>
+<li>
+<p>The average processing time for requests.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It can also be helpful to provide tools that enable an operator to help spot correlations, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of concurrent users versus request latency times (how long it takes to start processing a request after the user has sent it).</p>
+</li>
+<li>
+<p>The number of concurrent users versus the average response time (how long it takes to complete a request after it has started processing).</p>
+</li>
+<li>
+<p>The volume of requests versus the number of processing errors.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Along with this high-level functional information, an operator should be able to obtain a detailed view of the performance for <strong>each component</strong> in the system. This data is typically provided through low-level performance counters that track information such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Memory utilization.</p>
+</li>
+<li>
+<p>Number of threads.</p>
+</li>
+<li>
+<p>CPU processing time.</p>
+</li>
+<li>
+<p>Request queue length.</p>
+</li>
+<li>
+<p>Disk or network I/O rates and errors.</p>
+</li>
+<li>
+<p>Number of bytes written or read.</p>
+</li>
+<li>
+<p>Middleware indicators, such as queue length.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All visualizations should allow an operator to specify a time period. The displayed data might be a snapshot of the current situation and/or a historical view of the performance.</p>
+</div>
+<div class="paragraph">
+<p>An operator should be able to raise an alert based on any performance measure for any specified value during any specified time interval.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can gather high-level performance data (throughput, number of concurrent users, number of business transactions, error rates, and so on) by monitoring the progress of users' requests as they arrive and pass through the system. This involves incorporating tracing statements at key points in the application code, together with timing information. All faults, exceptions, and warnings should be captured with sufficient data for correlating them with the requests that caused them.</p>
+</div>
+<div class="paragraph">
+<p>If possible, you should also capture performance data for any external systems that the application uses. These external systems might provide their own performance counters or other features for requesting performance data. If this is not possible, record information such as the start time and end time of each request made to an external system, together with the status (success, fail, or warning) of the operation. For example, you can use a stopwatch approach to time requests: start a timer when the request starts and then stop the timer when the request finishes.</p>
+</div>
+<div class="paragraph">
+<p>Low-level performance data for individual components in a system might be available through features and services such as Windows performance counters and Azure Diagnostics.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzing_performance_data">Analyzing performance data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Much of the analysis work consists of aggregating performance data by user request type and/or the subsystem or service to which each request is sent. An example of a user request is adding an item to a shopping cart or performing the checkout process in an e-commerce system.</p>
+</div>
+<div class="paragraph">
+<p>Another common requirement is summarizing performance data in selected percentiles. For example, an operator might determine the response times for 99 percent of requests, 95 percent of requests, and 70 percent of requests. There might be SLA targets or other goals set for each percentile. The ongoing results should be reported in near real time to help detect immediate issues. The results should also be aggregated over the longer time for statistical purposes.</p>
+</div>
+<div class="paragraph">
+<p>In the case of latency issues affecting performance, an operator should be able to quickly identify the cause of the bottleneck by examining the latency of each step that each request performs. The performance data must therefore provide a means of correlating performance measures for each step to tie them to a specific request.</p>
+</div>
+<div class="paragraph">
+<p>Depending on the visualization requirements, it might be useful to generate and store a <a href="https://en.wikipedia.org/wiki/Data_cube">data cube</a> that contains views of the raw data. This data cube can allow complex ad hoc querying and analysis of the performance information.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

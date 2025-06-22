@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Considerations when using domain names in a multitenant solution</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Considerations when using domain names in a multitenant solution</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_subdomains">Subdomains</a>
+<ul class="sectlevel2">
+<li><a href="#_manage_your_domain_namespace">Manage your domain namespace</a></li>
+<li><a href="#_wildcard_dns">Wildcard DNS</a></li>
+<li><a href="#_subdomains_with_multipart_stem_domains">Subdomains with multipart stem domains</a></li>
+</ul>
+</li>
+<li><a href="#_custom_domain_names">Custom domain names</a>
+<ul class="sectlevel2">
+<li><a href="#_name_resolution">Name resolution</a></li>
+<li><a href="#_host_header_resolution">Host header resolution</a></li>
+<li><a href="#_domain_validation">Domain validation</a></li>
+<li><a href="#_dangling_dns_and_subdomain_takeover_attacks">Dangling DNS and subdomain takeover attacks</a></li>
+</ul>
+</li>
+<li><a href="#_tlsssl_certificates">TLS/SSL certificates</a></li>
+<li><a href="#_next_steps">Next steps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In many multitenant web applications, a domain name can be used as a way to identify a tenant, to help with routing requests, and to provide a branded experience to your customers. Two common approaches are to use subdomains and custom domain names. On this page, we provide guidance for technical decision-makers about the approaches you can consider and their tradeoffs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_subdomains">Subdomains</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each tenant might get a unique subdomain under a common shared domain name. Let&#8217;s consider an example multitenant solution built by Contoso. Customers purchase Contoso&#8217;s product to help manage their invoice generation. All of Contoso&#8217;s tenants might be assigned their own subdomain, under the <code>contoso.com</code> domain name. Or, if you use regional deployments, you might assign subdomains under the <code>us.contoso.com</code> and <code>eu.contoso.com</code> domains. In this article, we refer to these as stem domains. Each customer gets their own subdomain under your stem domain. For example, Tailwind Toys might be assigned <code>tailwind.contoso.com</code>, and Adventure Works might be assigned <code>adventureworks.contoso.com</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Many Azure services use this approach. For example, when you create an Azure storage account, it is assigned a set of subdomains for you to use, such as &lt;your account name&gt;.blob.core.windows.net.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_manage_your_domain_namespace">Manage your domain namespace</h3>
+<div class="paragraph">
+<p>When you create subdomains under your own domain name, you need to be mindful that you could have multiple customers with similar names. Since they share a single stem domain, the first customer to get a particular domain will get their preferred name, and subsequent customers will have to use alternate subdomain names, since full domain names must be globally unique.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_wildcard_dns">Wildcard DNS</h3>
+<div class="paragraph">
+<p>Consider using wildcard DNS entries to simplify the management of subdomains. Instead of creating DNS entries for <code>tailwind.contoso.com</code>, <code>adventureworks.contoso.com</code>, and so forth, you could instead create a wildcard entry for <code>*.contoso.com</code> and direct all subdomains to single IP address (A record) or canonical name (CNAME record).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Make sure that your web-tier services support wildcard DNS, if you plan to rely on this feature. Many Azure services, including Azure Front Door and Azure App Service, support wildcard DNS entries.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_subdomains_with_multipart_stem_domains">Subdomains with multipart stem domains</h3>
+<div class="paragraph">
+<p>Many multitenant solutions are spread across multiple physical deployments. This is common, when you need to comply with data residency requirements, or when you want to provide better performance by deploying resources geographically closer to the users. Even within a single region, you might also need to spread your tenants across independent deployments, as part of your scaling strategy. If you plan to use subdomains for each tenant, you might consider a multipart subdomain structure.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example: Contoso publishes a multitenant application for its four customers. Adventure Works and Tailwind Traders are in the United States, and their data is stored on a shared US instance of the Contoso platform. Fabrikam and Worldwide Importers are in Europe, and their data is stored on a European instance.</p>
+</div>
+<div class="paragraph">
+<p>If Contoso chose to use a single stem domain, contoso.com, for all their customers, here&#8217;s what this might look like:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/subdomains-single-stem.png" alt="Diagram that shows US and EU deployments of a web app" width="with a single stem domain for each customer's subdomain.">
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS entries (that are required to support this configuration) might look like this:</p>
+</div>
+<table class="tableblock frame-none grid-rows stretch">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Subdomain</th>
+<th class="tableblock halign-left valign-top">CNAME to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>adventureworks.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us.contoso.com</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tailwind.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us.contoso.com</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fabrikam.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>eu.contoso.com</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>worldwideimporters.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>eu.contoso.com</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Each new customer that is onboarded requires a new subdomain, and the number of subdomains grows with each customer.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, Contoso could use deployment- or region-specific stem domains, like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/subdomains-multiple-stem.png" alt="subdomains multiple stem">
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS entries for this deployment might look like this:</p>
+</div>
+<table class="tableblock frame-none grid-rows stretch">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Subdomain</th>
+<th class="tableblock halign-left valign-top">CNAME to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*.us.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us.contoso.com</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*.eu.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>eu.contoso.com</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Contoso doesn&#8217;t need to create subdomain records for every customer. Instead, they have a single wildcard DNS record for each geography&#8217;s deployment, and any new customers who are added underneath that stem will automatically inherit the CNAME record.</p>
+</div>
+<div class="paragraph">
+<p>There are benefits and drawbacks to each approach. When using a single stem domain, each tenant you onboard requires a new DNS record to be created, which introduces more operational overhead. However, you have more flexibility, if you need to move tenants between deployments, since you can change the CNAME record to direct their traffic to another deployment. This won&#8217;t affect any other tenants. When using multiple stem domains, there&#8217;s a lower management overhead, and you can reuse customer names across multiple regional stem domains, since each one effectively represents its own namespace.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_custom_domain_names">Custom domain names</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You might want to enable your customers to bring their own domain names. Some customers see this as an important aspect of their branding. It might also be required to meet customers' security requirements, especially if they need to supply their own TLS certificates. While it might seem trivial to enable customers to bring their own domain names, there are some hidden complexities to this approach, and it requires thoughtful consideration.</p>
+</div>
+<div class="sect2">
+<h3 id="_name_resolution">Name resolution</h3>
+<div class="paragraph">
+<p>Ultimately, each domain name needs to be resolved to an IP address. As you&#8217;ve seen, the approach by which this happens can depend on whether you deploy a single instance or multiple instances of your solution.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s return to our example. One of Contoso&#8217;s customers, Fabrikam, has asked to use invoices.fabrikam.com, as the custom domain name to access Contoso&#8217;s service. Since Contoso has multiple deployments of their platform, they decide to use subdomains and CNAME records to achieve their routing requirements. Contoso and Fabrikam configure the following DNS records:</p>
+</div>
+<table class="tableblock frame-none grid-rows stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Record Type</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Configured by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>invoices.fabrikam.com</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>CNAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fabrikam.eu.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Fabrikam</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*.eu.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>CNAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>eu.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Contoso</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>eu.contoso.com</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>A</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>(Contoso&#8217;s IP address)</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Contoso</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>From a name resolution perspective, this chain of records accurately resolves requests for <code>invoices.fabrikam.com</code>, to the IP address of Contoso&#8217;s European deployment.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_host_header_resolution">Host header resolution</h3>
+<div class="paragraph">
+<p>Name resolution is only half of the problem. All of the web components (within Contoso&#8217;s European deployment) need to be aware of how to handle requests that arrive with Fabrikam&#8217;s domain name in their <code>Host</code> request header. Depending on the specific web technologies that Contoso uses, this may require further configuration for each tenant&#8217;s domain name, which adds extra operational overhead to the onboarding of tenants.</p>
+</div>
+<div class="paragraph">
+<p>You can also consider rewriting host headers, so that regardless of the incoming request&#8217;s <code>Host</code> header, your web server sees a consistent header value. For example, Azure Front Door enables you to rewrite <code>Host</code> headers, so that regardless of the request, your application server receives a single <code>Host</code> header. Azure Front Door propagates the original host header in the <code>X-Forwarded-Host</code> header, so that your application can inspect it, to resolve the tenant.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain_validation">Domain validation</h3>
+<div class="paragraph">
+<p>It&#8217;s important to validate the ownership of custom domains before onboarding them. Otherwise, you risk a customer accidentally or maliciously parking a domain name.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s consider Contoso&#8217;s onboarding process for Adventure Works, who have asked to use <code>invoices.adventureworks.com</code> as their custom domain name. Unfortunately, somebody made a typo when they tried to onboard the custom domain name, and they missed the s. So, they set it up as <code>invoices.adventurework.com</code>. Not only does the traffic not flow correctly, but when another company named <em>Adventure Work</em> tries to add their custom domain to Contoso&#8217;s platform, they&#8217;re told the domain name is already in use.</p>
+</div>
+<div class="paragraph">
+<p>When working with custom domains, especially within a self-service or automated process, it&#8217;s common to require a domain verification step. This might require that the CNAME records be set up before the domain can be added. Alternatively, Contoso might generate a random string and ask Adventure Works to add a DNS TXT record with the string value. That would prevent the domain name from being added, until the verification is completed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dangling_dns_and_subdomain_takeover_attacks">Dangling DNS and subdomain takeover attacks</h3>
+<div class="paragraph">
+<p>When you work with custom domain names, you are potentially vulnerable to a class of attack called <a href="https://docs.microsoft.com/en-us/azure/security/fundamentals/subdomain-takeover">dangling DNS</a> or <a href="https://docs.microsoft.com/en-us/azure/security/fundamentals/subdomain-takeover">subdomain takeover</a>. This attack happens when customers disassociate their custom domain name from your service, but they don&#8217;t delete the record from their DNS server. This DNS entry then points to a non-existent resource and is vulnerable to a takeover.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s consider how Fabrikam&#8217;s relationship with Contoso might change:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Fabrikam has decided to no longer work with Contoso, and so they have terminated their business relationship.</p>
+</li>
+<li>
+<p>Contoso has offboarded the Fabrikam tenant, and they requested for <code>fabrikam.contoso.com</code> to no longer work. However, Fabrikam forgot to delete the CNAME record for <code>invoices.fabrikam.com</code>.</p>
+</li>
+<li>
+<p>A malicious actor creates a new Contoso account and gives it the name <code>fabrikam</code>.</p>
+</li>
+<li>
+<p>The attacker onboards the custom domain name <code>invoices.fabrikam.com</code> to their new tenant. Since Contoso performs CNAME-based domain validation, they check Fabrikam&#8217;s DNS server. They see that the DNS server returns a CNAME record for <code>invoices.fabrikam.com</code>, which points to <code>fabrikam.contoso.com</code>. Contoso considers the custom domain validation to be successful.</p>
+</li>
+<li>
+<p>If any Fabrikam employees tried to access the site, requests would appear to work. If the attacker sets up their Contoso tenant with Fabrikam&#8217;s branding, employees might be fooled into accessing the site and providing sensitive data, which the attacker can then access.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>A common strategy to protect against dangling DNS attacks is to require that the CNAME record is deleted, before the domain name can be removed from the tenant&#8217;s account. You could also consider prohibiting the reuse of tenant identifiers, and you can then strengthen your custom domain onboarding process by using a randomly generated TXT record (that is different for each onboarding attempt).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tlsssl_certificates">TLS/SSL certificates</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Transport Layer Security (TLS) is an essential component, when working with modern applications. It provides trust and security to your web applications. The ownership and management of TLS certificates is something that needs careful consideration, for multitenant applications.</p>
+</div>
+<div class="paragraph">
+<p>Typically, the owner of a domain name will be responsible for issuing and renewing its certificates. For example, Contoso is responsible for issuing and renewing TLS certificates for <code>us.contoso.com</code>, as well as a wildcard certificate for <code>*.contoso.com</code>. Similarly, Fabrikam would generally be responsible for managing any records for the <code>fabrikam</code>.com domain, including <code>invoices.fabrikam.com</code>. The CAA (Certificate Authority Authorization) DNS record type can be used by a domain owner, to ensure that only specific authorities can create certificates for their domain.</p>
+</div>
+<div class="paragraph">
+<p>If you plan to allow customers to bring their own domains, consider whether you plan to issue the certificate on the customer&#8217;s behalf, or whether the customers must bring their own certificates. Each option has benefits and drawbacks. If you issue a certificate for a customer, you can handle the renewal of the certificate, so the customer doesn&#8217;t have to remember to keep it updated. However, if the customers have CAA records on their domain names, they might need to authorize you to issue certificates on their behalf. If you expect customers should issue and provide you with their own certificates, you are responsible for receiving and managing the private keys in a secure manner, and you might have to remind your customers to renew the certificate before it expires, to avoid an interruption in their service.</p>
+</div>
+<div class="paragraph">
+<p>Several Azure services support automatic management of certificates for custom domains. For example, Azure Front Door and App Service provide certificates for custom domains, and they automatically handle the renewal process. This removes the burden of managing certificates, from your operations team. However, you still need to consider the question of ownership and authority, such as whether CAA records are in effect and configured correctly. Also, you need to ensure your customers' domains are configured to allow the certificates that are managed by the platform.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Return to the <a href="README.html">architectural considerations overview</a>. Or, review the <a href="https://docs.microsoft.com/en-us/azure/architecture/framework">Microsoft Azure Well-Architected Framework</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Choreography pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Choreography pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_example">Example</a>
+<ul class="sectlevel2">
+<li><a href="#_design">Design</a></li>
+</ul>
+</li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Have each component of the system participate in the decision-making process about the workflow of a business transaction, instead of relying on a central point of control.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In microservices architecture, it&#8217;s often the case that a cloud-based application is divided into several small services that work together to process a business transaction end-to-end. To lower coupling between services, each service is responsible for a single business operation. Some benefits include faster development, smaller code base, and scalability. However, designing an efficient and scalable workflow is a challenge and often requires complex interservice communication.</p>
+</div>
+<div class="paragraph">
+<p>The services communicate with each other by using well-defined APIs. Even a single business operation can result in multiple point-to-point calls among all services. A common pattern for communication is to use a centralized service that acts as the orchestrator. It acknowledges all incoming requests and delegates operations to the respective services. In doing so, it also manages the workflow of the entire business transaction. Each service just completes an operation and is not aware of the overall workflow.</p>
+</div>
+<div class="paragraph">
+<p>The orchestrator pattern reduces point-to-point communication between services but has some drawbacks because of the tight coupling between the orchestrator and other services that participate in processing of the business transaction. To execute tasks in a sequence, the orchestrator needs to have some domain knowledge about the responsibilities of those services. If you want to add or remove services, existing logic will break, and you&#8217;ll need to rewire portions of the communication path. While you can configure the workflow, add or remove services easily with a well-designed orchestrator, such an implementation is complex and hard to maintain.</p>
+</div>
+<div id="img-orchestrator" class="imageblock">
+<div class="content">
+<img src="./images/orchestrator.png" alt="orchestrator">
+</div>
+<div class="title">Figure 1. Processing a request using a central orchestrator</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let each service decide when and how a business operation is processed, instead of depending on a central orchestrator.</p>
+</div>
+<div class="paragraph">
+<p>One way to implement choreography is to use the <a href="publisher-subscriber.html">asynchronous messaging pattern</a> to coordinate the business operations.</p>
+</div>
+<div id="img-choreography" class="imageblock">
+<div class="content">
+<img src="./images/choreography-pattern.png" alt="choreography pattern">
+</div>
+<div class="title">Figure 2. Solution</div>
+</div>
+<div class="paragraph">
+<p>A client request publishes messages to a message queue. As messages arrive, they are pushed to subscribers, or services, interested in that message. Each subscribed service does their operation as indicated by the message and responds to the message queue with success or failure of the operation. In case of success, the service can push a message back to the same queue or a different message queue so that another service can continue the workflow if needed. If an operation fails, the message bus can retry that operation.</p>
+</div>
+<div class="paragraph">
+<p>This way, the services choreograph the workflow among themselves without depending on an orchestrator or having direct communication between them.</p>
+</div>
+<div class="paragraph">
+<p>Because there isn&#8217;t point-to-point communication, this pattern helps reduce coupling between services. Also, it can remove the performance bottleneck caused by the orchestrator when it has to deal with all transactions.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use the choreography pattern if you expect to update, remove, or add new services frequently. The entire app can be modified with lesser effort and minimal disruption to existing services.</p>
+</div>
+<div class="paragraph">
+<p>Consider this pattern if you experience performance bottlenecks in the central orchestrator.</p>
+</div>
+<div class="paragraph">
+<p>This pattern is a natural model for the serverless architecture where all services can be short lived, or event driven. Services can spin up because of an event, do their task, and are removed when the task is finished.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Decentralizing the orchestrator can cause issues while managing the workflow.</p>
+</div>
+<div class="paragraph">
+<p>If a service fails to complete a business operation, it can be difficult to recover from that failure. One way is to have the service indicate failure by firing an event. Another service subscribes to those failed events takes necessary actions such as applying <a href="compensating-transaction.html">compensating transactions</a> to undo successful operations in a request. The failed service might also fail to fire an event for the failure. In that case, consider using a retry and, or time out mechanism to recognize that operation as a failure. For an example, see the Example section.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s simple to implement a workflow when you want to process independent business operations in parallel. You can use a single message bus. However, the workflow can become complicated when choreography needs to occur in a sequence. For instance, Service C can start its operation only after Service A and Service B have completed their operations with success. One approach is to have multiple message buses that get messages in the required order. For more information, see the Example section.</p>
+</div>
+<div class="paragraph">
+<p>The choreography pattern becomes a challenge if the number of services grow rapidly. Given the high number of independent moving parts, the workflow between services tends to get complex. Also, distributed tracing becomes difficult.</p>
+</div>
+<div class="paragraph">
+<p>The orchestrator centrally manages the resiliency of the workflow and it can become a single point of failure. On the other hand, for choreography, the role is distributed between all services and resiliency becomes less robust.</p>
+</div>
+<div class="paragraph">
+<p>Each service isn&#8217;t only responsible for the resiliency of its operation but also the workflow. This responsibility can be burdensome for the service and hard to implement. Each service must retry transient, nontransient, and time-out failures, so that the request terminates gracefully, if needed. Also, the service must be diligent about communicating the success or failure of the operation so that other services can act accordingly.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This example shows the choreography pattern with the <a href="https://github.com/mspnp/microservices-reference-implementation">Drone Delivery app</a>. When a client requests a pickup, the app assigns a drone and notifies the client.</p>
+</div>
+<div class="paragraph">
+<p>GitHub logo An example of this pattern is available on <a href="https://github.com/mspnp/cloud-design-patterns/tree/master/choreography">GitHub</a>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/choreography-example.png" alt="choreography example">
+</div>
+</div>
+<div class="paragraph">
+<p>A single client business transaction requires three distinct business operations: creating or updating a package, assigning a drone to deliver the package, and checking the delivery status. Those operations are performed by three microservices: Package, Drone Scheduler, and Delivery services. Instead of a central orchestrator, the services use messaging to collaborate and coordinate the request among themselves.</p>
+</div>
+<div class="sect2">
+<h3 id="_design">Design</h3>
+<div class="paragraph">
+<p>The business transaction is processed in a sequence through multiple hops. Each hop has a message bus and the respective business service.</p>
+</div>
+<div class="paragraph">
+<p>When a client sends a delivery request through an HTTP endpoint, the Ingestion service receives it, raises an operation event, and sends it to a message bus. The bus invokes the subscribed business service and sends the event in a POST request. On receiving the event, the business service can complete the operation with success, failure, or the request can time out. If successful, the service responds to the bus with the Ok status code, raises a new operation event, and sends it to the message bus of the next hop. In case of a failure or time-out, the service reports failure by sending the BadRequest code to the message bus that sent the original POST request. The message bus retries the operation based on a retry policy. After that period expires, message bus flags the failed operation and further processing of the entire request stops.</p>
+</div>
+<div class="paragraph">
+<p>This workflow continues until the entire request has been processed.</p>
+</div>
+<div class="paragraph">
+<p>The design uses multiple message buses to process the entire business transaction. Microsoft Azure Event Grid provides the messaging service. The app is deployed in an Azure Kubernetes Service (AKS) cluster with two containers in the same pod. One container runs the <a href="ambassador.html">ambassador</a> that interacts with Event Grid while the other runs a business service. The approach with two containers in the same pod improves performance and scalability. The ambassador and the business service share the same network allowing for low latency and high throughput.</p>
+</div>
+<div class="paragraph">
+<p>To avoid cascading retry operations that might lead to multiple efforts, only Event Grid retries an operation instead of the business service. It flags a failed request by sending a messaging to a <a href="https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-dead-letter-queues">dead letter queue (DLQ)</a>.</p>
+</div>
+<div class="paragraph">
+<p>The business services are idempotent to make sure retry operations don&#8217;t result in duplicate resources. For example, the Package service uses upsert operations to add data to the data store.</p>
+</div>
+<div class="paragraph">
+<p>The example implements a custom solution to correlate calls across all services and Event Grid hops.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a code example that shows the choreography pattern between all business services. It shows the workflow of the Drone Delivery app transactions. Code for exception handling and logging have been removed for brevity.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="p">[</span><span class="n">HttpPost</span><span class="p">]</span>
+<span class="p">[</span><span class="nf">Route</span><span class="p">(</span><span class="s">"/api/[controller]/operation"</span><span class="p">)]</span>
+<span class="p">[</span><span class="nf">ProducesResponseType</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">void</span><span class="p">),</span> <span class="m">200</span><span class="p">)]</span>
+<span class="p">[</span><span class="nf">ProducesResponseType</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">void</span><span class="p">),</span> <span class="m">400</span><span class="p">)]</span>
+<span class="p">[</span><span class="nf">ProducesResponseType</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">void</span><span class="p">),</span> <span class="m">500</span><span class="p">)]</span>
+
+<span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">Post</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span> <span class="n">EventGridEvent</span><span class="p">[]</span> <span class="n">events</span><span class="p">)</span>
+<span class="p">{</span>
+
+   <span class="k">if</span> <span class="p">(</span><span class="n">events</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+   <span class="p">{</span>
+       <span class="k">return</span> <span class="nf">BadRequest</span><span class="p">(</span><span class="s">"No Event for Choreography"</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">foreach</span><span class="p">(</span><span class="kt">var</span> <span class="n">e</span> <span class="k">in</span> <span class="n">events</span><span class="p">)</span>
+   <span class="p">{</span>
+
+        <span class="n">List</span><span class="p">&lt;</span><span class="n">EventGridEvent</span><span class="p">&gt;</span> <span class="n">listEvents</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">EventGridEvent</span><span class="p">&gt;();</span>
+        <span class="n">e</span><span class="p">.</span><span class="n">Topic</span> <span class="p">=</span> <span class="n">eventRepository</span><span class="p">.</span><span class="nf">GetTopic</span><span class="p">();</span>
+        <span class="n">e</span><span class="p">.</span><span class="n">EventTime</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">EventType</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="n">Operations</span><span class="p">.</span><span class="n">ChoreographyOperation</span><span class="p">.</span><span class="n">ScheduleDelivery</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">packageGen</span> <span class="p">=</span> <span class="k">await</span> <span class="n">packageServiceCaller</span><span class="p">.</span><span class="nf">UpsertPackageAsync</span><span class="p">(</span><span class="n">delivery</span><span class="p">.</span><span class="n">PackageInfo</span><span class="p">).</span><span class="nf">ConfigureAwait</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">packageGen</span> <span class="k">is</span> <span class="k">null</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">//BadRequest allows the event to be reprocessed by Event Grid</span>
+                    <span class="k">return</span> <span class="nf">BadRequest</span><span class="p">(</span><span class="s">"Package creation failed."</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="c1">//we set the event type to the next choreography step</span>
+                <span class="n">e</span><span class="p">.</span><span class="n">EventType</span> <span class="p">=</span> <span class="n">Operations</span><span class="p">.</span><span class="n">ChoreographyOperation</span><span class="p">.</span><span class="n">CreatePackage</span><span class="p">;</span>
+                <span class="n">listEvents</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+                <span class="k">await</span> <span class="n">eventRepository</span><span class="p">.</span><span class="nf">SendEventAsync</span><span class="p">(</span><span class="n">listEvents</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nf">Ok</span><span class="p">(</span><span class="s">"Created Package Completed"</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="n">Operations</span><span class="p">.</span><span class="n">ChoreographyOperation</span><span class="p">.</span><span class="n">CreatePackage</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">droneId</span> <span class="p">=</span> <span class="k">await</span> <span class="n">droneSchedulerServiceCaller</span><span class="p">.</span><span class="nf">GetDroneIdAsync</span><span class="p">(</span><span class="n">delivery</span><span class="p">).</span><span class="nf">ConfigureAwait</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">droneId</span> <span class="k">is</span> <span class="k">null</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">//BadRequest allows the event to be reprocessed by Event Grid</span>
+                    <span class="k">return</span> <span class="nf">BadRequest</span><span class="p">(</span><span class="s">"could not get a drone id"</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">e</span><span class="p">.</span><span class="n">Subject</span> <span class="p">=</span> <span class="n">droneId</span><span class="p">;</span>
+                <span class="n">e</span><span class="p">.</span><span class="n">EventType</span> <span class="p">=</span> <span class="n">Operations</span><span class="p">.</span><span class="n">ChoreographyOperation</span><span class="p">.</span><span class="n">GetDrone</span><span class="p">;</span>
+                <span class="n">listEvents</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+                <span class="k">await</span> <span class="n">eventRepository</span><span class="p">.</span><span class="nf">SendEventAsync</span><span class="p">(</span><span class="n">listEvents</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nf">Ok</span><span class="p">(</span><span class="s">"Drone Completed"</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="n">Operations</span><span class="p">.</span><span class="n">ChoreographyOperation</span><span class="p">.</span><span class="n">GetDrone</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">deliverySchedule</span> <span class="p">=</span> <span class="k">await</span> <span class="n">deliveryServiceCaller</span><span class="p">.</span><span class="nf">ScheduleDeliveryAsync</span><span class="p">(</span><span class="n">delivery</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">Subject</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nf">Ok</span><span class="p">(</span><span class="s">"Delivery Completed"</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nf">BadRequest</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider these patterns in your design for choreography.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Modularize the business service by using the <a href="ambassador.html">ambassador</a> design pattern.</p>
+</li>
+<li>
+<p>Implement <a href="queue-based-load-leveling.html">queue-based load leveling pattern</a> to handle spikes of the workload.</p>
+</li>
+<li>
+<p>Use asynchronous distributed messaging through the <a href="publisher-subscriber.html">publisher-subscriber pattern</a>.</p>
+</li>
+<li>
+<p>Use <a href="compensating-transaction.html">compensating transactions</a> to undo a series of successful operations in case one or more related operation fails.</p>
+</li>
+<li>
+<p>For information about using a message broker in a messaging infrastructure, see <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/technology-choices/messaging">Asynchronous messaging options in Azure</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

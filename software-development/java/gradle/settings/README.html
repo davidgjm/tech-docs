@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Gradle user and project settings</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Gradle user and project settings</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_project_settings">Project Settings</a>
+<ul class="sectlevel2">
+<li><a href="#_using_multi_level_hierachical_projects_modules">Using multi-level (hierachical) projects (modules)</a></li>
+</ul>
+</li>
+<li><a href="#_initialization_scripts_init_scripts">Initialization Scripts (init scripts)</a>
+<ul class="sectlevel2">
+<li><a href="#_references">References</a></li>
+<li><a href="#_basics">Basics</a></li>
+<li><a href="#_using_maven_mirrors">Using Maven Mirrors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_project_settings">Project Settings</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_using_multi_level_hierachical_projects_modules">Using multi-level (hierachical) projects (modules)</h3>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Use <code>:</code> as separator for directories.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">include</span> <span class="s1">'project1'</span><span class="o">,</span> <span class="s1">'project2:child'</span><span class="o">,</span> <span class="s1">'project3:child1'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the settings file you can use the <code>include</code> method to build the project tree.
+The <code>include</code> method takes project paths as arguments. The project path is assumed to be equal to the relative physical file system path. For example, a path 'services:api' is mapped by default to a folder 'services/api' (relative from the project root). You only need to specify the leaves of the tree. This means that the inclusion of the path 'services:hotels:api' will result in creating 3 projects: 'services', 'services:hotels' and 'services:hotels:api'. More examples of how to work with the project path can be found in the DSL documentation of <a href="https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html#org.gradle.api.initialization.Settings:include(java.lang.String%5B%5D)">Settings.include(java.lang.String[</a>]).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_initialization_scripts_init_scripts">Initialization Scripts (init scripts)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_references">References</h3>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.gradle.org/current/userguide/init_scripts.html">Initialization Scripts</a></p>
+</li>
+<li>
+<p><a href="https://rahulsom.github.io/blog/2016/gradle-equivalent-of-maven-mirror.html">Gradle Equivalent of Maven Mirror</a></p>
+</li>
+<li>
+<p><a href="https://docs.gradle.org/current/userguide/declaring_repositories.html#sec:declaring_multiple_repositories">Declaring multiple repositories</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_basics">Basics</h3>
+<div class="sect3">
+<h4 id="_using_an_init_script">Using an init script</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Put a file called <code>init.gradle</code> (or <code>init.gradle.kts</code> for Kotlin) in the <code>USER_HOME/.gradle/</code> directory.</p>
+</li>
+<li>
+<p>Put a file that ends with <code>.gradle</code> (or <code>.init.gradle.kts</code> for Kotlin) in the <code>USER_HOME/.gradle/init.d/</code> directory.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If more than one init script is found they will all be executed, in the order specified above. Scripts in a given directory are executed in alphabetical order. This allows, for example, a tool to specify an init script on the command line and the user to put one in their home directory for defining the environment and both scripts will run when Gradle is executed.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_maven_mirrors">Using Maven Mirrors</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The order of declaration determines how Gradle will check for dependencies at runtime. If Gradle finds a module descriptor in a particular repository, it will attempt to download all of the artifacts for that module from the same repository. You can learn more about the inner workings of <a href="https://docs.gradle.org/current/userguide/dependency_resolution.html#sec:how-gradle-downloads-deps">dependency downloads</a>.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Gradle: Declaring multiple repositories
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">allprojects</span> <span class="o">{</span>         <b class="conum">(1)</b>
+  <span class="n">buildscript</span> <span class="o">{</span>       <b class="conum">(2)</b>
+    <span class="n">repositories</span> <span class="o">{</span>    <b class="conum">(3)</b>
+      <span class="n">mavenLocal</span><span class="o">()</span>
+      <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">"http://repo.internal.example.com/releases"</span> <span class="o">}</span> <b class="conum">(4)</b>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  <span class="n">repositories</span> <span class="o">{</span>      <b class="conum">(5)</b>
+    <span class="n">mavenLocal</span><span class="o">()</span>
+    <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s2">"http://repo.internal.example.com/releases"</span> <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>This says we want to apply to all projects on this machine.</p>
+</li>
+<li>
+<p>This says you want to modify the build script dependencies too. This will make gradle plugins and build dependencies also use your mirror.</p>
+</li>
+<li>
+<p>This says to look in maven local first. That&#8217;s typically your <code>$USER_HOME/.m2/repository</code> directory.</p>
+</li>
+<li>
+<p>This says to look at your maven mirror next if the artifact could not be found.</p>
+</li>
+<li>
+<p>This says to do the same set of changes for non-build dependencies of your gradle projects.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_concret_example">Concret example</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">allprojects</span> <span class="o">{</span>
+    <span class="n">buildscript</span> <span class="o">{</span>
+        <span class="n">repositories</span> <span class="o">{</span>
+            <span class="n">mavenLocal</span><span class="o">()</span>
+            <span class="n">maven</span> <span class="o">{</span> 
+                <span class="n">name</span> <span class="s1">'aliyun-public'</span>
+                <span class="n">url</span> <span class="s1">'https://maven.aliyun.com/repository/public/'</span>
+            <span class="o">}</span>
+            <span class="n">maven</span> <span class="o">{</span> 
+                <span class="n">name</span> <span class="s1">'aliyun-spring'</span>
+                <span class="n">url</span> <span class="s1">'https://maven.aliyun.com/repository/spring/'</span>
+            <span class="o">}</span>
+            <span class="n">mavenCentral</span><span class="o">()</span>
+            <span class="n">maven</span> <span class="o">{</span> 
+                <span class="n">name</span> <span class="s2">"spring-snapshot"</span>
+                <span class="n">url</span> <span class="s2">"https://repo.spring.io/snapshot"</span>
+            <span class="o">}</span>
+            <span class="n">maven</span> <span class="o">{</span>
+                <span class="n">name</span> <span class="s2">"spring-milestone"</span>
+                <span class="n">url</span> <span class="s2">"https://repo.spring.io/milestone"</span> 
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">mavenLocal</span><span class="o">()</span>
+        <span class="n">maven</span> <span class="o">{</span> 
+            <span class="n">name</span> <span class="s1">'aliyun-public'</span>
+            <span class="n">url</span> <span class="s1">'https://maven.aliyun.com/repository/public/'</span>
+        <span class="o">}</span>
+        <span class="n">maven</span> <span class="o">{</span> 
+            <span class="n">name</span> <span class="s1">'aliyun-spring'</span>
+            <span class="n">url</span> <span class="s1">'https://maven.aliyun.com/repository/spring/'</span>
+        <span class="o">}</span>
+        <span class="n">mavenCentral</span><span class="o">()</span>
+        <span class="n">maven</span> <span class="o">{</span> 
+            <span class="n">name</span> <span class="s2">"spring-snapshot"</span>
+            <span class="n">url</span> <span class="s2">"https://repo.spring.io/snapshot"</span>
+        <span class="o">}</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">name</span> <span class="s2">"spring-milestone"</span>
+            <span class="n">url</span> <span class="s2">"https://repo.spring.io/milestone"</span> 
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

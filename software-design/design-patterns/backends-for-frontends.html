@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Backends for Frontends pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Backends for Frontends pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://samnewman.io/patterns/architectural/bff/">Pattern: Backends For Frontends</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Create separate backend services to be consumed by specific frontend applications or interfaces. This pattern is useful when you want to avoid customizing a single backend for multiple interfaces. This pattern was first described by Sam Newman.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An application may initially be targeted at a desktop web UI. Typically, a backend service is developed in parallel that provides the features needed for that UI. As the application&#8217;s user base grows, a mobile application is developed that must interact with the same backend. The backend service becomes a general-purpose backend, serving the requirements of both the desktop and mobile interfaces.</p>
+</div>
+<div class="paragraph">
+<p>But the capabilities of a mobile device differ significantly from a desktop browser, in terms of screen size, performance, and display limitations. As a result, the requirements for a mobile application backend differ from the desktop web UI.</p>
+</div>
+<div class="paragraph">
+<p>These differences result in competing requirements for the backend. The backend requires regular and significant changes to serve both the desktop web UI and the mobile application. Often, separate interface teams work on each frontend, causing the backend to become a bottleneck in the development process. Conflicting update requirements, and the need to keep the service working for both frontends, can result in spending a lot of effort on a single deployable resource.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/backend-for-frontend.png" alt="backend for frontend">
+</div>
+</div>
+<div class="paragraph">
+<p>As the development activity focuses on the backend service, a separate team may be created to manage and maintain the backend. Ultimately, this results in a disconnect between the interface and backend development teams, placing a burden on the backend team to balance the competing requirements of the different UI teams. When one interface team requires changes to the backend, those changes must be validated with other interface teams before they can be integrated into the backend.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create one backend per user interface. Fine-tune the behavior and performance of each backend to best match the needs of the frontend environment, without worrying about affecting other frontend experiences.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/backend-for-frontend-example.png" alt="backend for frontend example">
+</div>
+</div>
+<div class="paragraph">
+<p>Because each backend is specific to one interface, it can be optimized for that interface. As a result, it will be smaller, less complex, and likely faster than a generic backend that tries to satisfy the requirements for all interfaces. Each interface team has autonomy to control their own backend and doesn&#8217;t rely on a centralized backend development team. This gives the interface team flexibility in language selection, release cadence, prioritization of workload, and feature integration in their backend.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="https://samnewman.io/patterns/architectural/bff/">Pattern: Backends For Frontends</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Consider how many backends to deploy.</p>
+</li>
+<li>
+<p>If different interfaces (such as mobile clients) will make the same requests, consider whether it is necessary to implement a backend for each interface, or if a single backend will suffice.</p>
+</li>
+<li>
+<p>Code duplication across services is highly likely when implementing this pattern.</p>
+</li>
+<li>
+<p>Frontend-focused backend services should only contain client-specific logic and behavior. General business logic and other global features should be managed elsewhere in your application.</p>
+</li>
+<li>
+<p>Think about how this pattern might be reflected in the responsibilities of a development team.</p>
+</li>
+<li>
+<p>Consider how long it will take to implement this pattern. Will the effort of building the new backends incur technical debt, while you continue to support the existing generic backend?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A shared or general purpose backend service must be maintained with significant development overhead.</p>
+</li>
+<li>
+<p>You want to optimize the backend for the requirements of specific client interfaces.</p>
+</li>
+<li>
+<p>Customizations are made to a general-purpose backend to accommodate multiple interfaces.</p>
+</li>
+<li>
+<p>An alternative language is better suited for the backend of a different user interface.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern may not be suitable:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When interfaces make the same or similar requests to the backend.</p>
+</li>
+<li>
+<p>When only one interface is used to interact with the backend.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="gateway-aggregation.html">Gateway Aggregation pattern</a></p>
+</li>
+<li>
+<p><a href="gateway-offloading.html">Gateway Offloading pattern</a></p>
+</li>
+<li>
+<p><a href="gateway-routing.html">Gateway Routing pattern</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Enterprise Agreement (EA) Enrollment</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Enterprise Agreement (EA) Enrollment</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_enterprise_agreement_enrollment_hierarchy">Enterprise Agreement Enrollment Hierarchy</a></li>
+<li><a href="#_ea_roles_enterprise_user_roles">EA roles (enterprise user roles)</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enterprise Agreement enrollment represents the commercial relationship between Microsoft and how your organization uses Azure. It provides billing foundation for your subscriptions and how your digital estate is administered.</p>
+</div>
+<div class="paragraph">
+<p>An enrollment often represents an organization&#8217;s hierarchy, including <strong>departments</strong>, <strong>accounts</strong>, and subscriptions. This hierarchy represents cost centers within an organization.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enterprise_agreement_enrollment_hierarchy">Enterprise Agreement Enrollment Hierarchy</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Departments</dt>
+<dd>
+<p>help you segment costs into logical groupings. Departments enable you to set a budget or quota at the department level.</p>
+</dd>
+<dt class="hdlist1">Accounts</dt>
+<dd>
+<p>are organizational units in the Azure Enterprise portal. You can use accounts to manage subscriptions and access reports.</p>
+</dd>
+<dt class="hdlist1">Subscriptions</dt>
+<dd>
+<p>are the smallest unit in the Azure Enterprise portal. They&#8217;re containers for Azure services managed by the service administrator.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/ea-hierarchies.png" alt="ea hierarchies"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ea_roles_enterprise_user_roles"><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/understand-ea-roles#enterprise-user-roles">EA roles (enterprise user roles)</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Roles work in two different portals to complete tasks. You use the <em>Azure Enterprise portal</em> to manage billing and costs, and the <em>Azure portal</em> to manage Azure services.</p>
+</div>
+<div class="paragraph">
+<p>Direct EA customers can complete all administrative tasks in the Azure portal. You can use the Azure Portal to manage billing, costs, and Azure services.</p>
+</div>
+<div class="paragraph">
+<p>User roles are associated with a user account. To validate user authenticity, each user must have a valid work, school, or Microsoft account. Ensure that each account is associated with an email address that&#8217;s actively monitored. Account notifications are sent to the email address.</p>
+</div>
+<div class="paragraph">
+<p>When setting up users, you can assign multiple accounts to the enterprise administrator role. However, only one account can hold the account owner role. Also, you can assign both the enterprise administrator and account owner roles to a single account.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">EA Role</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enterprise Administrator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Users with this role have the highest level of access.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EA purchaser</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Users with this role have permissions to purchase Azure services, but are not allowed to manage accounts.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Department Administrator</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>You can have multiple department administrators for each enterprise enrollment.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create and manage departments.</p>
+</li>
+<li>
+<p>Create new account owners.</p>
+</li>
+<li>
+<p>View usage details for the departments that they manage.</p>
+</li>
+<li>
+<p>View costs, if they have the necessary permissions.</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Account owner</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Users with this role can:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create and manage subscriptions.</p>
+</li>
+<li>
+<p>Manage service administrators.</p>
+</li>
+<li>
+<p>View usage for subscriptions.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There can be only one account owner per account. However, there can be multiple accounts in an EA enrollment. Each account has a unique account owner.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service administrator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The service administrator role has permissions to manage services in the Azure portal and assign users to the coadministrator role.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Notification contact</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The notification contact receives usage notifications related to the enrollment.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

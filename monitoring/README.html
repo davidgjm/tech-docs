@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Monitoring</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Monitoring</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_metrics_definition">Metrics Definition</a>
+<ul class="sectlevel2">
+<li><a href="#_the_four_golden_signals">The Four Golden Signals</a></li>
+<li><a href="#_the_use_method">The USE Method</a></li>
+<li><a href="#_the_red_method">The RED Method</a></li>
+</ul>
+</li>
+<li><a href="#_optimizing_metrics_in_your_monitoring_system">Optimizing Metrics in your monitoring system</a>
+<ul class="sectlevel2">
+<li><a href="#_guidelines_for_choosing_what_to_monitor">Guidelines for choosing what to monitor</a></li>
+</ul>
+</li>
+<li><a href="#_kubernetes_metrics">Kubernetes Metrics</a></li>
+<li><a href="#_monitoring_and_alerting">Monitoring and Alerting</a>
+<ul class="sectlevel2">
+<li><a href="#_prometheus">Prometheus</a></li>
+<li><a href="#_rules_for_monitoring_and_alerting">Rules for monitoring and alerting</a></li>
+</ul>
+</li>
+<li><a href="#_questionsopen_items">Questions/Open items</a></li>
+<li><a href="#_items_to_be_demystified">Items to be demystified</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_metrics_definition">Metrics Definition</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_four_golden_signals">The Four Golden Signals</h3>
+<div class="paragraph">
+<p>Google gave us a place to start in the excellent SRE Handbook with the notion of the “Four Golden Signals”:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The four golden signals of monitoring are latency, traffic, errors, and saturation. If you can only measure four metrics of your user-facing system, focus on these four.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Latency</dt>
+<dd>
+<p>The time it takes to service a request</p>
+</dd>
+<dt class="hdlist1">Traffic</dt>
+<dd>
+<p>A measure of how much demand is being placed on your system</p>
+</dd>
+<dt class="hdlist1">Errors</dt>
+<dd>
+<p>The rate of requests that fail</p>
+</dd>
+<dt class="hdlist1">Saturation</dt>
+<dd>
+<p>How “full” your service is.</p>
+</dd>
+</dl>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_use_method">The USE Method</h3>
+<div class="paragraph">
+<p><a href="http://www.brendangregg.com/usemethod.html" class="bare">http://www.brendangregg.com/usemethod.html</a></p>
+</div>
+<div class="paragraph">
+<p>Brendan Gregg does <a href="http://www.brendangregg.com/usemethod.html">an excellent job</a> explaining how to think about Utilization, Saturation and Errors when looking at the resources in your system.</p>
+</div>
+<div class="paragraph">
+<p>He gives the following definitions:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Resource: all physical server functional components (CPUs, disks, busses, …)</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Utilization</dt>
+<dd>
+<p>the average time that the resource was busy servicing work</p>
+</dd>
+<dt class="hdlist1">Saturation</dt>
+<dd>
+<p>the degree to which the resource has extra work which it can’t service, often queued</p>
+</dd>
+<dt class="hdlist1">Errors</dt>
+<dd>
+<p>the count of error events</p>
+</dd>
+</dl>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>He suggests, but does not prescribe, exactly which metrics that represent utilization, saturation and errors in the context of a Unix system. The rest of this article I will apply the USE method to resources in your Kubernetes nodes.</p>
+</div>
+<div class="paragraph">
+<p>While the USE method is targeted at resources, actual physical things with hard limits, it is an incomplete picture when it comes to the software running on those resources. That’s where the RED method comes in.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_red_method">The RED Method</h3>
+<div class="paragraph">
+<p><a href="https://www.youtube.com/watch?v=TJLpYXbnfQ4">Tom Wilkie coined the RED method</a> as:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Rate</dt>
+<dd>
+<p>The number of requests per second.</p>
+</dd>
+<dt class="hdlist1">Errors</dt>
+<dd>
+<p>The number of those requests that are failing.</p>
+</dd>
+<dt class="hdlist1">Duration</dt>
+<dd>
+<p>The amount of time those requests take.</p>
+</dd>
+</dl>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>On the surface the RED method seems very similar to the USE method and the Four Golden Signals. When do you apply USE vs RED?</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The USE method is for resources and the RED method is for my services</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Tom Wilkie
+</div>
+</div>
+<div class="paragraph">
+<p>Ahhh! Now we have frame of reference on how to apply these simplifying abstractions to the the metrics in our Kubernetes system. In coming installments some of the metrics I will be talking about describe the resources in our system. Others metrics describe the applications that use those resources.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_optimizing_metrics_in_your_monitoring_system">Optimizing Metrics in your monitoring system</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_guidelines_for_choosing_what_to_monitor">Guidelines for choosing what to monitor</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>In choosing what to monitor, keep the following guidelines in mind:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The rules that catch real incidents most often should be as simple, predictable, and reliable as possible.</p>
+</li>
+<li>
+<p>Data collection, aggregation, and alerting configuration that is rarely exercised (e.g., less than once a quarter for some SRE teams) should be up for removal.</p>
+</li>
+<li>
+<p>Signals that are collected, but not exposed in any prebaked dashboard nor used by any alert, are candidates for removal.</p>
+</li>
+</ul>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; SRE handbook
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kubernetes_metrics">Kubernetes Metrics</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://blog.freshtracks.io/a-deep-dive-into-kubernetes-metrics-b190cc97f0f6">A Deep Dive into Kubernetes Metrics</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring_and_alerting">Monitoring and Alerting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_prometheus"><a href="prometheus/README.html">Prometheus</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_rules_for_monitoring_and_alerting">Rules for monitoring and alerting</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="ulist">
+<ul>
+<li>
+<p>Every time the pager goes off, I should be able to react with a sense of urgency. I can only react with a sense of urgency a few times a day before I become fatigued.</p>
+</li>
+<li>
+<p>Every page should be actionable.</p>
+</li>
+<li>
+<p>Every page response should require intelligence. If a page merely merits a robotic response, it shouldn’t be a page.</p>
+</li>
+<li>
+<p>Pages should be about a novel problem or an event that hasn’t been seen before.</p>
+</li>
+</ul>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; p64 SRE Handbook
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_questionsopen_items">Questions/Open items</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_items_to_be_demystified">Items to be demystified</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>downsampling vs aggregation</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

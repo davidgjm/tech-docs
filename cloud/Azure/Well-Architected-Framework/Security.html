@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="Gone are the days when security focused solely on a strong perimeter defense to keep out malicious hackers. Anything outside the perimeter was treated as hostile, whereas inside the wall, an organization&#8217;s systems were trusted. Today&#8217;s security posture is to assume breach and use the *Zero Trust* model.">
+<title>Security</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Security</h1>
+<div class="details">
+<span id="author" class="author">Gone are the days when security focused solely on a strong perimeter defense to keep out malicious hackers. Anything outside the perimeter was treated as hostile, whereas inside the wall, an organization&#8217;s systems were trusted. Today&#8217;s security posture is to assume breach and use the *Zero Trust* model.</span><br>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_defense_in_depth">Defense in depth</a>
+<ul class="sectlevel2">
+<li><a href="#_zero_trust_model">Zero Trust model</a></li>
+<li><a href="#_defense_in_depth_a_layered_approach_to_security">Defense in depth: A layered approach to security</a></li>
+<li><a href="#_security_layers">Security layers</a></li>
+<li><a href="#_shared_responsibilities">Shared responsibilities</a></li>
+<li><a href="#_continuous_improvement">Continuous improvement</a></li>
+</ul>
+</li>
+<li><a href="#_identity_management">Identity management</a>
+<ul class="sectlevel2">
+<li><a href="#_single_sign_on">Single sign-on</a></li>
+<li><a href="#_authentication_and_access">Authentication and access</a></li>
+<li><a href="#_securing_applications">Securing applications</a></li>
+</ul>
+</li>
+<li><a href="#_infrastructure_protection">Infrastructure protection</a>
+<ul class="sectlevel2">
+<li><a href="#_role_based_access_control">Role-based access control</a></li>
+<li><a href="#_roles_and_management_groups">Roles and management groups</a></li>
+<li><a href="#_privileged_identity_management">Privileged Identity Management</a></li>
+</ul>
+</li>
+<li><a href="#_providing_identities_to_services">Providing identities to services</a>
+<ul class="sectlevel2">
+<li><a href="#_service_principals">Service principals</a></li>
+<li><a href="#_managed_identities_for_azure_resources">Managed identities for Azure resources</a></li>
+</ul>
+</li>
+<li><a href="#_encryption">Encryption</a>
+<ul class="sectlevel2">
+<li><a href="#_identify_and_classify_data">Identify and classify data</a></li>
+<li><a href="#_encryption_on_azure">Encryption on Azure</a></li>
+</ul>
+</li>
+<li><a href="#_network_security">Network security</a>
+<ul class="sectlevel2">
+<li><a href="#_what_is_network_security">What is network security?</a></li>
+<li><a href="#_layered_approach_to_network_security">Layered approach to network security</a></li>
+</ul>
+</li>
+<li><a href="#_application_security">Application security</a>
+<ul class="sectlevel2">
+<li><a href="#_security_development_lifecycle">Security Development Lifecycle</a></li>
+<li><a href="#_identity_as_the_perimeter">Identity as the perimeter</a></li>
+<li><a href="#_data_protection">Data protection</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Security professionals no longer focus on perimeter defense. Modern organizations have to support access to data and services evenly from both inside and outside the corporate firewall.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_defense_in_depth">Defense in depth</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_zero_trust_model">Zero Trust model</h3>
+<div class="paragraph">
+<p>The analyst firm Forrester Research introduced the Zero Trust model, which states that you should never assume trust but instead continually validate trust. When users, devices, and data all resided inside the organization&#8217;s firewall, they were assumed to be trusted. This assumed trust allowed for easy lateral movement after a malicious hacker compromised an endpoint device.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_defense_in_depth_a_layered_approach_to_security">Defense in depth: A layered approach to security</h3>
+<div class="paragraph">
+<p><em>Defense in depth</em> is a strategy that employs a series of mechanisms to slow the advance of an attack that&#8217;s aimed at acquiring unauthorized access to information. Each layer provides protection so that if one layer is breached, a subsequent layer is already in place to prevent further exposure.</p>
+</div>
+<div class="paragraph">
+<p>The common principles that help define a security posture are confidentiality, integrity, and availability, known collectively as CIA.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Confidentiality</strong>: The principle of least privilege restricts access to information only to individuals explicitly granted access. This information includes protection of user passwords, remote access certificates, and email content.</p>
+</li>
+<li>
+<p><strong>Integrity</strong>: The goal is to prevent unauthorized changes to information at rest or in transit. A common approach used in data transmission is for the sender to create a unique fingerprint of the data by using a one-way hashing algorithm. The hash is sent to the receiver along with the data. The receiver recalculates the data&#8217;s hash and compares it to the original to ensure that the data wasn&#8217;t lost or modified in transit.</p>
+</li>
+<li>
+<p><strong>Availability</strong>: Ensure that services are available to authorized users. Denial-of-service attacks are a common cause of loss of availability to users. Natural disasters also drive system design to prevent single points of failure and deploy multiple instances of an application to geo-dispersed locations.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_security_layers">Security layers</h3>
+<div class="paragraph">
+<p>You can visualize defense in depth as a set of concentric rings, with the data to be secured at the center. Each ring adds a layer of security around the data. This approach removes reliance on any single layer of protection. It also acts to slow down an attack and provide alert telemetry that can be acted upon, either automatically or manually.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/2-defense-in-depth.png" alt="2 defense in depth">
+</div>
+</div>
+<div class="paragraph">
+<p>Each layer can implement one or more of the CIA concerns:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># 	Ring 	                Example 	                                            Principle
+1 	Data 	                Data encryption at rest in Azure Blob Storage 	        Integrity
+2 	Application 	        SSL/TLS encrypted sessions 	                            Integrity
+3 	Compute 	            Regular application of OS and layered software patches 	Availability
+4 	Network 	            Network security rules 	                                Confidentiality
+5 	Perimeter 	            DDoS protection 	                                    Availability
+6 	Identity and access 	Azure Active Directory user authentication 	            Integrity
+7 	Physical security 	    Azure datacenter biometric access controls 	            Confidentiality</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_protect_from_common_attacks">Protect from common attacks</h4>
+<div class="paragraph">
+<p>At each layer, there are some common attacks that you&#8217;ll want to protect against. The following list isn&#8217;t all-inclusive, but it can give you an idea of how each layer can be attacked and what types of protections you might need.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Data layer</strong>: Exposing an encryption key or using weak encryption can leave your data vulnerable if unauthorized access occurs.</p>
+</li>
+<li>
+<p><strong>Application layer</strong>: Malicious code injection and execution are the hallmarks of application-layer attacks. Common attacks include SQL injection and cross-site scripting (XSS).</p>
+</li>
+<li>
+<p><strong>VM/compute layer</strong>: Malware is a common method of attacking an environment, which involves executing malicious code to compromise a system. After malware is present on a system, further attacks that lead to credential exposure and lateral movement throughout the environment can occur.</p>
+</li>
+<li>
+<p><strong>Networking layer</strong>: Unnecessary open ports to the internet are a common method of attack. These might include leaving SSH or RDP open to virtual machines. When these protocols are open, they can allow brute-force attacks against your systems as attackers attempt to gain access.</p>
+</li>
+<li>
+<p><strong>Perimeter layer</strong>: Denial-of-service (DoS) attacks often happen at this layer. These attacks try to overwhelm network resources, forcing them to go offline or making them incapable of responding to legitimate requests.</p>
+</li>
+<li>
+<p><strong>Policies and access layer</strong>: This layer is where authentication occurs for your application. This layer might include modern authentication protocols such as OpenID Connect, OAuth, or Kerberos-based authentication such as Active Directory. The exposure of credentials is a risk at this layer, and it&#8217;s important to limit the permissions of identities. We also want to have monitoring in place to look for possible compromised accounts, such as logins coming from unusual places.</p>
+</li>
+<li>
+<p><strong>Physical layer</strong>: Unauthorized access to facilities through methods such as door drafting and theft of security badges can happen at this layer.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_data">Data</h4>
+<div class="paragraph">
+<p>In almost all cases, attackers are after data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Stored in a database.</p>
+</li>
+<li>
+<p>Stored on disk inside virtual machines.</p>
+</li>
+<li>
+<p>Stored on a software as a service (SaaS) application such as Microsoft 365.</p>
+</li>
+<li>
+<p>Stored in cloud storage.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_applications">Applications</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Ensure that applications are secure and free of vulnerabilities.</p>
+</li>
+<li>
+<p>Store sensitive application secrets in a secure storage medium.</p>
+</li>
+<li>
+<p>Make security a design requirement for all application development.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Integrating security into the application development life cycle will help reduce the number of vulnerabilities introduced in code. Encourage all development teams to make their applications secure by default. Make security requirements non-negotiable.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_compute">Compute</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Secure access to virtual machines.</p>
+</li>
+<li>
+<p>Implement endpoint protection and keep systems patched and current.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Malware, unpatched systems, and improperly secured systems open your environment to attacks. The focus in this layer is on making sure that your compute resources are secure, and that you have the proper controls in place to minimize security issues.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_networking">Networking</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Limit communication between resources through segmentation and access controls.</p>
+</li>
+<li>
+<p>Deny by default.</p>
+</li>
+<li>
+<p>Restrict inbound internet access and limit outbound where appropriate.</p>
+</li>
+<li>
+<p>Implement secure connectivity to on-premises networks.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>At this layer, the focus is on limiting network connectivity across all your resources. Segment your resources and use network-level controls to restrict communication to only what&#8217;s needed. By limiting this communication, you reduce the risk of lateral movement throughout your network.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_perimeter">Perimeter</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Use distributed denial-of-service (DDoS) protection to filter large-scale attacks before they can cause a denial of service for users.</p>
+</li>
+<li>
+<p>Use perimeter firewalls to identify and alert on malicious attacks against your network.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>At the network perimeter, it&#8217;s about protecting from network-based attacks against your resources. Identifying these attacks, eliminating their impact, and alerting on them are important to keep your network secure.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_identity_and_access">Identity and access</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Control access to infrastructure (change control).</p>
+</li>
+<li>
+<p>Use single sign-on and multifactor authentication.</p>
+</li>
+<li>
+<p>Audit events and changes.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The identity and access layer is all about ensuring that identities are secure, access granted is only what&#8217;s needed, and changes are logged.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_physical_security">Physical security</h4>
+<div class="paragraph">
+<p>Physical building security and controlling access to computing hardware within the datacenter are the first line of defense.</p>
+</div>
+<div class="paragraph">
+<p>With physical security, the intent is to provide physical safeguards against access to assets. This ensures that other layers can&#8217;t be bypassed, and that loss or theft is handled appropriately.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shared_responsibilities">Shared responsibilities</h3>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/2-shared-responsibilities.png" alt="2 shared responsibilities">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_continuous_improvement">Continuous improvement</h3>
+<div class="paragraph">
+<p>The threat landscape is evolving in real time and at massive scale, so a security architecture is never complete. Microsoft and its customers need the ability to respond to these threats intelligently, quickly, and at scale.</p>
+</div>
+<div class="paragraph">
+<p>Microsoft Defender for Cloud provides customers with unified security management and advanced threat protection to understand and respond to security events on-premises and in Azure. In turn, Azure customers have a responsibility to continually reevaluate and evolve their security architecture.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_identity_management">Identity management</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As your organization evaluates the capabilities of its architecture around identity, it&#8217;s looking at ways to bring the following capabilities into the application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Provide single sign-on to application users.</p>
+</li>
+<li>
+<p>Enhance the application to use modern authentication with minimal effort.</p>
+</li>
+<li>
+<p>Enforce multifactor authentication for all sign-ins outside the company&#8217;s network.</p>
+</li>
+<li>
+<p>Develop an application to allow patients to enroll and securely manage their account data.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_single_sign_on">Single sign-on</h3>
+<div class="paragraph">
+<p>The more identities a user has to manage, the greater the risk of a credential-related security incident. More identities mean more passwords to remember and change. Password policies can vary between applications. As complexity requirements increase, it&#8217;s more difficult for users to remember them.</p>
+</div>
+<div class="paragraph">
+<p>On the other side is the management required for all those identities. Additional strain is placed on help desks as they deal with account lockouts and password reset requests. If a user leaves an organization, tracking down all those identities and ensuring that they&#8217;re disabled can be challenging. An overlooked identity can allow access that should have been eliminated.</p>
+</div>
+<div class="paragraph">
+<p>With single sign-on, users need to remember only one ID and one password. Access across applications is granted to a single identity tied to a user, simplifying the security model. As users change roles or leave an organization, access modifications are tied to the single identity, greatly reducing the effort needed to change or disable accounts.</p>
+</div>
+<div class="paragraph">
+<p>Using single sign-on for accounts will make it easier for users to manage their identities. It will also increase the security capabilities in your environment.</p>
+</div>
+<div class="sect3">
+<h4 id="_sso_with_azure_active_directory">SSO with Azure Active Directory</h4>
+<div class="sect4">
+<h5 id="_synchronize_directories_with_azure_ad_connect">Synchronize directories with Azure AD Connect</h5>
+<div class="paragraph">
+<p>Azure AD Connect can integrate your on-premises directories with Azure Active Directory. Azure AD Connect provides the newest capabilities and replaces older versions of identity integration tools such as DirSync and Azure AD Sync.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s a single tool to provide an easy deployment experience for synchronization and sign-in.
+image::https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/3-azure-ad-connect.png[]
+Your organization requires that authentication occurs primarily against on-premises domain controllers, but it also requires cloud authentication in a disaster recovery scenario. It doesn&#8217;t have any requirements that Azure AD doesn&#8217;t already support.</p>
+</div>
+<div class="paragraph">
+<p>Your organization has made the decision to move forward with the following configuration:</p>
+</div>
+<div class="paragraph">
+<p>*Use Azure AD Connect to synchronize groups, user accounts, and password hashes stored in on-premises Active Directory to Azure AD.
+* This can be a backup if pass-through authentication is unavailable.
+* Configure pass-through authentication by using an on-premises authentication agent installed on Windows Server.
+* Use the seamless SSO feature of Azure AD to automatically sign in users from on-premises domain-joined computers.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_authentication_and_access">Authentication and access</h3>
+<div class="paragraph">
+<p>Your organization&#8217;s security policy requires that all sign-ins that occur outside the company&#8217;s perimeter network are authenticated with an additional factor of authentication. This requirement combines two aspects of the Azure AD service: <strong>multifactor authentication</strong> and <strong>Conditional Access policies</strong>.</p>
+</div>
+<div class="sect3">
+<h4 id="_multifactor_authentication">Multifactor authentication</h4>
+<div class="paragraph">
+<p>Multifactor authentication provides additional security for your identities by requiring two or more elements for full authentication. These elements fall into three categories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Something you know</em>: A password or the answer to a security question.</p>
+</li>
+<li>
+<p><em>Something you have</em>: A mobile app that receives a notification or a token-generating device.</p>
+</li>
+<li>
+<p><em>Something you are</em>: Some sort of biometric property such as a fingerprint or face scan used on many mobile devices.
+Using multifactor authentication increases the security of your identity by limiting the impact of credential exposure. An attacker who has a user&#8217;s password would also need to have possession of their phone or their face in order to fully authenticate. Authentication with only a single factor verified is insufficient, and the attacker would be unable to use those credentials to authenticate. The benefits that this brings to security are huge, so organizations should enable multifactor authentication wherever possible.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_conditional_access_policies">Conditional Access policies</h5>
+<div class="paragraph">
+<p>Along with multifactor authentication, ensuring that additional requirements are met before granting access can add another layer of protection. Blocking logins from a suspicious IP address, or denying access from devices without malware protection, can limit access from risky sign-ins.</p>
+</div>
+<div class="paragraph">
+<p>Azure Active Directory provides Conditional Access policies based on group, location, or device state. The location feature allows your organization to differentiate IP addresses that don&#8217;t belong to the network, and it satisfies the security policy to require multifactor authentication from all such locations.</p>
+</div>
+<div class="paragraph">
+<p>Your organization has created a Conditional Access policy that requires users who access the application from an IP address outside the company network to be challenged with multifactor authentication.</p>
+</div>
+<div class="paragraph">
+<p>In the following illustration, user requests to access the on-premises and cloud applications are first checked against a list of conditions. The requests are either allowed access, forced to go through multifactor authentication, or blocked based on the conditions that they satisfy.</p>
+</div>
+<div class="paragraph">
+<p>Illustration of a sample implementation of a Conditional Access policy and multifactor authentication.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/3-conditional-access.png" alt="3 conditional access">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_securing_applications">Securing applications</h3>
+<div class="paragraph">
+<p>Azure AD Application Proxy can allow users to access the application remotely without any code changes.</p>
+</div>
+<div class="paragraph">
+<p>Azure AD Application Proxy is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Simple</p>
+<div class="ulist">
+<ul>
+<li>
+<p>You don&#8217;t need to change or update your applications to work with Application Proxy.</p>
+</li>
+<li>
+<p>Your users get a consistent authentication experience. They can use the MyApps portal to get single sign-on to both SaaS apps in the cloud and your apps on-premises.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Secure</p>
+<div class="ulist">
+<ul>
+<li>
+<p>When you publish your apps by using Azure AD Application Proxy, you can take advantage of the authorization controls and security analytics in Azure. You get cloud-scale security and Azure security features like Conditional Access and two-step verification.</p>
+</li>
+<li>
+<p>You don&#8217;t have to open any inbound connections through your firewall to give your users remote access.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Cost-effective</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Application Proxy works in the cloud, so you can save time and money. On-premises solutions typically require you to set up and maintain perimeter networks, edge servers, or other complex infrastructures.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Azure AD Application Proxy has two components. The first is a connector agent that sits on a server running Windows within your corporate network. The second is an external endpoint, either the MyApps portal or an external URL. When a user goes to the endpoint, they authenticate with Azure AD and are routed to the on-premises application via the connector agent.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_infrastructure_protection">Infrastructure protection</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_role_based_access_control">Role-based access control</h3>
+<div class="paragraph">
+<p>Role-based access control (RBAC) offers a slightly different approach. Roles are defined as collections of access permissions. Security principals are mapped to roles directly or through group membership. Separating security principals, access permissions, and resources provides simplified access management and more detailed control.</p>
+</div>
+<div class="paragraph">
+<p>On Azure, users, groups, and roles are all stored in Azure Active Directory (Azure AD). The Azure Resource Manager API uses role-based access control to secure all resource access management within Azure.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/4-acl-based-access.png" alt="Azure RBAC">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_roles_and_management_groups">Roles and management groups</h3>
+<div class="paragraph">
+<p>Roles are sets of permissions, like <em>read-only</em> or <em>contributor</em>, that users can be granted to access an Azure service instance. Roles can be granted at the level of an individual service instance, but they also flow down the Azure Resource Manager hierarchy. Roles assigned at a higher scope, like an entire subscription, are inherited by child scopes, like service instances.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.microsoft.com/en-us/azure/governance/management-groups/overview">Management groups</a> are an additional hierarchical level recently introduced into the RBAC model. Management groups add the ability to group subscriptions together and apply policy at an even higher level.</p>
+</div>
+<div class="paragraph">
+<p>The ability to flow roles through an arbitrarily defined subscription hierarchy also allows administrators to grant temporary access to an entire environment for authenticated users. For example, an auditor might require temporary read-only access to all subscriptions.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/4-management-groups.png" alt="4 management groups">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_management_group">Management group</h4>
+<div class="listingblock">
+<div class="content">
+<pre>Azure management groups provide a level of scope above subscriptions. You organize subscriptions into containers called "management groups" and apply your governance conditions to the management groups. All subscriptions within a management group automatically inherit the conditions applied to the management group. Management groups give you enterprise-grade management at a large scale no matter what type of subscriptions you might have. All subscriptions within a single management group must trust the same Azure Active Directory tenant.</pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/azure/governance/management-groups/media/tree.png" alt="management group" width="800">
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_privileged_identity_management">Privileged Identity Management</h3>
+<div class="paragraph">
+<p>In addition to managing Azure resource access with RBAC, a comprehensive approach to infrastructure protection should consider including the ongoing auditing of role members as the organization changes and evolves. <strong><a href="https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/pim-configure">Azure AD Privileged Identity Management (PIM)</a> is an additional paid-for offering that provides oversight of role assignments, self-service, and just-in-time (JIT) role activation</strong>.</p>
+</div>
+<div class="paragraph">
+<p>With the Azure AD PIM service, you can manage, control, and monitor access to important resources in your organization. This includes access to resources in Azure AD; Azure; and other Microsoft Online Services, like Microsoft 365 and Microsoft Intune. This control does not eliminate the need for users to carry out privileged operations in Azure AD, Azure, Microsoft 365, and software as a service (SaaS) apps.</p>
+</div>
+<div class="paragraph">
+<p>Organizations can give users JIT privileged access to Azure resources and Azure AD. Oversight is needed for what those users do with their administrator privileges. PIM helps mitigate the risk of excessive, unnecessary, or misused access rights.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_providing_identities_to_services">Providing identities to services</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It&#8217;s often valuable for services to have identities. Often, and against best practices, credential information is embedded in configuration files. With no security around these configuration files, anyone with access to the systems or repositories can access these credentials and risk exposure.</p>
+</div>
+<div class="sect2">
+<h3 id="_service_principals">Service principals</h3>
+<div class="paragraph">
+<p>To understand service principals, it&#8217;s useful to first understand the words identity and principal as they&#8217;re used in the world of identity management.</p>
+</div>
+<div class="paragraph">
+<p>An <em>identity</em> is just a thing that can be authenticated. Obviously, this includes users with usernames and passwords. But it can also include applications or other servers, which might authenticate with secret keys or certificates. As a bonus definition, an account is data associated with an identity.</p>
+</div>
+<div class="paragraph">
+<p>A <em>principal</em> is an identity that acts with certain roles or claims. Consider the use of Sudo on a Bash prompt or on Windows via <strong>Run as administrator</strong>. In both of those cases, you&#8217;re still signed in as the same identity as before, but you&#8217;ve changed your role.</p>
+</div>
+<div class="paragraph">
+<p>So, a <em>service principal</em> is literally named. It&#8217;s an identity that a service or application uses. Like other identities, it can be assigned roles.</p>
+</div>
+<div class="paragraph">
+<p>For example, your organization can assign its deployment scripts to run authenticated as a service principal. If that&#8217;s the only identity that has permission to perform destructive actions, your organization has gone a long way toward making sure that it doesn&#8217;t repeat the accidental resource deletion.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_managed_identities_for_azure_resources">Managed identities for Azure resources</h3>
+<div class="paragraph">
+<p>A managed identity can be instantly created for any Azure service that supports it. (The list is constantly growing.) When you create a managed identity for a service, you&#8217;re creating an account on the Azure AD tenant. Azure infrastructure will automatically take care of authenticating the service and managing the account. You can then use that account like any other Active Directory account, including letting the authenticated service securely access other Azure resources.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_encryption">Encryption</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_identify_and_classify_data">Identify and classify data</h3>
+<div class="paragraph">
+<p>Let&#8217;s revisit the problem that your organization is trying to solve. The organization has had previous incidents that exposed sensitive data, so there&#8217;s a gap between what&#8217;s being encrypted and what should be encrypted. The organization needs to start by identifying and classifying the types of data that it&#8217;s storing, and align this with the business and regulatory requirements for the storage of data.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s beneficial to classify this data as it relates to the impact of exposure to the organization, its customers, or its partners.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_encryption_on_azure">Encryption on Azure</h3>
+<div class="sect3">
+<h4 id="_encrypt_raw_storage">Encrypt raw storage</h4>
+<div class="paragraph">
+<p>Azure Storage encryption for data at rest helps you protect your data to meet your organizational security and compliance commitments. The Azure Storage platform automatically encrypts your data with 256-bit Advanced Encryption Standard (AES) encryption before persisting it to disk and then decrypts the data during retrieval. This handling of encryption, encryption at rest, decryption, and key management in Azure Storage is <strong>transparent</strong> to applications that use the service. <em>You don&#8217;t need to add any code or turn on any features</em>.</p>
+</div>
+<div class="paragraph">
+<p>Azure Storage automatically encrypts data in:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All Azure Storage services, including Azure Managed Disks, Azure Blob Storage, Azure Files, Azure Queue Storage, and Azure Table Storage</p>
+</li>
+<li>
+<p>Both performance tiers (Standard and Premium)</p>
+</li>
+<li>
+<p>Both deployment models (Azure Resource Manager and classic)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encrypt_virtual_machines">Encrypt virtual machines</h4>
+<div class="paragraph">
+<p>Azure Disk Encryption is a capability that helps you encrypt your Windows and Linux IaaS virtual machine disks. Azure Disk Encryption uses the industry-standard BitLocker feature of Windows and the DM-Crypt feature of Linux to provide volume encryption for the OS and data disks. The solution is integrated with Azure Key Vault to help you control and manage the disk-encryption keys and secrets. (And you can use managed identities for Azure services for accessing the key vault.)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encrypt_databases">Encrypt databases</h4>
+<div class="paragraph">
+<p>Transparent data encryption helps protect Azure SQL Database and Azure Data Warehouse against the threat of malicious activity. It performs real-time encryption and decryption of the database, associated backups, and transaction log files at rest without requiring changes to the application. By default, transparent data encryption is enabled for all newly deployed Azure SQL databases.</p>
+</div>
+<div class="paragraph">
+<p><em>Transparent data encryption</em> encrypts the storage of an entire database by using a symmetric key called the database encryption key. By default, Azure provides a unique encryption key per logical SQL Server instance and handles all the details. <em>Bring your own key</em> is also supported with keys stored in Azure Key Vault.</p>
+</div>
+<div class="paragraph">
+<p>For its on-premises SQL Server databases, your organization has turned on the SQL Server Always Encrypted feature. Always Encrypted is designed to protect sensitive data, such as client personal information or financial data. This feature helps protect column data at rest and in transit by having the client application handle the encryption and decryption outside the SQL Server database through an installed driver. This allows your organization to minimize exposure of data, because the database never works with unencrypted data.</p>
+</div>
+<div class="paragraph">
+<p>The Always Encrypted client driver performs the encryption and decryption processes. It rewrites the T-SQL queries as necessary to encrypt data passed to the database and decrypt the results, while keeping these operations transparent to the application.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encrypt_secrets">Encrypt secrets</h4>
+<div class="paragraph">
+<p><strong>Azure Key Vault</strong> is a cloud service that works as a secure store for secrets. Key Vault allows you to create multiple secure containers, called vaults. These vaults are backed by hardware security modules (HSMs). Vaults help reduce the chances of accidental loss of security information by centralizing the storage of application secrets. Vaults also control and log the access to anything stored in them.</p>
+</div>
+<div class="paragraph">
+<p>Azure Key Vault can handle requesting and renewing Transport Layer Security (TLS) certificates, to provide a robust certificate lifecycle management solution. Key Vault is designed to support any type of secret. These secrets can be passwords, database credentials, API keys, and certificates.</p>
+</div>
+<div class="paragraph">
+<p>Because you can grant Azure Active Directory identities access to use Key Vault secrets, applications that use managed identities for Azure services can automatically and seamlessly acquire the secrets they need.</p>
+</div>
+<div class="paragraph">
+<p>Your organization can use Key Vault for the storage of all of its sensitive application information. That information includes the TLS certificates that the organization uses to secure communication between systems.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_network_security">Network security</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_is_network_security">What is network security?</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Securing traffic flow between applications and the internet</em> focuses on limiting exposure outside your network. Network attacks will most often start outside your network, so by limiting the internet exposure and securing the perimeter, you can reduce the risk of being attacked.</p>
+</li>
+<li>
+<p><em>Securing traffic flow among applications</em> focuses on data between applications and their tiers, between different environments, and in other services within your network. By limiting exposure between these resources, you reduce the effect that a compromised resource can have. This can help reduce further propagation within the network.</p>
+</li>
+<li>
+<p><em>Securing traffic flow between users and an application</em> focuses on securing the network flow for your users. This limits the exposure that your resources have to outside attacks, and it provides a secure mechanism for users to utilize your resources.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_layered_approach_to_network_security">Layered approach to network security</h3>
+<div class="paragraph">
+<p>A common thread throughout this module has been taking a layered approach to security, and this approach is no different at the network layer. It&#8217;s not enough to just focus on securing the network perimeter, or focusing on the network security between services inside a network. A layered approach provides multiple levels of protection so that if an attacker gets through one layer, further protections are in place to limit the attack.</p>
+</div>
+<div class="sect3">
+<h4 id="_internet_protection">Internet protection</h4>
+<div class="paragraph">
+<p>If you start on the perimeter of the network, you&#8217;re focused on limiting and eliminating attacks from the internet. A great place to start is to <strong>assess the resources that are internet-facing, and allow inbound and outbound communication only where necessary</strong>. Identify all resources that are allowing inbound network traffic of any type. Ensure that they&#8217;re necessary and restricted to only the required ports and protocols.</p>
+</div>
+<div class="paragraph">
+<p>There are a couple of ways to provide inbound protection at the perimeter. Azure Application Gateway is a Layer 7 load balancer that also includes a web application firewall (<strong>WAF</strong>) to provide advanced security for your HTTP-based services. The WAF is based on rules from the OWASP 3.0 or 2.2.9 core rule sets. It provides protection from commonly known vulnerabilities such as cross-site scripting and SQL injection.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/6-app-gateway-waf.png" alt="6 app gateway waf">
+</div>
+</div>
+<div class="paragraph">
+<p>For protection of non-HTTP-based services or for increased customization, you can use network virtual appliances (NVAs) to secure your network resources. NVAs are similar to firewall appliances that you might find in on-premises networks, and are available from popular network security vendors. NVAs can provide greater customization of security for those applications that require it. But they increase complexity, so we recommend that you carefully consider your requirements.</p>
+</div>
+<div class="paragraph">
+<p>Any resource exposed to the internet is at risk for a denial-of-service attack. These types of attacks try to overwhelm a network resource by sending so many requests that the resource becomes slow or unresponsive.</p>
+</div>
+<div class="paragraph">
+<p>To mitigate these attacks, <strong>Azure DDoS Protection</strong> provides basic protection across all Azure services and enhanced protection for further customization for your resources. DDoS Protection blocks attack traffic and forwards legitimate traffic to its intended destination. Within a few minutes of attack detection, you&#8217;re notified through Azure Monitor metrics.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/6-ddos.png" alt="Diagram that shows Azure DDoS Protection installed between a virtual network and external user requests.">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_virtual_network_security">Virtual network security</h4>
+<div class="paragraph">
+<p>Inside a virtual network, it&#8217;s important to limit communication between resources to only what&#8217;s required.</p>
+</div>
+<div class="paragraph">
+<p>For communication between virtual machines, network security groups are a critical piece to restrict unnecessary communication. Network security groups operate at layers 3 and 4. They provide a list of allowed and denied communication to and from network interfaces and subnets. Network security groups are fully customizable, and they enable you to lock down network communication to and from your virtual machines. By using network security groups, you can isolate applications between environments, tiers, and services.</p>
+</div>
+<div class="paragraph">
+<p>To isolate Azure services to allow communication only from virtual networks, use <strong>virtual network service endpoints</strong>. With service endpoints, you can secure Azure service resources to your virtual network.</p>
+</div>
+<div class="paragraph">
+<p>Securing service resources to a virtual network provides improved security by fully removing public internet access to resources and allowing traffic only from your virtual network. This technique:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Reduces the attack surface for your environment.</p>
+</li>
+<li>
+<p>Reduces the administration required to limit communication between your virtual network and Azure services.</p>
+</li>
+<li>
+<p>Provides optimal routing for this communication.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_network_integration">Network integration</h4>
+<div class="paragraph">
+<p>Virtual private network (VPN) connections are a common way of establishing secure communication channels between networks. This is no different when you&#8217;re working with virtual networking on Azure. Connection between Azure virtual networks and an on-premises VPN device is a great way to provide secure communication between your network and your virtual machines on Azure.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_application_security">Application security</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The primary areas that concern customer applications are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Secure application design</p>
+</li>
+<li>
+<p>Data security</p>
+</li>
+<li>
+<p>Identity and access management</p>
+</li>
+<li>
+<p>Endpoint security</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_security_development_lifecycle">Security Development Lifecycle</h3>
+<div class="imageblock">
+<div class="content">
+<img src="https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-security/media/7-security-development-lifecycle.png" alt="7 security development lifecycle">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_identity_as_the_perimeter">Identity as the perimeter</h3>
+<div class="paragraph">
+<p>Identity validation is becoming the first line of defense for applications. Restricting access to a web application by authenticating and authorizing sessions can drastically reduce the attack surface area.</p>
+</div>
+<div class="paragraph">
+<p>Azure Active Directory (Azure AD) and Azure Active Directory B2C (Azure AD B2C) offer an effective way to offload the responsibility of identity and access to a fully managed service. Azure AD Conditional Access policies, Privileged Identity Management, and identity protection controls further enhance your ability to prevent unauthorized access and audit changes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_protection">Data protection</h3>
+<div class="paragraph">
+<p>For example, the organization uses Transport Layer Security (TLS) to encrypt data exchanged between the web application and back-end SQL databases. Data is also encrypted at rest in SQL Server through transparent data encryption. Encryption at rest ensures that even if the environment is compromised, data is effectively useless to anyone without the correct decryption keys.</p>
+</div>
+<div class="paragraph">
+<p>To encrypt data stored in Azure Blob Storage, you can use client-side encryption to encrypt the data in memory before it&#8217;s written to the storage service. Libraries that support this encryption are available for .NET, Java, and Python. These libraries enable the integration of data encryption directly into applications to enhance data integrity.</p>
+</div>
+<div class="sect3">
+<h4 id="_secure_key_and_secret_storage">Secure key and secret storage</h4>
+<div class="paragraph">
+<p>Separating application secrets (like connection strings or passwords) and encryption keys from the application that&#8217;s used to access data is vital. Encryption keys and application secrets should never be stored in the application code or configuration files.</p>
+</div>
+<div class="paragraph">
+<p>Instead, use a secure store such as Azure Key Vault. Access to this sensitive data can then be limited to application identities through managed identities for Azure resources. You can rotate keys on a regular basis to limit exposure if encryption keys are leaked.</p>
+</div>
+<div class="paragraph">
+<p>You can also choose to use your own encryption keys generated by on-premises hardware security modules (HSMs). You can even mandate that Azure Key Vault instances are implemented in single-tenant, discrete HSMs.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

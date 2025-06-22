@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Reliability Pillar</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Reliability Pillar</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_references">References</a></li>
+<li><a href="#_reliability_overview">Reliability Overview</a>
+<ul class="sectlevel2">
+<li><a href="#_design_principals">Design Principals</a></li>
+<li><a href="#_definitions">Definitions</a></li>
+<li><a href="#_understanding_availability_needs_design_availaiblity_goals">Understanding Availability Needs (design Availaiblity Goals)</a></li>
+</ul>
+</li>
+<li><a href="#_foundations">Foundations</a>
+<ul class="sectlevel2">
+<li><a href="#_plan_your_network_topology">Plan your Network Topology</a></li>
+</ul>
+</li>
+<li><a href="#_change_management">Change Management</a>
+<ul class="sectlevel2">
+<li><a href="#_implement_change">Implement Change</a></li>
+</ul>
+</li>
+<li><a href="#_failure_management">Failure Management</a>
+<ul class="sectlevel2">
+<li><a href="#_test_reliability">Test Reliability</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="exampleblock">
+<div class="title">Example 1. Readings</div>
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.aws.amazon.com/whitepapers/latest/availability-and-beyond-improving-resilience/understanding-availability.html">Availability and Beyond: Understanding and Improving the Resilience of Distributed Systems on AWS</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reliability_overview">Reliability Overview</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_design_principals">Design Principals</h3>
+<div class="literalblock">
+<div class="content">
+<pre>In the cloud, there are a number of principles that can help you increase reliability. Keep these in mind as we discuss best practices:</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Automatically recover from failure</dt>
+<dd>
+<p>By monitoring a workload for key performance indicators (KPIs), you can trigger automation when a threshold is breached. These KPIs should be a measure of business value, not of the technical aspects of the operation of the service. This allows for automatic notification and tracking of failures, and for automated recovery processes that work around or repair the failure. With more sophisticated automation, it’s possible to anticipate and remediate failures before they occur.</p>
+</dd>
+<dt class="hdlist1">Test recovery procedures</dt>
+<dd>
+<p>In an on-premises environment, testing is often conducted to prove that the workload works in a particular scenario. Testing is not typically used to validate recovery strategies. In the cloud, you can test how your workload fails, and you can validate your recovery procedures. You can use automation to simulate different failures or to recreate scenarios that led to failures before. This approach exposes failure pathways that you can test and fix before a real failure scenario occurs, thus reducing risk.</p>
+</dd>
+<dt class="hdlist1">Scale horizontally to increase aggregate workload availability</dt>
+<dd>
+<p>Replace one large resource with multiple small resources to reduce the impact of a single failure on the overall workload. Distribute requests across multiple, smaller resources to ensure that they don’t share a common point of failure.</p>
+</dd>
+<dt class="hdlist1">Stop guessing capacity</dt>
+<dd>
+<p>A common cause of failure in on-premises workloads is resource saturation, when the demands placed on a workload exceed the capacity of that workload (this is often the objective of denial of service attacks). In the cloud, you can monitor demand and workload utilization, and automate the addition or removal of resources to maintain the optimal level to satisfy demand without over- or under-provisioning. There are still limits, but some quotas can be controlled and others can be managed (see Manage Service Quotas and Constraints).</p>
+</dd>
+<dt class="hdlist1">Manage change in automation</dt>
+<dd>
+<p>Changes to your infrastructure should be made using automation. The changes that need to be managed include changes to the automation, which then can be tracked and reviewed.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_definitions">Definitions</h3>
+<div class="sect3">
+<h4 id="_resiliency_and_the_components_of_reliability">Resiliency, and the components of Reliability</h4>
+<div class="literalblock">
+<div class="content">
+<pre>Reliability of a workload in the cloud depends on several factors, the primary of which is Resiliency:</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resiliency</strong> is the ability of a workload to recover from infrastructure or service disruptions, dynamically acquire computing resources to meet demand, and mitigate disruptions, such as misconfigurations or transient network issues.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The other factors impacting workload reliability are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Operational Excellence, which includes automation of changes, use of playbooks to respond to failures, and Operational Readiness Reviews (ORRs) to confirm that applications are ready for production operations.</p>
+</li>
+<li>
+<p>Security, which includes preventing harm to data or infrastructure from malicious actors, which would impact availability. For example, encrypt backups to ensure that data is secure.</p>
+</li>
+<li>
+<p>Performance Efficiency, which includes designing for maximum request rates and minimizing latencies for your workload.</p>
+</li>
+<li>
+<p>Cost Optimization, which includes trade-offs such as whether to spend more on EC2 instances to achieve static stability, or to rely on automatic scaling when more capacity is needed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Resiliency is the primary focus of this whitepaper.</p>
+</div>
+<div class="paragraph">
+<p>The other four aspects are also important and they are covered by their respective pillars of the AWS Well-Architected Framework
+. Many of the best practices here also address those aspects of reliability, but the focus is on resiliency.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_availability"><a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/availability.html">Availability</a></h4>
+<div class="paragraph">
+<p><em>Availability</em> (also known as <em>service availability</em>) is both a commonly used metric to quantitatively measure resiliency, as well as a target resiliency objective.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Availability is the percentage of time that a workload is available for use.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Available for use</em> means that it performs its agreed function successfully when required.</p>
+</div>
+<div class="paragraph">
+<p>This percentage is calculated over a period of time, such as a month, year, or trailing three years. Applying the strictest possible interpretation, availability is reduced anytime that the application isn’t operating normally, including both scheduled and unscheduled interruptions. We define availability as follows:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/availability-formula.png" alt="availability formula">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Availability is a percentage uptime (such as 99.9%) over a period of time (commonly a month or year)</p>
+</li>
+<li>
+<p>Common short-hand refers only to the “number of nines”; for example, “five nines” translates to being 99.999% available</p>
+</li>
+<li>
+<p>Some customers choose to exclude scheduled service downtime (for example, planned maintenance) from the Total Time in the formula. However, this is not advised, as your users will likely want to use your service during these times.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_measuring_availability_based_on_requests">Measuring availability based on requests.</h5>
+<div class="paragraph">
+<p>For your service it may be easier to count successful and failed requests instead of “time available for use”. In this case the following calculation can be used:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/availability-formula-requests.png" alt="availability formula requests">
+</div>
+</div>
+<div class="paragraph">
+<p>This is often measured for one-minute or five-minute periods. Then a monthly uptime percentage (time-base availability measurement) can be calculated from the average of these periods. If no requests are received in a given period it is counted at 100% available for that time.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_calculating_availability_with_hard_dependencies">Calculating availability with hard dependencies</h5>
+<div class="paragraph">
+<p>Many systems have hard dependencies on other systems, where an interruption in a dependent system directly translates to an interruption of the invoking system. This is opposed to a soft dependency, where a failure of the dependent system is compensated for in the application. Where such hard dependencies occur, the invoking system’s availability is the product of the dependent systems’ availabilities. For example, if you have a system designed for 99.99% availability that has a hard dependency on two other independent systems that each are designed for 99.99% availability, the workload can theoretically achieve 99.97% availability:</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Avail<sub>invok</sub> × Avail<sub>dep1</sub> × Avail<sub>dep2</sub> = Avail<sub>workload</sub></p>
+</div>
+<div class="paragraph">
+<p>99.99% × 99.99% × 99.99% = 99.97%</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>It’s therefore important to understand your dependencies and their availability design goals as you calculate your own.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_calculating_availability_with_redundant_components">Calculating availability with redundant components.</h5>
+<div class="paragraph">
+<p>When a system involves the use of independent, redundant components (for example, redundant resources in different Availability Zones), the theoretical availability is computed as 100% minus the product of the component failure rates. For example, if a system makes use of two independent components, each with an availability of 99.9%, the effective availability of this dependency is 99.9999%:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/availability-redundant-components.png" alt="availability redundant components">
+</div>
+</div>
+<div class="paragraph">
+<p>Avail<sub>effective</sub> = Avail<sub>MAX</sub> − ( (100%−Avail<sub>dependency</sub>)×(100%−Avail<sub>dependency</sub>) )</p>
+</div>
+<div class="paragraph">
+<p>99.9999% = 100% − (0.1%×0.1%)</p>
+</div>
+<div class="paragraph">
+<p><em>Shortcut calculation</em>: If the availabilities of all components in your calculation consist solely of the digit nine, then you can sum the count of the number of nines digits to get your answer. In the above example two redundant, independent components with three nines availability results in six nines.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_calculating_dependency_availability">Calculating dependency availability</h5>
+<div class="paragraph">
+<p>Some dependencies provide guidance on their availability, including availability design goals for many AWS services (see <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/appendix-a-designed-for-availability-for-select-aws-services.html">Appendix A: Designed-For Availability for Select AWS Services</a>). But in cases where this isn’t available (for example, a component where the manufacturer does not publish availability information), one way to estimate is to determine the <strong>Mean Time Between Failure (MTBF)</strong> and <strong>Mean Time to Recover (MTTR)</strong>. An availability estimate can be established by:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/avail-est-formula.png" alt="avail est formula">
+</div>
+</div>
+<div class="paragraph">
+<p>For example, if the MTBF is 150 days and the MTTR is 1 hour, the availability estimate is 99.97%.</p>
+</div>
+<div class="paragraph">
+<p>For additional details, see <a href="https://docs.aws.amazon.com/whitepapers/latest/availability-and-beyond-improving-resilience/availability-and-beyond-improving-resilience.html">Availability and Beyond: Understanding and improving the resilience of distributed systems on AWS</a>, which can help you calculate your availability.
+&lt;&lt;&lt;</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_disaster_recovery_dr_objectives">Disaster Recovery (DR) Objectives</h4>
+<div class="paragraph">
+<p>In addition to availability objectives, your resiliency strategy should also include Disaster Recovery (DR) objectives based on strategies to recover your workload in case of a disaster event. Disaster Recovery focuses on one-time recovery objectives in response natural disasters, large-scale technical failures, or human threats such as attack or error. This is different than availability which measures mean resiliency over a period of time in response to component failures, load spikes, or software bugs.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Recovery Time Objective (RTO)</dt>
+<dd>
+<p>Defined by the organization. RTO is the maximum acceptable delay between the interruption of service and restoration of service. This determines what is considered an acceptable time window when service is unavailable.</p>
+</dd>
+<dt class="hdlist1">Recovery Point Objective (RPO)</dt>
+<dd>
+<p>Defined by the organization. RPO is the maximum acceptable amount of time since the last data recovery point. This determines what is considered an acceptable loss of data between the last recovery point and the interruption of service.</p>
+</dd>
+</dl>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/business-continuity.png" alt="business continuity">
+</div>
+<div class="title">Figure 1. The relationship of RPO (Recovery Point Objective), RTO (Recovery Time Objective), and the disaster event.</div>
+</div>
+<div class="paragraph">
+<p>RTO is similar to MTTR (Mean Time to Recovery) in that both measure the time between the start of an outage and workload recovery. However MTTR is a mean value taken over several availability impacting events over a period of time, while RTO is a target, or maximum value allowed, for a <em>single</em> availability impacting event.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_understanding_availability_needs_design_availaiblity_goals">Understanding Availability Needs (design Availaiblity Goals)</h3>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="title">Recommendation</div>
+<div class="paragraph">
+<p>Critically evaluate the unique aspects to your applications and, where appropriate, differentiate the availability and disaster recovery design goals to reflect the needs of your business.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Within AWS, we commonly divide services into the “data plane” and the “control plane.” The data plane is responsible for delivering real-time service while control planes are used to configure the environment. For example, Amazon EC2 instances, Amazon RDS databases, and Amazon DynamoDB table read/write operations are all data plane operations. In contrast, launching new EC2 instances or RDS databases, or adding or changing table metadata in DynamoDB are all considered control plane operations. While high levels of availability are important for all of these capabilities, the data planes typically have higher availability design goals than the control planes. Therefore workloads with high availability requirements should avoid run-time dependency on control plane operations.</p>
+</div>
+<div class="paragraph">
+<p>Many AWS customers take a similar approach to critically evaluating their applications and identifying subcomponents with different availability needs. Availability design goals are then tailored to the different aspects, and the appropriate work efforts are executed to engineer the system. AWS has significant experience engineering applications with a range of availability design goals, including services with 99.999% or greater availability. AWS Solution Architects (SAs) can help you design appropriately for your availability goals. Involving AWS early in your design process improves our ability to help you meet your availability goals. Planning for availability is not only done before your workload launches. It’s also done continuously to refine your design as you gain operational experience, learn from real world events, and endure failures of different types. You can then apply the appropriate work effort to improve upon your implementation.</p>
+</div>
+<div class="paragraph">
+<p>The availability needs that are required for a workload must be aligned to the business need and criticality. <strong>By first defining business criticality framework with defined RTO, RPO, and availability, you can then assess each workload.</strong> Such an approach requires that the people involved in implementation of the workload are knowledgeable of the framework, and the impact their workload has on business needs.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_foundations">Foundations</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_plan_your_network_topology">Plan your Network Topology</h3>
+<div class="sect3">
+<h4 id="_ensure_ip_subnet_allocation_accounts_for_expansion_and_availability">Ensure IP subnet allocation accounts for expansion and availability</h4>
+<div class="paragraph">
+<p>Amazon VPC IP address ranges must be large enough to accommodate workload requirements, including factoring in future expansion and allocation of IP addresses to subnets across Availability Zones. This includes load balancers, EC2 instances, and container-based applications.</p>
+</div>
+<div class="paragraph">
+<p>When you plan your network topology, the first step is to define the IP address space itself. Private IP address ranges (following RFC 1918 guidelines) should be allocated for each VPC. Accommodate the following requirements as part of this process:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Allow IP address space for more than one VPC per Region.</p>
+</li>
+<li>
+<p>Within a VPC, allow space for multiple subnets that span multiple Availability Zones.</p>
+</li>
+<li>
+<p>Always leave unused CIDR block space within a VPC for future expansion.</p>
+</li>
+<li>
+<p>Ensure that there is IP address space to meet the needs of any transient fleets of EC2 instances that you might use, such as Spot Fleets for machine learning, Amazon EMR clusters, or Amazon Redshift clusters.</p>
+</li>
+<li>
+<p>Note that the first four IP addresses and the last IP address in each subnet CIDR block are reserved and not available for your use.</p>
+<div class="paragraph">
+<p>You should plan on deploying large VPC CIDR blocks. Note that the initial VPC CIDR block allocated to your VPC cannot be changed or deleted, but you can add additional non-overlapping CIDR blocks to the VPC. Subnet IPv4 CIDRs cannot be changed, however IPv6 CIDRs can. Keep in mind that deploying the largest VPC possible (/16) results in over 65,000 IP addresses. In the base 10.x.x.x IP address space alone, you could provision 255 such VPCs. You should therefore err on the side of being too large rather than too small to make it easier to manage your VPCs.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_prefer_hub_and_spoke_topologies_over_many_to_many_mesh">Prefer hub-and-spoke topologies over many-to-many mesh</h4>
+<div class="paragraph">
+<p>If more than two network address spaces (for example, VPCs and on-premises networks) are connected via VPC peering, AWS Direct Connect, or VPN, then use a hub-and-spoke model, like those provided by AWS Transit Gateway.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>If you have only two such networks, you can simply connect them to each other, but as the number of networks grows, the complexity of such meshed connections becomes untenable. AWS Transit Gateway provides an easy to maintain hub-and-spoke model, allowing the routing of traffic across your multiple networks.</pre>
+</div>
+</div>
+<div id="img-hub-spoke" class="imageblock">
+<div class="content">
+<img src="./images/network-vpc-peering.png" alt="network vpc peering">
+</div>
+<div class="title">Figure 2. Without AWS Transit Gateway: You need to peer each Amazon VPC to each other and to each onsite location using a VPN connection, which can become complex as it scales.</div>
+</div>
+<div id="img-transit-gateway" class="imageblock">
+<div class="content">
+<img src="./images/network-hub-spoke-transit-gateway.png" alt="network hub spoke transit gateway">
+</div>
+<div class="title">Figure 3. With AWS Transit Gateway: You simply connect each Amazon VPC or VPN to the AWS Transit Gateway and it routes traffic to and from each VPC or VPN.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enforce_non_overlapping_private_ip_address_ranges_in_all_private_address_spaces_where_they_are_connected">Enforce non-overlapping private IP address ranges in all private address spaces where they are connected</h4>
+<div class="paragraph">
+<p>The IP address ranges of each of your VPCs must not overlap when peered or connected via VPN. You must similarly avoid IP address conflicts between a VPC and on-premises environments or with other cloud providers that you use. You must also have a way to allocate private IP address ranges when needed.</p>
+</div>
+<div class="paragraph">
+<p>An IP address management (IPAM) system can help with this. Several IPAMs are available from the AWS Marketplace.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_change_management">Change Management</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_implement_change"><a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/implement-change.html">Implement Change</a></h3>
+<div class="paragraph">
+<p>Controlled changes are necessary to deploy new functionality and to ensure that the workloads and the operating environment are running known, properly patched software. If these changes are uncontrolled, then it makes it difficult to predict the effect of these changes, or to address issues that arise because of them.</p>
+</div>
+<div class="sect3">
+<h4 id="_use_runbooks_for_standard_activities_such_as_deployment">Use runbooks for standard activities such as deployment</h4>
+<div class="paragraph">
+<p>Runbooks are the predefined steps to achieve specific outcomes. Use runbooks to perform standard activities, whether done manually or automatically. Examples include deploying a workload, patching it, or making DNS modifications.</p>
+</div>
+<div class="paragraph">
+<p>For example, put processes in place to ensure rollback safety during deployments</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ensuring that you can roll back a deployment without any disruption for your customers is critical in making a service reliable.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For runbook procedures, start with a valid effective manual process, implement it in code, and trigger automated execution where appropriate.</p>
+</div>
+<div class="paragraph">
+<p>Even for sophisticated workloads that are highly automated, runbooks are still useful for running game days or meeting rigorous reporting and auditing requirements.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+playbooks are used in response to specific incidents, and runbooks are used to achieve specific outcomes. Often, runbooks are for routine activities, while playbooks are used for responding to non-routine events.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_integrate_functional_testing_as_part_of_your_deployment">Integrate functional testing as part of your deployment</h4>
+<div class="paragraph">
+<p>Functional tests are run as part of automated deployment. If success criteria are not met, the pipeline is halted or rolled back.</p>
+</div>
+<div class="paragraph">
+<p>These tests are run in a pre-production environment, which is staged prior to production in the pipeline. Ideally, this is done as part of a deployment pipeline.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_integrate_resiliency_testing_as_part_of_your_deployment">Integrate resiliency testing as part of your deployment</h4>
+<div class="paragraph">
+<p><strong>Resiliency tests (as part of chaos engineering)</strong> are run as part of the automated deployment pipeline in a pre-production environment.</p>
+</div>
+<div class="paragraph">
+<p>These tests are staged and run in the pipeline prior to production. They should also be run in production, but as part of <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/test-reliability.html#GameDays">Game Days</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deploy_using_immutable_infrastructure">Deploy using immutable infrastructure</h4>
+<div class="paragraph">
+<p>This is a model that mandates that no updates, security patches, or configuration changes happen in-place on production systems. When a change is needed, the architecture is built onto new infrastructure and deployed into production.</p>
+</div>
+<div class="paragraph">
+<p>The most common implementation of the immutable infrastructure paradigm is the <strong><em>immutable server</em></strong>. This means that if a server needs an update or a fix, new servers are deployed instead of updating the ones already in use. So, instead of logging into the server via SSH and updating the software version, every change in the application starts with a software push to the code repository, for example, git push. Since changes are not allowed in immutable infrastructure, you can be sure about the state of the deployed system. Immutable infrastructures are inherently more consistent, reliable, and predictable, and they simplify many aspects of software development and operations.</p>
+</div>
+<div class="paragraph">
+<p>Use a canary or blue/green deployment when deploying applications in immutable infrastructures.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><a href="https://martinfowler.com/bliki/CanaryRelease.html">Canary deployment</a></dt>
+<dd>
+<p>is the practice of directing a small number of your customers to the new version, usually running on a single service instance (the canary). You then deeply scrutinize any behavior changes or errors that are generated. You can remove traffic from the canary if you encounter critical problems and send the users back to the previous version. If the deployment is successful, you can continue to deploy at your desired velocity, while monitoring the changes for errors, until you are fully deployed. AWS CodeDeploy can be configured with a deployment configuration that will enable a canary deployment.</p>
+</dd>
+<dt class="hdlist1"><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html">Blue/green deployment</a></dt>
+<dd>
+<p>is similar to the canary deployment except that a full fleet of the application is deployed in parallel. You alternate your deployments across the two stacks (blue and green). Once again, you can send traffic to the new version, and fall back to the old version if you see problems with the deployment. Commonly all traffic is switched at once, however you can also use fractions of your traffic to each version to dial up the adoption of the new version using the weighted DNS routing capabilities of Amazon Route 53. AWS CodeDeploy and AWS Elastic Beanstalk can be configured with a deployment configuration that will enable a blue/green deployment.</p>
+</dd>
+</dl>
+</div>
+<div id="img-blue-green-deployment" class="imageblock">
+<div class="content">
+<img src="./images/blue-green-deployment.png" alt="blue green deployment">
+</div>
+<div class="title">Figure 4. Blue/green deployment with AWS Elastic Beanstalk and Amazon Route 53</div>
+</div>
+<div class="paragraph">
+<p>Benefits of immutable infrastructure:</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Reduction in configuration drifts
+</td>
+<td class="hdlist2">
+<p>By frequently replacing servers from a base, known and version-controlled configuration, the infrastructure is <strong>reset</strong> to a known state, avoiding configuration drifts.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Simplified deployments
+</td>
+<td class="hdlist2">
+<p>Deployments are simplified because they don’t need to support upgrades. Upgrades are just new deployments.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Reliable atomic deployments
+</td>
+<td class="hdlist2">
+<p>Deployments either complete successfully, or nothing changes. It gives more trust in the deployment process.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Safer deployments with fast rollback and recovery processes
+</td>
+<td class="hdlist2">
+<p>Deployments are safer because the previous working version is not changed. You can roll back to it if errors are detected.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Consistent testing and debugging environments
+</td>
+<td class="hdlist2">
+<p>Since all servers use the same image, there are no differences between environments. One build is deployed to multiple environments. It also prevents inconsistent environments and simplifies testing and debugging.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Increased scalability
+</td>
+<td class="hdlist2">
+<p>Since servers use a base image, are consistent, and repeatable, automatic scaling is trivial.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Simplified toolchain
+</td>
+<td class="hdlist2">
+<p>The toolchain is simplified since you can get rid of configuration management tools managing production software upgrades. No extra tools or agents are installed on servers. Changes are made to the base image, tested, and rolled-out.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Increased security
+</td>
+<td class="hdlist2">
+<p>By denying all changes to servers, you can disable SSH on instances and remove keys. This reduces the attack vector, improving your organization’s security posture.</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_deploy_changes_with_automation">Deploy changes with automation</h5>
+<div class="paragraph">
+<p>Deployments and patching are automated to eliminate negative impact.</p>
+</div>
+<div class="paragraph">
+<p>Making changes to production systems is one of the largest risk areas for many organizations. We consider deployments a first-class problem to be solved alongside the business problems that the software addresses. Today, this means the use of automation wherever practical in operations, including testing and deploying changes, adding or removing capacity, and migrating data. AWS CodePipeline lets you manage the steps required to release your workload. This includes a deployment state using AWS CodeDeploy to automate deployment of application code to Amazon EC2 instances, on-premises instances, serverless Lambda functions, or Amazon ECS services.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="title">Recommendation</div>
+<div class="paragraph">
+<p>Although conventional wisdom suggests that you keep humans in the loop for the most difficult operational procedures, we suggest that you automate the most difficult procedures for that very reason.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_failure_management">Failure Management</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_test_reliability"><a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/test-reliability.html">Test Reliability</a></h3>
+<div class="sect3">
+<h4 id="_use_playbooks_to_investigate_failures">Use playbooks to investigate failures</h4>
+<div class="paragraph">
+<p>Enable consistent and prompt responses to failure scenarios that are not well understood, by documenting the investigation process in playbooks. Playbooks are the predefined steps performed to identify the factors contributing to a failure scenario. The results from any process step are used to determine the next steps to take until the issue is identified or escalated.</p>
+</div>
+<div class="paragraph">
+<p>The playbook is proactive planning that you must do, so as to be able to take reactive actions effectively. When failure scenarios not covered by the playbook are encountered in production, first address the issue (put out the fire). Then go back and look at the steps you took to address the issue and use these to add a new entry in the playbook.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+playbooks are used in response to specific incidents, while runbooks are used to achieve specific outcomes. Often, runbooks are used for routine activities and playbooks are used to respond to non-routine events.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_perform_post_incident_analysis">Perform post-incident analysis</h4>
+<div class="paragraph">
+<p>Review customer-impacting events, and identify the contributing factors and preventative action items. Use this information to develop mitigations to limit or prevent recurrence. Develop procedures for prompt and effective responses. Communicate contributing factors and corrective actions as appropriate, tailored to target audiences.</p>
+</div>
+<div class="paragraph">
+<p>Assess why existing testing did not find the issue. Add tests for this case if tests do not already exist.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_test_resiliency_using_chaos_engineering">Test resiliency using chaos engineering</h4>
+<div class="paragraph">
+<p>Run tests that inject failures regularly into pre-production and production environments. Hypothesize how your workload will react to the failure, then compare your hypothesis to the testing results and iterate if they do not match. Ensure that production testing does not impact users.</p>
+</div>
+<div class="paragraph">
+<p>In the cloud, you can test how your workload fails, and you can validate your recovery procedures. Use automation to simulate different failures or to recreate scenarios that led to failures before. This exposes failure pathways that you can test and fix before a real failure scenario occurs, thus reducing risk.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Chaos Engineering is the discipline of experimenting on a system in order to build confidence in the system’s capability to withstand turbulent conditions in production. – <a href="https://principlesofchaos.org/">Principles of Chaos Engineering</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>In pre-production and testing environments, chaos engineering should be done regularly, and be part of your CI/CD cycle. Chaos engineering in production is encouraged, however teams must take care not to disrupt availability for customers.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Test for component failures that you have designed your workload to be resilient against. These include loss of EC2 instances, failure of the primary Amazon RDS database instance, and Availability Zone outages.</p>
+</div>
+<div class="paragraph">
+<p>Test for external dependency unavailability. Your workload’s resiliency to transient failures of dependencies should be tested for durations that may last from less than a second to hours.</p>
+</div>
+<div class="paragraph">
+<p>Other modes of degradation might cause reduced functionality and slow responses, often resulting in a brownout of your services. Common sources of this degradation are increased latency on critical services and unreliable network communication (dropped packets). Test for these failures, including networking effects, such as latency and dropped messages, as well as DNS failures, such as being unable to resolve a name or not being able to establish connections to dependent services.</p>
+</div>
+<div class="paragraph">
+<p>AWS Fault Injection Simulator (AWS FIS) is a fully managed service for running fault injection experiments that can be used as part of your CD pipeline, during game days, or ad hoc. It supports gradually and simultaneously impairing performance of different types of resources including Amazon EC2, Amazon ECS, Amazon EKS, and Amazon RDS. It can also stress CPU or memory on your workload in AWS. Since it is integrated with Amazon CloudWatch Alarms, you can set guardrails to rollback a test if it causes unexpected impact.</p>
+</div>
+<div id="img-aws-fis" class="imageblock">
+<div class="content">
+<img src="./images/aws-fis-architecture.png" alt="aws fis architecture">
+</div>
+<div class="title">Figure 5. AWS Fault Injection Simulator (AWS FIS) integrates with AWS resources to enable you to run fault injection experiments for your workloads.</div>
+</div>
+<div class="paragraph">
+<p>There are also several third-party options for fault injection experiments. These include open source options such as <a href="https://chaostoolkit.org/">The Chaos ToolKit</a>, and <a href="https://github.com/Shopify/toxiproxy">Shopify Toxiproxy</a>, as well as commercial options like <a href="https://www.gremlin.com/">Gremlin</a>. For organizations new to chaos engineering, it can build confidence to first use self-authored scripts. This enables engineering teams to become comfortable with how chaos is introduced into their workloads. For examples of these, see <a href="https://wellarchitectedlabs.com/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html">Testing for Resiliency of EC2 RDS and S3</a> using multiple languages such as a Bash, Python, Java, and PowerShell. You can also implement Injecting Chaos to Amazon EC2 using AWS Systems Manager, which enables you to simulate brownouts and high CPU conditions using AWS Systems Manager Documents.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_conduct_game_days_regularly">Conduct game days regularly</h4>
+<div class="paragraph">
+<p>Use game days to regularly exercise your procedures for responding to events and failures as close to production as possible (including in production environments) with the people who will be involved in actual failure scenarios. Game days enforce measures to ensure that production events do not impact users.</p>
+</div>
+<div class="paragraph">
+<p>Game days simulate a failure or event to test systems, processes, and team responses. The purpose is to actually perform the actions the team would perform as if an exceptional event happened. This will help you understand where improvements can be made and can help develop organizational experience in dealing with events. These should be conducted regularly so that your team builds "muscle memory" on how to respond.</p>
+</div>
+<div class="paragraph">
+<p>After your design for resiliency is in place and has been tested in non-production environments, a game day is the way to ensure that everything works as planned in production. A game day, especially the first one, is an “all hands on deck” activity where engineers and operations are all informed when it will happen, and what will occur. Runbooks are in place. Simulated events are executed, including possible failure events, in the production systems in the prescribed manner, and impact is assessed. If all systems operate as designed, detection and self-healing will occur with little to no impact. However, if negative impact is observed, the test is rolled back and the workload issues are remedied, manually if necessary (using the runbook). Since game days often take place in production, all precautions should be taken to ensure that there is no impact on availability to your customers.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

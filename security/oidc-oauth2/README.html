@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OpenID 1.0 &amp; OAuth 2.0</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OpenID 1.0 &amp; OAuth 2.0</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_specifications">Specifications</a></li>
+<li><a href="#_authentication">Authentication</a>
+<ul class="sectlevel2">
+<li><a href="#_response_types_response_type">Response types (<code>response_type</code>)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_specifications">Specifications</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 30%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Specification</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth 2.0 Authorization Framework</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.rfc-editor.org/rfc/rfc6749">RFC6749</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth 2.0 Bearer Token Usage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.rfc-editor.org/rfc/rfc6750">RFC6750</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth 2.0 Multiple Response Type Encoding Practices</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html">OAuth.Responses</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON Web Token (JWT)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://datatracker.ietf.org/doc/html/rfc7519">RFC7519</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON Web Signature (JWS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://datatracker.ietf.org/doc/html/rfc7515">RFC7515</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON Web Encryption (JWE)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://datatracker.ietf.org/doc/html/rfc7516">RFC7516</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenID Connect Discovery 1.0,</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OpenID.Discovery</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenID Connect Dynamic Client Registration 1.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://openid.net/specs/openid-connect-registration-1_0.html">OpenID.Registration</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This specification defines how an OpenID Connect Relying Party can dynamically register with the End-User&#8217;s OpenID Provider, providing information about itself to the OpenID Provider, and obtaining information needed to use it, including the OAuth 2.0 Client ID for this Relying Party.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication">Authentication</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_response_types_response_type">Response types (<code>response_type</code>)</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><code>response_type</code> value</th>
+<th class="tableblock halign-left valign-top">Flow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authorization Code Flow</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id_token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Implicit Flow</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id_token token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Implicit Flow</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code id_token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hybrid Flow</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hybrid Flow</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code id_token token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hybrid Flow</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+All but the code Response Type value, which is defined by OAuth 2.0 [RFC6749], are defined in the OAuth 2.0 Multiple Response Type Encoding Practices [OAuth.Responses] specification. NOTE: While OAuth 2.0 also defines the token Response Type value for the Implicit Flow, OpenID Connect does not use this Response Type, since no ID Token would be returned.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

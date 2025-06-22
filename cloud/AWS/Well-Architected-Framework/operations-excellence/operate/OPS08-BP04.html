@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OPS08-BP04 Establish workload metrics baselines</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OPS08-BP04 Establish workload metrics baselines</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implementation_guidance">Implementation guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Establish baselines for metrics to provide expected values as the basis <mark>for comparison and identification of under- and over-performing components</mark>. Identify thresholds for improvement, investigation, and intervention.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Common anti-patterns</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A server is running at 95% CPU utilization you are asked if that is good or bad. CPU utilization on that server has not been baselined so you have no idea if that is good or bad.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Benefits of establishing this best practice</dt>
+<dd>
+<p>By defining baseline metric values you are able to evaluate current metric values, and metric trends, to determine if action is required.</p>
+</dd>
+<dt class="hdlist1">Level of risk exposed if this best practice is not established</dt>
+<dd>
+<p>Medium</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_guidance">Implementation guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Establish baselines for workload metrics: Establish baselines for workload metrics to provide expected values as the basis for comparison.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html">Creating Amazon CloudWatch Alarms</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Architectural approaches for storage and data in multitenant solutions</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Architectural approaches for storage and data in multitenant solutions</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_key_considerations_and_requirements">Key considerations and requirements</a>
+<ul class="sectlevel2">
+<li><a href="#_scale">Scale</a></li>
+<li><a href="#_performance_predictability">Performance predictability</a></li>
+<li><a href="#_data_isolation">Data isolation</a></li>
+<li><a href="#_complexity_of_implementation">Complexity of implementation</a></li>
+<li><a href="#_complexity_of_management_and_operations">Complexity of management and operations</a></li>
+<li><a href="#_cost">Cost</a></li>
+</ul>
+</li>
+<li><a href="#_approaches_and_patterns_to_consider">Approaches and patterns to consider</a>
+<ul class="sectlevel2">
+<li><a href="#_deployment_stamps_pattern">Deployment Stamps pattern</a></li>
+<li><a href="#_shared_multitenant_databases_and_file_stores">Shared multitenant databases and file stores</a></li>
+<li><a href="#_sharding_pattern">Sharding pattern</a></li>
+<li><a href="#_multitenant_app_with_dedicated_databases_for_each_tenant">Multitenant app with dedicated databases for each tenant</a></li>
+<li><a href="#_geodes_pattern">Geodes pattern</a></li>
+</ul>
+</li>
+<li><a href="#_antipatterns_to_avoid">Antipatterns to avoid</a></li>
+<li><a href="#_databases">Databases</a></li>
+<li><a href="#_file_and_blob_storage">File and blob storage</a></li>
+<li><a href="#_cost_allocation">Cost allocation</a></li>
+<li><a href="#_next_steps">Next steps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>When planning multitenant storage or data components, you need to decide on an approach for sharing or isolating your tenants' data. Data is often considered the most valuable part of a solution, since it represents your or your customers' valuable business information. So, it&#8217;s important to carefully plan the approach you use to manage data in a multitenant environment. On this page, we provide guidance about the key considerations and requirements that are essential for solution architects when deciding on an approach to store data in a multitenant system. We then suggest some common patterns for applying multitenancy to storage and data services, and some antipatterns to avoid. Finally, we provide targeted guidance for some specific situations.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_key_considerations_and_requirements">Key considerations and requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It&#8217;s important to consider the approaches you use for storage and data services from a number of perspectives, which approximately align to the pillars of the <a href="https://docs.microsoft.com/en-us/azure/architecture/framework">Azure Well-Architected Framework</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_scale">Scale</h3>
+<div class="paragraph">
+<p>When working with services that store your data, you should consider the number of tenants you have, and the volume of data you store. If you have a small number of tenants (such as five or less), and you&#8217;re storing small amounts of data for each tenant, then it&#8217;s likely to be a wasted effort to plan a highly scalable data storage approach, or to build a fully automated approach to manage your data resources. As you grow, you will increasingly benefit from having a clear strategy to scale your data and storage resources, and to apply automation to their management. When you have 50 tenants or more, or if you plan to reach that level of scale, then it&#8217;s especially important to design your data and storage approach, with scale as a key consideration.</p>
+</div>
+<div class="paragraph">
+<p>Consider the extent to which you plan to scale, and clearly plan your data storage architectural approach to meet that level of scale.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_performance_predictability">Performance predictability</h3>
+<div class="paragraph">
+<p>Multitenant data and storage services are particularly susceptible to the <a href="https://docs.microsoft.com/en-us/azure/architecture/antipatterns/noisy-neighbor/">Noisy Neighbor problem</a>. It&#8217;s important to consider whether your tenants could affect each other&#8217;s performance. For example, do your tenants have overlapping peaks in their usage patterns over time? Do all of your customers use your solution at the same time each day, or are requests distributed evenly? Those factors will impact the level of isolation you need to design for, the amount of resources you need to provision, and the degree to which resources can be shared between tenants.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s important to consider <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits">Azure&#8217;s resource and request quotas</a> as part of this decision. For example, suppose you deploy a single storage account to contain all of your tenants' data. If you exceed a specific number of storage operations per second, Azure Storage will reject your application&#8217;s requests, and all of your tenants will be impacted. This is called <em>throttling</em> behavior. It&#8217;s important that you monitor for throttled requests. See <a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific">Retry guidance for Azure services</a> for further information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_isolation">Data isolation</h3>
+<div class="paragraph">
+<p>When designing a solution that contains multitenant data services, there are usually different options and levels of data isolation, each with their own benefits and tradeoffs. For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When using Azure Cosmos DB, you can deploy separate containers for each tenant, and you can share databases and accounts between multiple tenants. Alternatively, you might consider deploying different databases or even accounts for each tenant, depending on the level of isolation required.</p>
+</li>
+<li>
+<p>When using Azure Storage for blob data, you can deploy separate blob containers for each tenant, or you can deploy separate storage accounts.</p>
+</li>
+<li>
+<p>When using Azure SQL, you can use separate tables in shared databases, or you can deploy separate databases or servers for each tenant.</p>
+</li>
+<li>
+<p>In all Azure services, you can consider deploying resources within a single shared Azure subscription, or you can use multiple Azure subscriptions&#8212;&#8203;perhaps even one per tenant.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is no single solution that works for every situation. The option you choose depends on a number of factors and the requirements of your tenants. For example, if your tenants need to meet specific compliance or regulatory standards, you might need to apply a higher level of isolation. Similarly, you might have commercial requirements to physically isolate your customers' data, or you might need to enforce isolation to avoid the <a href="https://docs.microsoft.com/en-us/azure/architecture/antipatterns/noisy-neighbor/">Noisy Neighbor problem</a>. Additionally, if tenants need to use their own encryption keys, they have individual backup and restore policies, or they need to have their data stored in different geographical locations, you might need to isolate them from other tenants, or group them with tenants that have similar policies.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_complexity_of_implementation">Complexity of implementation</h3>
+<div class="paragraph">
+<p>It&#8217;s important to consider the complexity of your implementation. It&#8217;s good practice to keep your architecture as simple as possible, while still meeting your requirements. Avoid committing to an architecture that will become increasingly complex as you scale, or an architecture that you don&#8217;t have the resources or expertise to develop and maintain.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, if your solution doesn&#8217;t need to scale to a large number of tenants, or if you don&#8217;t have concerns around performance or data isolation, then it&#8217;s better to keep your solution simple and avoid adding unnecessary complexity.</p>
+</div>
+<div class="paragraph">
+<p>A particular concern for multitenant data solutions is the level of customization you support. For example, can a tenant extend your data model or apply custom data rules? Ensure you design for this upfront. Avoid forking or providing custom infrastructure for individual tenants, since this inhibits your ability to scale, to test your solution, and to deploy updates. Instead, consider using <a href="https://docs.microsoft.com/en-us/devops/operate/progressive-experimentation-feature-flags">feature flags</a> and other forms of tenant configuration.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_complexity_of_management_and_operations">Complexity of management and operations</h3>
+<div class="paragraph">
+<p>Consider how you plan to operate your solution, and how your multitenancy approach affects your operations and processes. For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Consider cross-tenant management operations, such as regular maintenance activities. If you use multiple accounts, servers, or databases, how will you initiate and monitor the operations for each tenant?</p>
+</li>
+<li>
+<p>If you monitor or meter your tenants, consider how your solution reports metrics, and whether they can be easily linked to the tenant that triggered the request.</p>
+</li>
+<li>
+<p>Reporting data from across isolated tenants may require that each tenant publishes data to a centralized data warehouse, rather than running queries on each database individually and then aggregating the results.</p>
+</li>
+<li>
+<p>If you use a database that enforces a schema, plan how you will deploy schema updates across your estate. Consider how your application knows which schema version to use for a specific tenant&#8217;s database queries.</p>
+</li>
+<li>
+<p>Consider your tenants' high availability requirements (for example, uptime service level agreements, or SLAs) and disaster recovery requirements (for example, recovery time objectives, or RTOs, and recovery point objectives, or RPOs). If tenants have different expectations, will you be able to meet each tenant&#8217;s requirements?</p>
+</li>
+<li>
+<p>How will you migrate tenants if they need to move to a different type of service, a different deployment, or another region?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cost">Cost</h3>
+<div class="paragraph">
+<p>Generally, the higher the density of tenants to your deployment infrastructure, the lower the cost to provision that infrastructure. However, shared infrastructure increases the likelihood of issues like the Noisy Neighbor problem, so consider the tradeoffs carefully.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_approaches_and_patterns_to_consider">Approaches and patterns to consider</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Several design patterns from the Azure Architecture Center are of relevance to multitenant storage and data services. You might choose to follow one pattern consistently. Or, you could consider mixing and matching patterns. For example, you might use a multitenant database for most of your tenants, but deploy single-tenant stamps for tenants who pay more or who have unusual requirements. Similarly, it&#8217;s often a good practice to scale by using deployment stamps, even when you use a multitenant database or sharded databases within a stamp.</p>
+</div>
+<div class="sect2">
+<h3 id="_deployment_stamps_pattern">Deployment Stamps pattern</h3>
+<div class="paragraph">
+<p>For more information about how the <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/deployment-stamp">Deployment Stamps pattern</a> can be used to support a multitenant solution, see Overview.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shared_multitenant_databases_and_file_stores">Shared multitenant databases and file stores</h3>
+<div class="paragraph">
+<p>You might consider deploying a shared multitenant database, storage account, or file share, and sharing it across all of your tenants.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/shared-database.png" alt="shared database">
+</div>
+</div>
+<div class="paragraph">
+<p>This approach provides the highest density of tenants to infrastructure, so it tends to come at the lowest cost of any approach. It also often reduces the management overhead, since there&#8217;s a single database or resource to manage, back up, and secure.</p>
+</div>
+<div class="paragraph">
+<p>However, when you work with shared infrastructure, there are several caveats to consider:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When you rely on a single resource, consider the supported scale and limits of that resource. For example, the maximum size of one database or file store, or the maximum throughput limits, will eventually become a hard blocker, if your architecture relies on a single database. Carefully consider the maximum scale you need to achieve, and compare it to your current and future limits, before you select this pattern.</p>
+</li>
+<li>
+<p>The <a href="https://docs.microsoft.com/en-us/azure/architecture/antipatterns/noisy-neighbor/">Noisy Neighbor problem</a> might become a factor, especially if you have tenants that are particularly busy or generate higher workloads than others. Considering applying the <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/throttling">Throttling pattern</a> or the <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/rate-limiting-pattern">Rate Limiting pattern</a> to mitigate these effects.</p>
+</li>
+<li>
+<p>You might have difficulty monitoring the activity and <a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/considerations/measure-consumption">measuring the consumption</a> for a single tenant. Some services, such as Azure Cosmos DB, provide reporting on resource usage for each request, so this information can be tracked to measure the consumption for each tenant. Other services don&#8217;t provide the same level of detail. For example, the Azure Files metrics for file capacity are available per file share dimension, only when you use premium shares. However, the standard tier provides the metrics only at the storage account level.</p>
+</li>
+<li>
+<p>Tenants may have different requirements for security, backup, availability, or storage location. If these don&#8217;t match your single resource&#8217;s configuration, you might not be able to accommodate them.</p>
+</li>
+<li>
+<p>When working with a relational database, or another situation where the schema of the data is important, then tenant-level schema customization is difficult.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sharding_pattern">Sharding pattern</h3>
+<div class="paragraph">
+<p>The <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/sharding">Sharding pattern</a> involves deploying multiple separate databases, called shards, that contain one or more tenants' data. Unlike deployment stamps, shards don&#8217;t imply that the entire infrastructure is duplicated. You might shard databases without also duplicating or sharding other infrastructure in your solution.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sharding.png" alt="Diagram showing a sharded database. One database contains the data for tenants A and B" width="and the other contains the data for tenant C.">
+</div>
+</div>
+<div class="paragraph">
+<p>Sharding is closely related to partitioning, and the terms are often used interchangeably. Consider the Horizontal, vertical, and functional data partitioning guidance.</p>
+</div>
+<div class="paragraph">
+<p>The Sharding pattern can scale to very large numbers of tenants. Additionally, depending on your workload, you might be able to achieve a high density of tenants to shards, so the cost can be attractive. The Sharding pattern can also be used to address Azure subscription and service quotas, limits and constraints.</p>
+</div>
+<div class="paragraph">
+<p>Some data stores, such as Azure Cosmos DB, provide native support for sharding or partitioning. When working with other solutions, such as Azure SQL, it can be more complex to build a sharding infrastructure and to route requests to the correct shard, for a given tenant.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multitenant_app_with_dedicated_databases_for_each_tenant">Multitenant app with dedicated databases for each tenant</h3>
+<div class="paragraph">
+<p>Another common approach is to deploy a single multitenant application, with dedicated databases for each tenant.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/dedicated-databases.png" alt="Diagram showing different databases for each tenant.">
+</div>
+</div>
+<div class="paragraph">
+<p>In this model, each tenant&#8217;s data is isolated from the others, and you might be able to support some degree of customization for each tenant.</p>
+</div>
+<div class="paragraph">
+<p>Because you provision dedicated data resources for each tenant, the cost for this approach can be higher than shared hosting models. However, Azure provides several options you can consider, in order to share the cost of hosting individual data resources across multiple tenants. For example, when you work with Azure SQL, you can consider elastic pools. For Azure Cosmos DB, you can provision throughput for a database and the throughput is shared between the containers in that database, although this approach is not appropriate when you need guaranteed performance for each container.</p>
+</div>
+<div class="paragraph">
+<p>In this approach, because only the data components are deployed individually for each tenant, you likely can achieve high density for the other components in your solution and reduce the cost of those components.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s important to use automated deployment approaches when you provision databases for each tenant.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_geodes_pattern">Geodes pattern</h3>
+<div class="paragraph">
+<p>The Geode pattern is designed specifically for geographically distributed solutions, including multitenant solutions. It supports high load and high levels of resiliency. When working with the Geode pattern, the data tier must be able to replicate the data across geographic regions, and it should support multi-geography writes.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/geodes.png" alt="Diagram showing the Geode pattern" width="with databases deployed across multiple regions that synchronize together.">
+</div>
+</div>
+<div class="paragraph">
+<p>Azure Cosmos DB provides multi-master writes to support this pattern, and Cassandra supports multi-region clusters. Other data services are generally not able to support this pattern, without significant customization.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_antipatterns_to_avoid">Antipatterns to avoid</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When working with multitenant data services, it&#8217;s important to avoid situations that inhibit your ability to scale.</p>
+</div>
+<div class="paragraph">
+<p>For relational databases, these include:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Table-based isolation.</dt>
+<dd>
+<p>When you work within a single database, avoid creating individual tables for each tenant. A single database won&#8217;t be able to support very large numbers of tenants when you use this approach, and it becomes increasingly difficult to query, manage, and update data. Instead, consider using a single set of multitenant tables with a tenant identifier column. Alternatively, you can use one of the patterns described above to deploy separate databases for each tenant.</p>
+</dd>
+<dt class="hdlist1">Column-level tenant customization.</dt>
+<dd>
+<p>Avoid applying schema updates that only apply to a single tenant. For example, suppose you have a single multitenant database. Avoid adding a new column to meet a specific tenant&#8217;s requirements. It might be acceptable for a small number of customizations, but this rapidly becomes unmanageable when you have a large number of customizations to consider. Instead, consider revising your data model to track custom data for each tenant in a dedicated table.</p>
+</dd>
+<dt class="hdlist1">Manual schema changes.</dt>
+<dd>
+<p>Avoid updating your database schema manually, even if you only have a single shared database. It&#8217;s easy to lose track of the updates you&#8217;ve applied, and if you need to scale out to more databases, it&#8217;s challenging to identify the correct schema to apply. Instead, build an automated pipeline to deploy your schema changes, and use it consistently. Track the schema version used for each tenant in a dedicated database or lookup table.</p>
+</dd>
+<dt class="hdlist1">Version dependencies.</dt>
+<dd>
+<p>Avoid having your application take a dependency on a single version of your database schema. As you scale, you may need to apply schema updates at different times for different tenants. Instead, ensure your application version is backwards-compatible with at least one schema version, and avoid destructive schema updates.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_databases">Databases</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are some features that can be useful for multitenancy. However, these aren&#8217;t available in all database services. Consider whether you need these, when you decide on the service to use for your scenario:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Row-level security can provide security isolation for specific tenants' data in a shared multitenant database. This feature is available in Azure SQL and Postgres Flex, but it&#8217;s not available in other databases, like MySQL or Azure Cosmos DB.</p>
+</li>
+<li>
+<p>Tenant-level encryption might be required to support tenants that provide their own encryption keys for their data. This feature is available in Azure SQL as part of Always Encrypted. Cosmos DB provides customer-managed keys at the account level and also supports Always Encrypted.</p>
+</li>
+<li>
+<p>Resource pooling provides the ability to share resources and cost, between multiple databases or containers. This feature is available in Azure SQL&#8217;s elastic pools and managed instances and in Azure Cosmos DB&#8217;s database throughput, although each option has limitations you should be aware of.</p>
+</li>
+<li>
+<p>Sharding and partitioning has stronger native support in some services than others. This feature is available in Azure Cosmos DB, by using its logical and physical partitioning, and in Postgres Hyperscale. While Azure SQL doesn&#8217;t natively support sharding, it provides sharding tools to support this type of architecture.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Additionally, when working with relational databases or other schema-based databases, consider where the schema upgrade process should be triggered, when you maintain a fleet of databases. In a small estate of databases, you might consider using a deployment pipeline to deploy schema changes. As you grow, it might be better for your application tier to detect the schema version for a specific database and to initiate the upgrade process.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_file_and_blob_storage">File and blob storage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the approach you use to isolate data within a storage account. For example, you might deploy separate storage accounts for each tenant, or you might share storage accounts and deploy individual containers. Alternatively, you might create shared blob containers, and then you can use the blob path to separate data for each tenant. Consider Azure subscription limits and quotas, and carefully plan your growth to ensure your Azure resources scale to support your future needs.</p>
+</div>
+<div class="paragraph">
+<p>If you use shared containers, plan your authentication and authorization strategy carefully, to ensure that tenants can&#8217;t access each other&#8217;s data. Consider the Valet Key pattern, when you provide clients with access to Azure Storage resources.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cost_allocation">Cost allocation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider how you&#8217;ll measure consumption and allocate costs to tenants, for the use of shared data services. Whenever possible, aim to use built-in metrics instead of calculating your own. However, with shared infrastructure, it becomes hard to split telemetry for individual tenants. Application-level custom metering needs to be considered.</p>
+</div>
+<div class="paragraph">
+<p>In general, cloud-native services, like Azure Cosmos DB and Azure Blob Storage, provide more granular metrics to track and model the usage for a specific tenant. For example, Azure Cosmos DB provides the consumed throughput for every request and response.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For more information about multitenancy and specific Azure services, see:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/service/storage">Multitenancy and Azure Storage</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/service/sql-database">Multitenancy and Azure SQL Database</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/service/cosmos-db">Multitenancy and Azure Cosmos DB</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

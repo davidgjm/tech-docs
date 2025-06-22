@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OPS03-BP04 Communications are timely, clear, and actionable</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OPS03-BP04 Communications are timely, clear, and actionable</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implementation_guidance">Implementation guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Mechanisms exist and are used to provide timely notice to team members of known risks and planned events. Necessary context, details, and time (when possible) are provided to support determining if action is necessary, what action is required, and to take action in a timely manner. For example, providing notice of software vulnerabilities so that patching can be expedited, or providing notice of planned sales promotions so that a change freeze can be implemented to avoid the risk of service disruption.</p>
+</div>
+<div class="paragraph">
+<p>Planned events can be recorded in a change calendar or maintenance schedule so that team members can identify what activities are pending.</p>
+</div>
+<div class="paragraph">
+<p>On AWS, <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> can be used to record these details. It supports programmatic checks of calendar status to determine if the calendar is open or closed to activity at a particular point of time. Operations activities can be planned around specific approved windows of time that are reserved for potentially disruptive activities. AWS Systems Manager Maintenance Windows allows you to schedule activities against instances and other <a href="https://docs.aws.amazon.com/ARG/latest/userguide/supported-resources.html#supported-resources-console">supported resources</a> to automate the activities and make those activities discoverable.</p>
+</div>
+<div class="paragraph">
+<p><strong>Level of risk exposed if this best practice is not established</strong>: High</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_guidance">Implementation guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Communications are timely, clear, and actionable: Mechanisms are in place to provide notification of risks or planned events in a clear and actionable way with enough notice to allow appropriate responses.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Document planned activities on a change calendar and provide notifications: Provide an accessible source of information where planned events can be discovered. Provide notifications of planned events from the same system.</p>
+</li>
+<li>
+<p>Track events and activity that may have an impact on your workload: Monitoring vulnerability notifications and patch information to understand vulnerabilities in the wild and potential risks associated to your workload components. Provide notification to team members so that they can take action.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

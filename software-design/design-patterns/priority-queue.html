@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Priority Queue pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Priority Queue pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_next_steps">Next steps</a></li>
+<li><a href="#_related_patterns_and_guidance">Related patterns and guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority. This pattern is useful in applications that offer different service level guarantees to individual clients.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Applications can delegate specific tasks to other services, for example, to perform background processing or to integrate with other applications or services. In the cloud, a message queue is typically used to delegate tasks to background processing. In many cases, the order requests are received in by a service isn&#8217;t important. In some cases, though, it&#8217;s necessary to prioritize specific requests. These requests should be processed earlier than lower priority requests that were sent previously by the application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A queue is usually a first-in, first-out (FIFO) structure, and consumers typically receive messages in the same order that they were posted to the queue. However, some message queues support priority messaging. The application posting a message can assign a priority and the messages in the queue are automatically reordered so that those with a higher priority will be received before those with a lower priority. The figure illustrates a queue with priority messaging.</p>
+</div>
+<div id="image-priority-queue-pattern" class="imageblock">
+<div class="content">
+<img src="./images/priority-queue-pattern.png" alt="priority queue pattern">
+</div>
+<div class="title">Figure 1. Priority queue pattern</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Most message queue implementations support multiple consumers (following the <a href="competing-consumers.html">Competing Consumers pattern</a>), and the number of consumer processes can be scaled up or down depending on demand.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In systems that don&#8217;t support priority-based message queues, an alternative solution is to maintain a separate queue for each priority. The application is responsible for posting messages to the appropriate queue. Each queue can have a separate pool of consumers. Higher priority queues can have a larger pool of consumers running on faster hardware than lower priority queues. The next figure illustrates using separate message queues for each priority.</p>
+</div>
+<div id="image-priority-queue-alternate" class="imageblock">
+<div class="content">
+<img src="./images/priority-queue-separate.png" alt="priority queue separate">
+</div>
+<div class="title">Figure 2. separate message queues for each priority</div>
+</div>
+<div class="paragraph">
+<p>A variation on this strategy is to have a single pool of consumers that check for messages on high priority queues first, and only then start to fetch messages from lower priority queues. There are some semantic differences between a solution that uses a single pool of consumer processes (either with a single queue that supports messages with different priorities or with multiple queues that each handle messages of a single priority), and a solution that uses multiple queues with a separate pool for each queue.</p>
+</div>
+<div class="paragraph">
+<p>In the single pool approach, higher priority messages are always received and processed before lower priority messages. In theory, messages that have a very low priority could be continually superseded and might never be processed. In the multiple pool approach, lower priority messages will always be processed, just not as quickly as those of a higher priority (depending on the relative size of the pools and the resources that they have available).</p>
+</div>
+<div class="paragraph">
+<p>Using a priority-queuing mechanism can provide the following advantages:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It allows applications to meet business requirements that require prioritization of availability or performance, such as offering different levels of service to specific groups of customers.</p>
+</li>
+<li>
+<p>It can help to minimize operational costs. In the single queue approach, you can scale back the number of consumers if necessary. High priority messages will still be processed first (although possibly more slowly), and lower priority messages might be delayed for longer. If you&#8217;ve implemented the multiple message queue approach with separate pools of consumers for each queue, you can reduce the pool of consumers for lower priority queues, or even suspend processing for some very low priority queues by stopping all the consumers that listen for messages on those queues.</p>
+</li>
+<li>
+<p>The multiple message queue approach can help maximize application performance and scalability by <strong>partitioning</strong> messages based on processing requirements. For example, vital tasks can be prioritized to be handled by receivers that run immediately while less important background tasks can be handled by receivers that are scheduled to run at less busy periods.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the following points when deciding how to implement this pattern:</p>
+</div>
+<div class="paragraph">
+<p>Define the priorities in the context of the solution. For example, high priority could mean that messages should be processed within ten seconds. Identify the requirements for handling high priority items, and the other resources that should be allocated to meet these criteria.</p>
+</div>
+<div class="paragraph">
+<p>Decide if all high priority items must be processed before any lower priority items. If the messages are being processed by a single pool of consumers, you have to provide a mechanism that can preempt and suspend a task that&#8217;s handling a low priority message if a higher priority message becomes available.</p>
+</div>
+<div class="paragraph">
+<p>In the multiple queue approach, when using a single pool of consumer processes that listen on all queues rather than a dedicated consumer pool for each queue, the consumer must apply an algorithm that ensures it always services messages from higher priority queues before those from lower priority queues.</p>
+</div>
+<div class="paragraph">
+<p>Monitor the processing speed on high and low priority queues to ensure that messages in these queues are processed at the expected rates.</p>
+</div>
+<div class="paragraph">
+<p>If you need to guarantee that low priority messages will be processed, it&#8217;s necessary to implement the multiple message queue approach with multiple pools of consumers. Alternatively, in a queue that supports message prioritization, it&#8217;s possible to dynamically increase the priority of a queued message as it ages. However, this approach depends on the message queue providing this feature.</p>
+</div>
+<div class="paragraph">
+<p>Using a separate queue for each message priority works best for systems that have a few well-defined priorities.</p>
+</div>
+<div class="paragraph">
+<p>Message priorities can be determined logically by the system. For example, rather than having explicit high and low priority messages, they could be designated as "fee-paying customer," or "non-fee paying customer." Depending on your business model, your system can allocate more resources to processing messages from fee-paying customers than non-fee paying ones.</p>
+</div>
+<div class="paragraph">
+<p>There might be a financial and processing cost associated with checking a queue for a message (some commercial messaging systems charge a small fee each time a message is posted or retrieved, and each time a queue is queried for messages). This cost increases when checking multiple queues.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s possible to dynamically adjust the size of a pool of consumers based on the length of the queue that the pool is servicing. For more information, see the <a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589774(v=pandp.10)">Autoscaling Guidance</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This pattern is useful in scenarios where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The system must handle multiple tasks that have different priorities.</p>
+</li>
+<li>
+<p>Different users or tenants should be served with different priority.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Microsoft Azure doesn&#8217;t provide a queuing mechanism that natively supports automatic prioritization of messages through sorting. However, it does provide Azure Service Bus topics and subscriptions that support a queuing mechanism that provides message filtering, together with a wide range of flexible capabilities that make it ideal for use in most priority queue implementations.</p>
+</div>
+<div class="paragraph">
+<p>An Azure solution can implement a Service Bus topic an application can post messages to, in the same way as a queue. Messages can contain metadata in the form of application-defined custom properties. Service Bus subscriptions can be associated with the topic, and these subscriptions can filter messages based on their properties. When an application sends a message to a topic, the message is directed to the appropriate subscription where it can be read by a consumer. Consumer processes can retrieve messages from a subscription using the same semantics as a message queue (a subscription is a logical queue). The following figure illustrates implementing a priority queue with Azure Service Bus topics and subscriptions.</p>
+</div>
+<div id="image-priority-queue-service-bus" class="imageblock">
+<div class="content">
+<img src="./images/priority-queue-service-bus.png" alt="priority queue service bus">
+</div>
+<div class="title">Figure 3. Implementing a priority queue with Azure Service Bus topics and subscriptions</div>
+</div>
+<div class="paragraph">
+<p>In the figure above, the application creates several messages and assigns a custom property called Priority in each message with a value, either High or Low. The application posts these messages to a topic. The topic has two associated subscriptions that both filter messages by examining the Priority property. One subscription accepts messages where the Priority property is set to High, and the other accepts messages where the Priority property is set to Low. A pool of consumers reads messages from each subscription. The high priority subscription has a larger pool, and these consumers might be running on more powerful computers with more resources available than the consumers in the low priority pool.</p>
+</div>
+<div class="paragraph">
+<p>There&#8217;s nothing special about the designation of high and low-priority messages in this example. They&#8217;re simply labels specified as properties in each message, and are used to direct messages to a specific subscription. If additional priorities are required, it&#8217;s relatively easy to create further subscriptions and pools of consumer processes to handle these priorities.</p>
+</div>
+<div class="paragraph">
+<p>The PriorityQueue solution available on <a href="https://github.com/mspnp/cloud-design-patterns/tree/master/priority-queue">GitHub</a> contains an implementation of this approach.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following guidance might also be relevant when implementing this pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A sample that demonstrates this pattern is available on <a href="https://github.com/mspnp/cloud-design-patterns/tree/master/priority-queue">GitHub</a>.</p>
+</li>
+<li>
+<p><a href="../distributed-systems/messaging/async-messaging-primer.html">Asynchronous Messaging Primer</a>. A consumer service that processes a request might need to send a reply to the instance of the application that posted the request. Provides information on the strategies that you can use to implement request/response messaging.</p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn589774(v=pandp.10)">Autoscaling Guidance</a>. It might be possible to scale the size of the pool of consumer processes handling a queue depending on the length of the queue. This strategy can help to improve performance, especially for pools handling high priority messages.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_patterns_and_guidance">Related patterns and guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following patterns might also be relevant when implementing this pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="competing-consumers.html">Competing Consumers pattern</a>. To increase the throughput of the queues, it&#8217;s possible to have multiple consumers that listen on the same queue, and process the tasks in parallel. These consumers will compete for messages, but only one should be able to process each message. Provides more information on the benefits and tradeoffs of implementing this approach.</p>
+</li>
+<li>
+<p><a href="throttling.html">Throttling pattern</a>. You can implement throttling by using queues. Priority messaging can be used to ensure that requests from critical applications, or applications being run by high-value customers, are given priority over requests from less important applications.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Architectural approaches for multitenancy</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Architectural approaches for multitenancy</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_deployment_stamps_pattern">Deployment Stamps pattern</a></li>
+<li><a href="#_intended_audience">Intended audience</a></li>
+<li><a href="#_next_steps">Next Steps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are many different ways that you can design and build multitenant solutions in Azure. At one extreme, you can share every resource in your solution between every tenant. At the other extreme, you can deploy isolated resources for every tenant. It might seem simple to deploy separate resources for every tenant, and it can work for a small numbers of tenants. However, it typically doesn&#8217;t provide cost effectiveness, and it can become difficult to manage your resources. There are also various approaches that fit between these extremes, and they all have tradeoffs: scale, isolation, cost efficiency, performance, implementation complexity, and manageability.</p>
+</div>
+<div class="paragraph">
+<p>Throughout this section, we discuss the main categories of Azure services that comprise a solution, including <a href="compute.html">compute</a>, <a href="storage-data.html">storage and data</a>, <a href="networking.html">networking</a>, and <a href="deployment-configuration.html">deployment</a>. Coming soon, we will also provide guidance for messaging and IoT. For each category, we outline the key patterns and approaches you can consider when you&#8217;re designing a multitenant solution, and some antipatterns to avoid.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deployment_stamps_pattern">Deployment Stamps pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="../../../../design-patterns/deployment-stamp.html">Deployment Stamps pattern</a> is frequently used in multitenant solutions.It involves deploying dedicated infrastructure for a tenant or for a group of tenants.A single stamp might contain multiple tenants or might be dedicated to a single tenant.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/deployment-stamps.png" alt="deployment stamps">
+</div>
+</div>
+<div class="paragraph">
+<p>When using single-tenant stamps, the Deployment Stamps pattern tends to be straightforward to implement, because each stamp is likely to be unaware of any other, so no multitenancy logic or capabilities need to be built into the application layer.When each tenant has their own dedicated stamp, this pattern provides the highest degree of isolation, and it mitigates the <a href="https://docs.microsoft.com/en-us/azure/architecture/antipatterns/noisy-neighbor/">Noisy Neighbor problem</a>.It also provides the option for tenants to be configured or customized according to their own requirements, such as to be located in a specific geopolitical region or to have specific high availability requirements.</p>
+</div>
+<div class="paragraph">
+<p>When using multitenant stamps, other patterns need to be considered to manage multitenancy within the stamp, and the Noisy Neighbor problem still might apply.However, by using the Deployment Stamps pattern, you can continue to scale as your solution grows.</p>
+</div>
+<div class="paragraph">
+<p>The biggest problem with the Deployment Stamps pattern, when being used to serve a single tenant, tends to be the cost of the infrastructure.When using single-tenant stamps, each stamp needs to have its own separate set of infrastructure, which isn&#8217;t shared with other tenants.You also need to ensure that the resources deployed for a stamp are sufficient to meet the peak load for that tenant&#8217;s workload.Ensure that your <a href="../considerations/pricing-models.html">pricing model</a> offsets the cost of deployment for the tenant&#8217;s infrastructure.</p>
+</div>
+<div class="paragraph">
+<p>Single-tenant stamps often work well when you have a small number of tenants. As your number of tenants grows, it&#8217;s possible but increasingly difficult to manage a fleet of stamps (<a href="https://devblogs.microsoft.com/azure-sql/running-1m-databases-on-azure-sql-for-a-large-saas-provider-microsoft-dynamics-365-and-power-platform">see this case study as an example</a>). You can also apply the Deployment Stamps pattern to create a fleet of multitenant stamps, which can provide benefits for resource and cost sharing.</p>
+</div>
+<div class="paragraph">
+<p>To implement the Deployment Stamps pattern, it&#8217;s important to use automated deployment approaches. Depending on your deployment strategy, you might consider managing your stamps within your deployment pipelines, by using declarative infrastructure as code, such as Bicep, ARM templates, or Terraform templates. Alternatively, you might consider building custom code to deploy and manage each stamp, such as by using Azure SDKs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_intended_audience">Intended audience</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The pages in this section are intended to be useful for solution architects and lead developers of multitenant applications, including independent software vendors (ISVs) and startups who develop SaaS solutions. Much of the guidance in this section is generic and applies to multiple Azure services within a category.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next Steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We recommend you review the <a href="resource-organization.html">approaches for resource organization in a multitenant solution</a> before reviewing the guidance about specific categories of Azure services.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

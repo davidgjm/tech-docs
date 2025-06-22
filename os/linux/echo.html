@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Code sample</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_code_sample">Code sample</a>
+<ul class="sectlevel2">
+<li><a href="#_common_usage_may_introduce_issues">Common Usage (may introduce issues)</a></li>
+<li><a href="#_portable_use_in_scripts">Portable use in scripts</a></li>
+</ul>
+</li>
+<li><a href="#_explanation">Explanation</a>
+<ul class="sectlevel2">
+<li><a href="#_reference_doucmentation">Reference doucmentation</a></li>
+</ul>
+</li>
+<li><a href="#_how_to_use_in_scripts">How to use in scripts</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_code_sample">Code sample</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_common_usage_may_introduce_issues">Common Usage (may introduce issues)</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">$ echo "hello" | md5sum
+b1946ac92492d2347c6235b4d2611184  -</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_portable_use_in_scripts">Portable use in scripts</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">$ echo -n "hello" | md5sum
+5d41402abc4b2a76b9719d911017c592  -</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_explanation">Explanation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Normally echo will print all provided textual content and append a newline. This behavior is safe if you want to dump the content into a file.</p>
+</div>
+<div class="paragraph">
+<p><strong>But</strong> you will likely run into problems when you just want the provided text as input for a different command/program. Notice the different hash values above. The first <code>md5sum</code> command takes the <code>hello</code> string as well as <strong>newline</strong> non-printable character as input while the command in the second example just takes the string <strong>hello</strong> as input.</p>
+</div>
+<div class="paragraph">
+<p>The argument <code>-n</code> will not output the trailing newline.</p>
+</div>
+<div class="sect2">
+<h3 id="_reference_doucmentation">Reference doucmentation</h3>
+<div class="sect3">
+<h4 id="_echo">echo</h4>
+<div class="paragraph">
+<p><a href="https://www.gnu.org/software/coreutils/manual/html_node/echo-invocation.html#echo-invocation" class="bare">https://www.gnu.org/software/coreutils/manual/html_node/echo-invocation.html#echo-invocation</a></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>POSIX does not require support for any options, and says that the behavior of echo is implementation-defined if any string contains a backslash or if the first argument is -n. ==Portable programs can use the printf command if they need to omit trailing newlines or output control characters or backslashes==. See printf invocation.</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_printf">printf</h4>
+<div class="paragraph">
+<p><a href="https://www.gnu.org/software/coreutils/manual/html_node/printf-invocation.html#printf-invocation" class="bare">https://www.gnu.org/software/coreutils/manual/html_node/printf-invocation.html#printf-invocation</a></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>printf does formatted printing of text. Synopsis:</p>
+</div>
+<div class="paragraph">
+<p>printf format [argument]…
+printf prints the format string, interpreting ‘%’ directives and ‘\’ escapes to format numeric and string arguments in a way that is mostly similar to the C ‘printf’ function. See printf format directives in The GNU C Library Reference Manual, for details. The differences are listed below.</p>
+</div>
+<div class="paragraph">
+<p>Due to shell aliases and built-in printf functions, using an unadorned printf interactively or in a script may get you different functionality than that described here. Invoke it via env (i.e., env printf …) to avoid interference from the shell.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_to_use_in_scripts">How to use in scripts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Either use <code>echo -n</code> with the additional argument or simply use <code>printf</code>. So the above md5 hash value computation can be changed to below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ echo -n "hello" | md5sum
+5d41402abc4b2a76b9719d911017c592  -</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Or</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ printf "hello" | md5sum
+5d41402abc4b2a76b9719d911017c592  -</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

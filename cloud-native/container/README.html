@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Generic</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Generic</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_references">References</a></li>
+<li><a href="#_different_terms_ocicrietc">Different terms (OCI,CRI,etc)</a></li>
+<li><a href="#_docker">Docker</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Readings</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.tutorialworks.com/difference-docker-containerd-runc-crio-oci">The differences between Docker, containerd, CRI-O and runc</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_different_terms_ocicrietc">Different terms (OCI,CRI,etc)</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="../images/container-ecosystem.drawio.png" alt="container ecosystem.drawio">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_docker">Docker</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We have to start with Docker because it’s the most popular developer tool for working with containers. And for a lot of people, the name “Docker” itself is synonymous with the word “container”.</p>
+</div>
+<div class="paragraph">
+<p>Docker kick-started this whole revolution. Docker created a very ergonomic (nice-to-use) tool for working with containers – also called <mark>docker</mark>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/container-ecosystem-docker.drawio.png" alt="container ecosystem docker.drawio">
+</div>
+</div>
+<div class="paragraph">
+<p>docker is designed to be installed on a workstation or server and comes with a bunch of tools to make it easy to build and run containers as a developer, or DevOps person.</p>
+</div>
+<div class="paragraph">
+<p>The docker command line tool can build container images, pull them from registries, create, start and manage containers.</p>
+</div>
+<div class="paragraph">
+<p>To make all of this happen, the experience you know as docker is now comprised of these projects (there are others, but these are the main ones):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/docker/cli"><strong>docker-cli</strong></a>: This is the command-line utility that you interact with using docker &#8230;&#8203; commands.</p>
+</li>
+<li>
+<p><a href="https://containerd.io/"><strong>containerd</strong></a>: This is a daemon process that manages and runs containers. It pushes and pulls images, manages storage and networking, and supervises the running of containers.</p>
+</li>
+<li>
+<p><a href="https://github.com/opencontainers/runc"><strong>runc</strong></a>: This is the low-level container runtime (the thing that actually creates and runs containers). It includes libcontainer, a native Go-based implementation for creating containers.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In reality, when you run a container with docker, you’re actually running it through the Docker daemon, containerd, and then runc.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

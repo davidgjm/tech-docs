@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OpenTelemetry</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OpenTelemetry</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_what_is_opentelemetry">What is OpenTelemetry?</a>
+<ul class="sectlevel2">
+<li><a href="#_why_you_need_opentelemetry_and_what_it_can_do">Why you need OpenTelemetry and what it can do</a></li>
+<li><a href="#_what_opentelemetry_is_not">What OpenTelemetry is not</a></li>
+</ul>
+</li>
+<li><a href="#_instrumenting">Instrumenting</a>
+<ul class="sectlevel2">
+<li><a href="#_automatic_instrumentation">Automatic Instrumentation</a></li>
+<li><a href="#_manual_instrumentation">Manual Instrumentation</a></li>
+</ul>
+</li>
+<li><a href="#_data_collection">Data Collection</a>
+<ul class="sectlevel2">
+<li><a href="#_deployment">Deployment</a></li>
+<li><a href="#_components">Components</a></li>
+</ul>
+</li>
+<li><a href="#_opentelemetry_with_java">OpenTelemetry with Java</a>
+<ul class="sectlevel2">
+<li><a href="#_references">References</a></li>
+<li><a href="#_integrate_traces_with_logs">Integrate traces with logs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://medium.com/opentelemetry/opentelemetry-beyond-getting-started-5ac43cd0fe26">OpenTelemetry: beyond getting started</a></p>
+</li>
+<li>
+<p><a href="https://opentelemetry.io/vendors">OpenTelemetry vendors</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=2nTJSsBngao" class="bare">https://www.youtube.com/watch?v=2nTJSsBngao</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_opentelemetry">What is OpenTelemetry?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenTelemetry is a set of APIs, SDKs, tooling and integrations that are designed for the creation and management of telemetry data such as traces, metrics, and logs. The project provides a vendor-agnostic implementation that can be configured to send telemetry data to the backend(s) of your choice. It supports a variety of popular open-source projects including Jaeger and Prometheus.</p>
+</div>
+<div class="sect2">
+<h3 id="_why_you_need_opentelemetry_and_what_it_can_do">Why you need OpenTelemetry and what it can do</h3>
+<div class="paragraph">
+<p>In cloud-native technology stacks, distributed and polyglot architectures are the norm. Distributed architectures introduce a variety of operational challenges including how to solve availability and performance issues quickly. These challenges have led to the rise of observability.</p>
+</div>
+<div class="paragraph">
+<p>Telemetry data is needed to power observability products. Traditionally, telemetry data has been provided by either open-source projects or commercial vendors. With a lack of standardization, the net result is the lack of data portability and the burden on the user to maintain the instrumentation.</p>
+</div>
+<div class="paragraph">
+<p>The OpenTelemetry project solves these problems by providing a single, vendor-agnostic solution. The project has broad industry support and adoption from cloud providers, vendors and end users.</p>
+</div>
+<div class="paragraph">
+<p>OpenTelemetry provides you with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A single, vendor-agnostic instrumentation library per language with support for both automatic and manual instrumentation.</p>
+</li>
+<li>
+<p>A single collector binary that can be deployed in a variety of ways including as an agent or gateway.</p>
+</li>
+<li>
+<p>An end-to-end implementation to generate, emit, collect, process and export telemetry data.</p>
+</li>
+<li>
+<p>Full control of your data with the ability to send data to multiple destinations in parallel through configuration.</p>
+</li>
+<li>
+<p>Open-standard semantic conventions to ensure vendor-agnostic data collection</p>
+</li>
+<li>
+<p>The ability to support multiple context propagation formats in parallel to assist with migrating as standards evolve.</p>
+</li>
+<li>
+<p>A path forward no matter where you are on your observability journey. With support for a variety of open-source and commercial protocols, format and context propagation mechanisms as well as providing shims to the OpenTracing and OpenCensus projects, it is easy to adopt OpenTelemetry.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_opentelemetry_is_not">What OpenTelemetry is not</h3>
+<div class="paragraph">
+<p>OpenTelemetry is not an observability back-end like Jaeger or Prometheus. Instead, it supports exporting data to a variety of open-source and commercial back-ends. It provides a pluggable architecture so additional technology protocols and formats can be easily added.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_instrumenting">Instrumenting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>At a basic level, "instrumenting” is simply enabling an application to capture telemetry.</p>
+</div>
+<div class="paragraph">
+<p>There are two methods to instrument your application:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Manual Instrumentation</p>
+</li>
+<li>
+<p>Automatic Instrumentation (Auto-Instrumentation)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Manual instrumentation is coding against the OpenTelemetry API. In the context of an end user, it typically refers to installing a language-specific SDK in an application.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+“Manual” does NOT mean you’ll be required to write complex code to define spans for distributed traces (though it remains an option). A rich and growing set of instrumentation libraries maintained by OpenTelemetry contributors will enable you to effortlessly capture telemetry signals across common frameworks and libraries. A subset of OpenTelemetry Instrumentation Libraries will be supported by Azure Monitor, informed by customer feedback. Additionally, we are working to instrument the most popular Azure Service SDKs using OpenTelemetry.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>On the other hand, auto-instrumentation is enabling telemetry collection through configuration without touching the application&#8217;s code. While more convenient, it tends to be less configurable and it’s not available in all languages.</p>
+</div>
+<div class="sect2">
+<h3 id="_automatic_instrumentation">Automatic Instrumentation</h3>
+<div class="sect3">
+<h4 id="_add_dependencies">Add dependencies</h4>
+<div class="paragraph">
+<p>In order to enable automatic instrumentation, one or more dependencies need to be added. How dependencies are added are language specific. <mark>At a minimum, these dependencies will add OpenTelemetry API and SDK capabilities</mark>. Some languages also require per instrumentation dependencies. Exporter dependencies may also be required. For more information about the OpenTelemetry API and SDK, see the <a href="https://opentelemetry.io/docs/reference/specification/">specification</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configure_opentelemetry_instrumentation">Configure OpenTelemetry Instrumentation</h4>
+<div class="paragraph">
+<p>Configuration is available via environment variables and possibly language specific means such as system properties in Java. At a minimum, a service name must be configured to identify the service being instrumented. A variety of other configuration options are available and may include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Data source specific configuration</p>
+</li>
+<li>
+<p>Exporter configuration</p>
+</li>
+<li>
+<p>Propagator configuration</p>
+</li>
+<li>
+<p>Resource configuration</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manual_instrumentation">Manual Instrumentation</h3>
+<div class="sect3">
+<h4 id="_import_the_opentelemetry_api_and_sdk">Import the OpenTelemetry API and SDK</h4>
+<div class="paragraph">
+<p>You’ll first need to import OpenTelemetry to your service code. If you’re developing a library or some other component that is intended to be consumed by a runnable binary, then you would only take a dependency on the API. If your artifact is a standalone process or service, then you would take a dependency on the API and the SDK. For more information about the OpenTelemetry API and SDK, see the <a href="https://opentelemetry.io/docs/reference/specification/">specification</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configure_the_opentelemetry_api">Configure the OpenTelemetry API</h4>
+<div class="paragraph">
+<p>In order to create traces or metrics, you’ll need to first create a tracer and/or meter provider. In general, we recommend that the SDK should provide a single default provider for these objects. You’ll then get a tracer or meter instance from that provider, and give it a name and version. The name you choose here should identify what exactly is being instrumented – if you’re writing a library, for example, then you should name it after your library (i.e., <code>com.legitimatebusiness.myLibrary</code> or some other unique identifier) as this name will namespace all spans or metric events produced. It is also recommended that you supply a version string (i.e., <code>semver:1.0.0</code>) that corresponds to the current version of your library or service.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configure_the_opentelemetry_sdk">Configure the OpenTelemetry SDK</h4>
+<div class="paragraph">
+<p>If you’re building a service process, you’ll also need to configure the SDK with appropriate options for exporting your telemetry data to some analysis backend. We recommend that this configuration be handled programmatically through a configuration file or some other mechanism. There are also per-language tuning options you may wish to take advantage of.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_create_telemetry_data">Create Telemetry Data</h4>
+<div class="paragraph">
+<p>Once you’ve configured the API and SDK, you’ll then be free to create traces and metric events through the tracer and meter objects you obtained from the provider. You can also utilize a plugin or integration to create traces and metric events for you – check out the <a href="https://opentelemetry.io/registry">registry</a> or your language’s repository for more information on these.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_export_data">Export Data</h4>
+<div class="paragraph">
+<p>Once you’ve created telemetry data, you’ll want to send it somewhere. OpenTelemetry supports two primary methods of exporting data from your process to an analysis backend, either directly from a process or by proxying it through the <a href="https://opentelemetry.io/docs/collector">OpenTelemetry Collector</a>.</p>
+</div>
+<div class="paragraph">
+<p>In-process export requires you to import and take a dependency on one or more exporters, libraries that translate OpenTelemetry’s in-memory span and metric objects into the appropriate format for telemetry analysis tools like Jaeger or Prometheus. In addition, OpenTelemetry supports a wire protocol known as OTLP, which is supported by all OpenTelemetry SDKs. This protocol can be used to send data to the OpenTelemetry Collector, a standalone binary process that can be run as a proxy or sidecar to your service instances or run on a separate host. The Collector can then be configured to forward and export this data to your choice of analysis tools.</p>
+</div>
+<div class="paragraph">
+<p>In addition to open source tools such as Jaeger or Prometheus, a growing list of companies support ingesting telemetry data from OpenTelemetry. Please see this page for more details.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_collection">Data Collection</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_deployment">Deployment</h3>
+<div class="paragraph">
+<p>The OpenTelemetry Collector provides a single binary and two deployment methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Agent</strong>: A Collector instance running with the application or on the same host as the application (e.g. binary, sidecar, or daemonset).</p>
+</li>
+<li>
+<p><strong>Gateway</strong>: One or more Collector instances running as a standalone service (e.g. container or deployment) typically per cluster, datacenter or region.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For information on how to use the Collector see the <a href="https://opentelemetry.io/docs/collector/getting-started">getting started</a> documentation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_components">Components</h3>
+<div class="paragraph">
+<p>The Collector is made up of the following components:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>receivers</code>: How to get data into the Collector; these can be push or pull based</p>
+</li>
+<li>
+<p><code>processors</code>: What to do with received data</p>
+</li>
+<li>
+<p><code>exporters</code>: Where to send received data; these can be push or pull based</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These components are enabled through <code>pipelines</code>. Multiple instances of components as well as pipelines can be defined via YAML configuration.</p>
+</div>
+<div class="paragraph">
+<p>For more information about these components see the <a href="https://opentelemetry.io/docs/collector/configuration">configuration documentation</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_opentelemetry_with_java">OpenTelemetry with Java</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_references">References</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://reflectoring.io/spring-boot-tracing/">Tracing with Spring Boot, OpenTelemetry, and Jaeger</a></p>
+</li>
+<li>
+<p><a href="https://help.sumologic.com/Traces/01Getting_Started_with_Transaction_Tracing/Instrument_your_application_with_OpenTelemetry/Java_OpenTelemetry_auto-instrumentation/TraceId_and_SpanId_injection_into_logs_configuration"> TraceId and SpanId injection into logs configuration </a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_integrate_traces_with_logs">Integrate traces with logs</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.datadoghq.com/tracing/connect_logs_and_traces/opentelemetry/">Connect OpenTelemetry Traces and Logs</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_logger_mdc_auto_instrumentation">Logger MDC auto-instrumentation</h4>
+<div class="paragraph">
+<p>See details at <a href="https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/logger-mdc-instrumentation.md">OpenTelemetry Java instrumentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>The Mapped Diagnostic Context (MDC) is</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+an instrument for distinguishing interleaved log output from different sources. (<a href="http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/MDC.html">log4j MDC documentation</a>)
+</blockquote>
+<div class="attribution">
+&#8212; log4j MDC documentation
+</div>
+</div>
+<div class="paragraph">
+<p>It contains thread-local contextual information which is later copied to each logging event captured by a logging library.</p>
+</div>
+<div class="paragraph">
+<p>The OTel Java agent injects several pieces of information about the current span into each logging event&#8217;s MDC copy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>trace_id</code> - the current trace id (same as <code>Span.current().getSpanContext().getTraceId()</code>);</p>
+</li>
+<li>
+<p><code>span_id</code> - the current span id (same as <code>Span.current().getSpanContext().getSpanId()</code>);</p>
+</li>
+<li>
+<p><code>trace_flags</code> - the current trace flags, formatted according to W3C traceflags format (same as <code>Span.current().getSpanContext().getTraceFlags().asHex()</code>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Those three pieces of information can be included in log statements produced by the logging library by specifying them in the pattern/format. Example for Spring Boot configuration (which uses logback):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="properties"><span class="py">logging.pattern.console</span> <span class="p">=</span> <span class="s">%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} %n</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

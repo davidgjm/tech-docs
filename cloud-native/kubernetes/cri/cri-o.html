@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>CRI-O</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>CRI-O</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_cri_o">CRI-O</a>
+<ul class="sectlevel2">
+<li><a href="#_what_is_cri_o">What is CRI-O?</a></li>
+<li><a href="#_architecture">Architecture</a></li>
+<li><a href="#_explanation_about_cri_o_relationship_with_docker_and_containerd">Explanation about CRI-O relationship with docker and containerd</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://cri-o.io/" class="bare">https://cri-o.io/</a></p>
+</li>
+<li>
+<p><a href="https://opensource.com/article/18/1/history-low-level-container-runtimes">A history of low-level Linux container runtimes</a></p>
+</li>
+<li>
+<p><a href="https://medium.com/cri-o/container-runtimes-clarity-342b62172dc3">Container runtimes: clarity</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cri_o">CRI-O</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_is_cri_o">What is CRI-O?</h3>
+<div class="paragraph">
+<p>CRI-O is an implementation of the Kubernetes CRI (Container Runtime Interface) to enable using OCI (Open Container Initiative) compatible runtimes. It is a lightweight alternative to using Docker as the runtime for kubernetes. It allows Kubernetes to use any OCI-compliant runtime as the container runtime for running pods. Today it supports runc and Kata Containers as the container runtimes but any OCI-conformant runtime can be plugged in principle.</p>
+</div>
+<div class="paragraph">
+<p>CRI-O supports OCI container images and can pull from any container registry. It is a lightweight alternative to using Docker, Moby or rkt as the runtime for Kubernetes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_architecture">Architecture</h3>
+<div class="imageblock">
+<div class="content">
+<img src="https://cri-o.io/assets/images/architecture.png" alt="architecture">
+</div>
+</div>
+<div class="paragraph">
+<p>The architectural components are as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Kubernetes contacts the kubelet to launch a pod.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pods are a kubernetes concept consisting of one or more containers sharing the same IPC, NET and PID namespaces and living in the same cgroup.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The kubelet forwards the request to the CRI-O daemon VIA kubernetes CRI (Container runtime interface) to launch the new POD.</p>
+</li>
+<li>
+<p>CRI-O uses the containers/image library to pull the image from a container registry.</p>
+</li>
+<li>
+<p>The downloaded image is unpacked into the container’s root filesystems, stored in COW file systems, using containers/storage library.</p>
+</li>
+<li>
+<p>After the rootfs has been created for the container, CRI-O generates an OCI runtime specification json file describing how to run the container using the OCI Generate tools.</p>
+</li>
+<li>
+<p>CRI-O then launches an OCI Compatible Runtime using the specification to run the container proceses. The default OCI Runtime is runc.</p>
+</li>
+<li>
+<p>Each container is monitored by a separate conmon process. The conmon process holds the pty of the PID1 of the container process. It handles logging for the container and records the exit code for the container process.</p>
+</li>
+<li>
+<p>Networking for the pod is setup through use of CNI, so any CNI plugin can be used with CRI-O.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_components">Components</h4>
+<div class="paragraph">
+<p>CRI-O is made up of several components that are found in different GitHub repositories.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>OCI compatible runtime</p>
+</li>
+<li>
+<p>containers/storage</p>
+</li>
+<li>
+<p>containers/image</p>
+</li>
+<li>
+<p>networking (CNI)</p>
+</li>
+<li>
+<p>container monitoring (conmon)</p>
+</li>
+<li>
+<p>security is provided by several core Linux capabilities</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_oci_compatible_runtimes">OCI compatible runtimes</h5>
+<div class="paragraph">
+<p>CRI-O supports any OCI compatible runtime. We test with runc and Clear Containers today.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_storage">Storage</h5>
+<div class="paragraph">
+<p>The containers/storage library is used for managing layers and creating root file-systems for the containers in a pod: Overlayfs, devicemapper, AUFS and btrfs are implemented, with Overlayfs as the default driver.</p>
+</div>
+<div class="paragraph">
+<p>Support for network based file system images (NFS, GlusterFS, CephFS) is on the development roadmap.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_container_images">Container images</h5>
+<div class="paragraph">
+<p>The containers/image library is used for pulling images from registries. Currently, it supports Docker schema 2/version 1 as well as schema 2/version 2. It also passes all Docker and Kubernetes tests.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_networking">Networking</h5>
+<div class="paragraph">
+<p>The Container Network Interface CNI is used for setting up networking for the pods. Various CNI plugins such as Flannel, Weave and OpenShift-SDN have been tested with CRI-O and are working as expected.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_monitoring">Monitoring</h5>
+<div class="paragraph">
+<p>conmon is a utility within CRI-O that is used to monitor the containers, handle logging from the container process, serve attach clients and detects Out Of Memory (OOM) situations.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_security">Security</h5>
+<div class="paragraph">
+<p>Container security separation policies are provided by a series of tools including SELinux, Capabilities, seccomp, and other security separation policies as specified in the OCI Specification.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_explanation_about_cri_o_relationship_with_docker_and_containerd">Explanation about CRI-O relationship with docker and containerd</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Kubernetes originally leveraged Docker for running containers, it is still the default container runtime today. However, a few years ago CoreOS wanted to use kubernetes on Rkt. CoreOS offered a bunch of patches to kubernetes to use Rkt as an alternative to Docker.</p>
+</div>
+<div class="paragraph">
+<p>Upstream Kubernetes saw this as a problem, since they did not want to have to modify the kubernetes code base for each new container runtime. Upstream kubernetes decided to create an API to define calls that it would make into container runtimes, thus the Container Runtime Interface (CRI) was born. This interface reverses the responsibility from the core Kubernetes of talking to a container runtime like Docker or Rkt. Interaction between kubernetes and a given runtime is performed through the CRI API.</p>
+</div>
+<div class="paragraph">
+<p>This means anyone can create his own container runtime and simply have it speak the CRI interface in order to run containers under kubernetes.</p>
+</div>
+<div class="paragraph">
+<p>We decided to create CRI-O, which was the first container runtime created for the kubernetes CRI interface. Others CRI based container runtimes have popped up over the past year, fratki for example.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Antonio Murdaca<br>
+<cite>author of CRI-O</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>CRI-O leverages all of the OCI standards:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Runs containers using the OCI Runtime tools defaulting to runc.</p>
+</li>
+<li>
+<p>Managing container images following the OCI image specification.</p>
+</li>
+<li>
+<p>Uses the OCI-Runtime-tools for generating the OCI Runtime Specification</p>
+</li>
+<li>
+<p>CNI for setting up the container networking.</p>
+</li>
+<li>
+<p>containers/image for pulling container images from container registries like docker.io</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>CRI-O defaults to running containers with runc, exactly the same as Docker does today: running containers with runc. In addition to that CRI-O has support for running containers using virtualization technologies like Clear Containers, and soon Kata Containers.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Environment Configurations as Git repository</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Environment Configurations as Git repository</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_overview">Overview</a></li>
+<li><a href="#_how_it_works_push_based_vs_pull_based_deployments">How it works (Push-based vs. Pull-based Deployments)</a>
+<ul class="sectlevel2">
+<li><a href="#_push_based_deployments">Push-based Deployments</a></li>
+<li><a href="#_pull_based_deployments">Pull-based Deployments</a></li>
+<li><a href="#_examplesuse_cases">Examples/Use cases</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_overview">Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>GitOps organizes the deployment process around code repositories as the central element. There are at least two repositories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>application(app) repository</p>
+</li>
+<li>
+<p>environment configuration(env) repository</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <strong>application repository</strong> contains the source code of the application and the deployment manifests to deploy the application. The <strong>environment configuration repository</strong> contains all deployment manifests of the currently desired infrastructure of an deployment environment. It describes what applications and infrastructural services (message broker, service mesh, monitoring tool, …) should run with what configuration and version in the deployment environment.</p>
+</div>
+<div class="paragraph">
+<p>We keep the <em>app</em> and <em>env</em> repositories separate because they have different lifecycles and uses. The main users of the app repository are actual humans and this repository is dedicated to a specific application. The main users of the env repository are automated systems (such as Cloud Build), and this repository might be shared by several applications. The env repository can have several branches that each map to a specific environment (you only use production in this tutorial) and reference a specific container image, whereas the app repository does not.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_it_works_push_based_vs_pull_based_deployments">How it works (Push-based vs. Pull-based Deployments)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are two ways to implement the deployment strategy for GitOps: Push-based and Pull-based deployments. The difference between the two deployment types is how it is ensured, that the deployment environment actually resembles the desired infrastructure. When possible, the Pull-based approach should be preferred as it is considered the more secure and thus better practice to implement GitOps.</p>
+</div>
+<div class="sect2">
+<h3 id="_push_based_deployments">Push-based Deployments</h3>
+<div class="paragraph">
+<p>The Push-based deployment strategy is implemented by popular CI/CD tools such as Jenkins, CircleCI, or Travis CI. The source code of the application lives inside the application repository along with the Kubernetes YAMLs needed to deploy the app. Whenever the application code is updated, the build pipeline is triggered, which builds the container images and finally the environment configuration repository is updated with new deployment descriptors.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can also just store templates of the YAMLs in the application repository. When a new version is built, the template can be used to generate the YAML in the environment configuration repository.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/deployment-strategy-push.png" alt="deployment strategy push">
+</div>
+</div>
+<div class="paragraph">
+<p>Changes to the environment configuration repository trigger the deployment pipeline. This pipeline is responsible for applying all manifests in the environment configuration repository to the infrastructure. With this approach it is indispensable to provide credentials to the deployment environment. So the pipeline has god-mode enabled. In some use cases a Push-based deployment is inevitable when running an automated provisioning of cloud infrastructure. In such cases it is strongly recommended utilizing the fine-granular configurable authorization system of the cloud provider for more restrictive deployment permissions.</p>
+</div>
+<div class="paragraph">
+<p>Another important thing to keep in mind when using this approach is that the deployment pipeline only is triggered when the environment repository changes. It can not automatically notice any deviations of the environment and its desired state. This means, it needs some way of monitoring in place, so that one can intervene if the environment doesn’t match what is described in the environment repository.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pull_based_deployments">Pull-based Deployments</h3>
+<div class="paragraph">
+<p>The Pull-based deployment strategy uses the same concepts as the push-based variant but differs in how the deployment pipeline works. Traditional CI/CD pipelines are triggered by an external event, for example when new code is pushed to an application repository. With the pull-based deployment approach, the <em>operator</em> is introduced. It takes over the role of the pipeline by continuously comparing the desired state in the environment repository with the actual state in the deployed infrastructure. Whenever differences are noticed, the operator updates the infrastructure to match the environment repository. Additionally the image registry can be monitored to find new versions of images to deploy.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/deployment-strategy-pull.png" alt="deployment strategy pull">
+</div>
+</div>
+<div class="paragraph">
+<p>Just like the push-based deployment, this variant updates the environment whenever the environment repository changes. However, with the operator, changes can also be noticed in the other direction. Whenever the deployed infrastructure changes in any way not described in the environment repository, these changes are reverted. This ensures that all changes are made traceable in the Git log, by making all direct changes to the cluster impossible.</p>
+</div>
+<div class="paragraph">
+<p>This change in direction solves the problem of push-based deployments, where the environment is only updated when the environment repository is updated. However, this doesn’t mean you can completely do without any monitoring in place. Most operators support sending mails or Slack notifications if it can not bring the environment to the desired state for any reason, for example if it can not pull a container image. Additionally, you probably should set up monitoring for the operator itself, as there is no longer any automated deployment process without it.</p>
+</div>
+<div class="paragraph">
+<p>The operator should always live in the same environment or cluster as the application to deploy. This prevents the god-mode, seen with the push-based approach, where credentials for doing deployments are known by the CI/CD pipeline. When the actual deploying instance lives inside the very same environment, no credentials need to be known by external services. The Authorization mechanism of the deployment platform in use can be utilized to restrict the permissions on performing deployments. This has a huge impact in terms of security. When using Kubernetes, RBAC configurations and service accounts can be utilized.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_examplesuse_cases">Examples/Use cases</h3>
+<div class="sect3">
+<h4 id="_push_based_deployments_2">Push based deployments</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://cloud.google.com/kubernetes-engine/docs/tutorials/gitops-cloud-build">Push-based deployments with their Cloud Builds and GKE</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_pull_based_deployments_2">Pull based deployments</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.gitops.tech/tutorial.html">Tutorial about setting up Pull-based GitOps on Google’s GKE with WeaveWorks Flux</a></p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/google_gitops-tutorial-pipeline-flow.svg" alt="google gitops tutorial pipeline flow">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

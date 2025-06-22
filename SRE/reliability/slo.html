@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>SLO</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>SLO</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_basics">Basics</a>
+<ul class="sectlevel2">
+<li><a href="#_what_to_measure_using_slis">What to Measure: Using SLIs</a></li>
+<li><a href="#_maturity_level_slo">Maturity Level (SLO)</a></li>
+<li><a href="#_error_budget_based_approach">error budget-based approach</a></li>
+</ul>
+</li>
+<li><a href="#_creating_first_set_of_slos">Creating first set of SLOs</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="exampleblock">
+<div class="title">Example 1. Readings</div>
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://sre.google/sre-book/service-level-objectives/">Chapter 4 Service Level Objectives, Google SRE Handbook</a></p>
+</li>
+<li>
+<p><a href="https://sre.google/workbook/implementing-slos/">Implementing SLOs, Google SRE workbook</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basics">Basics</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_to_measure_using_slis">What to Measure: Using SLIs</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>What to Measure: Using SLIs</p>
+</div>
+<div class="paragraph">
+<p>Once you agree that 100% is the wrong number, how do you determine the right number? And what are you measuring, anyway? Here, service level indicators come into play: an SLI is an indicator of the level of service that you are providing.</p>
+</div>
+<div class="paragraph">
+<p>While many numbers can function as an SLI, we generally recommend treating the SLI as the ratio of two numbers: the number of good events divided by the total number of events. For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of successful HTTP requests / total HTTP requests (success rate)</p>
+</li>
+<li>
+<p>Number of gRPC calls that completed successfully in &lt; 100 ms / total gRPC requests</p>
+</li>
+<li>
+<p>Number of search results that used the entire corpus / total number of search results, including those that degraded gracefully</p>
+</li>
+<li>
+<p>Number of “stock check count” requests from product searches that used stock data fresher than 10 minutes / total number of stock check requests</p>
+</li>
+<li>
+<p>Number of “good user minutes” according to some extended list of criteria for that metric / total number of user minutes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SLIs of this form have a couple of particularly useful properties. The SLI ranges from 0% to 100%, where 0% means nothing works, and 100% means nothing is broken. We have found this scale intuitive, and this style lends itself easily to the concept of an error budget: the SLO is a target percentage and the error budget is 100% minus the SLO. For example, if you have a 99.9% success ratio SLO, then a service that receives 3 million requests over a four-week period had a budget of 3,000 (0.1%) errors over that period. If a single outage is responsible for 1,500 errors, that error costs 50% of the error budget.4</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Implementing SLOs<br>
+<cite>SRE Workbook</cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_maturity_level_slo">Maturity Level (SLO)</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Your system’s maturity level might be one of the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A greenfield development, with nothing currently deployed</p>
+</li>
+<li>
+<p>A system in production with some monitoring to notify you when things go awry, but no formal objectives, no concept of an error budget, and an unspoken goal of 100% uptime</p>
+</li>
+<li>
+<p>A running deployment with an SLO below 100%, but without a common understanding about its importance or how to leverage it to make continuous improvement choices—in other words, an SLO without teeth</p>
+</li>
+</ul>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Implementing SLOs<br>
+<cite>SRE Workbook</cite>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Application Maturity Level</th>
+<th class="tableblock halign-left valign-top">Monitoring</th>
+<th class="tableblock halign-left valign-top">Service Level Objectives (SLO)</th>
+<th class="tableblock halign-left valign-top">Value Created</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Level 0 - Greenfield</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NO</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Level 1 - Basic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Some monitoring in place</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No formal objectives</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NO</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Level 2 - Medium</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitoring in place</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">YES</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. No common understanding about how to leverage it to make continuous improvement choices</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Level 3 - Advanced (Mature)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Appropriate monitoring in place</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">YES with feasible objectives aligned</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">YES. Used for decision-making and prioritizing</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_error_budget_based_approach">error budget-based approach</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>In order to adopt an error budget-based approach to Site Reliability Engineering, you need to reach a state where the following hold true:</p>
+</div>
+<div class="paragraph">
+<p>There are SLOs that all stakeholders in the organization have approved as being fit for the product.
+The people responsible for ensuring that the service meets its SLO have agreed that it is possible to meet this SLO under normal circumstances.
+The organization has committed to using the error budget for decision making and prioritizing. This commitment is formalized in an error budget policy.
+There is a process in place for refining the SLO.
+Otherwise, you won’t be able to adopt an error budget–based approach to reliability. SLO compliance will simply be another KPI (key performance indicator) or reporting metric, rather than a decision-making tool.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Implementing SLOs<br>
+<cite>SRE Workbook</cite>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_first_set_of_slos">Creating first set of SLOs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create your first set of SLOs, you need to decide upon a few key SLI specifications that matter to your service. <strong>Availability</strong> and <strong>latency</strong> SLOs are pretty common; <strong>freshness, durability, correctness, quality, and coverage</strong> SLOs also have their place (we’ll talk more about those later).</p>
+</div>
+<div class="paragraph">
+<p>If you are having trouble figuring out what sort of SLIs to start with, it helps to start simple:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Choose one application for which you want to define SLOs. If your product comprises many applications, you can add those later.</p>
+</li>
+<li>
+<p>Decide clearly who the “users” are in this situation. These are the people whose happiness you are optimizing.</p>
+</li>
+<li>
+<p>Consider the common ways your users interact with your system—common tasks and critical activities.</p>
+</li>
+<li>
+<p>Draw a high-level architecture diagram of your system; show the key components, the request flow, the data flow, and the critical dependencies. Group these components into categories listed in the following section (there may be some overlap and ambiguity; use your intuition and don’t let perfect be the enemy of the good).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You should think carefully about exactly what you select as your SLIs, but you also shouldn’t overcomplicate things. Especially if you’re just starting your SLI journey, pick an aspect of your system that’s relevant but easy to measure—you can always iterate and refine later.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

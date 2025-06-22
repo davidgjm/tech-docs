@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Design for evolution</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Design for evolution</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_an_evolutionary_design_is_key_for_continuous_innovation">An evolutionary design is key for continuous innovation</a></li>
+<li><a href="#_recommendations">Recommendations</a>
+<ul class="sectlevel2">
+<li><a href="#_enforce_high_cohesion_and_loose_coupling">Enforce high cohesion and loose coupling.</a></li>
+<li><a href="#_encapsulate_domain_knowledge">Encapsulate domain knowledge.</a></li>
+<li><a href="#_use_asynchronous_messaging">Use asynchronous messaging.</a></li>
+<li><a href="#_dont_build_domain_knowledge_into_a_gateway">Don&#8217;t build domain knowledge into a gateway.</a></li>
+<li><a href="#_expose_open_interfaces_avoid_creating_custom_translation_layers_that_sit_between_services">Expose open interfaces. Avoid creating custom translation layers that sit between services.</a></li>
+<li><a href="#_design_and_test_against_service_contracts">Design and test against service contracts.</a></li>
+</ul>
+</li>
+<li><a href="#_abstract_infrastructure_away_from_domain_logic">Abstract infrastructure away from domain logic.</a>
+<ul class="sectlevel2">
+<li><a href="#_offload_cross_cutting_concerns_to_a_separate_service">Offload cross-cutting concerns to a separate service.</a></li>
+<li><a href="#_deploy_services_independently">Deploy services independently.</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>References:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/design-for-evolution" class="bare">https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/design-for-evolution</a>
+-</p>
+</li>
+</ul>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Design principals for Azure Applications</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_an_evolutionary_design_is_key_for_continuous_innovation">An evolutionary design is key for continuous innovation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All successful applications change over time, whether to fix bugs, add new features, bring in new technologies, or make existing systems more scalable and resilient. If all the parts of an application are tightly coupled, it becomes very hard to introduce changes into the system. A change in one part of the application may break another part, or cause changes to ripple through the entire codebase.</p>
+</div>
+<div class="paragraph">
+<p>This problem is not limited to monolithic applications. An application can be decomposed into services, but still exhibit the sort of tight coupling that leaves the system rigid and brittle. But when services are designed to evolve, teams can innovate and continuously deliver new features.</p>
+</div>
+<div class="paragraph">
+<p>Microservices are becoming a popular way to achieve an evolutionary design, because they address many of the considerations listed here.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recommendations">Recommendations</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_enforce_high_cohesion_and_loose_coupling">Enforce high cohesion and loose coupling.</h3>
+<div class="paragraph">
+<p>A service is cohesive if it provides functionality that logically belongs together. Services are loosely coupled if you can change one service without changing the other. High cohesion generally means that changes in one function will require changes in other related functions. If you find that updating a service requires coordinated updates to other services, it may be a sign that your services are not cohesive. One of the goals of domain-driven design (DDD) is to identify those boundaries.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_encapsulate_domain_knowledge">Encapsulate domain knowledge.</h3>
+<div class="paragraph">
+<p>When a client consumes a service, the responsibility for enforcing the business rules of the domain should not fall on the client. Instead, the service should encapsulate all of the domain knowledge that falls under its responsibility. Otherwise, every client has to enforce the business rules, and you end up with domain knowledge spread across different parts of the application.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_asynchronous_messaging">Use asynchronous messaging.</h3>
+<div class="paragraph">
+<p>Asynchronous messaging is a way to decouple the message producer from the consumer. The producer does not depend on the consumer responding to the message or taking any particular action. With a pub/sub architecture, the producer may not even know who is consuming the message. New services can easily consume the messages without any modifications to the producer.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dont_build_domain_knowledge_into_a_gateway">Don&#8217;t build domain knowledge into a gateway.</h3>
+<div class="paragraph">
+<p>Gateways can be useful in a microservices architecture, for things like request routing, protocol translation, load balancing, or authentication. However, the gateway should be restricted to this sort of infrastructure functionality. It should not implement any domain knowledge, to avoid becoming a heavy dependency.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_expose_open_interfaces_avoid_creating_custom_translation_layers_that_sit_between_services">Expose open interfaces. Avoid creating custom translation layers that sit between services.</h3>
+<div class="paragraph">
+<p>Instead, a service should expose an API with a well-defined API contract. The API should be versioned, so that you can evolve the API while maintaining backward compatibility. That way, you can update a service without coordinating updates to all of the upstream services that depend on it. Public facing services should expose a RESTful API over HTTP. Backend services might use an RPC-style messaging protocol for performance reasons.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_design_and_test_against_service_contracts">Design and test against service contracts.</h3>
+<div class="paragraph">
+<p>When services expose well-defined APIs, you can develop and test against those APIs. That way, you can develop and test an individual service without spinning up all of its dependent services. (Of course, you would still perform integration and load testing against the real services.)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_abstract_infrastructure_away_from_domain_logic">Abstract infrastructure away from domain logic.</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Don&#8217;t let domain logic get mixed up with infrastructure-related functionality, such as messaging or persistence. Otherwise, changes in the domain logic will require updates to the infrastructure layers and vice versa.</p>
+</div>
+<div class="sect2">
+<h3 id="_offload_cross_cutting_concerns_to_a_separate_service">Offload cross-cutting concerns to a separate service.</h3>
+<div class="paragraph">
+<p>For example, if several services need to authenticate requests, you could move this functionality into its own service. Then you could evolve the authentication service — for example, by adding a new authentication flow — without touching any of the services that use it.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deploy_services_independently">Deploy services independently.</h3>
+<div class="paragraph">
+<p>When the DevOps team can deploy a single service independently of other services in the application, updates can happen more quickly and safely. Bug fixes and new features can be rolled out at a more regular cadence. Design both the application and the release process to support independent updates.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

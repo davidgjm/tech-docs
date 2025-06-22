@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>DNS Record Types</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>DNS Record Types</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_common_record_types">Common Record Types</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="exampleblock">
+<div class="title">Example 1. References</div>
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/List_of_DNS_record_types">List of DNS record types</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_record_types">Common Record Types</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 45%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Defining RFC</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>A</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RFC 1035</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Address record</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns a 32-bit IPv4 address, most commonly used to map hostnames to an IP address of the host, but it is also used for DNSBLs, storing subnet masks in RFC 1101, etc.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AAAA</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RFC 3596</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IPv6 address record</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns a 128-bit IPv6 address, most commonly used to map hostnames to an IP address of the host.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CNAME</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RFC 1035</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Canonical name record</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alias of one name to another: the DNS lookup will continue by retrying the lookup with the new name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RFC 1035</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name server record</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delegates a DNS zone to use the given authoritative name servers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SRV</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RFC 2782</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service locator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generalized service location record, used for newer protocols instead of creating protocol-specific records such as MX.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

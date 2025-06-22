@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Gradle Tips &amp; Tricks</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Gradle Tips &amp; Tricks</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_settings_at_environment_level_current_user">Settings at environment level (current user)</a></li>
+<li><a href="#_gradle_user_and_project_settings">Gradle user and project settings</a>
+<ul class="sectlevel2">
+<li><a href="#_project_settings">Project Settings</a></li>
+<li><a href="#_initialization_scripts_init_scripts">Initialization Scripts (init scripts)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_settings_at_environment_level_current_user">Settings at environment level (current user)</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gradle_user_and_project_settings">Gradle user and project settings</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_project_settings">Project Settings</h3>
+<div class="sect3">
+<h4 id="_using_multi_level_hierachical_projects_modules">Using multi-level (hierachical) projects (modules)</h4>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Use <code>:</code> as separator for directories.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">include 'project1', 'project2:child', 'project3:child1'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the settings file you can use the <code>include</code> method to build the project tree.
+The <code>include</code> method takes project paths as arguments. The project path is assumed to be equal to the relative physical file system path. For example, a path 'services:api' is mapped by default to a folder 'services/api' (relative from the project root). You only need to specify the leaves of the tree. This means that the inclusion of the path 'services:hotels:api' will result in creating 3 projects: 'services', 'services:hotels' and 'services:hotels:api'. More examples of how to work with the project path can be found in the DSL documentation of <a href="https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html#org.gradle.api.initialization.Settings:include(java.lang.String%5B%5D)">Settings.include(java.lang.String[</a>]).</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_initialization_scripts_init_scripts">Initialization Scripts (init scripts)</h3>
+<div class="sect3">
+<h4 id="_references">References</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.gradle.org/current/userguide/init_scripts.html">Initialization Scripts</a></p>
+</li>
+<li>
+<p><a href="https://rahulsom.github.io/blog/2016/gradle-equivalent-of-maven-mirror.html">Gradle Equivalent of Maven Mirror</a></p>
+</li>
+<li>
+<p><a href="https://docs.gradle.org/current/userguide/declaring_repositories.html#sec:declaring_multiple_repositories">Declaring multiple repositories</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_basics">Basics</h4>
+<div class="sect4">
+<h5 id="_using_an_init_script">Using an init script</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Put a file called <code>init.gradle</code> (or <code>init.gradle.kts</code> for Kotlin) in the <code>USER_HOME/.gradle/</code> directory.</p>
+</li>
+<li>
+<p>Put a file that ends with <code>.gradle</code> (or <code>.init.gradle.kts</code> for Kotlin) in the <code>USER_HOME/.gradle/init.d/</code> directory.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If more than one init script is found they will all be executed, in the order specified above. Scripts in a given directory are executed in alphabetical order. This allows, for example, a tool to specify an init script on the command line and the user to put one in their home directory for defining the environment and both scripts will run when Gradle is executed.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_maven_mirrors">Using Maven Mirrors</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The order of declaration determines how Gradle will check for dependencies at runtime. If Gradle finds a module descriptor in a particular repository, it will attempt to download all of the artifacts for that module from the same repository. You can learn more about the inner workings of <a href="https://docs.gradle.org/current/userguide/dependency_resolution.html#sec:how-gradle-downloads-deps">dependency downloads</a>.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Gradle: Declaring multiple repositories
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">allprojects {         <b class="conum">(1)</b>
+  buildscript {       <b class="conum">(2)</b>
+    repositories {    <b class="conum">(3)</b>
+      mavenLocal()
+      maven { url "http://repo.internal.example.com/releases" } <b class="conum">(4)</b>
+    }
+  }
+  repositories {      <b class="conum">(5)</b>
+    mavenLocal()
+    maven { url "http://repo.internal.example.com/releases" }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>This says we want to apply to all projects on this machine.</p>
+</li>
+<li>
+<p>This says you want to modify the build script dependencies too. This will make gradle plugins and build dependencies also use your mirror.</p>
+</li>
+<li>
+<p>This says to look in maven local first. That&#8217;s typically your <code>$USER_HOME/.m2/repository</code> directory.</p>
+</li>
+<li>
+<p>This says to look at your maven mirror next if the artifact could not be found.</p>
+</li>
+<li>
+<p>This says to do the same set of changes for non-build dependencies of your gradle projects.</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_concret_example">Concret example</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">allprojects {
+    buildscript {
+        repositories {
+            mavenLocal()
+            maven { 
+                name 'aliyun-public'
+                url 'https://maven.aliyun.com/repository/public/'
+            }
+            maven { 
+                name 'aliyun-spring'
+                url 'https://maven.aliyun.com/repository/spring/'
+            }
+            mavenCentral()
+            maven { 
+                name "spring-snapshot"
+                url "https://repo.spring.io/snapshot"
+            }
+            maven {
+                name "spring-milestone"
+                url "https://repo.spring.io/milestone" 
+            }
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven { 
+            name 'aliyun-public'
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        maven { 
+            name 'aliyun-spring'
+            url 'https://maven.aliyun.com/repository/spring/'
+        }
+        mavenCentral()
+        maven { 
+            name "spring-snapshot"
+            url "https://repo.spring.io/snapshot"
+        }
+        maven {
+            name "spring-milestone"
+            url "https://repo.spring.io/milestone" 
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

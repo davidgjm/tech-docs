@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>jq</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>jq</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_cheatsheet">Cheatsheet</a>
+<ul class="sectlevel2">
+<li><a href="#_json_arrays">JSON arrays</a></li>
+<li><a href="#_sum_values_in_an_array">Sum values in an array</a></li>
+<li><a href="#_filter_by_property_in_object_array">Filter by property in object array</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><span class="icon"><i class="fa fa-book"></i></span> jq references</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://stedolan.github.io/jq/">jq web site</a></p>
+</li>
+<li>
+<p><a href="https://maas.io/blog/improving-cli-output-with-jq">Improving CLI output with jq</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cheatsheet">Cheatsheet</h2>
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">External sources</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://gist.github.com/olih/f7437fb6962fb3ee9fe95bda8d2c8fa4">Processing JSON using jq</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_arrays">JSON arrays</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 70%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Command</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query by attribute name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>az account list-locations | jq -r ".[].name"</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_data_types">data types</h4>
+<div class="paragraph">
+<p>with type been arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_slicing_and_filtering">Slicing and Filtering</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 70%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Command</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq .[]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">First</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq '.[0]'</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Range</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq '.[2:4]'</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">First 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq '.[:3]'</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Last 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq '.[-2:]'</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Before Last</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq '.[-2]'</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select array of int by value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq 'map(select(. &gt;= 2))'</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select array of objects by array item property value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>jq '.[] &#124; select(.id == "second")'</code></code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select by type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jq '.[] &#124; numbers'</code> <sup>*</sup></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List Azure role assignments with principalType == <code>Group</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>az role assignment list --all | jq '[.[]|select(.principalType == "Group")]'</code></code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Filter a property of object array by array item value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">`cat assignments-china.json| jq '[.assignments[</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_filtering_an_array_property_by_item_value">Filtering an array property by item value</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_given_json">Given json</h5>
+<div class="paragraph">
+<p>The command below filters values whose <code>identityType=="Group"</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cat </span>assignments.json| jq <span class="s1">'[.assignments[]|select(.identityType=="Group") ]'</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"assignments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"azure-tenant-admin"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"identityType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Group"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Contributor"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tenant root"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"assignment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PIM"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345688asdf32"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"identityType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ServicePrincipal"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Contributor"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Contosoo-root"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"assignment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RBAC"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"finops"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"identityType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Group"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cost Management Contributor"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Contosoo-root"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"assignment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RBAC"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_output">Output</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"azure-tenant-admin"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"identityType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Group"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Contributor"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tenant root"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"assignment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PIM"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"finops"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"identityType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Group"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cost Management Contributor"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Contosoo-root"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"assignment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RBAC"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sum_values_in_an_array">Sum values in an array</h3>
+<div class="paragraph">
+<p>To sum all values in <code>issueCount</code> field in the following json example, run the jq command below</p>
+</div>
+<div class="sect3">
+<h4 id="_expression">Expression</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="o">[</span>.records[].issueCount]|add</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_input">Input</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">195</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalPages"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"page"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">195</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sb1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cnp0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"records"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"resultCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"issueCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">39</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"commentCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"team"</span><span class="p">:</span><span class="w"> </span><span class="s2">"accounts-identity,cnc,cv-platform,historical,platform-usage,streams,ui"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aba-swap-detector"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"resultCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"issueCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"commentCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"team"</span><span class="p">:</span><span class="w"> </span><span class="s2">"canis-minor"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account-service"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"resultCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"issueCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"commentCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"team"</span><span class="p">:</span><span class="w"> </span><span class="s2">"accounts-identity"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"assets-account-consistency-monitor"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"resultCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"issueCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"commentCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"team"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inventory"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"assets-cache-consistency-monitor"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"resultCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"issueCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"commentCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"team"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inventory"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"assets-cache-writer"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"resultCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"issueCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"commentCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"team"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inventory"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_output_2">Output</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>57</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_filter_by_property_in_object_array">Filter by property in object array</h3>
+<div class="paragraph">
+<p>Gets a list of strings from a property from a subset of an object array.</p>
+</div>
+<div class="sect3">
+<h4 id="_expression_2">Expression</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">.value[]|select<span class="o">(</span>.mail <span class="o">!=</span>null<span class="o">)</span>|.userPrincipalName|rtrimstr<span class="o">(</span><span class="s2">"@example.com"</span><span class="o">)</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_input_2">Input</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+	</span><span class="nl">"@odata.context"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://microsoftgraph.chinacloudapi.cn/v1.0/$metadata#users(id,userPrincipalName,displayName,accountEnabled,appId,mail,onPremisesSyncEnabled,deviceId)"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"@odata.count"</span><span class="p">:</span><span class="w"> </span><span class="mi">292</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+		</span><span class="p">{</span><span class="w">
+			</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00d2896d-1cf1-4aa5-8288-55164a29a0a2"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"userPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FZPY74@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lulu Olson"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"accountEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"mail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FZPY74@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"onPremisesSyncEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+		</span><span class="p">{</span><span class="w">
+			</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"016c5530-1cfb-4d8d-9eb3-b67896f72cbe"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"userPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NZJFV1@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Franklin McGee"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"accountEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"mail"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"onPremisesSyncEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+		</span><span class="p">{</span><span class="w">
+			</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"017f6ae3-c7f1-4fb7-8050-8f88097b2b7b"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"userPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NZ8P8N@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Agnes Gill"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"accountEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"mail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NZ8P8N@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"onPremisesSyncEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+		</span><span class="p">{</span><span class="w">
+			</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01d1566f-d4ef-433a-8480-d7272d640e41"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"userPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NZD0L1@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cecelia Casey"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"accountEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"mail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NZD0L1@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"onPremisesSyncEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+		</span><span class="p">{</span><span class="w">
+			</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"03180156-9719-4950-baef-4e2baa679f10"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"userPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RZGF6Q@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cameron Norris"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"accountEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"mail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RZGF6Q@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"onPremisesSyncEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+		</span><span class="p">{</span><span class="w">
+			</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"03fbe4ba-b87c-47d6-bd32-28f00d29f7ff"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"userPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BZHQ0G@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rex Flores"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"accountEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"mail"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"onPremisesSyncEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+		</span><span class="p">{</span><span class="w">
+			</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"05e44699-3292-4bef-a4f1-636c1fa991e4"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"userPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"KZ51WZ@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Leila Bailey"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"accountEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"mail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"KZ51WZ@example.com"</span><span class="p">,</span><span class="w">
+			</span><span class="nl">"onPremisesSyncEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+		</span><span class="p">}</span><span class="w">
+	</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_output_3">Output</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="s2">"FZPY74"</span>
+<span class="s2">"NZ8P8N"</span>
+<span class="s2">"NZD0L1"</span>
+<span class="s2">"RZGF6Q"</span>
+<span class="s2">"KZ51WZ"</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

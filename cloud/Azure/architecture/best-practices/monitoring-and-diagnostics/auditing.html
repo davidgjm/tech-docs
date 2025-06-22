@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Auditing</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Auditing</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_requirements_for_auditing">Requirements for auditing</a></li>
+<li><a href="#_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</a></li>
+<li><a href="#_analyzing_audit_data">Analyzing audit data</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Depending on the nature of the application, there might be statutory or other legal regulations that specify requirements for auditing users' operations and recording all data access. Auditing can provide evidence that links customers to specific requests. Nonrepudiation is an important factor in many e-business systems to help maintain trust be between a customer and the organization that&#8217;s responsible for the application or service.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements_for_auditing">Requirements for auditing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An analyst must be able to trace the sequence of business operations that users are performing so that you can reconstruct users' actions. This might be necessary simply as a matter of record, or as part of a forensic investigation.</p>
+</div>
+<div class="paragraph">
+<p>Audit information is highly sensitive. It will likely include data that identifies the users of the system, together with the tasks that they&#8217;re performing. For this reason, audit information will most likely take the form of reports that are available only to trusted analysts rather than as an interactive system that supports drill-down of graphical operations. An analyst should be able to generate a range of reports. For example, reports might list all users' activities occurring during a specified time frame, detail the chronology of activity for a single user, or list the sequence of operations performed against one or more resources.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The primary sources of information for auditing can include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The security system that manages user authentication.</p>
+</li>
+<li>
+<p>Trace logs that record user activity.</p>
+</li>
+<li>
+<p>Security logs that track all identifiable and unidentifiable network requests.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The format of the audit data and the way in which it&#8217;s stored might be driven by regulatory requirements. For example, it might not be possible to clean the data in any way. (It must be recorded in its original format.) Access to the repository where it&#8217;s held must be protected to prevent tampering.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzing_audit_data">Analyzing audit data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An analyst must be able to access the raw data in its entirety, in its original form. Aside from the requirement to generate common audit reports, the tools for analyzing this data are likely to be specialized and kept external to the system.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

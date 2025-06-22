@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Pipes and Filters pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Pipes and Filters pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to use this pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_next_steps">Next steps</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Decompose a task that performs complex processing into a series of separate elements that can be reused. This can improve performance, scalability, and reusability by allowing task elements that perform the processing to be deployed and scaled independently.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An application is required to perform a variety of tasks of varying complexity on the information that it processes. A straightforward but inflexible approach to implementing an application is to perform this processing as a monolithic module. However, this approach is likely to reduce the opportunities for refactoring the code, optimizing it, or reusing it if parts of the same processing are required elsewhere within the application.</p>
+</div>
+<div class="paragraph">
+<p>The figure illustrates the issues with processing data using the monolithic approach. An application receives and processes data from two sources. The data from each source is processed by a separate module that performs a series of tasks to transform this data, before passing the result to the business logic of the application.</p>
+</div>
+<div id="img-pipes_modules" class="imageblock">
+<div class="content">
+<img src="./images/pipes-and-filters-modules.png" alt="pipes and filters modules">
+</div>
+<div class="title">Figure 1. processing data using the monolithic approach.</div>
+</div>
+<div class="paragraph">
+<p>Some of the tasks that the monolithic modules perform are functionally very similar, but the modules have been designed separately. The code that implements the tasks is closely coupled in a module, and has been developed with little or no thought given to reuse or scalability.</p>
+</div>
+<div class="paragraph">
+<p>However, the processing tasks performed by each module, or the deployment requirements for each task, could change as business requirements are updated. Some tasks might be compute intensive and could benefit from running on powerful hardware, while others might not require such expensive resources. Also, additional processing might be required in the future, or the order in which the tasks performed by the processing could change. A solution is required that addresses these issues, and increases the possibilities for code reuse.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Break down the processing required for each stream into a set of separate components (or filters), each performing a single task. By standardizing the format of the data that each component receives and sends, these filters can be combined together into a pipeline. This helps to avoid duplicating code, and makes it easy to remove, replace, or integrate additional components if the processing requirements change. The next figure shows a solution implemented using pipes and filters.</p>
+</div>
+<div id="img-pipes_solution" class="imageblock">
+<div class="content">
+<img src="./images/pipes-and-filters-solution.png" alt="pipes and filters solution">
+</div>
+<div class="title">Figure 2. solution implemented using pipes and filters</div>
+</div>
+<div class="paragraph">
+<p>The time it takes to process a single request depends on the speed of the slowest filter in the pipeline. One or more filters could be a bottleneck, especially if a large number of requests appear in a stream from a particular data source. A key advantage of the pipeline structure is that it provides opportunities for running parallel instances of slow filters, enabling the system to spread the load and improve throughput.</p>
+</div>
+<div class="paragraph">
+<p>The filters that make up a pipeline can run on different machines, enabling them to be scaled independently and take advantage of the elasticity that many cloud environments provide. A filter that is computationally intensive can run on high-performance hardware, while other less demanding filters can be hosted on less expensive commodity hardware. The filters don&#8217;t even have to be in the same datacenter or geographic location, which allows each element in a pipeline to run in an environment close to the resources it requires. The next figure shows an example applied to the pipeline for the data from Source 1.</p>
+</div>
+<div id="img-pipes_load_balancing" class="imageblock">
+<div class="content">
+<img src="./images/pipes-and-filters-load-balancing.png" alt="pipes and filters load balancing">
+</div>
+<div class="title">Figure 3. An example applied to the pipeline for the data from Source 1</div>
+</div>
+<div class="paragraph">
+<p>If the input and output of a filter are structured as a stream, it&#8217;s possible to perform the processing for each filter in parallel. The first filter in the pipeline can start its work and output its results, which are passed directly on to the next filter in the sequence before the first filter has completed its work.</p>
+</div>
+<div class="paragraph">
+<p>Another benefit is the resiliency that this model can provide. If a filter fails or the machine it&#8217;s running on is no longer available, the pipeline can reschedule the work that the filter was performing and direct this work to another instance of the component. Failure of a single filter doesn&#8217;t necessarily result in failure of the entire pipeline.</p>
+</div>
+<div class="paragraph">
+<p>Using the Pipes and Filters pattern in conjunction with the <a href="compensating-transaction.html">Compensating Transaction</a> pattern is an alternative approach to implementing distributed transactions. A distributed transaction can be broken down into separate, compensable tasks, each of which can be implemented by using a filter that also implements the Compensating Transaction pattern. The filters in a pipeline can be implemented as separate hosted tasks running close to the data that they maintain.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You should consider the following points when deciding how to implement this pattern:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Complexity.</dt>
+<dd>
+<p>The increased flexibility that this pattern provides can also introduce complexity, especially if the filters in a pipeline are distributed across different servers.</p>
+</dd>
+<dt class="hdlist1">Reliability.</dt>
+<dd>
+<p>Use an infrastructure that ensures that data flowing between filters in a pipeline won&#8217;t be lost.</p>
+</dd>
+<dt class="hdlist1">Idempotency.</dt>
+<dd>
+<p>If a filter in a pipeline fails after receiving a message and the work is rescheduled to another instance of the filter, part of the work might have already been completed. If this work updates some aspect of the global state (such as information stored in a database), the same update could be repeated. A similar issue might occur if a filter fails after posting its results to the next filter in the pipeline, but before indicating that it&#8217;s completed its work successfully. In these cases, the same work could be repeated by another instance of the filter, causing the same results to be posted twice. This could result in subsequent filters in the pipeline processing the same data twice. Therefore filters in a pipeline should be designed to be idempotent. For more information, see Idempotency Patterns on Jonathan Oliver&#8217;s blog.</p>
+</dd>
+<dt class="hdlist1">Repeated messages.</dt>
+<dd>
+<p>If a filter in a pipeline fails after posting a message to the next stage of the pipeline, another instance of the filter might be run, and it&#8217;ll post a copy of the same message to the pipeline. This could cause two instances of the same message to be passed to the next filter. To avoid this, the pipeline should detect and eliminate duplicate messages.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you&#8217;re implementing the pipeline by using message queues (such as Microsoft Azure Service Bus queues), the message queuing infrastructure might provide automatic duplicate message detection and removal.
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Context and state.</dt>
+<dd>
+<p>In a pipeline, each filter essentially runs in isolation and shouldn&#8217;t make any assumptions about how it was invoked. This means that each filter should be provided with sufficient context to perform its work. This context could include a large amount of state information.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to use this pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The processing required by an application can easily be broken down into a set of independent steps.</p>
+</li>
+<li>
+<p>The processing steps performed by an application have different scalability requirements.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It&#8217;s possible to group filters that should scale together in the same process. For more information, see the <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/compute-resource-consolidation">Compute Resource Consolidation pattern</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Flexibility is required to allow reordering of the processing steps performed by an application, or the capability to add and remove steps.</p>
+</li>
+<li>
+<p>The system can benefit from distributing the processing for steps across different servers.</p>
+</li>
+<li>
+<p>A reliable solution is required that minimizes the effects of failure in a step while data is being processed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern might <strong>not</strong> be useful when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The processing steps performed by an application aren&#8217;t independent, or they have to be performed together as part of the same transaction.</p>
+</li>
+<li>
+<p>The amount of context or state information required by a step makes this approach inefficient. It might be possible to persist state information to a database instead, but don&#8217;t use this strategy if the additional load on the database causes excessive contention.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use a sequence of message queues to provide the infrastructure required to implement a pipeline. An initial message queue receives unprocessed messages. A component implemented as a filter task listens for a message on this queue, performs its work, and then posts the transformed message to the next queue in the sequence. Another filter task can listen for messages on this queue, process them, post the results to another queue, and so on until the fully transformed data appears in the final message in the queue. The next figure illustrates implementing a pipeline using message queues.</p>
+</div>
+<div id="img-pipes_example" class="imageblock">
+<div class="content">
+<img src="./images/pipes-and-filters-message-queues.png" alt="pipes and filters message queues">
+</div>
+<div class="title">Figure 4. a pipeline using message queues</div>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re building a solution on Azure you can use Service Bus queues to provide a reliable and scalable queuing mechanism. The ServiceBusPipeFilter class shown below in C# demonstrates how you can implement a filter that receives input messages from a queue, processes these messages, and posts the results to another queue.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The <code>ServiceBusPipeFilter</code> class is defined in the PipesAndFilters.Shared project available from <a href="https://github.com/mspnp/cloud-design-patterns/tree/master/pipes-and-filters">GitHub</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">ServiceBusPipeFilter</span>
+<span class="p">{</span>
+  <span class="p">...</span>
+  <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">inQueuePath</span><span class="p">;</span>
+  <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">outQueuePath</span><span class="p">;</span>
+  <span class="p">...</span>
+  <span class="k">private</span> <span class="n">QueueClient</span> <span class="n">inQueue</span><span class="p">;</span>
+  <span class="k">private</span> <span class="n">QueueClient</span> <span class="n">outQueue</span><span class="p">;</span>
+  <span class="p">...</span>
+
+  <span class="k">public</span> <span class="nf">ServiceBusPipeFilter</span><span class="p">(...,</span> <span class="kt">string</span> <span class="n">inQueuePath</span><span class="p">,</span> <span class="kt">string</span> <span class="n">outQueuePath</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
+  <span class="p">{</span>
+     <span class="p">...</span>
+     <span class="k">this</span><span class="p">.</span><span class="n">inQueuePath</span> <span class="p">=</span> <span class="n">inQueuePath</span><span class="p">;</span>
+     <span class="k">this</span><span class="p">.</span><span class="n">outQueuePath</span> <span class="p">=</span> <span class="n">outQueuePath</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">public</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+  <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="c1">// Create the outbound filter queue if it doesn't exist.</span>
+    <span class="p">...</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">outQueue</span> <span class="p">=</span> <span class="n">QueueClient</span><span class="p">.</span><span class="nf">CreateFromConnectionString</span><span class="p">(...);</span>
+
+    <span class="p">...</span>
+    <span class="c1">// Create the inbound and outbound queue clients.</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">inQueue</span> <span class="p">=</span> <span class="n">QueueClient</span><span class="p">.</span><span class="nf">CreateFromConnectionString</span><span class="p">(...);</span>
+  <span class="p">}</span>
+
+  <span class="k">public</span> <span class="k">void</span> <span class="nf">OnPipeFilterMessageAsync</span><span class="p">(</span>
+    <span class="n">Func</span><span class="p">&lt;</span><span class="n">BrokeredMessage</span><span class="p">,</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">BrokeredMessage</span><span class="p">&gt;&gt;</span> <span class="n">asyncFilterTask</span><span class="p">,</span> <span class="p">...)</span>
+  <span class="p">{</span>
+    <span class="p">...</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="n">inQueue</span><span class="p">.</span><span class="nf">OnMessageAsync</span><span class="p">(</span>
+      <span class="k">async</span> <span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+      <span class="p">...</span>
+      <span class="c1">// Process the filter and send the output to the</span>
+      <span class="c1">// next queue in the pipeline.</span>
+      <span class="kt">var</span> <span class="n">outMessage</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">asyncFilterTask</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+
+      <span class="c1">// Send the message from the filter processor</span>
+      <span class="c1">// to the next queue in the pipeline.</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">outQueue</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">await</span> <span class="n">outQueue</span><span class="p">.</span><span class="nf">SendAsync</span><span class="p">(</span><span class="n">outMessage</span><span class="p">);</span>
+      <span class="p">}</span>
+
+      <span class="c1">// Note: There's a chance that the same message could be sent twice</span>
+      <span class="c1">// or that a message gets processed by an upstream or downstream</span>
+      <span class="c1">// filter at the same time.</span>
+      <span class="c1">// This would happen in a situation where processing of a message was</span>
+      <span class="c1">// completed, it was sent to the next pipe/queue, and then failed</span>
+      <span class="c1">// to complete when using the PeekLock method.</span>
+      <span class="c1">// Idempotent message processing and concurrency should be considered</span>
+      <span class="c1">// in a real-world implementation.</span>
+    <span class="p">},</span>
+    <span class="n">options</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span> <span class="nf">Close</span><span class="p">(</span><span class="n">TimeSpan</span> <span class="n">timespan</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="c1">// Pause the processing threads.</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">pauseProcessingEvent</span><span class="p">.</span><span class="nf">Reset</span><span class="p">();</span>
+
+    <span class="c1">// There's no clean approach for waiting for the threads to complete</span>
+    <span class="c1">// the processing. This example simply stops any new processing, waits</span>
+    <span class="c1">// for the existing thread to complete, then closes the message pump</span>
+    <span class="c1">// and finally returns.</span>
+    <span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="n">timespan</span><span class="p">);</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="n">inQueue</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
+    <span class="p">...</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Start</code> method in the <code>ServiceBusPipeFilter</code> class connects to a pair of input and output queues, and the <code>Close</code> method disconnects from the input queue. The <code>OnPipeFilterMessageAsync</code> method performs the actual processing of messages, the <code>asyncFilterTask</code> parameter to this method specifies the processing to be performed. The <code>OnPipeFilterMessageAsync</code> method waits for incoming messages on the input queue, runs the code specified by the <code>asyncFilterTask</code> parameter over each message as it arrives, and posts the results to the output queue. The queues themselves are specified by the constructor.</p>
+</div>
+<div class="paragraph">
+<p>The sample solution implements filters in a set of worker roles. Each worker role can be scaled independently, depending on the complexity of the business processing that it performs or the resources required for processing. Additionally, multiple instances of each worker role can be run in parallel to improve throughput.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps">Next steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following guidance might also be relevant when implementing this pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A sample that demonstrates this pattern is available on GitHub.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following patterns might also be relevant when implementing this pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="competing-consumers.html">Competing Consumers pattern</a>. A pipeline can contain multiple instances of one or more filters. This approach is useful for running parallel instances of slow filters, enabling the system to spread the load and improve throughput. Each instance of a filter will compete for input with the other instances, two instances of a filter shouldn&#8217;t be able to process the same data. Provides an explanation of this approach.</p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/compute-resource-consolidation">Compute Resource Consolidation pattern</a>. It might be possible to group filters that should scale together into the same process. Provides more information about the benefits and tradeoffs of this strategy.</p>
+</li>
+<li>
+<p><a href="compensating-transaction.html">Compensating Transaction pattern</a>. A filter can be implemented as an operation that can be reversed, or that has a compensating operation that restores the state to a previous version in the event of a failure. Explains how this can be implemented to maintain or achieve eventual consistency.</p>
+</li>
+<li>
+<p><a href="https://blog.jonathanoliver.com/idempotency-patterns/">Idempotency patterns</a> on Jonathan Oliver&#8217;s blog.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

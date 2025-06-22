@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OpenAPI Document Generation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OpenAPI Document Generation</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_swagger_ui">Swagger UI</a>
+<ul class="sectlevel2">
+<li><a href="#_the_docker_way">The <code>docker</code> way</a></li>
+<li><a href="#_github_pages">GitHub Pages</a></li>
+</ul>
+</li>
+<li><a href="#_openapi_generator">OpenAPI Generator</a>
+<ul class="sectlevel2">
+<li><a href="#_command_line">Command Line</a></li>
+<li><a href="#_gradle_plugin">Gradle Plugin</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_swagger_ui">Swagger UI</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_docker_way">The <code>docker</code> way</h3>
+<div class="paragraph">
+<p>You can host a Swagger UI mini site with Swagger-ui docker image by specifying your OpenAPI JSON/YAML either through mount volume (<code>SWAGGER_JSON</code>) or environment variable <code>SWAGGER_JSON_URL</code> for externally hosted file</p>
+</div>
+<div class="sect3">
+<h4 id="_specifying_files_on_host">Specifying files on host</h4>
+<div class="paragraph">
+<p>The following snippet mounts host directory <code>/Users/david/code/schemas</code> to docker volume <code>apis</code> and uses <code>openapi.yaml</code> in the directory as the default Swagger yaml file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">docker run -p 80:8000 --name openapi \
+ -e SWAGGER_JSON=/apis/openapi.yaml \
+ -v /Users/david/code/schemas:/apis \
+ swaggerapi/swagger-ui:v4.14.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_specifying_remote_files">Specifying remote files</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shellscript" data-lang="shellscript">docker run -p 80:8080 --name openapi \
+ -e SWAGGER_JSON_URL=https://foo.bar/openapi.yaml \
+swaggerapi/swagger-ui:v4.14.0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_github_pages">GitHub Pages</h3>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+GitHub Pages only support <code>public</code> or <code>internal</code> repositories.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The idea is to create an <code>index.html</code> page which contains Swagger UI js/css resources. In this file, you can define your OpenAPI file located in your repository.</p>
+</div>
+<div class="paragraph">
+<p>This method uses traditional GitHub Pages deployment process without using GitHub actions.</p>
+</div>
+<div class="sect3">
+<h4 id="_index_html"><code>index.html</code></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-html" data-lang="html">&lt;html&gt;
+    &lt;head&gt;
+        &lt;!-- Load the latest Swagger UI code and style from npm using unpkg.com --&gt;
+        &lt;script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"&gt;&lt;/script&gt;
+        &lt;link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css"/&gt;
+        &lt;title&gt;Environment Consistency API&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="swagger-ui"&gt;&lt;/div&gt; &lt;!-- Div to hold the UI component --&gt;
+        &lt;script&gt;
+            window.onload = function () {
+                // Begin Swagger UI call region
+                const ui = SwaggerUIBundle({
+                    url: "postman/schemas/openapi.yaml", //Location of Open API spec in the repo
+                    dom_id: '#swagger-ui',
+                    deepLinking: true,
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIBundle.SwaggerUIStandalonePreset
+                    ],
+                    plugins: [
+                        SwaggerUIBundle.plugins.DownloadUrl
+                    ],
+                })
+                window.ui = ui
+            }
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_openapi_generator"><a href="https://github.com/OpenAPITools/openapi-generator">OpenAPI Generator</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_command_line">Command Line</h3>
+<div class="sect3">
+<h4 id="_install_the_command_line">Install the command line</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">MacOS</dt>
+<dd>
+<p><code>brew install openapi-generator</code></p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_generate_html2_and_asciidoc">Generate HTML2 and asciidoc</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">HTML2</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">openapi-generator generate -i openapi.yaml -g html2</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">asciidoc</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">openapi-generator generate -i openapi.yaml -g asciidoc</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gradle_plugin">Gradle Plugin</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">plugins {
+  id "org.openapi.generator" version "6.0.1"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See more documentation at <a href="https://github.com/OpenAPITools/openapi-generator/blob/v6.0.1/modules/openapi-generator-gradle-plugin/README.adoc">OpenAPI Generator Gradle Plugin</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

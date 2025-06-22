@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Operating model</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Operating model</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_operating_model_2_by_2_representations">Operating model 2 by 2 representations</a>
+<ul class="sectlevel2">
+<li><a href="#_fully_separated_operating_model">Fully separated operating model</a></li>
+<li><a href="#_separated_application_engineering_and_operations_aeo_and_infrastructure_engineering_and_operations_ieo_with_centralized_governance">Separated Application Engineering and Operations (AEO) and Infrastructure Engineering and Operations (IEO) with centralized governance</a></li>
+<li><a href="#_separated_aeo_and_ieo_with_centralized_governance_and_a_service_provider">Separated AEO and IEO with centralized governance and a service provider</a></li>
+<li><a href="#_separated_aeo_and_ieo_with_centralized_governance_and_an_internal_service_provider_consulting_partner">Separated AEO and IEO with centralized governance and an internal service provider consulting partner</a></li>
+</ul>
+</li>
+<li><a href="#_relationships_and_ownership">Relationships and ownership</a>
+<ul class="sectlevel2">
+<li><a href="#_ops02_bp01_resources_have_identified_owners">OPS02-BP01 Resources have identified owners</a></li>
+<li><a href="#_ops02_bp02_processes_and_procedures_have_identified_owners">OPS02-BP02 Processes and procedures have identified owners</a></li>
+<li><a href="#_ops02_bp03_operations_activities_have_identified_owners_responsible_for_their_performance">OPS02-BP03 Operations activities have identified owners responsible for their performance</a></li>
+<li><a href="#_ops02_bp04_team_members_know_what_they_are_responsible_for">OPS02-BP04 Team members know what they are responsible for</a></li>
+<li><a href="#_ops02_bp05_mechanisms_exist_to_identify_responsibility_and_ownership">OPS02-BP05 Mechanisms exist to identify responsibility and ownership</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Your teams must understand their part in achieving business outcomes. Teams need to understand their roles in the success of other teams, the role of other teams in their success, and have shared goals. Understanding responsibility, ownership, how decisions are made, and who has authority to make decisions will help focus efforts and maximize the benefits from your teams.</p>
+</div>
+<div class="paragraph">
+<p>The needs of a team will be shaped by their industry, their organization, the makeup of the team, and the characteristics of their workload. It is unreasonable to expect a single operating model to be able to support all teams and their workloads.</p>
+</div>
+<div class="paragraph">
+<p>The number of operating models present in an organization is likely to increase with the number of development teams. You may need to use a combination of operating models.</p>
+</div>
+<div class="paragraph">
+<p>Adopting standards and consuming services can simplify operations and limit the support burden in your operating model. The benefit of development efforts on shared standards is magnified by the number of teams who have adopted the standard and who will adopt new features.</p>
+</div>
+<div class="paragraph">
+<p>It’s critical that mechanisms exist to request additions, changes, and exceptions to standards in support of the teams’ activities. Without this option, standards become a constraint on innovation. Requests should be approved where viable and determined to be appropriate after an evaluation of benefits and risks.</p>
+</div>
+<div class="paragraph">
+<p>A well-defined set of responsibilities will reduce the frequency of conflicting and redundant efforts. Business outcomes are easier to achieve when there is strong alignment and relationships between business, development, and operations teams.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_operating_model_2_by_2_representations">Operating model 2 by 2 representations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>These operating model 2 by 2 representations are illustrations to help you understand the relationships between teams in your environment. These diagrams focus on who does what and the relationships between teams, but we will also discuss governance and decision making in context of these examples.</p>
+</div>
+<div class="paragraph">
+<p>Our teams may have responsibilities in multiple parts of multiple models depending on the workloads they support. You may wish to break out more specialized discipline areas than the high-level ones described. There is the potential for endless variation on these models as you separate or aggregate activities, or overlay teams and provide more specific detail.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ops-model_01.png" alt="ops model 01" width="800">
+</div>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/ops-model_02.png" alt="ops model 02" width="400"></span>
+<span class="image"><img src="./images/ops-model_03.png" alt="ops model 03" width="400"></span>
+<span class="image"><img src="./images/ops-model_04.png" alt="ops model 04" width="400"></span>
+<span class="image"><img src="./images/ops-model_05.png" alt="ops model 05" width="400"></span></p>
+</div>
+<div class="sect2">
+<h3 id="_fully_separated_operating_model">Fully separated operating model</h3>
+<div class="paragraph">
+<p>In the following diagram, on the vertical axis we have Applications and Platform. Applications refer to the workload serving a business outcome and can be custom developed or purchased software. Platform refers to the physical and virtual infrastructure and other software that supports that workload.</p>
+</div>
+<div class="paragraph">
+<p>On the horizontal axis, we have Engineering and Operations. Engineering refers to the development, building, and testing of applications and infrastructure. Operations is the deployment, update, and ongoing support of applications and infrastructure.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ops-model_01.png" alt="ops model 01">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>In many organizations, this “fully separated” model is present. The activities in each quadrant are performed by a separate team.</strong> Work is passed between teams through mechanisms such as work requests, work queues, tickets, or by using an IT service management (ITSM) system.</p>
+</div>
+<div class="paragraph">
+<p>The transition of tasks to or between teams increases complexity, and creates bottlenecks and delays. Requests may be delayed until they are a priority. Defects identified late may require significant rework and may have to pass through the same teams and their functions once again. If there are incidents that require action by engineering teams, their responses are delayed by the hand off activity.</p>
+</div>
+<div class="paragraph">
+<p>There is a higher risk of misalignment when business, development, and operations teams are organized around the activities or functions that are being performed. This can lead to teams focusing on their specific responsibilities instead of focusing on achieving business outcomes. Teams may be narrowly specialized, physically isolated, or logically isolated, hindering communication and collaboration.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_separated_application_engineering_and_operations_aeo_and_infrastructure_engineering_and_operations_ieo_with_centralized_governance">Separated Application Engineering and Operations (AEO) and Infrastructure Engineering and Operations (IEO) with centralized governance</h3>
+<div class="paragraph">
+<p>This “<em>Separated AEO and IEO</em>” model follows a “you build it you run it” methodology.</p>
+</div>
+<div class="paragraph">
+<p>Your application engineers and developers perform both the engineering and the operation of their workloads. Similarly, your infrastructure engineers perform both the engineering and operation of the platforms they use to support application teams.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ops-model_02.png" alt="ops model 02">
+</div>
+</div>
+<div class="paragraph">
+<p>For this example, we are going to treat governance as centralized. Standards are distributed, provided, or shared to the application teams.</p>
+</div>
+<div class="paragraph">
+<p>You should use tools or services that enable you to centrally govern your environments across accounts, such as <a href="http://aws.amazon.com/organizations/" target="_blank" rel="noopener">AWS Organizations</a>. Services like <a href="http://aws.amazon.com/controltower/features/" target="_blank" rel="noopener">AWS Control Tower</a> expand this management capability enabling you to define blueprints (supporting your operating models) for the setup of accounts, apply ongoing governance using AWS Organizations, and automate provisioning of new accounts.</p>
+</div>
+<div class="paragraph">
+<p>“You build it you run it” does not mean that the application team is responsible for the full stack, tool chain, and platform.</p>
+</div>
+<div class="paragraph">
+<p>The platform engineering team provides a standardized set of services (for example, development tools, monitoring tools, backup and recovery tools, and network) to the application team. The platform team may also provide the application team access to approved cloud provider services, specific configurations of the same, or both.</p>
+</div>
+<div class="paragraph">
+<p>Mechanisms that provide a self-service capability for deploying approved services and configurations, such as <a href="http://aws.amazon.com/servicecatalog/" target="_blank" rel="noopener">Service Catalog</a>, can help limit delays associated with fulfillment requests while enforcing governance.</p>
+</div>
+<div class="paragraph">
+<p>The platform team enables full stack visibility so that application teams can differentiate between issues with their application components and the services and infrastructure components their applications consume. The platform team may also provide assistance configuring these services and guidance on how to improve the applications teams’ operations.</p>
+</div>
+<div class="paragraph">
+<p>As discussed previously, it’s critical that mechanisms exist for the application team to request additions, changes, and exceptions to standards in support of teams’ activities and innovation of their application.</p>
+</div>
+<div class="paragraph">
+<p>The Separated AEO IEO model provides strong feedback loops to application teams. Day to day operations of a workload increases contact with customers either through direct interaction or indirectly through support and feature requests. This heightened visibility allows application teams to address issues more quickly. The deeper engagement and closer relationship provides insight to customer needs and enables more rapid innovation.</p>
+</div>
+<div class="paragraph">
+<p>All of this is also true for the platform team supporting the application teams.</p>
+</div>
+<div class="paragraph">
+<p>Adopted standards may be pre-approved for use, reducing the amount of review necessary to enter production. Consuming supported and tested standards provided by the platform team may reduce the frequency of issues with those services. Adoption of standards enables application teams to focus on differentiating their workloads.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_separated_aeo_and_ieo_with_centralized_governance_and_a_service_provider">Separated AEO and IEO with centralized governance and a service provider</h3>
+<div class="paragraph">
+<p>This “Separated AEO and IEO” model follows a “you build it you run it” methodology.</p>
+</div>
+<div class="paragraph">
+<p>Your application engineers and developers perform both the engineering and the operation of their workloads.</p>
+</div>
+<div class="paragraph">
+<p>Your organization may not have the existing skills, or team members, to support a dedicated platform engineering and operations team, or you may not want to make the investments of time and effort to do so.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you may wish to have a platform team that is focused on creating capabilities that will differentiate your business, but you want to offload the undifferentiated day to day operations to an outsourcer.</p>
+</div>
+<div class="paragraph">
+<p>Managed Services providers such as AWS Managed Services
+, AWS Managed Services Partners, or Managed Services Providers in the AWS Partner Network, provide expertise implementing cloud environments, and support your security and compliance requirements and business goals.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/ops-model_03.png" alt="ops model 03"></span></p>
+</div>
+<div class="paragraph">
+<p>For this variation, we are going to treat governance as centralized and managed by the platform team, with account creation and policies managed with AWS Organizations and AWS Control Tower.</p>
+</div>
+<div class="paragraph">
+<p>This model does require you to modify your mechanisms to work with those of your service provider. It does not address the bottlenecks and delays created by transition of tasks between teams, including your service provider, or the potential rework related to the late identification of defects.</p>
+</div>
+<div class="paragraph">
+<p>You gain the advantage of your providers’ standards, best practices, processes, and expertise. You also gain the benefits of their ongoing development of their service offerings.</p>
+</div>
+<div class="paragraph">
+<p>Adding Managed Services to your operating model can save you time and resources, and lets you keep your internal teams lean and focused on strategic outcomes that will differentiate your business, rather than developing new skills and capabilities.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_separated_aeo_and_ieo_with_centralized_governance_and_an_internal_service_provider_consulting_partner">Separated AEO and IEO with centralized governance and an internal service provider consulting partner</h3>
+<div class="paragraph">
+<p>This “Separated AEO and IEO” model seeks to establish a “you build it you run it” methodology.</p>
+</div>
+<div class="paragraph">
+<p>You want your application teams to perform the engineering and operations activities for their workloads, and to adopt a more DevOps like culture.</p>
+</div>
+<div class="paragraph">
+<p>Your application teams may be in-progress migrating, adopting the cloud, or modernizing your workloads, and not have the existing skills to adequately support cloud and cloud operations. This lack of application team capabilities or familiarity may be barriers to your efforts.</p>
+</div>
+<div class="paragraph">
+<p>To address this concern you establish a Cloud Center of Enablement team (CCoE) that provides a forum to ask questions, discuss needs, and identify solutions. Depending on the needs of your organization, the CCoE can be a dedicated team of experts or a virtual team with participants selected from across your organization. The CCoE enables cloud transformation for teams, establishes centralized cloud governance, and defines account and organization management standards. They also identify successful reference architectures and patterns for enterprise use.</p>
+</div>
+<div class="paragraph">
+<p>We refer to CCoE as Cloud Center of Enablement, instead of the more common Cloud Center of Excellence, to place the emphasis on enabling the success of the supported teams and the achievement of business outcomes.</p>
+</div>
+<div class="paragraph">
+<p>Your platform engineering team builds the core shared platform capabilities based on those standards for application teams to adopt. They codify the enterprise reference architectures and patterns that are provided to the application teams through a self-service mechanism. Using a service such as AWS Service Catalog the application teams can deploy approved reference architectures, patterns, services, and configurations, compliant by default with the centralized governance and security standards.</p>
+</div>
+<div class="paragraph">
+<p>The platform engineering team also provides a standardized set of services (for example, development tools, monitoring tools, backup and recovery tools, and network) to the application teams.</p>
+</div>
+<div class="paragraph">
+<p>Your organization has an “Internal MSP and Consulting Partner” that manages and supports the standardized services and provides assistance to application teams establishing their cloud presence based on the reference architectures and patterns. This “Cloud Operations and Platform Enablement (COPE)” team works with the applications teams to help them establish baseline operations with the application teams progressively taking more responsibility for their systems and resources over time. The COPE team drives continual improvement together with the CCoE and Platform Engineering teams, and acts as proponents for the application teams.</p>
+</div>
+<div class="paragraph">
+<p>The application teams get assistance setting up environments, CICD pipelines, change management, observability and monitoring, and establishing incident and event management processes with the COPE team integrated with those of the enterprise as required. The COPE team participates with the application teams in the performance of these operations activities, phasing out the COPE team engagement over time as the application teams take ownership.</p>
+</div>
+<div class="paragraph">
+<p>The application team gains the benefit of the skills of the COPE team and the lessons learned by the organization. They are protected by the guardrails established through centralized governance. The application team builds upon recognized successes and gain the benefit of continuing development of the organizational standards they have adopted. They gain greater insight to the operation of their workload through the process of establishing observability and monitoring, and are better able to understand the impact of changes they make to their workloads.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ops-model_04.png" alt="ops model 04">
+</div>
+</div>
+<div class="paragraph">
+<p>The COPE team retains the access necessary to support operations activities, provide an enterprise-operations view spanning application teams, and to provide critical incident management support. The COPE team retains responsibility for activities considered undifferentiated heavy lifting, which they satisfy through standard solutions supportable at scale. They also continue to manage well-understood programmatic and automated operations activities for the application teams so that they can focus on differentiating their applications.</p>
+</div>
+<div class="paragraph">
+<p>You gain the advantage of your organization’s standards, best practices, processes, and expertise derived from the successes of your teams. You establish a mechanism to replicate these successful patterns for new teams adopting or modernizing on the cloud. This model places emphasis on the COPE team’s ability to help application team get established, and transition knowledge and artifacts. It reduces the operational burdens of the application teams with the risk that application teams will fail to become largely independent. It establishes relationships between CCoE, COPE, and application teams creating a feedback loop to support further evolution and innovation.</p>
+</div>
+<div class="paragraph">
+<p>Establishing your CCoE and COPE teams, while defining organization wide standards, can facilitate cloud adoption and support modernization efforts. By providing the additional supports of a COPE team acting as consultants and partners to your application teams you can remove barriers that slow application team adoption of beneficial cloud capabilities.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_relationships_and_ownership">Relationships and ownership</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Your operating model defines the relationships between teams and supports identifiable ownership and responsibility.</p>
+</div>
+<div class="sect2">
+<h3 id="_ops02_bp01_resources_have_identified_owners">OPS02-BP01 Resources have identified owners</h3>
+<div class="paragraph">
+<p>Understand who has ownership of each application, workload, platform, and infrastructure component, what business value is provided by that component, and why that ownership exists. Understanding the business value of these individual components and how they support business outcomes informs the processes and procedures applied against them.</p>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of establishing this best practice</strong>: Understanding ownership identifies whom can approve improvements, implement those improvements, or both.</p>
+</div>
+<div class="paragraph">
+<p><strong>Level of risk exposed if this best practice is not established</strong>: High</p>
+</div>
+<div class="sect3">
+<h4 id="_implementation_guidance">Implementation guidance</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Resources have identified owners: Define what ownership means for the resource use cases in your environment. Specify and record owners for resources including at a minimum name, contact information, organization, and team. Store resource ownership information with resources using metadata such as tags or resource groups. Use AWS Organizations to structure accounts and implement policies to ensure ownership and contact information are captured.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Define forms of ownership and how they are assigned: Ownership may have multiple definitions in your organization with different uses cases. You may wish to define a workload owner as the individual who owns the risk and liability for the operation of a workload, and whom ultimately has authority to make decisions about the workload. You may wish to define ownership in terms of financial or administrative responsibility where ownership rolls up to a parent organization. A developer may be the owner of their development environment and be responsible for incidents that its operation causes. Their product lead may own responsibility for the financial costs associated to the operation of their development environments.</p>
+</li>
+<li>
+<p>Define who owns an organization, account, collection of resources, or individual components: Define and record ownership in an appropriately accessible location organized to support discovery. Update definitions and ownership details as they change.</p>
+</li>
+<li>
+<p>Capture ownership in the metadata for the resources: Capture resource ownership using metadata such as tags or resource groups, specifying ownership and contact information. Use AWS Organizations to structure accounts and ensure ownership and contact information are captured.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ops02_bp02_processes_and_procedures_have_identified_owners">OPS02-BP02 Processes and procedures have identified owners</h3>
+<div class="paragraph">
+<p>Understand who has ownership of the definition of individual processes and procedures, why those specific process and procedures are used, and why that ownership exists. Understanding the reasons that specific processes and procedures are used enables identification of improvement opportunities.</p>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of establishing this best practice</strong>: Understanding ownership identifies who can approve improvements, implement those improvements, or both.</p>
+</div>
+<div class="paragraph">
+<p><strong>Level of risk exposed if this best practice is not established</strong>: High</p>
+</div>
+<div class="sect3">
+<h4 id="_implementation_guidance_2">Implementation guidance</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Process and procedures have identified owners responsible for their definition: Capture the processes and procedures used in your environment and the individual or team responsible for their definition.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Identify process and procedures: Identify the operations activities conducted in support of your workloads. Document these activities in a discoverable location.</p>
+</li>
+<li>
+<p>Define who owns the definition of a process or procedure: Uniquely identify the individual or team responsible for the specification of an activity. They are responsible to ensure it can be successfully performed by an adequately skilled team member with the correct permissions, access, and tools. If there are issues with performing that activity, the team members performing it are responsible to provide the detailed feedback necessary for the activitiy to be improved.</p>
+</li>
+<li>
+<p>Capture ownership in the metadata of the activity artifact: Procedures automated in services like AWS Systems Manager, through documents, and AWS Lambda, as functions, support capturing metadata information as tags. Capture resource ownership using tags or resource groups, specifying ownership and contact information. Use AWS Organizations to create tagging polices and ensure ownership and contact information are captured.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ops02_bp03_operations_activities_have_identified_owners_responsible_for_their_performance">OPS02-BP03 Operations activities have identified owners responsible for their performance</h3>
+<div class="paragraph">
+<p>Understand who has responsibility to perform specific activities on defined workloads and why that responsibility exists. Understanding who has responsibility to perform activities informs who will conduct the activity, validate the result, and provide feedback to the owner of the activity.</p>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of establishing this best practice</strong>: Understanding who is responsible to perform an activity informs whom to notify when action is needed and who will perform the action, validate the result, and provide feedback to the owner of the activity.</p>
+</div>
+<div class="paragraph">
+<p><strong>Level of risk exposed if this best practice is not established</strong>: High</p>
+</div>
+<div class="sect3">
+<h4 id="_implementation_guidance_3">Implementation guidance</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Operations activities have identified owners responsible for their performance: Capture the responsibility for performing processes and procedures used in your environment</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Identify process and procedures: Identify the operations activities conducted in support of your workloads. Document these activities in a discoverable location.</p>
+</li>
+<li>
+<p>Define who is responsible to perform each activity: Identify the team responsible for an activity. Ensure they have the details of the activity, and the necessary skills and correct permissions, access, and tools to perform the activity. They must understand the condition under which it is to be perform (for example, on an event or schedule). Make this information discoverable so that members of your organization can identify who they need to contact, team or individual, for specific needs.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ops02_bp04_team_members_know_what_they_are_responsible_for">OPS02-BP04 Team members know what they are responsible for</h3>
+<div class="paragraph">
+<p>Understanding the responsibilities of your role and how you contribute to business outcomes informs the prioritization of your tasks and why your role is important. This enables team members to recognize needs and respond appropriately.</p>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of establishing this best practice</strong>: Understanding your responsibilities informs the decisions you make, the actions you take, and your hand off activities to their proper owners.</p>
+</div>
+<div class="paragraph">
+<p><strong>Level of risk exposed if this best practice is not established</strong>: High</p>
+</div>
+<div class="sect3">
+<h4 id="_implementation_guidance_4">Implementation guidance</h4>
+<div class="paragraph">
+<p>Ensure team members understand their roles and responsibilities: Identify team members roles and responsibilities and ensure they understand the expectations of their role. Make this information discoverable so that members of your organization can identify who they need to contact, team or individual, for specific needs.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ops02_bp05_mechanisms_exist_to_identify_responsibility_and_ownership">OPS02-BP05 Mechanisms exist to identify responsibility and ownership</h3>
+<div class="paragraph">
+<p>Where no individual or team is identified, there are defined escalation paths to someone with the authority to assign ownership or plan for that need to be addressed.</p>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of establishing this best practice</strong>: Understanding who has responsbility or ownership allows you to reach out to the proper team or team member to make a request or transition a task. Having an identified person who has the authority to assign responsbility or ownership or plan to address needs reduces the risk of inaction and needs not being addressed.</p>
+</div>
+<div class="paragraph">
+<p><strong>Level of risk exposed if this best practice is not established</strong>: High</p>
+</div>
+<div class="sect3">
+<h4 id="_implementation_guidance_5">Implementation guidance</h4>
+<div class="paragraph">
+<p>Mechanisms exist to identify responsibility and ownership: Provide accessible mechanisms for members of your organization to discover and identify ownership and responsibility. These mechanisms will enable them to identify who to contact, team or individual, for specific needs.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

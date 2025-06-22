@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Health monitoring</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Health monitoring</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_requirements_for_health_monitoring">Requirements for health monitoring</a></li>
+<li><a href="#_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</a></li>
+<li><a href="#_analyzing_health_data">Analyzing health data</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The purpose of health monitoring is to generate a snapshot of the current health of the system so that you can verify that all components of the system are functioning as expected.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements_for_health_monitoring">Requirements for health monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An operator should be alerted quickly (within a matter of seconds) if any part of the system is deemed to be unhealthy. The operator should be able to ascertain which parts of the system are functioning normally, and which parts are experiencing problems. System health can be highlighted through a <em>traffic-light system</em>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Red</strong> for unhealthy (the system has stopped)</p>
+</li>
+<li>
+<p><strong>Yellow</strong> for partially healthy (the system is running with reduced functionality)</p>
+</li>
+<li>
+<p><strong>Green</strong> for completely healthy</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A comprehensive health-monitoring system enables an operator to drill down through the system to view the health status of subsystems and components. For example, if the overall system is depicted as partially healthy, the operator should be able to zoom in and determine which functionality is currently unavailable.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_sources_instrumentation_and_data_collection_requirements">Data sources, instrumentation, and data-collection requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The raw data that&#8217;s required to support health monitoring can be generated as a result of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Tracing execution of user requests. This information can be used to determine which requests have succeeded, which have failed, and how long each request takes.</p>
+</li>
+<li>
+<p>Synthetic user monitoring. This process simulates the steps performed by a user and follows a predefined series of steps. The results of each step should be captured.</p>
+</li>
+<li>
+<p>Logging exceptions, faults, and warnings. This information can be captured as a result of trace statements embedded into the application code, as well as retrieving information from the event logs of any services that the system references.</p>
+</li>
+<li>
+<p>Monitoring the health of any third-party services that the system uses. This monitoring might require retrieving and parsing health data that these services supply. This information might take a variety of formats.</p>
+</li>
+<li>
+<p>Endpoint monitoring. This mechanism is described in more detail in the "Availability monitoring" <a href="#_availability_monitoring">[_availability_monitoring]</a>  section.</p>
+</li>
+<li>
+<p>Collecting ambient performance information, such as background CPU utilization or I/O (including network) activity.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzing_health_data">Analyzing health data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><mark>The primary focus of health monitoring is to quickly indicate whether the system is running.</mark> Hot analysis of the immediate data can trigger an alert if a critical component is detected as unhealthy. (It fails to respond to a consecutive series of pings, for example.) The operator can then take the appropriate corrective action.</p>
+</div>
+<div class="paragraph">
+<p>A more advanced system might include a predictive element that performs a cold analysis over recent and current workloads. A cold analysis can spot trends and determine whether the system is likely to remain healthy or whether the system will need additional resources. This predictive element should be based on critical performance metrics, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The rate of requests directed at each service or subsystem.</p>
+</li>
+<li>
+<p>The response times of these requests.</p>
+</li>
+<li>
+<p>The volume of data flowing into and out of each service.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If the value of any metric exceeds a defined threshold, the system can raise an alert to enable an operator or autoscaling (if available) to take the preventative actions necessary to maintain system health. These actions might involve adding resources, restarting one or more services that are failing, or applying throttling to lower-priority requests.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

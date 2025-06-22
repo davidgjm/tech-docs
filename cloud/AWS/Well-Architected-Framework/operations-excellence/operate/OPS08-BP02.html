@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OPS08-BP02 Define workload metrics</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OPS08-BP02 Define workload metrics</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implementation_guidance">Implementation guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Define workload metrics to measure the achievement of KPIs (for example, abandoned shopping carts, orders placed, cost, price, and allocated workload expense). Define workload metrics to measure the health of the workload (for example, interface response time, error rate, requests made, requests completed, and utilization). Evaluate metrics to determine if the workload is achieving desired outcomes, and to understand the health of the workload.</p>
+</div>
+<div class="paragraph">
+<p>You should send log data to a service such as CloudWatch Logs, and generate metrics from observations of necessary log content.</p>
+</div>
+<div class="paragraph">
+<p>CloudWatch has specialized features such as Amazon CloudWatch Insights for .NET and SQL Server and Container Insights that can assist you by identifying and setting up key metrics, logs, and alarms across your specifically supported application resources and technology stack.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Common anti-patterns</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>You have defined standard metrics, not associated to any KPIs or tailored to any workload.</p>
+</li>
+<li>
+<p>You have errors in your metrics calculations that will yield invalid results.</p>
+</li>
+<li>
+<p>You don&#8217;t have any metrics defined for your workload.</p>
+</li>
+<li>
+<p>You only measure for availability.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Benefits of establishing this best practice</dt>
+<dd>
+<p>By defining and evaluating workload metrics you can determine the health of your workload and measure the achievement of business outcomes.</p>
+</dd>
+<dt class="hdlist1">Level of risk exposed if this best practice is not established</dt>
+<dd>
+<p>High</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_guidance">Implementation guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Define workload metrics: Define workload metrics to measure the achievement of KPIs. Define workload metrics to measure the health of the workload and its individual components. Evaluate metrics to determine if the workload is achieving desired outcomes, and to understand the health of the workload.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publish custom metrics</a></p>
+</li>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/MonitoringLogData.html">Searching and filtering log data</a></p>
+</li>
+<li>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch metrics and dimensions reference</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

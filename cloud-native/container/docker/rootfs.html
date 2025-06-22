@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>RootFS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>RootFS</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://opensource.com/article/18/8/sysadmins-guide-containers">
+A sysadmin&#8217;s guide to containers</a></p>
+</li>
+<li>
+<p><a href="https://github.com/opencontainers/runtime-spec" class="bare">https://github.com/opencontainers/runtime-spec</a></p>
+</li>
+<li>
+<p><a href="https://tldp.org/LDP/sag/html/root-fs.html">The root filesystem</a></p>
+</li>
+<li>
+<p><a href="https://wiki.debian.org/ramfs" class="bare">https://wiki.debian.org/ramfs</a></p>
+</li>
+<li>
+<p><a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch03.html" class="bare">https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch03.html</a></p>
+</li>
+<li>
+<p><a href="https://unix.stackexchange.com/questions/479415/how-does-linux-know-where-the-rootfs-is" class="bare">https://unix.stackexchange.com/questions/479415/how-does-linux-know-where-the-rootfs-is</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Docker introduced the concept of a container image, which is a standard TAR file that combines:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Rootfs (container root filesystem)</strong>: A directory on the system that looks like the standard root (/) of the operating system. For example, a directory with /usr, /var, /home, etc.</p>
+</li>
+<li>
+<p><strong>JSON file (container configuration)</strong>: Specifies how to run the rootfs; for example, what command or entrypoint to run in the rootfs when the container starts; environment variables to set for the container; the container&#8217;s working directory; and a few other settings.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Docker "tar&#8217;s up" the rootfs and the JSON file to create the base image. This enables you to install additional content on the rootfs, create a new JSON file, and tar the difference between the original image and the new image with the updated JSON file. This creates a <strong>layered image</strong>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://opensource.com/sites/default/files/linux_container_internals_2.0_-_hosts.png" alt="linux container internals 2.0   hosts">
+</div>
+</div>
+<div class="paragraph">
+<p>Container storage is usually a copy-on-write (COW) layered filesystem. When you pull down a container image from a container registry, you first need to untar the rootfs and place it on disk. If you have multiple layers that make up your image, each layer is downloaded and stored on a different layer on the COW filesystem. The COW filesystem allows each layer to be stored separately, which maximizes sharing for layered images. Container engines often support multiple types of container storage, including <strong>overlay, devicemapper, btrfs, aufs, and zfs</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Sidecar pattern</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Sidecar pattern</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_context_and_problem">Context and Problem</a></li>
+<li><a href="#_solution">Solution</a></li>
+<li><a href="#_issues_and_considerations">Issues and Considerations</a></li>
+<li><a href="#_when_to_use_this_pattern">When to Use this Pattern</a></li>
+<li><a href="#_example">Example</a></li>
+<li><a href="#_related_guidance">Related guidance</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Deploy components of an application into a separate process or container to provide isolation and encapsulation. This pattern can also enable applications to be composed of heterogeneous components and technologies.</p>
+</div>
+<div class="paragraph">
+<p>This pattern is named <em>Sidecar</em> because it resembles a sidecar attached to a motorcycle. In the pattern, the sidecar is attached to a parent application and provides supporting features for the application. The sidecar also shares the same lifecycle as the parent application, being created and retired alongside the parent. The sidecar pattern is sometimes referred to as the sidekick pattern and is a decomposition pattern.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem">Context and Problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Applications and services often require related functionality, such as monitoring, logging, configuration, and networking services. These peripheral tasks can be implemented as separate components or services.</p>
+</div>
+<div class="paragraph">
+<p>If they are tightly integrated into the application, they can run in the same process as the application, making efficient use of shared resources. However, this also means they are not well isolated, and an outage in one of these components can affect other components or the entire application. Also, they usually need to be implemented using the same language as the parent application. As a result, the component and the application have close interdependence on each other.</p>
+</div>
+<div class="paragraph">
+<p>If the application is decomposed into services, then each service can be built using different languages and technologies. While this gives more flexibility, it means that each component has its own dependencies and requires language-specific libraries to access the underlying platform and any resources shared with the parent application. In addition, deploying these features as separate services can add latency to the application. Managing the code and dependencies for these language-specific interfaces can also add considerable complexity, especially for hosting, deployment, and management.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Co-locate a cohesive set of tasks with the primary application, but place them inside their own process or container, providing a homogeneous interface for platform services across languages.</p>
+</div>
+<div id="img-sidecar" class="imageblock">
+<div class="content">
+<img src="./images/sidecar.png" alt="sidecar">
+</div>
+<div class="title">Figure 1. Diagram of the Sidecar pattern</div>
+</div>
+<div class="paragraph">
+<p>A sidecar service is not necessarily part of the application, but is connected to it. It goes wherever the parent application goes. Sidecars are supporting processes or services that are deployed with the primary application. On a motorcycle, the sidecar is attached to one motorcycle, and each motorcycle can have its own sidecar. In the same way, a sidecar service shares the fate of its parent application. For each instance of the application, an instance of the sidecar is deployed and hosted alongside it.</p>
+</div>
+<div class="paragraph">
+<p>Advantages of using a sidecar pattern include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A sidecar is independent from its primary application in terms of runtime environment and programming language, so you don&#8217;t need to develop one sidecar per language.</p>
+</li>
+<li>
+<p>The sidecar can access the same resources as the primary application. For example, a sidecar can monitor system resources used by both the sidecar and the primary application.</p>
+</li>
+<li>
+<p>Because of its proximity to the primary application, there&#8217;s no significant latency when communicating between them.</p>
+</li>
+<li>
+<p>Even for applications that don&#8217;t provide an extensibility mechanism, you can use a sidecar to extend functionality by attaching it as its own process in the same host or sub-container as the primary application.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The sidecar pattern is often used with containers and referred to as a sidecar container or sidekick container.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issues_and_considerations">Issues and Considerations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Consider the deployment and packaging format you will use to deploy services, processes, or containers. Containers are particularly well suited to the sidecar pattern.</p>
+</li>
+<li>
+<p>When designing a sidecar service, carefully decide on the interprocess communication mechanism. Try to use language- or framework-agnostic technologies unless performance requirements make that impractical.</p>
+</li>
+<li>
+<p>Before putting functionality into a sidecar, consider whether it would work better as a separate service or a more traditional daemon.</p>
+</li>
+<li>
+<p>Also consider whether the functionality could be implemented as a library or using a traditional extension mechanism. Language-specific libraries may have a deeper level of integration and less network overhead.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_this_pattern">When to Use this Pattern</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use this pattern when:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Your primary application uses a heterogeneous set of languages and frameworks. A component located in a sidecar service can be consumed by applications written in different languages using different frameworks.</p>
+</li>
+<li>
+<p>A component is owned by a remote team or a different organization.</p>
+</li>
+<li>
+<p>A component or feature must be co-located on the same host as the application</p>
+</li>
+<li>
+<p>You need a service that shares the overall lifecycle of your main application, but can be independently updated.</p>
+</li>
+<li>
+<p>You need fine-grained control over resource limits for a particular resource or component. For example, you may want to restrict the amount of memory a specific component uses. You can deploy the component as a sidecar and manage memory usage independently of the main application.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This pattern may not be suitable:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When interprocess communication needs to be optimized. Communication between a parent application and sidecar services includes some overhead, notably latency in the calls. This may not be an acceptable trade-off for chatty interfaces.</p>
+</li>
+<li>
+<p>For small applications where the resource cost of deploying a sidecar service for each instance is not worth the advantage of isolation.</p>
+</li>
+<li>
+<p>When the service needs to scale differently than or independently from the main applications. If so, it may be better to deploy the feature as a separate service.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The sidecar pattern is applicable to many scenarios. Some common examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Infrastructure API. The infrastructure development team creates a service that&#8217;s deployed alongside each application, instead of a language-specific client library to access the infrastructure. The service is loaded as a sidecar and provides a common layer for infrastructure services, including logging, environment data, configuration store, discovery, health checks, and watchdog services. The sidecar also monitors the parent application&#8217;s host environment and process (or container) and logs the information to a centralized service.</p>
+</li>
+<li>
+<p>Manage NGINX/HAProxy. Deploy NGINX with a sidecar service that monitors environment state, then updates the NGINX configuration file and recycles the process when a change in state is needed.</p>
+</li>
+<li>
+<p>Ambassador sidecar. Deploy an <a href="ambassador.html">ambassador</a> service as a sidecar. The application calls through the ambassador, which handles request logging, routing, circuit breaking, and other connectivity related features.</p>
+</li>
+<li>
+<p>Offload proxy. Place an NGINX proxy in front of a node.js service instance, to handle serving static file content for the service.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_guidance">Related guidance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="ambassador.html">Ambassador pattern</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

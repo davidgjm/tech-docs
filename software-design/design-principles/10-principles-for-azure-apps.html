@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Ten design principles for Azure applications</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Ten design principles for Azure applications</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_references">References:</a></li>
+<li><a href="#_principles">Principles</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_references">References:</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/" class="bare">https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_principles">Principles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Follow these design principles to make your application more scalable, resilient, and manageable.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Design for self healing. In a distributed system, failures happen. Design your application to be self healing when failures occur.</p>
+</li>
+<li>
+<p>Make all things redundant. Build redundancy into your application, to avoid having single points of failure.</p>
+</li>
+<li>
+<p>Minimize coordination. Minimize coordination between application services to achieve scalability.</p>
+</li>
+<li>
+<p>Design to scale out. Design your application so that it can scale horizontally, adding or removing new instances as demand requires.</p>
+</li>
+<li>
+<p>Partition around limits. Use partitioning to work around database, network, and compute limits.</p>
+</li>
+<li>
+<p>Design for operations. Design your application so that the operations team has the tools they need.</p>
+</li>
+<li>
+<p>Use managed services. When possible, use platform as a service (PaaS) rather than infrastructure as a service (IaaS).</p>
+</li>
+<li>
+<p>Use the best data store for the job. Pick the storage technology that is the best fit for your data and how it will be used.</p>
+</li>
+<li>
+<p>Design for evolution. All successful applications change over time. An evolutionary design is key for continuous innovation.</p>
+</li>
+<li>
+<p>Build for the needs of business. Every design decision must be justified by a business requirement.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

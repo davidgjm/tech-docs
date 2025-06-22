@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>OPS04-BP01 Implement application telemetry</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>OPS04-BP01 Implement application telemetry</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implementation_guidance">Implementation guidance</a>
+<ul class="sectlevel2">
+<li><a href="#_implementation_steps">Implementation steps</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Application telemetry is the foundation for observability of your workload. Your application should emit telemetry that provides insight into the state of the application and the achievement of business outcomes. From troubleshooting to measuring the impact of a new feature, application telemetry informs the way you build, operate, and evolve your workload.</p>
+</div>
+<div class="paragraph">
+<p>Application telemetry consists of metrics and logs. Metrics are diagnostic information, such as your pulse or temperature. Metrics are used collectively to describe the state of your application. Collecting metrics over time can be used to develop baselines and detect anomalies. Logs are messages that the application sends about its internal state or events that occur. Error codes, transaction identifiers, and user actions are examples of events that are logged.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Desired Outcome</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Your application emits metrics and logs that provide insight into its health and the achievement of business outcomes.</p>
+</li>
+<li>
+<p>Metrics and logs are stored centrally for all applications in the workload.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Common anti-patterns</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Your application doesn&#8217;t emit telemetry. You are forced to rely upon your customers to tell you when something is wrong.</p>
+</li>
+<li>
+<p>A customer has reported that your application is unresponsive. You have no telemetry and are unable to confirm that the issue exists or characterize the issue without using the application yourself to understand the current user experience.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Benefits of establishing this best practice</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>You can understand the health of your application, the user experience, and the achievement of business outcomes.</p>
+</li>
+<li>
+<p>You can react quickly to changes in your application health.</p>
+</li>
+<li>
+<p>You can develop application health trends.</p>
+</li>
+<li>
+<p>You can make informed decisions about improving your application.</p>
+</li>
+<li>
+<p>You can detect and resolve application issues faster.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><strong>Level of risk exposed if this best practice is not established</strong>: High</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_guidance">Implementation guidance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Implementing application telemetry consists of three steps: identifying a location to store telemetry, identifying telemetry that describes the state of the application, and instrumenting the application to emit telemetry.</p>
+</div>
+<div class="paragraph">
+<p>As an example, an ecommerce company has a microservices based architecture. As part of their architectural design process they identified application telemetry that would help them understand the state of each microservice. For example, the user cart service emitted telemetry about events like add to cart, abandon cart, and length of time it took to add an item to the cart. All microservices would log errors, warnings, and transaction information. Telemetry would be sent to Amazon CloudWatch for storage and analysis.</p>
+</div>
+<div class="sect2">
+<h3 id="_implementation_steps">Implementation steps</h3>
+<div class="paragraph">
+<p>The first step is to identify a central location for telemetry storage for the applications in your workload. If you don’t have an existing platform Amazon CloudWatch</p>
+</div>
+<div class="paragraph">
+<p>provides telemetry collection, dashboards, analysis, and event generation capabilities.</p>
+</div>
+<div class="paragraph">
+<p>To identify what telemetry you need, start with the following questions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Is my application healthy?</p>
+</li>
+<li>
+<p>Is my application achieving business outcomes?</p>
+<div class="paragraph">
+<p>Your application should emit logs and metrics that collectively answer these questions. If you can’t answer those questions with the existing application telemetry, work with business and engineering stakeholders to create a list of telemetry that can. You can request expert technical advice from your AWS account team as you identify and develop new application telemetry.</p>
+</div>
+<div class="paragraph">
+<p>Once the additional application telemetry has been identified, work with your engineering stakeholders to instrument your application. <a href="https://aws-otel.github.io/">The AWS Distro for Open Telemetry</a> provides APIs, libraries, and agents that collect application telemetry. <a href="https://aws-otel.github.io/docs/getting-started/js-sdk/metric-manual-instr">This example demonstrates how to instrument a JavaScript application with custom metrics</a>.</p>
+</div>
+<div class="paragraph">
+<p>Customers that want to understand the observability services that AWS offers can work through the <a href="https://catalog.workshops.aws/observability/en-US">One Observability Workshop</a> on their own or request support from their AWS account team to guide them. This workshop guides you through the observability solutions at AWS and provides hands-on examples of how they’re used.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For a deeper dive into application telemetry, read the <a href="http://aws.amazon.com/builders-library/instrumenting-distributed-systems-for-operational-visibility/">Instrumenting distributed systems for operational visibility</a> article in the Amazon Builder’s Library. It explains how Amazon instruments applications and can serve as a guide for developing your own instrumentation guidelines.</p>
+</div>
+<div class="paragraph">
+<p><strong>Level of effort for the implementation plan</strong>: Medium</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

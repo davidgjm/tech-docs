@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Design for self healing</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Design for self healing</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_references">References:</a></li>
+<li><a href="#_design_your_application_to_be_self_healing_when_failures_occur">Design your application to be self healing when failures occur</a></li>
+<li><a href="#_recommendations">Recommendations</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_references">References:</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/self-healing" class="bare">https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/self-healing</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/overview" class="bare">https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/overview</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_design_your_application_to_be_self_healing_when_failures_occur">Design your application to be self healing when failures occur</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In a distributed system, failures can happen. Hardware can fail. The network can have transient failures. Rarely, an entire service or region may experience a disruption, but even those must be planned for.</p>
+</div>
+<div class="paragraph">
+<p>Therefore, design an application to be self healing when failures occur. This requires a three-pronged approach:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Detect failures.</p>
+</li>
+<li>
+<p>Respond to failures gracefully.</p>
+</li>
+<li>
+<p>Log and monitor failures, to give operational insight.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>How you respond to a particular type of failure may depend on your application&#8217;s availability requirements. For example, if you require very high availability, you might automatically fail over to a secondary region during a regional outage. However, that will incur a higher cost than a single-region deployment.</p>
+</div>
+<div class="paragraph">
+<p>Also, don&#8217;t just consider big events like regional outages, which are generally rare. You should focus as much, if not more, on handling local, short-lived failures, such as network connectivity failures or failed database connections.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recommendations">Recommendations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Retry failed operations</strong>. Transient failures may occur due to momentary loss of network connectivity, a dropped database connection, or a timeout when a service is busy. Build retry logic into your application to handle transient failures. For many Azure services, the client SDK implements automatic retries. For more information, see Transient fault handling and the Retry pattern.</p>
+</div>
+<div class="paragraph">
+<p><strong>Protect failing remote services (Circuit Breaker).</strong> It&#8217;s good to retry after a transient failure, but if the failure persists, you can end up with too many callers hammering a failing service. This can lead to cascading failures, as requests back up. Use the Circuit Breaker pattern to fail fast (without making the remote call) when an operation is likely to fail.</p>
+</div>
+<div class="paragraph">
+<p><strong>Isolate critical resources (Bulkhead)</strong>. Failures in one subsystem can sometimes cascade. This can happen if a failure causes some resources, such as threads or sockets, not to get freed in a timely manner, leading to resource exhaustion. To avoid this, partition a system into isolated groups, so that a failure in one partition does not bring down the entire system.</p>
+</div>
+<div class="paragraph">
+<p><strong>Perform load leveling</strong>. Applications may experience sudden spikes in traffic that can overwhelm services on the backend. To avoid this, use the Queue-Based Load Leveling pattern to queue work items to run asynchronously. The queue acts as a buffer that smooths out peaks in the load.</p>
+</div>
+<div class="paragraph">
+<p><strong>Fail over</strong>. If an instance can&#8217;t be reached, fail over to another instance. For things that are stateless, like a web server, put several instances behind a load balancer or traffic manager. For things that store state, like a database, use replicas and fail over. Depending on the data store and how it replicates, this may require the application to deal with eventual consistency.</p>
+</div>
+<div class="paragraph">
+<p><strong>Compensate failed transactions</strong>. In general, avoid distributed transactions, as they require coordination across services and resources. Instead, compose an operation from smaller individual transactions. If the operation fails midway through, use Compensating Transactions to undo any step that already completed.</p>
+</div>
+<div class="paragraph">
+<p><strong>Checkpoint long-running transactions</strong>. Checkpoints can provide resiliency if a long-running operation fails. When the operation restarts (for example, it is picked up by another VM), it can be resumed from the last checkpoint.</p>
+</div>
+<div class="paragraph">
+<p><strong>Degrade gracefully</strong>. Sometimes you can&#8217;t work around a problem, but you can provide reduced functionality that is still useful. Consider an application that shows a catalog of books. If the application can&#8217;t retrieve the thumbnail image for the cover, it might show a placeholder image. Entire subsystems might be noncritical for the application. For example, in an e-commerce site, showing product recommendations is probably less critical than processing orders.</p>
+</div>
+<div class="paragraph">
+<p><strong>Throttle clients</strong>. Sometimes a small number of users create excessive load, which can reduce your application&#8217;s availability for other users. In this situation, throttle the client for a certain period of time. See the Throttling pattern.</p>
+</div>
+<div class="paragraph">
+<p><strong>Block bad actors</strong>. Just because you throttle a client, it doesn&#8217;t mean client was acting maliciously. It just means the client exceeded their service quota. But if a client consistently exceeds their quota or otherwise behaves badly, you might block them. Define an out-of-band process for user to request getting unblocked.</p>
+</div>
+<div class="paragraph">
+<p><strong>Use leader election</strong>. When you need to coordinate a task, use Leader Election to select a coordinator. That way, the coordinator is not a single point of failure. If the coordinator fails, a new one is selected. Rather than implement a leader election algorithm from scratch, consider an off-the-shelf solution such as <strong>Zookeeper</strong>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Test with fault injection.</strong> All too often, the success path is well tested but not the failure path. A system could run in production for a long time before a failure path is exercised. Use fault injection to test the resiliency of the system to failures, either by triggering actual failures or by simulating them.</p>
+</div>
+<div class="paragraph">
+<p><strong>Embrace chaos engineering</strong>. Chaos engineering extends the notion of fault injection, by randomly injecting failures or abnormal conditions into production instances.</p>
+</div>
+<div class="paragraph">
+<p>For a structured approach to making your applications self healing, see Design reliable applications for Azure.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

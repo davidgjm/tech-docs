@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Observability vs. Monitoring</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Observability vs. Monitoring</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_monitoring">Monitoring</a></li>
+<li><a href="#_observability">Observability</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.baeldung.com/distributed-systems-observability#observability_vs_monitoring">Observability vs. Monitoring</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring">Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We often hear about monitoring in relation to observability in the practice of DevOps. So, what is the difference between these terms? Well, they both have similar functions and enable us to maintain the system&#8217;s reliability. But they have a subtle difference and, in fact, a relationship between them. We can only effectively monitor a system if it&#8217;s observable!</p>
+</div>
+<div class="paragraph">
+<p>Monitoring basically refers to <strong>the practice of watching a system&#8217;s state through a predefined set of metrics and logs</strong>. This inherently means that we are watching for a known set of failures. However, in a distributed system, there are a lot of dynamic changes that keep happening. This results in problems that we were never looking for. Hence, our monitoring system can just miss them.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_observability">Observability</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Observability, on the other hand, helps us understand the internal state of a system. This can enable us to ask arbitrary questions about the system&#8217;s behavior. For instance, we can ask complex questions like how did each service handle the request in case of problems. Over time, it can aid in building knowledge about the dynamic behavior of the system.</p>
+</div>
+<div class="paragraph">
+<p>To understand why this is so, we need to understand the concept of cardinality. <strong>Cardinality refers to the number of unique items in a set</strong>. For instance, the set of users' social security numbers will have a higher cardinality than gender. To answer arbitrary questions about a system&#8217;s behavior, we need high cardinality data. However, monitoring typically only deals with low cardinality data.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

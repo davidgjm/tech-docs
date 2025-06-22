@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Azure DevOps</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./rouge-github.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Azure DevOps</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_case_studies_examples">Case studies &amp; examples</a>
+<ul class="sectlevel2">
+<li><a href="#_use_deployment_rings_with_extension_releases">Use deployment rings with extension releases</a></li>
+</ul>
+</li>
+<li><a href="#_tips_notes">Tips &amp; Notes</a>
+<ul class="sectlevel2">
+<li><a href="#_specifying_arraylist_string_value_using_parameters">Specifying array/list string value using parameters</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">References</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://medium.com/@TimvanBaarsen/build-your-spring-boot-project-using-azure-pipelines-in-azure-devops-3305977991d">Build your Spring Boot project using Azure Pipelines in Azure DevOps</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_case_studies_examples">Case studies &amp; examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_use_deployment_rings_with_extension_releases">Use deployment rings with extension releases</h3>
+<div class="paragraph">
+<p>Check details at <a href="https://docs.microsoft.com/en-us/azure/devops/migrate/phase-rollout-with-rings?view=azure-devops" class="bare">https://docs.microsoft.com/en-us/azure/devops/migrate/phase-rollout-with-rings?view=azure-devops</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/phase-rollout-with-rings-rings.png" alt="phase rollout with rings rings">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/phase-rollout-with-rings-pipeline.png" alt="phase rollout with rings pipeline">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tips_notes">Tips &amp; Notes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Use case</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convert array/list to string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use <code>join</code> <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/expressions">expression</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>${{ join(',',parameters.appDebugConfig.args) }}</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_specifying_arraylist_string_value_using_parameters">Specifying array/list string value using parameters</h3>
+<div class="sect3">
+<h4 id="_specifying_array_value_for_helm_template_overrides_field">Specifying array value for helm template <code>overrides</code> field</h4>
+<div class="sect4">
+<h5 id="_parameter_variable_definition">Parameter &amp; variable definition</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">parameters</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">appDebugConfig</span>
+    <span class="na">displayName</span><span class="pi">:</span> <span class="s">Customize app via args</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">object</span>
+    <span class="na">default</span><span class="pi">:</span>
+      <span class="na">args</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">--debug.config.credentials.enabled=true</span>
+        <span class="pi">-</span> <span class="s">--debug.config.credentials.properties=spring.cloud.azure.credential.client-secret\,spring.cloud.azure.eventhubs.processor.checkpoint-store.account-key</span>
+        <span class="pi">-</span> <span class="s">--debug.config.values.enabled=true</span>
+        <span class="pi">-</span> <span class="s">--debug.config.values.properties=spring.cloud.stream.function.definition</span>
+
+<span class="na">variables</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">APP_ARGS</span>
+    <span class="na">value</span><span class="pi">:</span> <span class="s">${{ join(',',parameters.appDebugConfig.args) }}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_pipeline_task">Pipeline Task</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">        <span class="pi">-</span> <span class="na">task</span><span class="pi">:</span> <span class="s">HelmDeploy@0</span>
+          <span class="na">displayName</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Helm</span><span class="nv"> </span><span class="s">install'</span>
+          <span class="na">condition</span><span class="pi">:</span> <span class="s">succeeded()</span>
+          <span class="na">inputs</span><span class="pi">:</span>
+            <span class="na">connectionType</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Azure</span><span class="nv"> </span><span class="s">Resource</span><span class="nv"> </span><span class="s">Manager'</span>
+            <span class="na">azureSubscription</span><span class="pi">:</span> <span class="s">$(subscription)</span>
+            <span class="na">azureResourceGroup</span><span class="pi">:</span> <span class="s">${{ parameters.kubernetesResourceGroup }}</span>
+            <span class="na">kubernetesCluster</span><span class="pi">:</span> <span class="s">${{ parameters.kubernetesCluster }}</span>
+            <span class="na">namespace</span><span class="pi">:</span> <span class="s">${{ parameters.releaseTestK8sNamespace }}</span>
+            <span class="na">command</span><span class="pi">:</span> <span class="s1">'</span><span class="s">upgrade'</span>
+            <span class="na">chartType</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Name'</span>
+            <span class="na">chartName</span><span class="pi">:</span> <span class="s">$(transportAgentChartPath)</span>
+            <span class="na">releaseName</span><span class="pi">:</span> <span class="s">$(helmTestReleaseName)</span>
+            <span class="na">overrideValues</span><span class="pi">:</span> <span class="s">image.tag=$(image_tag)</span>
+            <span class="na">arguments</span><span class="pi">:</span> <span class="s">--create-namespace --atomic --set application.args={$(APP_ARGS)}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

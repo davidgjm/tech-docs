@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Containerization</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Containerization</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_differences_between_virtualization_and_containerization">Differences between virtualization and containerization</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_differences_between_virtualization_and_containerization">Differences between virtualization and containerization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Virtualization and containerization are two distinct technologies used in cloud computing and software development. While they have some similarities, there are several differences between the two.</p>
+</div>
+<div class="paragraph">
+<p>Virtualization refers to the process of creating a virtual version of a physical resource, such as a server, storage device, or network, using software. Virtualization allows multiple virtual machines to run on a single physical machine, enabling the sharing of resources and increasing efficiency. Each virtual machine has its own operating system, which can be different from the host operating system, and runs as a separate entity with its own CPU, memory, and storage resources. Hypervisors are used to manage virtual machines and provide a layer of abstraction between the physical hardware and the virtual machines.</p>
+</div>
+<div class="paragraph">
+<p>Containerization, on the other hand, is a lightweight form of virtualization that allows multiple applications to run on a single operating system instance. Containers use the host operating system kernel and share the same resources, such as CPU and memory, with other containers. They are isolated from each other and run as independent entities with their own file system and processes. Containers are more lightweight than virtual machines and are faster to start up and shut down. Docker is one of the most popular containerization platforms.</p>
+</div>
+<div class="paragraph">
+<p>Here are some key differences between virtualization and containerization:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Resource usage: Virtual machines require a complete operating system, which consumes more resources than containers, which share the host operating system kernel.</p>
+</li>
+<li>
+<p>Isolation: Virtual machines provide complete isolation between the host and the virtual machine, while containers share the same kernel and some system resources with the host operating system.</p>
+</li>
+<li>
+<p>Flexibility: Virtual machines are more flexible, as they can run different operating systems and software configurations, while containers are limited to the host operating system and share the same configuration.</p>
+</li>
+<li>
+<p>Deployment: Virtual machines are more complex to deploy, as they require an entire operating system to be installed and configured, while containers are faster to deploy and can be easily moved from one host to another.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>In summary, virtualization and containerization are two different technologies that serve different purposes. Virtualization is more heavyweight, providing complete isolation between the host and the virtual machine, while containerization is more lightweight and provides resource sharing and fast deployment. Both technologies are important in modern cloud computing environments, and their usage depends on the specific needs of the application and infrastructure.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

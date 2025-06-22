@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Docker Desktop replacement on MacOS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1><em>Docker Desktop</em> replacement on MacOS</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_setup_minikube">setup minikube</a>
+<ul class="sectlevel2">
+<li><a href="#_setup_prerequisite_tools">Setup prerequisite tools</a></li>
+<li><a href="#_bootstrap_a_single_node_kubernetes_cluster_in_minikube">Bootstrap a single node Kubernetes cluster in Minikube</a></li>
+</ul>
+</li>
+<li><a href="#_setup_docker_client">Setup docker client</a>
+<ul class="sectlevel2">
+<li><a href="#_install_docker_client_binaries">Install docker client binaries</a></li>
+<li><a href="#_setup_docker_host_environment">Setup docker host environment</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_setup_minikube">setup minikube</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_setup_prerequisite_tools">Setup prerequisite tools</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">brew install hyperkit                   <b class="conum">(1)</b>
+brew install minikube                   <b class="conum">(2)</b>
+minikube config set driver hyperkit     <b class="conum">(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Installs hyperkit</p>
+</li>
+<li>
+<p>Installs minikube</p>
+</li>
+<li>
+<p>Sets <code>hyperkit</code> as the default driver</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bootstrap_a_single_node_kubernetes_cluster_in_minikube">Bootstrap a single node Kubernetes cluster in Minikube</h3>
+<div class="sect3">
+<h4 id="_start_a_new_cluster">Start a new cluster</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">minikube start</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Command output</div>
+<div class="content">
+<pre class="highlight"><code>😄  minikube v1.24.0 on Darwin 11.6.1
+✨  Using the hyperkit driver based on user configuration
+💾  Downloading driver docker-machine-driver-hyperkit:
+    &gt; docker-machine-driver-hyper...: 65 B / 65 B [----------] 100.00% ? p/s 0s
+    &gt; docker-machine-driver-hyper...: 8.35 MiB / 8.35 MiB  100.00% 4.65 MiB p/s
+🔑  The 'hyperkit' driver requires elevated permissions. The following commands will be executed:
+
+    $ sudo chown root:wheel /Users/user/.minikube/bin/docker-machine-driver-hyperkit
+    $ sudo chmod u+s /Users/user/.minikube/bin/docker-machine-driver-hyperkit
+
+
+Password:
+💿  Downloading VM boot image ...
+    &gt; minikube-v1.24.0.iso.sha256: 65 B / 65 B [-------------] 100.00% ? p/s 0s
+    &gt; minikube-v1.24.0.iso: 225.58 MiB / 225.58 MiB  100.00% 1.47 MiB p/s 2m33s
+👍  Starting control plane node minikube in cluster minikube
+💾  Downloading Kubernetes v1.22.3 preload ...
+    &gt; preloaded-images-k8s-v13-v1...: 501.73 MiB / 501.73 MiB  100.00% 1.40 MiB
+🔥  Creating hyperkit VM (CPUs=2, Memory=4000MB, Disk=20000MB) ...
+🐳  Preparing Kubernetes v1.22.3 on Docker 20.10.8 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+💡  kubectl not found. If you need it, try: 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_check_cluster_status">Check cluster status</h4>
+<div class="literalblock">
+<div class="content">
+<pre>minikube status</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Command Output</div>
+<div class="content">
+<pre class="highlight"><code>minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_shutdown_your_cluster">Shutdown your cluster</h4>
+<div class="literalblock">
+<div class="content">
+<pre>minikube stop</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Command Output</div>
+<div class="content">
+<pre class="highlight"><code>✋  Stopping node "minikube"  ...
+🛑  1 node stopped.</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup_docker_client">Setup docker client</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_install_docker_client_binaries">Install docker client binaries</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">brew install docker</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_setup_docker_host_environment">Setup docker host environment</h3>
+<div class="paragraph">
+<p><a href="https://docs.docker.com/engine/reference/commandline/cli/#environment-variables" class="bare">https://docs.docker.com/engine/reference/commandline/cli/#environment-variables</a></p>
+</div>
+<div class="sect3">
+<h4 id="_get_minikube_docker_engine_information">Get minikube docker engine information</h4>
+<div class="sect4">
+<h5 id="_check_if_minikube_is_running">Check if minikube is running</h5>
+<div class="paragraph">
+<p>Make sure minikube is up and running by running the command below:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>minikube status</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_get_docker_engine_info">Get docker engine info</h5>
+<div class="paragraph">
+<p>View the docker engine host information by running command below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">s0001321@mC02FG16BML85 ~ % minikube docker-env</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Output</div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.64.12:2376"
+export DOCKER_CERT_PATH="/Users/s0001321/.minikube/certs"
+export MINIKUBE_ACTIVE_DOCKERD="minikube"
+
+# To point your shell to minikube's docker-daemon, run:
+# eval $(minikube -p minikube docker-env)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_setup_docker_host_information">Setup docker host information</h4>
+<div class="paragraph">
+<p>You can either simply use the environment variables exposed by command <code>minikube docker-env</code> or configure the docker context.</p>
+</div>
+<div class="sect4">
+<h5 id="_use_docker_context_to_configure_docker_host">Use docker context to configure docker host</h5>
+<div class="listingblock">
+<div class="title">Setup context</div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">docker context create minikube --description "using minikube's docker engine" --docker "host=tcp://192.168.64.12:2376,ca=$HOME/.minikube/certs/ca.pem,cert=$HOME/.minikube/certs/cert.pem,key=$HOME/.minikube/certs/key.pem"
+docker context use minikube</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_use_minikube_docker_env">Use <code>minikube docker-env</code></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">eval $(minikube docker-env)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_test_docker_command">Test docker command</h4>
+<div class="literalblock">
+<div class="content">
+<pre>docker ps</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">example output</div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">s0001321@mC02FG16BML85 .docker % docker images
+REPOSITORY                                TAG       IMAGE ID       CREATED        SIZE
+k8s.gcr.io/kube-apiserver                 v1.22.3   53224b502ea4   7 weeks ago    128MB
+k8s.gcr.io/kube-scheduler                 v1.22.3   0aa9c7e31d30   7 weeks ago    52.7MB
+k8s.gcr.io/kube-controller-manager        v1.22.3   05c905cef780   7 weeks ago    122MB
+k8s.gcr.io/kube-proxy                     v1.22.3   6120bd723dce   7 weeks ago    104MB
+kubernetesui/dashboard                    v2.3.1    e1482a24335a   6 months ago   220MB
+k8s.gcr.io/etcd                           3.5.0-0   004811815584   6 months ago   295MB
+kubernetesui/metrics-scraper              v1.0.7    7801cfc6d5c0   6 months ago   34.4MB
+k8s.gcr.io/coredns/coredns                v1.8.4    8d147537fb7d   6 months ago   47.6MB
+gcr.io/k8s-minikube/storage-provisioner   v5        6e38f40d628d   8 months ago   31.5MB
+k8s.gcr.io/pause                          3.5       ed210e3e4a5b   9 months ago   683kB</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Azure RBAC</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Azure RBAC</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_azure_roles_azure_ad_roles_and_classic_subscription_administrator_roles">Azure roles, Azure AD roles, and classic subscription administrator roles</a>
+<ul class="sectlevel2">
+<li><a href="#_how_the_roles_are_related">How the roles are related</a></li>
+<li><a href="#_azure_roles">Azure Roles</a></li>
+</ul>
+</li>
+<li><a href="#_azure_ad_roles">Azure AD Roles</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_azure_roles_azure_ad_roles_and_classic_subscription_administrator_roles">Azure roles, Azure AD roles, and classic subscription administrator roles</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_how_the_roles_are_related">How the roles are related</h3>
+<div class="paragraph">
+<p>To better understand roles in Azure, it helps to know some of the history. When Azure was initially released, access to resources was managed with just three administrator roles: Account Administrator, Service Administrator, and Co-Administrator. Later, Azure role-based access control (Azure RBAC) was added. Azure RBAC is a newer authorization system that provides fine-grained access management to Azure resources. Azure RBAC includes many built-in roles, can be assigned at different scopes, and allows you to create your own custom roles. To manage resources in Azure AD, such as users, groups, and domains, there are several Azure AD roles.</p>
+</div>
+<div class="paragraph">
+<p>The following diagram is a high-level view of how the Azure roles, Azure AD roles, and classic subscription administrator roles are related.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/rbac-admin-roles.png" alt="rbac admin roles"></span></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/azure-roles-azure-ad-roles.png" alt="azure roles azure ad roles"></span>]</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_roles">Azure Roles</h3>
+<div class="paragraph">
+<p><a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/overview">Azure RBAC</a> is an authorization system built on <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/overview">Azure Resource Manager</a> that provides fine-grained access management to Azure resources, such as compute and storage. Azure RBAC includes over 70 built-in roles. There are four fundamental Azure roles. The first three apply to all resource types:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 40%;">
+<col style="width: 35%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Azure role</th>
+<th class="tableblock halign-left valign-top">Permissions</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner">Owner</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Full access to all resources</p>
+</li>
+<li>
+<p>Delegate access to others</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Service Administrator and Co-Administrators are assigned the Owner role at the subscription scope
+Applies to all resource types.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor">Contributor</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Create and manage all of types of Azure resources</p>
+</li>
+<li>
+<p>Create a new tenant in Azure Active Directory</p>
+</li>
+<li>
+<p>Can&#8217;t grant access to others</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Applies to all resource types.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#reader">Reader</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>View Azure resources</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Applies to all resource types.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator">User Access Administrator</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Manage user access to Azure resources</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The rest of the built-in roles allow management of specific Azure resources. For example, the Virtual Machine Contributor role allows the user to create and manage virtual machines. For a list of all the built-in roles, see <a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles">Azure built-in roles</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_azure_ad_roles">Azure AD Roles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://learn.microsoft.com/en-us/azure/active-directory/roles/custom-overview">Azure AD roles</a> are used to manage Azure AD resources in a directory such as create or edit users, assign administrative roles to others, reset user passwords, manage user licenses, and manage domains. The following table describes a few of the more important Azure AD roles.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 45%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Azure AD role</th>
+<th class="tableblock halign-left valign-top">Permissions</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference#global-administrator">Global Administrator</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Manage access to all administrative features in Azure Active Directory, as well as services that federate to Azure Active Directory</p>
+</li>
+<li>
+<p>Assign administrator roles to others</p>
+</li>
+<li>
+<p>Reset the password for any user and all other administrators</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The person who signs up for the Azure Active Directory tenant becomes a Global Administrator.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference#user-administrator">User Administrator</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Create and manage all aspects of users and groups</p>
+</li>
+<li>
+<p>Manage support tickets</p>
+</li>
+<li>
+<p>Monitor service health</p>
+</li>
+<li>
+<p>Change passwords for users, Helpdesk administrators, and other User Administrators</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference#billing-administrator">Billing Administrator</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Make purchases</p>
+</li>
+<li>
+<p>Manage subscriptions</p>
+</li>
+<li>
+<p>Manage support tickets</p>
+</li>
+<li>
+<p>Monitors service health</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>In the Azure portal, you can see the list of Azure AD roles on the <strong>Roles and administrators</strong> page. For a list of all the Azure AD roles, see <a href="https://learn.microsoft.com/en-us/azure/active-directory/roles/permissions-reference">Administrator role permissions in Azure Active Directory</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

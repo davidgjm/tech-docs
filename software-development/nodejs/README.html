@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>node.js overview</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article">
+<div id="header">
+<h1>node.js overview</h1>
+</div>
+<div id="content">
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><span class="icon yeti"><i class="fa fa-book"></i></span> Readings</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/" class="bare">https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/</a></p>
+</li>
+<li>
+<p><a href="https://nodejs.org/en/docs/guides/dont-block-the-event-loop/" class="bare">https://nodejs.org/en/docs/guides/dont-block-the-event-loop/</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>   ┌───────────────────────────┐
+┌─&gt;│           timers          │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │     pending callbacks     │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │       idle, prepare       │
+│  └─────────────┬─────────────┘      ┌───────────────┐
+│  ┌─────────────┴─────────────┐      │   incoming:   │
+│  │           poll            │&lt;─────┤  connections, │
+│  └─────────────┬─────────────┘      │   data, etc.  │
+│  ┌─────────────┴─────────────┐      └───────────────┘
+│  │           check           │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+└──┤      close callbacks      │
+   └───────────────────────────┘</pre>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

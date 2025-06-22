@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Grafana</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Grafana</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_concepts">Concepts</a></li>
+<li><a href="#_variables">Variables</a>
+<ul class="sectlevel2">
+<li><a href="#_interval"><code>$__interval</code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_concepts">Concepts</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_variables">Variables</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_interval"><code>$__interval</code></h3>
+<div class="sect3">
+<h4 id="_how_the_prometheus_rate_function_works"><a href="https://www.metricfire.com/blog/understanding-the-prometheus-rate-function/">How the Prometheus rate() function works</a></h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>One could also use the special variable in Grafana called $__interval - it is defined to be equal to the time range divided by the step’s size. It could seem like the perfect solution as it looks like all of the data points between each step would be considered, but it has the same problems as mentioned previously. It is impossible to see both very detailed graphs and broad trends at the same time. Also, your time interval becomes tied to your query step, so if your scrape interval ever changes then you might have problems with very small time ranges.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Choosing the time range for range vectors
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>

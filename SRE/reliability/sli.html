@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>SLI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/darshandsoni/asciidoctor-skins/css/material-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>SLI</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_basics">Basics</a>
+<ul class="sectlevel2">
+<li><a href="#_sli_formulation">SLI Formulation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_basics">Basics</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_sli_formulation">SLI Formulation</h3>
+<div class="paragraph">
+<p>When attempting to formulate SLIs for the first time, you might find it useful to further divide SLIs into <em>SLI specification</em> and <em>SLI implementation</em>:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">SLI specification</dt>
+<dd>
+<p>The assessment of service outcome that you think matters to users, independent of how it is measured.
+For example: Ratio of home page requests that loaded in &lt; 100 ms</p>
+</dd>
+<dt class="hdlist1">SLI implementation</dt>
+<dd>
+<p>The SLI specification and a way to measure it.
+For example:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ratio of home page requests that loaded in &lt; 100 ms, as measured from the Latency column of the server log. This measurement will miss requests that fail to reach the backend.</p>
+</li>
+<li>
+<p>Ratio of home page requests that loaded in &lt; 100 ms, as measured by probers that execute JavaScript in a browser running in a virtual machine. This measurement will catch errors when requests cannot reach our network, but may miss issues that affect only a subset of users.</p>
+</li>
+<li>
+<p>Ratio of home page requests that loaded in &lt; 100 ms, as measured by instrumentation in the JavaScript on the home page itself, and reported back to a dedicated telemetry recording service. This measurement will more accurately capture the user experience, although we now need to modify the code to capture this information and build the infrastructure to record it—a specification that has its own reliability requirements.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>As you can see, a single SLI specification might have multiple SLI implementations, each with its own set of pros and cons in terms of quality (how accurately they capture the experience of a customer), coverage (how well they capture the experience of all customers), and cost.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-22 13:10:08 UTC
+</div>
+</div>
+</body>
+</html>
