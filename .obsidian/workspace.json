@@ -64,7 +64,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "parted",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -85,7 +85,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -181,7 +182,7 @@
       "asciidoctor-editor:New asciidoc file": false
     }
   },
-  "active": "b87bb9afc12f80da",
+  "active": "88bdc9b11d7382ae",
   "lastOpenFiles": [
     "cloud-native/kubernetes/etcd/quick-runbook.adoc",
     "cloud-native/kubernetes/architecture/authentication.adoc",
