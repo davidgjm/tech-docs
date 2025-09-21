@@ -171,6 +171,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "publish:Publish changes...": false,
       "github-sync:Sync with Remote": false,
       "switcher:Open quick switcher": false,
