@@ -1,5 +1,0 @@
-= Gradle Tips & Tricks
-
-== Settings at environment level (current user)
-
-include::settings/README.adoc[leveloffset=+1]

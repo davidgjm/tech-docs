@@ -1,3 +1,0 @@
-= Azure Kubernetes Service
-
-include::storage.adoc[leveloffset=+1]

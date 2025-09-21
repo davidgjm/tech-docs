@@ -1,8 +1,0 @@
-= Idempotency Processing
-
-.Readings
-[sidebar]
-****
-- xref:../../design-patterns/idempotency-patterns.adoc[Idempotency Patterns]
-- https://blog.jonathanoliver.com/idempotency-patterns/[Idempotency Patterns from Jonathan Oliver's blog]
-****
